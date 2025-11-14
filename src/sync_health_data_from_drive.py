@@ -38,12 +38,12 @@ SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 class GoogleDriveHealthSync:
     """Manages syncing health data from Google Drive"""
 
-    def __init__(self, config_file: str = ".drive_sync_config.json"):
+    def __init__(self, config_file: str = "config/.drive_sync_config.json"):
         self.config_file = Path(config_file)
-        self.token_file = Path(".drive_token.pickle")
-        self.credentials_file = Path("credentials.json")
+        self.token_file = Path("config/.drive_token.pickle")
+        self.credentials_file = Path("config/credentials.json")
         self.local_data_dir = Path("health_connect_export")
-        self.sync_state_file = Path(".drive_sync_state.json")
+        self.sync_state_file = Path("config/.drive_sync_state.json")
 
         self.config = self._load_config()
         self.service = None
@@ -52,7 +52,7 @@ class GoogleDriveHealthSync:
         """Load configuration file"""
         if not self.config_file.exists():
             print(f"ERROR: Config file not found: {self.config_file}")
-            print("Please create .drive_sync_config.json from the template")
+            print("Please create config/.drive_sync_config.json from the template in config/")
             sys.exit(1)
 
         with open(self.config_file, 'r') as f:
@@ -88,7 +88,7 @@ class GoogleDriveHealthSync:
             else:
                 if not self.credentials_file.exists():
                     print(f"ERROR: OAuth credentials file not found: {self.credentials_file}")
-                    print("Please follow the setup instructions in GOOGLE_DRIVE_SETUP.md")
+                    print("Please follow the setup instructions in docs/GOOGLE_DRIVE_SETUP.md")
                     return False
 
                 print("Starting OAuth authentication flow...")

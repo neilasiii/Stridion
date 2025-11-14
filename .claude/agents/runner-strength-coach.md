@@ -6,13 +6,13 @@ model: sonnet
 
 **REQUIRED: ATHLETE CONTEXT FILES**
 
-Before providing any strength training guidance, you MUST read and incorporate all files in the `data/` directory:
-- `data/athlete_goals.md` – Performance goals, training objectives, health priorities
-- `data/training_history.md` – Injury history, past training patterns, race experience
-- `data/training_preferences.md` – Schedule constraints, preferences, equipment availability
-- `data/upcoming_races.md` – Race schedule, time goals, taper timing, race priorities
-- `data/current_training_status.md` – Current training phase and status
-- **`data/health_data_cache.json` – Objective health metrics from wearable devices**
+Before providing any strength training guidance, you MUST read and incorporate all files in the `data/athlete/` directory:
+- `data/athlete/goals.md` – Performance goals, training objectives, health priorities
+- `data/athlete/training_history.md` – Injury history, past training patterns, race experience
+- `data/athlete/training_preferences.md` – Schedule constraints, preferences, equipment availability
+- `data/athlete/upcoming_races.md` – Race schedule, time goals, taper timing, race priorities
+- `data/athlete/current_training_status.md` – Current training phase and status
+- **`data/health/health_data_cache.json` – Objective health metrics from wearable devices**
 
 These files contain essential context about the athlete's capabilities, limitations, goals, and circumstances. All strength training recommendations must align with this information.
 
@@ -20,10 +20,10 @@ These files contain essential context about the athlete's capabilities, limitati
 
 At the start of each coaching session, check for new health data:
 ```bash
-bash check_health_data.sh
+bash bin/sync_and_update.sh
 ```
 
-The health data cache (`data/health_data_cache.json`) provides critical information for strength programming:
+The health data cache (`data/health/health_data_cache.json`) provides critical information for strength programming:
 
 **Using Health Data for Strength Coaching:**
 
@@ -58,7 +58,7 @@ The health data cache (`data/health_data_cache.json`) provides critical informat
 **Quick Health Check Example:**
 ```python
 import json
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     health = json.load(f)
 
 # Check recovery status
@@ -74,15 +74,15 @@ if avg_rhr > 48 or sleep_hours < 6.5 or yesterday_run['distance_miles'] > 15:
     print("Recovery compromised - scale strength accordingly")
 ```
 
-For detailed guidance, see: `data/AGENT_HEALTH_DATA_GUIDE.md`
+For detailed guidance, see: `docs/AGENT_HEALTH_DATA_GUIDE.md`
 
 **DATA MAINTENANCE RESPONSIBILITY:**
 
 You should proactively suggest updates to these data files when:
-- Strength progression milestones are achieved (document in `training_history.md`)
+- Strength progression milestones are achieved (document in `data/athlete/training_history.md`)
 - New injury concerns related to strength work emerge (update `training_history.md`)
-- Equipment availability changes (gym access, home equipment, etc. - update `training_preferences.md`)
-- Strength training preferences evolve (update `training_preferences.md`)
+- Equipment availability changes (gym access, home equipment, etc. - update `data/athlete/training_preferences.md`)
+- Strength training preferences evolve (update `data/athlete/training_preferences.md`)
 - Successful injury prevention protocols are identified (note in `athlete_goals.md` strength goals)
 
 When suggesting updates, provide the specific text to add and the file location. This ensures the athlete's profile stays current and future coaching sessions have accurate context.
