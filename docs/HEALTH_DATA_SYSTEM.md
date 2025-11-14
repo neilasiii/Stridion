@@ -22,7 +22,7 @@ Coaching agents should check for new health data when:
 **Simple Method (Recommended for Agents):**
 
 ```bash
-bash check_health_data.sh
+bash bin/check_health_data.sh
 ```
 
 This will:
@@ -34,18 +34,18 @@ This will:
 
 ```bash
 # Just update without output
-python3 update_health_data.py --quiet
+python3 src/update_health_data.py --quiet
 
 # Update and show summary
-python3 update_health_data.py --summary --days 14
+python3 src/update_health_data.py --summary --days 14
 
 # Only check if new data exists (no update)
-python3 update_health_data.py --check-only
+python3 src/update_health_data.py --check-only
 ```
 
 ### Accessing Health Data in Agent Prompts
 
-The health data cache is stored in: `data/health_data_cache.json`
+The health data cache is stored in: `data/health/health_data_cache.json`
 
 This JSON file contains:
 - **activities**: All parsed workouts with pace, HR, distance
@@ -59,7 +59,7 @@ This JSON file contains:
 
 ```python
 import json
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     cache = json.load(f)
 
 # Get last 5 runs
@@ -73,7 +73,7 @@ for run in recent_runs:
 
 ```python
 import json
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     cache = json.load(f)
 
 # Check recent RHR trend
@@ -97,12 +97,12 @@ if avg_rhr > 48:
 2. **`update_health_data.py`**: Incremental update script
    - Tracks file modification times
    - Only processes new/changed files
-   - Updates `data/health_data_cache.json`
+   - Updates `data/health/health_data_cache.json`
 
 3. **`check_health_data.sh`**: Simple wrapper for agents
    - One command to update and view summary
 
-4. **`data/health_data_cache.json`**: Persistent cache
+4. **`data/health/health_data_cache.json`**: Persistent cache
    - Stores all parsed health data
    - Updated incrementally (no reprocessing)
    - Sorted newest-first
@@ -116,7 +116,7 @@ Health Connect Export (CSVs)
            ↓
   update_health_data.py (incremental update)
            ↓
-  data/health_data_cache.json (persistent storage)
+  data/health/health_data_cache.json (persistent storage)
            ↓
   Coaching Agents (read JSON for decisions)
 ```
@@ -134,9 +134,9 @@ Health Connect Export (CSVs)
 
 ### Step 2: Upload to health_connect_export/
 
-Place the exported folder in:
+Place the exported folder in the project's `health_connect_export/` directory:
 ```
-/home/neilasiii/running-coach/health_connect_export/
+<project-root>/health_connect_export/
 ```
 
 The system expects this structure:
@@ -161,7 +161,7 @@ health_connect_export/
 ### Step 3: Run Update
 
 ```bash
-python3 update_health_data.py
+python3 src/update_health_data.py
 ```
 
 You should see output like:
@@ -219,7 +219,7 @@ Cache updated: 2025-11-13 16:29:01
 import json
 from datetime import datetime, timedelta
 
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     cache = json.load(f)
 
 # Get RHR from last 3 days
@@ -244,7 +244,7 @@ else:
 ```python
 import json
 
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     cache = json.load(f)
 
 # Get runs from last 7 days
@@ -270,7 +270,7 @@ for run in recent_runs:
 ```python
 import json
 
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     cache = json.load(f)
 
 last_night = cache['sleep_sessions'][0]
@@ -295,8 +295,8 @@ else:
 
 1. Check file structure matches expected paths
 2. Verify CSV files have correct headers
-3. Run with verbose output: `python3 update_health_data.py`
-4. Check `data/health_data_cache.json` for errors
+3. Run with verbose output: `python3 src/update_health_data.py`
+4. Check `data/health/health_data_cache.json` for errors
 
 ### Duplicate Entries
 
@@ -307,7 +307,7 @@ else:
 ### Old Data Not Clearing
 
 - The cache is additive (never deletes old data)
-- To reset: `rm data/health_data_cache.json && python3 update_health_data.py`
+- To reset: `rm data/health/health_data_cache.json && python3 src/update_health_data.py`
 
 ---
 
@@ -349,11 +349,11 @@ else:
 
 ```bash
 # Test parser directly
-python3 health_data_parser.py
+python3 src/health_data_parser.py
 
 # Test incremental updates
-python3 update_health_data.py --check-only
-python3 update_health_data.py --summary
+python3 src/update_health_data.py --check-only
+python3 src/update_health_data.py --summary
 ```
 
 ---

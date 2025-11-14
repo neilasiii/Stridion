@@ -6,7 +6,7 @@
 **Plan Duration:** Days 1-14 post-marathon
 **Created:** November 13, 2025
 
-**Companion Document:** `/home/neilasiii/running-coach/data/post_marathon_mobility_framework.md`
+**Companion Document:** `data/frameworks/post_marathon_mobility_framework.md`
 
 ---
 
@@ -1037,8 +1037,8 @@ The recovery you invest now will pay dividends in that training cycle.
 
 ---
 
-**File Location:** `/home/neilasiii/running-coach/data/post_marathon_2week_mobility_plan.md`
+**File Location:** `data/plans/post_marathon_2week_mobility_plan.md`
 
-**Companion Framework:** `/home/neilasiii/running-coach/data/post_marathon_mobility_framework.md`
+**Companion Framework:** `data/frameworks/post_marathon_mobility_framework.md`
 
 **Questions or adjustments needed?** This plan can be modified based on your actual race outcome and recovery trajectory.

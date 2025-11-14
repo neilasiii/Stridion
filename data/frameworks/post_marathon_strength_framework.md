@@ -624,6 +624,6 @@ The marathon breaks you down. The recovery period builds you back better.
 4. Update training history with strength milestones achieved
 
 **Related Documents:**
-- `/home/neilasiii/running-coach/data/post_marathon_strength_2week_plan.md` - Specific daily guidance for days 1-14
-- `/home/neilasiii/running-coach/data/athlete_goals.md` - Strength and performance goals
-- `/home/neilasiii/running-coach/data/training_history.md` - Document progress here
+- `data/plans/post_marathon_strength_2week_plan.md` - Specific daily guidance for days 1-14
+- `data/athlete/goals.md` - Strength and performance goals
+- `data/athlete/training_history.md` - Document progress here

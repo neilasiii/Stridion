@@ -11,7 +11,7 @@
 I've created a comprehensive post-marathon strength training system with two complementary documents:
 
 ### 1. **Overarching Framework Document** (Long-term reference)
-**File:** `/home/neilasiii/running-coach/data/post_marathon_strength_framework.md`
+**File:** `data/frameworks/post_marathon_strength_framework.md`
 
 **Use this for:**
 - Understanding the complete post-marathon timeline (Days 1-84+)
@@ -38,7 +38,7 @@ I've created a comprehensive post-marathon strength training system with two com
 ---
 
 ### 2. **Detailed 2-Week Plan** (Specific daily guidance)
-**File:** `/home/neilasiii/running-coach/data/post_marathon_strength_2week_plan.md`
+**File:** `data/plans/post_marathon_strength_2week_plan.md`
 
 **Use this for:**
 - Day-by-day guidance for Days 1-14 post-marathon
@@ -371,12 +371,12 @@ Given your history of posterior tibialis tendinopathy:
 
 ## Your Two Key Documents
 
-1. **Framework:** `/home/neilasiii/running-coach/data/post_marathon_strength_framework.md`
+1. **Framework:** `data/frameworks/post_marathon_strength_framework.md`
    - Read once for understanding
    - Reference as needed for Weeks 3-12+
    - Long-term principles and strategy
 
-2. **2-Week Plan:** `/home/neilasiii/running-coach/data/post_marathon_strength_2week_plan.md`
+2. **2-Week Plan:** `data/plans/post_marathon_strength_2week_plan.md`
    - Use daily for Days 1-14
    - Specific session prescriptions
    - Immediate post-marathon guidance
