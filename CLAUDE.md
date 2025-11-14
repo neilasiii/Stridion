@@ -103,6 +103,10 @@ Coaching Agents (read JSON for decisions)
 
 **[src/sync_health_data_from_drive.py](src/sync_health_data_from_drive.py)**: Google Drive sync
 - Authenticates with Google Drive using OAuth2
+- Secure JSON token storage (no pickle vulnerabilities)
+- Path traversal validation prevents directory escape attacks
+- File size limits (configurable, default 500MB)
+- Atomic file downloads prevent partial/corrupted files
 - Downloads new/modified files from specified Drive folder
 - Tracks sync state to avoid re-downloading unchanged files
 - Maintains local folder structure matching Drive
@@ -231,7 +235,7 @@ running-coach/
 ├── config/                         # Configuration files
 │   ├── .drive_sync_config.json.template  # Drive config template
 │   ├── .drive_sync_config.json     # Drive folder config (gitignored)
-│   ├── .drive_token.pickle         # OAuth token (gitignored)
+│   ├── .drive_token.json           # OAuth token - JSON format (gitignored)
 │   └── credentials.json            # Google OAuth credentials (gitignored)
 │
 ├── docs/                           # Documentation

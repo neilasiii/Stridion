@@ -107,7 +107,7 @@ This will:
 1. Open your web browser
 2. Ask you to sign in to your Google account
 3. Request permission to read your Google Drive files
-4. Save an authentication token locally (`.drive_token.pickle`)
+4. Save an authentication token locally (`.drive_token.json`)
 
 **Important**: You only need to do this once. The token will be automatically refreshed when needed.
 
@@ -169,7 +169,7 @@ After setup, you'll have these files:
 ```
 running-coach/
 ├── credentials.json                    # OAuth credentials (from Google Cloud)
-├── .drive_token.pickle                 # Authentication token (auto-generated)
+├── .drive_token.json                 # Authentication token (auto-generated)
 ├── .drive_sync_config.json            # Your folder ID and settings
 ├── .drive_sync_state.json             # Tracks synced files (auto-generated)
 ├── sync_health_data_from_drive.py     # Main sync script
@@ -184,7 +184,7 @@ running-coach/
 ## Security Notes
 
 - **credentials.json**: Contains your OAuth client ID and secret. Keep this private.
-- **.drive_token.pickle**: Contains your authentication token. Keep this private.
+- **.drive_token.json**: Contains your authentication token. Keep this private.
 - Both files should be added to `.gitignore` to avoid committing them to version control.
 - The system only requests READ-ONLY access to your Drive files.
 
@@ -196,10 +196,10 @@ Make sure you downloaded the OAuth credentials from Google Cloud Console and sav
 
 ### "Authentication failed"
 
-Try deleting `.drive_token.pickle` and running the setup again:
+Try deleting `.drive_token.json` and running the setup again:
 
 ```bash
-rm .drive_token.pickle
+rm .drive_token.json
 python3 sync_health_data_from_drive.py --setup
 ```
 
