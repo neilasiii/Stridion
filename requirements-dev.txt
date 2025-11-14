@@ -1,0 +1,12 @@
+# Development dependencies for testing and code quality
+# Install with: pip install -r requirements-dev.txt
+
+# Testing framework
+pytest==8.3.4
+pytest-cov==6.0.0  # Coverage reporting
+pytest-mock==3.14.0  # Mocking utilities
+
+# Code quality
+flake8==7.1.1  # Linting
+black==24.10.0  # Code formatting
+mypy==1.13.0  # Type checking

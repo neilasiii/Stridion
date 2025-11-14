@@ -43,7 +43,24 @@ python3 src/update_health_data.py --check-only
 python3 src/update_health_data.py --summary --days 30
 ```
 
-### Testing Health Data System
+### Testing
+
+**Run Test Suite**
+```bash
+# Run all tests (some require Google Drive dependencies)
+python3 -m unittest discover -s tests -p 'test_*.py'
+
+# Run specific test file
+python3 -m unittest tests.test_sync_health_data
+
+# Run with pytest (if installed)
+pytest
+
+# Run with coverage
+pytest --cov=src --cov-report=html
+```
+
+**Test Health Data System**
 ```bash
 # Test parser directly
 python3 src/health_data_parser.py
