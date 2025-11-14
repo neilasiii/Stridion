@@ -14,7 +14,8 @@
 
 set -e  # Exit on error
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Get project root directory (parent of bin/)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd "$SCRIPT_DIR"
 
 # Parse arguments
@@ -29,9 +30,9 @@ echo
 # Step 1: Sync from Google Drive
 echo "Step 1/3: Syncing from Google Drive..."
 if [ "$CHECK_ONLY" = true ]; then
-    python3 sync_health_data_from_drive.py --check-only
+    python3 src/sync_health_data_from_drive.py --check-only
 else
-    python3 sync_health_data_from_drive.py
+    python3 src/sync_health_data_from_drive.py
 fi
 
 SYNC_EXIT_CODE=$?
@@ -45,14 +46,14 @@ echo
 # Step 2: Update health data cache (skip if check-only)
 if [ "$CHECK_ONLY" = false ]; then
     echo "Step 2/3: Updating health data cache..."
-    python3 update_health_data.py
+    python3 src/update_health_data.py
     echo
 fi
 
 # Step 3: Show summary (skip if check-only)
 if [ "$CHECK_ONLY" = false ]; then
     echo "Step 3/3: Health data summary (last 14 days)..."
-    python3 update_health_data.py --summary --days 14
+    python3 src/update_health_data.py --summary --days 14
 fi
 
 echo

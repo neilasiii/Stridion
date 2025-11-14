@@ -1,11 +1,11 @@
 # Google Drive OAuth credentials and tokens
-credentials.json
-.drive_token.pickle
-.drive_sync_state.json
-.drive_sync_config.json
+config/credentials.json
+config/.drive_token.pickle
+config/.drive_sync_state.json
+config/.drive_sync_config.json
 
 # Health data cache and exports
-data/health_data_cache.json
+data/health/health_data_cache.json
 health_connect_export/
 
 # Python

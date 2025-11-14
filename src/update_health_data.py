@@ -33,7 +33,7 @@ from health_data_parser import (
 class IncrementalHealthDataManager:
     """Manages incremental updates to health data cache"""
 
-    def __init__(self, data_dir: str = "health_connect_export", cache_file: str = "data/health_data_cache.json"):
+    def __init__(self, data_dir: str = "health_connect_export", cache_file: str = "data/health/health_data_cache.json"):
         self.data_dir = Path(data_dir)
         self.cache_file = Path(cache_file)
         self.parser = HealthDataParser(str(data_dir))
