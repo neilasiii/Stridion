@@ -9,8 +9,25 @@ This is a **running coach system** that provides personalized training guidance 
 ## Key Commands
 
 ### Health Data Management
+
+**Google Drive Sync (Primary Method)**
 ```bash
-# Update health data cache with new exports (primary method)
+# Sync from Google Drive + update cache + show summary (recommended)
+bash sync_and_update.sh
+
+# Check what would be synced without downloading
+bash sync_and_update.sh --check-only
+
+# Sync from Google Drive only
+python3 sync_health_data_from_drive.py
+
+# Setup Google Drive authentication (one-time)
+python3 sync_health_data_from_drive.py --setup
+```
+
+**Manual Update (Fallback Method)**
+```bash
+# Update health data cache with new exports
 python3 update_health_data.py
 
 # Quick check for agents (updates + shows 14-day summary)
@@ -50,8 +67,26 @@ All agents share access to athlete context files in [data/](data/) and the healt
 
 ### Health Data Pipeline
 
+**With Google Drive Sync (Recommended)**
 ```
-Health Connect Export (CSV files)
+Health Sync Android App → Google Drive
+           ↓
+sync_health_data_from_drive.py (automatic download)
+           ↓
+health_connect_export/ (local CSV files)
+           ↓
+health_data_parser.py (parsing library)
+           ↓
+update_health_data.py (incremental updates)
+           ↓
+data/health_data_cache.json (persistent cache)
+           ↓
+Coaching Agents (read JSON for decisions)
+```
+
+**Manual Method (Fallback)**
+```
+Manual Download from Google Drive → health_connect_export/
            ↓
 health_data_parser.py (parsing library)
            ↓
@@ -66,6 +101,19 @@ Coaching Agents (read JSON for decisions)
 
 ### Core Components
 
+**[sync_health_data_from_drive.py](sync_health_data_from_drive.py)**: Google Drive sync
+- Authenticates with Google Drive using OAuth2
+- Downloads new/modified files from specified Drive folder
+- Tracks sync state to avoid re-downloading unchanged files
+- Maintains local folder structure matching Drive
+- See [GOOGLE_DRIVE_SETUP.md](GOOGLE_DRIVE_SETUP.md) for setup instructions
+
+**[sync_and_update.sh](sync_and_update.sh)**: All-in-one convenience wrapper
+- Syncs from Google Drive
+- Updates health data cache
+- Shows 14-day summary
+- Primary command for agents to refresh health data
+
 **[health_data_parser.py](health_data_parser.py)**: Core parsing library
 - Parses CSV exports from Health Connect
 - Provides data classes: `Activity`, `SleepSession`, `VO2MaxReading`, `WeightReading`, `RestingHRReading`
@@ -78,9 +126,10 @@ Coaching Agents (read JSON for decisions)
 - Updates [data/health_data_cache.json](data/health_data_cache.json) atomically
 - Provides summary statistics
 
-**[check_health_data.sh](check_health_data.sh)**: Simple wrapper for agents
+**[check_health_data.sh](check_health_data.sh)**: Simple wrapper for agents (legacy)
 - Single command to update and view summary
 - Shows 14-day overview by default
+- Use `sync_and_update.sh` instead for automatic Drive sync
 
 **[data/health_data_cache.json](data/health_data_cache.json)**: Persistent storage
 - Contains: activities, sleep_sessions, vo2_max_readings, weight_readings, resting_hr_readings
@@ -100,6 +149,7 @@ All coaching agents MUST read these files in [data/](data/) before providing gui
 
 ### Documentation
 
+- **[GOOGLE_DRIVE_SETUP.md](GOOGLE_DRIVE_SETUP.md)** - Setup instructions for Google Drive sync (OAuth, credentials, configuration)
 - **[HEALTH_DATA_SYSTEM.md](HEALTH_DATA_SYSTEM.md)** - Complete technical documentation for health data system
 - **[data/AGENT_HEALTH_DATA_GUIDE.md](data/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on using health data
 - **[data/athlete_health_profile.md](data/athlete_health_profile.md)** - Human-readable health summary
@@ -108,12 +158,19 @@ All coaching agents MUST read these files in [data/](data/) before providing gui
 
 ### When Agents Should Check Health Data
 
-Coaching agents should run `bash check_health_data.sh` when:
+Coaching agents should run `bash sync_and_update.sh` when:
 1. Beginning a coaching session
 2. User mentions completing a workout
 3. Making recovery-based recommendations
 4. Adjusting training based on fatigue/readiness
-5. User uploads new health data
+5. User mentions new health data is available
+
+This automatically:
+- Syncs latest data from Google Drive
+- Updates the local cache
+- Provides a summary of recent activity
+
+For manual workflows without Google Drive, use `bash check_health_data.sh` instead.
 
 ### Using Health Data in Coaching Decisions
 

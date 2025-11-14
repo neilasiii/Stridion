@@ -1,0 +1,11 @@
+{
+  "google_drive_folder_id": "YOUR_FOLDER_ID_HERE",
+  "sync_options": {
+    "auto_update_cache": true,
+    "delete_local_if_removed_from_drive": false
+  },
+  "notes": {
+    "how_to_find_folder_id": "Open your Google Drive folder in a browser. The folder ID is in the URL: https://drive.google.com/drive/folders/FOLDER_ID_HERE",
+    "setup_instructions": "See GOOGLE_DRIVE_SETUP.md for complete setup instructions"
+  }
+}

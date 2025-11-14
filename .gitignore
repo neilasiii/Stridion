@@ -1,0 +1,30 @@
+# Google Drive OAuth credentials and tokens
+credentials.json
+.drive_token.pickle
+.drive_sync_state.json
+.drive_sync_config.json
+
+# Health data cache and exports
+data/health_data_cache.json
+health_connect_export/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
