@@ -567,4 +567,4 @@ Early aggressive stretching or deep tissue work can WORSEN inflammation and dela
 
 This framework provides the strategic foundation. The detailed 2-week plan provides specific daily implementation.
 
-**File Location:** `/home/neilasiii/running-coach/data/post_marathon_mobility_framework.md`
+**File Location:** `data/frameworks/post_marathon_mobility_framework.md`

@@ -667,7 +667,7 @@ Recovery is not lost fitness. It is strategic rebuilding. Rushing back leads to 
 5. **Enjoy the mental break** - You've earned it
 
 **Post-Marathon Documentation:**
-After the marathon, add race notes to /home/neilasiii/running-coach/data/upcoming_races.md:
+After the marathon, add race notes to data/athlete/upcoming_races.md:
 - Actual finish time
 - How the race felt
 - What worked well

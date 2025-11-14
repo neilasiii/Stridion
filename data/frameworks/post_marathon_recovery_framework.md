@@ -436,7 +436,7 @@ Before beginning the next structured training cycle (Gasparilla Half Marathon pr
 
 ### Applying New VDOT
 Once VDOT is reassessed:
-- Update /home/neilasiii/running-coach/data/current_training_status.md
+- Update data/athlete/current_training_status.md
 - Recalculate E, M, T, I, R paces using Jack Daniels VDOT tables
 - Use new paces for all structured workouts in next training cycle
 
@@ -502,7 +502,7 @@ Trust the process. Recovery is not lost fitness. It is the foundation for your n
 
 ---
 
-**Document to update after marathon:** Add post-race notes to /home/neilasiii/running-coach/data/upcoming_races.md, including:
+**Document to update after marathon:** Add post-race notes to data/athlete/upcoming_races.md, including:
 - Actual finish time
 - How the race felt
 - What worked well

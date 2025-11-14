@@ -488,7 +488,7 @@ def generate_athlete_summary(parser: HealthDataParser, days: int = 14) -> Dict:
 
 if __name__ == "__main__":
     # Example usage
-    parser = HealthDataParser("/home/neilasiii/running-coach/health_connect_export")
+    parser = HealthDataParser("health_connect_export")
     summary = generate_athlete_summary(parser, days=14)
 
     print("=== ATHLETE HEALTH SUMMARY ===\n")

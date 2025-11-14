@@ -755,9 +755,9 @@ Your post-marathon strength training journey starts with rest. Rest is training.
 ---
 
 **Related Documents:**
-- `/home/neilasiii/running-coach/data/post_marathon_strength_framework.md` - Comprehensive framework for Weeks 1-12+
-- `/home/neilasiii/running-coach/data/athlete_goals.md` - Long-term strength and performance goals
-- `/home/neilasiii/running-coach/data/training_history.md` - Document your Week 2 sessions and responses here
+- `data/frameworks/post_marathon_strength_framework.md` - Comprehensive framework for Weeks 1-12+
+- `data/athlete/goals.md` - Long-term strength and performance goals
+- `data/athlete/training_history.md` - Document your Week 2 sessions and responses here
 
 **Questions or Concerns:**
 Bring them to any coaching session. Your strength coach is here to support your recovery and long-term development.
