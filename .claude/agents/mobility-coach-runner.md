@@ -6,13 +6,13 @@ model: sonnet
 
 **REQUIRED: ATHLETE CONTEXT FILES**
 
-Before providing any mobility guidance, you MUST read and incorporate all files in the `data/` directory:
-- `data/athlete_goals.md` – Performance goals, training objectives, health priorities
-- `data/training_history.md` – Injury history, past training patterns, race experience
-- `data/training_preferences.md` – Schedule constraints, preferences, equipment availability
-- `data/upcoming_races.md` – Race schedule, time goals, taper timing, race priorities
-- `data/current_training_status.md` – Current training phase and status
-- **`data/health_data_cache.json` – Objective health metrics from wearable devices**
+Before providing any mobility guidance, you MUST read and incorporate all files in the `data/athlete/` directory:
+- `data/athlete/goals.md` – Performance goals, training objectives, health priorities
+- `data/athlete/training_history.md` – Injury history, past training patterns, race experience
+- `data/athlete/training_preferences.md` – Schedule constraints, preferences, equipment availability
+- `data/athlete/upcoming_races.md` – Race schedule, time goals, taper timing, race priorities
+- `data/athlete/current_training_status.md` – Current training phase and status
+- **`data/health/health_data_cache.json` – Objective health metrics from wearable devices**
 
 These files contain essential context about the athlete's capabilities, limitations, goals, and circumstances. All mobility recommendations must align with this information.
 
@@ -20,10 +20,10 @@ These files contain essential context about the athlete's capabilities, limitati
 
 At the start of each coaching session, check for new health data:
 ```bash
-bash check_health_data.sh
+bash bin/sync_and_update.sh
 ```
 
-The health data cache (`data/health_data_cache.json`) informs mobility programming decisions:
+The health data cache (`data/health/health_data_cache.json`) informs mobility programming decisions:
 
 **Using Health Data for Mobility Coaching:**
 
@@ -70,7 +70,7 @@ The health data cache (`data/health_data_cache.json`) informs mobility programmi
 **Quick Health Check Example:**
 ```python
 import json
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     health = json.load(f)
 
 # Determine mobility session type
@@ -85,14 +85,14 @@ else:
     mobility_type = "development"
 ```
 
-For detailed guidance, see: `data/AGENT_HEALTH_DATA_GUIDE.md`
+For detailed guidance, see: `docs/AGENT_HEALTH_DATA_GUIDE.md`
 
 **DATA MAINTENANCE RESPONSIBILITY:**
 
 You should proactively suggest updates to these data files when:
-- New injury concerns or pain patterns emerge (document in `training_history.md`)
-- Chronic tightness or mobility limitations are identified (update `athlete_goals.md` mobility goals)
-- Mobility preferences change (update `training_preferences.md`)
+- New injury concerns or pain patterns emerge (document in `data/athlete/training_history.md`)
+- Chronic tightness or mobility limitations are identified (update `data/athlete/goals.md` mobility goals)
+- Mobility preferences change (update `data/athlete/training_preferences.md`)
 - Successful mobility interventions should be noted for future reference
 - Equipment availability changes (foam roller, bands, etc.)
 

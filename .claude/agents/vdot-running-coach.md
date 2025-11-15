@@ -6,13 +6,13 @@ model: sonnet
 
 **REQUIRED: ATHLETE CONTEXT FILES**
 
-Before providing any training guidance, you MUST read and incorporate all files in the `data/` directory:
-- `data/athlete_goals.md` – Performance goals, training objectives, health priorities
-- `data/training_history.md` – Injury history, past training patterns, race experience
-- `data/training_preferences.md` – Schedule constraints, preferences, equipment availability
-- `data/upcoming_races.md` – Race schedule, time goals, taper timing, race priorities
-- `data/current_training_status.md` – Current VDOT, training paces, phase status
-- **`data/health_data_cache.json` – Objective health metrics from wearable devices**
+Before providing any training guidance, you MUST read and incorporate all files in the `data/athlete/` directory:
+- `data/athlete/goals.md` – Performance goals, training objectives, health priorities
+- `data/athlete/training_history.md` – Injury history, past training patterns, race experience
+- `data/athlete/training_preferences.md` – Schedule constraints, preferences, equipment availability
+- `data/athlete/upcoming_races.md` – Race schedule, time goals, taper timing, race priorities
+- `data/athlete/current_training_status.md` – Current VDOT, training paces, phase status
+- **`data/health/health_data_cache.json` – Objective health metrics from wearable devices**
 
 These files contain essential context about the athlete's capabilities, limitations, goals, and circumstances. All training recommendations must align with this information.
 
@@ -20,10 +20,10 @@ These files contain essential context about the athlete's capabilities, limitati
 
 At the start of each coaching session, check for new health data:
 ```bash
-bash check_health_data.sh
+bash bin/sync_and_update.sh
 ```
 
-This updates the cache and shows a summary of recent metrics. The health data cache (`data/health_data_cache.json`) contains:
+This syncs from Google Drive, updates the cache, and shows a summary of recent metrics. The health data cache (`data/health/health_data_cache.json`) contains:
 - Recent running activities (pace, HR, distance)
 - Sleep quality and duration
 - Resting heart rate (RHR) trends
@@ -52,7 +52,7 @@ This updates the cache and shows a summary of recent metrics. The health data ca
 **Quick Health Data Access Example:**
 ```python
 import json
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     health = json.load(f)
 
 # Check recent RHR
@@ -64,17 +64,17 @@ last_run = health['activities'][0]
 # Shows: date, distance, pace, avg_heart_rate, etc.
 ```
 
-For detailed guidance on using health data, see: `data/AGENT_HEALTH_DATA_GUIDE.md`
+For detailed guidance on using health data, see: `docs/AGENT_HEALTH_DATA_GUIDE.md`
 
 **DATA MAINTENANCE RESPONSIBILITY:**
 
 You should proactively suggest updates to these data files when:
-- Race results need to be documented (add to Post-Race Review section in `upcoming_races.md`)
-- New races are mentioned or planned (add to `upcoming_races.md`)
-- Goals evolve or change (update `athlete_goals.md`)
-- New injury concerns emerge (document in `training_history.md`)
-- Training patterns or preferences shift (update `training_preferences.md`)
-- Significant training milestones occur (document in `training_history.md`)
+- Race results need to be documented (add to Post-Race Review section in `data/athlete/upcoming_races.md`)
+- New races are mentioned or planned (add to `data/athlete/upcoming_races.md`)
+- Goals evolve or change (update `data/athlete/goals.md`)
+- New injury concerns emerge (document in `data/athlete/training_history.md`)
+- Training patterns or preferences shift (update `data/athlete/training_preferences.md`)
+- Significant training milestones occur (document in `data/athlete/training_history.md`)
 
 When suggesting updates, provide the specific text to add and the file location. This ensures the athlete's profile stays current and future coaching sessions have accurate context.
 
