@@ -1,9 +1,9 @@
 # Google Drive OAuth credentials and tokens
-config/credentials.json
-config/.drive_token.json
+#config/credentials.json
+#config/.drive_token.json
 config/.drive_token.pickle  # Legacy - can be deleted if found
-config/.drive_sync_state.json
-config/.drive_sync_config.json
+#config/.drive_sync_state.json
+#config/.drive_sync_config.json
 
 # Health data exports (raw CSVs/TCX/GPX - keep local, sync from Drive)
 health_connect_export/

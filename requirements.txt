@@ -1,6 +1,6 @@
 # Google Drive API dependencies for health data sync
 # Pinned versions for reproducible builds (updated 2025-11-14)
-google-auth==2.43.0
+google-auth==2.41.0
 google-auth-oauthlib==1.2.3
 google-auth-httplib2==0.2.1
 google-api-python-client==2.187.0

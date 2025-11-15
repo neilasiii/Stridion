@@ -95,9 +95,14 @@ class GoogleDriveHealthSync:
 
         # Validate folder ID format (basic check)
         folder_id = config['google_drive_folder_id']
-        if not folder_id or not isinstance(folder_id, str) or len(folder_id) < 10:
+        if not folder_id or not isinstance(folder_id, str):
             raise ConfigurationError(
                 f"Invalid google_drive_folder_id: must be a valid Drive folder ID"
+            )
+        # Allow "root" as special case for Drive root, otherwise require 10+ chars
+        if folder_id != "root" and len(folder_id) < 10:
+            raise ConfigurationError(
+                f"Invalid google_drive_folder_id: must be 'root' or a valid Drive folder ID (10+ characters)"
             )
 
         # Set default values for optional fields

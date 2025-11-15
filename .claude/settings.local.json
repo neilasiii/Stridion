@@ -3,7 +3,8 @@
     "allow": [
       "Bash(python3:*)",
       "Bash(/tmp/athlete_health_summary.json)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(source:*)"
     ],
     "deny": [],
     "ask": []
