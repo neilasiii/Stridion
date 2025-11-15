@@ -4,69 +4,52 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a **running coach system** that provides personalized training guidance across four coaching domains: running, strength, mobility, and nutrition. The system integrates objective health data from wearable devices (Garmin, Health Connect) to inform coaching decisions with real metrics.
+This is a **running coach system** that provides personalized training guidance across four coaching domains: running, strength, mobility, and nutrition. The system integrates objective health data directly from **Garmin Connect** to inform coaching decisions with real metrics.
 
 ## Key Commands
 
 ### Health Data Management
 
-**Google Drive Sync (Primary Method)**
+**Garmin Connect Sync**
 ```bash
-# Sync from Google Drive + update cache + show summary (recommended)
-bash bin/sync_and_update.sh
+# Sync from Garmin Connect + show summary (recommended)
+bash bin/sync_garmin_data.sh
 
-# Check what would be synced without downloading
-bash bin/sync_and_update.sh --check-only
+# Sync specific number of days
+bash bin/sync_garmin_data.sh --days 60
 
-# Sync from Google Drive only
-python3 src/sync_health_data_from_drive.py
+# Check what would be synced without updating cache
+bash bin/sync_garmin_data.sh --check-only
 
-# Setup Google Drive authentication (one-time)
-python3 src/sync_health_data_from_drive.py --setup
+# Direct Python script usage
+python3 src/garmin_sync.py --summary
+
+# Quiet mode (no output)
+python3 src/garmin_sync.py --quiet
+
+# Sync and show 30-day summary
+python3 src/garmin_sync.py --days 30 --summary
 ```
 
-**Manual Update (Fallback Method)**
+**Environment Setup**
 ```bash
-# Update health data cache with new exports
-python3 src/update_health_data.py
+# Set credentials for Garmin Connect (required)
+export GARMIN_EMAIL=your@email.com
+export GARMIN_PASSWORD=yourpassword
 
-# Quick check for agents (updates + shows 14-day summary)
-bash bin/check_health_data.sh
-
-# Update quietly without output
-python3 src/update_health_data.py --quiet
-
-# Check for new data without processing
-python3 src/update_health_data.py --check-only
-
-# Show summary for specific time period
-python3 src/update_health_data.py --summary --days 30
+# Then run sync
+bash bin/sync_garmin_data.sh
 ```
 
 ### Testing
 
-**Run Test Suite**
+**Verify Health Data System**
 ```bash
-# Run all tests (some require Google Drive dependencies)
-python3 -m unittest discover -s tests -p 'test_*.py'
-
-# Run specific test file
-python3 -m unittest tests.test_sync_health_data
-
-# Run with pytest (if installed)
-pytest
-
-# Run with coverage
-pytest --cov=src --cov-report=html
-```
-
-**Test Health Data System**
-```bash
-# Test parser directly
-python3 src/health_data_parser.py
-
 # Verify cache status
 cat data/health/health_data_cache.json | python3 -m json.tool | head -50
+
+# Check recent activities
+cat data/health/health_data_cache.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(f\"Activities: {len(d['activities'])}\")"
 ```
 
 ## Architecture
@@ -84,78 +67,47 @@ All agents share access to athlete context files in [data/](data/) and the healt
 
 ### Health Data Pipeline
 
-**With Google Drive Sync (Recommended)**
+**Garmin Connect Direct Sync**
 ```
-Health Sync Android App → Google Drive
+Garmin Connect API (garminconnect library)
            ↓
-src/sync_health_data_from_drive.py (automatic download)
-           ↓
-health_connect_export/ (local CSV files)
-           ↓
-src/health_data_parser.py (parsing library)
-           ↓
-src/update_health_data.py (incremental updates)
+src/garmin_sync.py (authenticate & fetch)
            ↓
 data/health/health_data_cache.json (persistent cache)
            ↓
 Coaching Agents (read JSON for decisions)
 ```
 
-**Manual Method (Fallback)**
-```
-Manual Download from Google Drive → health_connect_export/
-           ↓
-src/health_data_parser.py (parsing library)
-           ↓
-src/update_health_data.py (incremental updates)
-           ↓
-data/health/health_data_cache.json (persistent cache)
-           ↓
-Coaching Agents (read JSON for decisions)
-```
-
-**Key Design Principle**: Incremental updates only. The system tracks file modification times and only processes new/changed data to avoid reprocessing historical records.
+**Key Design Principles**:
+- Direct API access - no intermediate CSV files or manual exports
+- OAuth authentication via garminconnect library (tokens cached in ~/.garminconnect)
+- Incremental updates - tracks last sync date to avoid refetching all historical data
+- Atomic cache updates - write to temp file, then rename
+- De-duplication by timestamp - safe to re-sync date ranges
 
 ### Core Components
 
-**[src/sync_health_data_from_drive.py](src/sync_health_data_from_drive.py)**: Google Drive sync
-- Authenticates with Google Drive using OAuth2
-- Secure JSON token storage (no pickle vulnerabilities)
-- Path traversal validation prevents directory escape attacks
-- File size limits (configurable, default 500MB)
-- Atomic file downloads prevent partial/corrupted files
-- Downloads new/modified files from specified Drive folder
-- Tracks sync state to avoid re-downloading unchanged files
-- Maintains local folder structure matching Drive
-- See [docs/GOOGLE_DRIVE_SETUP.md](docs/GOOGLE_DRIVE_SETUP.md) for setup instructions
-
-**[bin/sync_and_update.sh](bin/sync_and_update.sh)**: All-in-one convenience wrapper
-- Syncs from Google Drive
-- Updates health data cache
-- Shows 14-day summary
-- Primary command for agents to refresh health data
-
-**[src/health_data_parser.py](src/health_data_parser.py)**: Core parsing library
-- Parses CSV exports from Health Connect
-- Provides data classes: `Activity`, `SleepSession`, `VO2MaxReading`, `WeightReading`, `RestingHRReading`
-- Handles multiple activity types (running, walking)
-- Parses sleep stages, heart rate metrics, body composition
-
-**[src/update_health_data.py](src/update_health_data.py)**: Incremental update manager
-- Tracks file modification times in cache
-- De-duplicates entries by timestamp
+**[src/garmin_sync.py](src/garmin_sync.py)**: Main Garmin Connect sync script
+- Authenticates with Garmin Connect using OAuth (via garminconnect library)
+- Fetches activities (running, walking), sleep, VO2 max, weight, resting HR
+- Parses Garmin API responses into standardized format
+- Merges with existing cache data (de-duplicates by timestamp)
 - Updates [data/health/health_data_cache.json](data/health/health_data_cache.json) atomically
 - Provides summary statistics
+- Supports incremental sync (--days parameter)
+- Check-only mode for preview without updating
 
-**[bin/check_health_data.sh](bin/check_health_data.sh)**: Simple wrapper for agents (legacy)
-- Single command to update and view summary
-- Shows 14-day overview by default
-- Use `bin/sync_and_update.sh` instead for automatic Drive sync
+**[bin/sync_garmin_data.sh](bin/sync_garmin_data.sh)**: Convenience wrapper script
+- Runs Garmin sync with summary display
+- Default: 30 days of data
+- Supports --days and --check-only options
+- Primary command for agents to refresh health data
 
 **[data/health/health_data_cache.json](data/health/health_data_cache.json)**: Persistent storage
 - Contains: activities, sleep_sessions, vo2_max_readings, weight_readings, resting_hr_readings
 - Sorted newest-first for easy access to recent data
-- Includes `last_updated` timestamp and `last_processed_files` metadata
+- Includes `last_updated` timestamp and `last_sync_date` metadata
+- No file tracking needed (direct API access)
 
 ### Athlete Context Files
 
@@ -166,11 +118,10 @@ All coaching agents MUST read these files in [data/athlete/](data/athlete/) befo
 - **[training_preferences.md](data/athlete/training_preferences.md)** - Schedule constraints (Mon-Thu workdays 0700-1730), preferred workout structure, dietary requirements (gluten-free, dairy-free)
 - **[upcoming_races.md](data/athlete/upcoming_races.md)** - Race schedule, time goals, taper timing
 - **[current_training_status.md](data/athlete/current_training_status.md)** - Current VDOT, training paces, phase status
-- **[health_data_cache.json](data/health/health_data_cache.json)** - Objective metrics from wearables
+- **[health_data_cache.json](data/health/health_data_cache.json)** - Objective metrics from Garmin Connect
 
 ### Documentation
 
-- **[docs/GOOGLE_DRIVE_SETUP.md](docs/GOOGLE_DRIVE_SETUP.md)** - Setup instructions for Google Drive sync (OAuth, credentials, configuration)
 - **[docs/HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Complete technical documentation for health data system
 - **[docs/AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on using health data
 - **[data/athlete/health_profile.md](data/athlete/health_profile.md)** - Human-readable health summary
@@ -179,7 +130,7 @@ All coaching agents MUST read these files in [data/athlete/](data/athlete/) befo
 
 ### When Agents Should Check Health Data
 
-Coaching agents should run `bash bin/sync_and_update.sh` when:
+Coaching agents should run `bash bin/sync_garmin_data.sh` when:
 1. Beginning a coaching session
 2. User mentions completing a workout
 3. Making recovery-based recommendations
@@ -187,11 +138,20 @@ Coaching agents should run `bash bin/sync_and_update.sh` when:
 5. User mentions new health data is available
 
 This automatically:
-- Syncs latest data from Google Drive
+- Fetches latest data from Garmin Connect API
 - Updates the local cache
 - Provides a summary of recent activity
 
-For manual workflows without Google Drive, use `bash bin/check_health_data.sh` instead.
+### Authentication
+
+The Garmin sync requires credentials to be set as environment variables:
+
+```bash
+export GARMIN_EMAIL=your@email.com
+export GARMIN_PASSWORD=yourpassword
+```
+
+The garminconnect library handles OAuth authentication and stores tokens in `~/.garminconnect/` for persistent access (valid for ~1 year).
 
 ### Using Health Data in Coaching Decisions
 
@@ -230,6 +190,8 @@ efficiency = last_night['sleep_efficiency']
 
 ### Supported Data Types
 
+All data is fetched directly from Garmin Connect API:
+
 - **Activities**: Date, distance, duration, pace, avg/max HR, calories (running, walking)
 - **Sleep**: Total duration, light/deep/REM/awake minutes, efficiency %
 - **VO2 Max**: Garmin estimates (ml/kg/min)
@@ -241,22 +203,12 @@ efficiency = last_night['sleep_efficiency']
 ```
 running-coach/
 ├── bin/                            # Executable scripts
-│   ├── sync_and_update.sh          # Google Drive sync + update + summary
-│   └── check_health_data.sh        # Quick health data check (legacy)
+│   └── sync_garmin_data.sh         # Garmin Connect sync + summary
 │
 ├── src/                            # Python source code
-│   ├── health_data_parser.py       # Core parsing library
-│   ├── update_health_data.py       # Incremental cache updates
-│   └── sync_health_data_from_drive.py  # Google Drive sync
-│
-├── config/                         # Configuration files
-│   ├── .drive_sync_config.json.template  # Drive config template
-│   ├── .drive_sync_config.json     # Drive folder config (gitignored)
-│   ├── .drive_token.json           # OAuth token - JSON format (gitignored)
-│   └── credentials.json            # Google OAuth credentials (gitignored)
+│   └── garmin_sync.py              # Garmin Connect API sync script
 │
 ├── docs/                           # Documentation
-│   ├── GOOGLE_DRIVE_SETUP.md       # Drive sync setup guide
 │   ├── HEALTH_DATA_SYSTEM.md       # Technical documentation
 │   ├── AGENT_HEALTH_DATA_GUIDE.md  # Agent quick reference
 │   ├── README.md                   # Project README
@@ -281,32 +233,27 @@ running-coach/
 │   └── health/                     # Health data cache
 │       └── health_data_cache.json  # Processed health metrics
 │
-├── health_connect_export/          # Raw exports from Health Connect
-│   ├── Health Sync Activities/     # Running/walking CSVs, TCX/GPX/FIT
-│   ├── Health Sync Sleep/          # Sleep tracking CSVs
-│   ├── Health Sync Heart rate/     # RHR, HRV, continuous HR CSVs
-│   ├── Health Sync VO2 max/        # VO2 max estimates
-│   └── Health Sync Weight/         # Weight and body composition
-│
 ├── .claude/agents/                 # Claude agent configurations
 ├── .gitignore                      # Git ignore patterns
-├── requirements.txt                # Python dependencies
+├── requirements.txt                # Python dependencies (garminconnect)
 └── CLAUDE.md                       # This file
 ```
 
 ## Important Implementation Details
 
-### Health Data Parser
-- Uses Python standard library only (csv, xml, datetime, pathlib, dataclasses)
-- No external dependencies required
-- Handles malformed CSV rows gracefully
-- De-duplicates by timestamp automatically
+### Garmin Connect Sync
+- Uses garminconnect Python library (garth-based OAuth)
+- Credentials via environment variables (GARMIN_EMAIL, GARMIN_PASSWORD)
+- Tokens stored in ~/.garminconnect/ (valid for ~1 year)
+- Fetches data via API calls (no CSV parsing needed)
+- Supports incremental sync by date range
 
-### Incremental Updates
-- Tracks file modification times to avoid reprocessing
+### Data Caching
 - Atomic cache updates (write to temp file, then rename)
 - Safe to run multiple times - won't create duplicates
-- Handles partial/interrupted exports gracefully
+- De-duplicates by timestamp automatically
+- Tracks last_sync_date for incremental updates
+- Sorted newest-first for easy access to recent data
 
 ### Agent Coordination
 - All agents use same athlete context files for consistency
@@ -342,19 +289,47 @@ running-coach/
 
 ## Troubleshooting
 
+### Authentication Issues
+1. Verify environment variables are set:
+   ```bash
+   echo $GARMIN_EMAIL
+   echo $GARMIN_PASSWORD
+   ```
+2. Try re-authenticating by removing token cache:
+   ```bash
+   rm -rf ~/.garminconnect
+   bash bin/sync_garmin_data.sh
+   ```
+3. Check Garmin Connect account status (ensure not locked)
+
 ### Health Data Not Updating
-1. Verify files exist in `health_connect_export/` with expected structure
-2. Check CSV files have correct headers
-3. Run with verbose output: `python3 src/update_health_data.py`
-4. Check cache timestamp: `python3 -c "import json; print(json.load(open('data/health/health_data_cache.json'))['last_updated'])"`
+1. Check authentication (see above)
+2. Run with verbose output to see errors:
+   ```bash
+   python3 src/garmin_sync.py --days 7 --summary
+   ```
+3. Verify cache timestamp:
+   ```bash
+   python3 -c "import json; print(json.load(open('data/health/health_data_cache.json'))['last_updated'])"
+   ```
+4. Check Garmin Connect API status (may be temporarily unavailable)
 
 ### Duplicate Entries
 - System automatically de-duplicates by timestamp
-- Re-exporting same date range is safe (won't create duplicates)
-- File modification tracking prevents reprocessing
+- Re-syncing same date range is safe (won't create duplicates)
+- Data merged by date/timestamp keys
 
 ### Resetting Cache
 ```bash
 # Complete reset (deletes all cached data)
-rm data/health/health_data_cache.json && python3 src/update_health_data.py
+rm data/health/health_data_cache.json
+
+# Then re-sync (e.g., 90 days of history)
+bash bin/sync_garmin_data.sh --days 90
 ```
+
+### Missing Data
+- Some data types may not be available on all days (e.g., weight, VO2 max)
+- Sleep data requires Garmin device with sleep tracking
+- VO2 max requires GPS activities with heart rate data
+- Check Garmin Connect web/app to verify data is actually available
