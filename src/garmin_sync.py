@@ -59,10 +59,23 @@ def get_garmin_client() -> Garmin:
     email = os.getenv("GARMIN_EMAIL")
     password = os.getenv("GARMIN_PASSWORD")
 
+    # Fallback: check for local credentials file (for testing only)
+    if not email or not password:
+        creds_file = Path(__file__).parent.parent / ".garmin_credentials.json"
+        if creds_file.exists():
+            try:
+                with open(creds_file, 'r') as f:
+                    creds = json.load(f)
+                    email = creds.get('garmin_email')
+                    password = creds.get('garmin_password')
+            except Exception:
+                pass  # Ignore errors, will raise below if still missing
+
     if not email or not password:
         raise GarminSyncError(
             "GARMIN_EMAIL and GARMIN_PASSWORD environment variables must be set.\n"
-            "Example: export GARMIN_EMAIL=your@email.com && export GARMIN_PASSWORD=yourpassword"
+            "Example: export GARMIN_EMAIL=your@email.com && export GARMIN_PASSWORD=yourpassword\n"
+            "Or create .garmin_credentials.json for testing (NOT recommended for production)"
         )
 
     try:
