@@ -208,6 +208,7 @@ class HealthDataParser:
         stages = defaultdict(float)
         first_timestamp = None
         last_timestamp = None
+        seen_entries = set()  # Track (timestamp, stage, duration) to deduplicate
 
         with open(filepath, 'r') as f:
             reader = csv.DictReader(f)
@@ -217,12 +218,21 @@ class HealthDataParser:
                     date_str = row.get('Date', '').strip()
                     timestamp = datetime.strptime(date_str, '%Y.%m.%d %H:%M:%S')
 
+                    duration_sec = float(row.get('Duration in seconds', 0))
+                    stage = row.get('Sleep stage', 'unknown').lower()
+
+                    # Create unique key for this entry to detect duplicates
+                    entry_key = (timestamp, stage, duration_sec)
+
+                    # Skip if we've already seen this exact entry
+                    if entry_key in seen_entries:
+                        continue
+
+                    seen_entries.add(entry_key)
+
                     if first_timestamp is None:
                         first_timestamp = timestamp
                     last_timestamp = timestamp
-
-                    duration_sec = float(row.get('Duration in seconds', 0))
-                    stage = row.get('Sleep stage', 'unknown').lower()
 
                     stages[stage] += duration_sec / 60  # Convert to minutes
 
