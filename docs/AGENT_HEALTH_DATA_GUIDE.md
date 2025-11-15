@@ -2,22 +2,24 @@
 
 ## Quick Start for Coaching Agents
 
-When starting a coaching session or when the user mentions uploading new data:
+When starting a coaching session or when the user mentions new workout data:
 
 ```bash
-bash check_health_data.sh
+bash bin/sync_garmin_data.sh
 ```
 
 This command:
-1. Checks for new health data files
+1. Fetches latest data from Garmin Connect API
 2. Updates the cache incrementally
 3. Shows a 14-day summary
+
+**Note:** Requires `GARMIN_EMAIL` and `GARMIN_PASSWORD` environment variables to be set.
 
 ---
 
 ## Reading Current Health Metrics
 
-The health data cache is in: **`data/health_data_cache.json`**
+The health data cache is in: **`data/health/health_data_cache.json`**
 
 ### Quick Python Access
 
@@ -25,7 +27,7 @@ The health data cache is in: **`data/health_data_cache.json`**
 import json
 
 # Load the cache
-with open('data/health_data_cache.json', 'r') as f:
+with open('data/health/health_data_cache.json', 'r') as f:
     health = json.load(f)
 
 # Access recent data
@@ -155,7 +157,7 @@ last_night_sleep = health['sleep_sessions'][0] if health['sleep_sessions'] else 
 User: "I just finished my long run. What should I do for recovery?"
 
 Agent Actions:
-1. Check health data: `bash check_health_data.sh`
+1. Sync health data: `bash bin/sync_garmin_data.sh`
 2. Read cache: Review last run details (distance, HR, pace)
 3. Assess: Compare to recent training load and recovery metrics
 4. Recommend: Provide evidence-based recovery protocol
@@ -231,32 +233,56 @@ elif fatigue_count >= 2:
 
 ## Important Notes
 
-1. **Always check for new data at session start**
+1. **Always sync data at session start** - Run `bash bin/sync_garmin_data.sh`
 2. **Use objective metrics to support recommendations**
 3. **Never ignore multiple red flags (RHR, sleep, performance)**
 4. **Communicate the "why" - show the athlete the data**
-5. **Update cache before reading** - health data may be stale
+5. **Data is pulled directly from Garmin Connect** - no manual exports needed
 
 ---
 
 ## Troubleshooting for Agents
 
+**If authentication fails:**
+```bash
+# Verify environment variables are set
+echo $GARMIN_EMAIL
+echo $GARMIN_PASSWORD
+
+# Remove token cache and re-authenticate
+rm -rf ~/.garminconnect
+bash bin/sync_garmin_data.sh
+```
+
 **If health data seems stale:**
 ```bash
-# Manually trigger update
-python3 update_health_data.py --summary
+# Manually trigger sync with verbose output
+python3 src/garmin_sync.py --days 30 --summary
 ```
 
 **If no recent activities appear:**
 - Check `last_updated` timestamp in cache
-- Verify user uploaded new data to `health_connect_export/`
-- Run parser test: `python3 health_data_parser.py`
+- Verify data exists in Garmin Connect web/app
+- Check for API errors in sync output
+- Some data types (weight, VO2 max) may not be recorded daily
 
-**If metrics seem wrong:**
-- Some data (sleep) has duplicate entries - use aggregates
-- Weight readings may have null body composition values
-- RHR files have many duplicate timestamps - filter by unique dates
+**If sync is slow:**
+- Reduce sync window: `bash bin/sync_garmin_data.sh --days 14`
+- Default is 30 days, which is usually sufficient
 
 ---
 
-For full technical details, see: **`HEALTH_DATA_SYSTEM.md`**
+## Data Source Notes
+
+All data comes directly from Garmin Connect API:
+- **Activities**: Synced immediately after upload to Garmin Connect
+- **Sleep**: Usually available next morning (requires compatible Garmin device)
+- **VO2 Max**: Calculated by Garmin from GPS runs with HR data
+- **Weight**: Manual entry in Garmin Connect or compatible scale
+- **Resting HR**: Calculated daily by Garmin device
+
+**Data Latency**: Most recent data is typically available within minutes of syncing with Garmin Connect mobile app or uploading from device.
+
+---
+
+For full technical details, see: **`docs/HEALTH_DATA_SYSTEM.md`**
