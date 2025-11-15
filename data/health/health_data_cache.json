@@ -1,0 +1,2701 @@
+{
+  "last_updated": "2025-11-15T14:38:02.866775",
+  "last_processed_files": {
+    "Health Sync Activities/RUNNING 2025.11.12 12_38_55 Garmin.csv": "2025-11-12T10:27:10",
+    "Health Sync Activities/RUNNING 2025.11.08 11_37_14 Garmin.csv": "2025-11-08T10:56:44",
+    "Health Sync Activities/RUNNING 2025.11.10 10_59_05 Garmin.csv": "2025-11-10T08:42:24",
+    "Health Sync Activities/RUNNING 2025.11.06 16_45_26 Garmin.csv": "2025-11-06T15:21:56",
+    "Health Sync Activities/RUNNING 2025.11.05 11_15_40 Garmin.csv": "2025-11-05T09:36:48",
+    "Health Sync Activities/RUNNING 2025.11.03 10_50_48 Garmin.csv": "2025-11-03T09:35:18",
+    "Health Sync Activities/RUNNING 2025.11.01 10_38_20 Garmin.csv": "2025-11-02T09:18:24",
+    "Health Sync Activities/WALKING 2025.11.13 12_12_47 Garmin.csv": "2025-11-13T09:47:06",
+    "Health Sync Activities/WALKING 2025.11.11 12_27_51 Garmin.csv": "2025-11-11T11:22:08",
+    "Health Sync Activities/WALKING 2025.11.07 10_59_44 Garmin.csv": "2025-11-07T08:40:28",
+    "Health Sync Activities/WALKING 2025.11.05 12_43_07 Garmin.csv": "2025-11-05T11:11:32",
+    "Health Sync Sleep/Sleep 2025.11.12 00_00_00 Health Connect.csv": "2025-11-13T12:47:02",
+    "Health Sync Sleep/Sleep 2025.11.09 00_00_00 Health Connect.csv": "2025-11-10T04:54:04",
+    "Health Sync Sleep/Sleep 2025.11.11 00_00_00 Health Connect.csv": "2025-11-12T20:53:10",
+    "Health Sync Sleep/Sleep 2025.11.10 00_00_00 Health Connect.csv": "2025-11-11T20:44:32",
+    "Health Sync Sleep/Sleep 2025.10.09-2025.11.08 Health Connect.csv": "2025-11-15T14:14:44.925855",
+    "Health Sync Sleep/Sleep 2025.10.10-2025.11.09 Health Connect.csv": "2025-11-15T14:14:43.534836",
+    "Health Sync Sleep/Sleep 2025.11.07 00_00_00 Health Connect.csv": "2025-11-08T20:53:32",
+    "Health Sync Sleep/Sleep 2025.10.07-2025.11.06 Health Connect.csv": "2025-11-15T14:14:45.689866",
+    "Health Sync Sleep/Sleep 2025.11.06 00_00_00 Health Connect.csv": "2025-11-07T04:36:52",
+    "Health Sync Sleep/Sleep 2025.11.04 00_00_00 Health Connect.csv": "2025-11-05T20:54:40",
+    "Health Sync Sleep/Sleep 2025.10.06-2025.11.05 Health Connect.csv": "2025-11-15T14:14:46.664880",
+    "Health Sync Sleep/Sleep 2025.11.03 00_00_00 Health Connect.csv": "2025-11-04T20:59:30",
+    "Health Sync Sleep/Sleep 2025.11.02 00_00_00 Health Connect.csv": "2025-11-03T04:09:40",
+    "Health Sync Sleep/Sleep 2025.10.03-2025.11.02 Health Connect.csv": "2025-11-15T14:14:48.751909",
+    "Health Sync Sleep/Sleep 2025.10.02-2025.11.01 Health Connect.csv": "2025-11-15T14:14:49.736923",
+    "Health Sync VO2 max/VO2 max 2025.10.06-2025.11.05 Health Connect.csv": "2025-11-15T14:14:23.623559",
+    "Health Sync VO2 max/VO2 max 2025.11.06 Health Connect.csv": "2025-11-15T14:14:22.911549",
+    "Health Sync VO2 max/VO2 max 2025.11.05 Health Connect.csv": "2025-11-15T14:14:24.075565",
+    "Health Sync VO2 max/VO2 max 2025.10.05-2025.11.04 Health Connect.csv": "2025-11-15T14:14:25.073579",
+    "Health Sync VO2 max/VO2 max 2025.11.03 Health Connect.csv": "2025-11-15T14:14:25.502585",
+    "Health Sync Weight/Weight 2025.11.13 Health Connect.csv": "2025-11-15T14:15:58.487901",
+    "Health Sync Weight/Weight 45-2025 Health Connect.csv": "2025-11-15T14:15:59.270912",
+    "Health Sync Weight/Weight 2025.10.13-2025.11.12 Health Connect.csv": "2025-11-15T14:16:00.600932",
+    "Health Sync Weight/Weight 2025.10.09-2025.11.08 Health Connect.csv": "2025-11-15T14:16:02.551960",
+    "Health Sync Weight/Weight 2025.11.05 Health Connect.csv": "2025-11-15T14:16:03.271970",
+    "Health Sync Weight/Weight 2024.12.25 Health Connect.csv": "2025-11-15T14:16:05.224998",
+    "Health Sync Weight/Weight 2024.12.10 Health Connect.csv": "2025-11-15T14:16:06.614019",
+    "Health Sync Weight/Weight 2025.11.09 Health Connect.csv": "2025-11-15T14:16:01.669947",
+    "Health Sync Weight/Weight 2024.11.09-2024.12.09 Health Connect.csv": "2025-11-15T14:16:07.697034",
+    "Health Sync Heart rate/RHR 2025.11.13 Health Connect.csv": "2025-11-15T14:18:34.246198",
+    "Health Sync Heart rate/RHR 2025.11.12 Health Connect.csv": "2025-11-15T14:18:38.513262",
+    "Health Sync Heart rate/RHR 2025.11.11 Health Connect.csv": "2025-11-15T14:18:42.452321",
+    "Health Sync Heart rate/RHR 2025.10.13-2025.11.12 Health Connect.csv": "2025-11-15T14:18:37.693250",
+    "Health Sync Heart rate/RHR 2025.10.11-2025.11.10 Health Connect.csv": "2025-11-15T14:18:45.326364",
+    "Health Sync Heart rate/RHR 2025.11.10 Health Connect.csv": "2025-11-15T14:18:45.764371",
+    "Health Sync Heart rate/RHR 2025.10.10-2025.11.09 Health Connect.csv": "2025-11-15T14:18:50.192438",
+    "Health Sync Heart rate/RHR 2025.11.09 Health Connect.csv": "2025-11-15T14:18:50.596444",
+    "Health Sync Heart rate/RHR 2025.10.08-2025.11.07 Health Connect.csv": "2025-11-15T14:18:58.160558",
+    "Health Sync Heart rate/RHR 2025.11.07 Health Connect.csv": "2025-11-15T14:18:59.085572",
+    "Health Sync Heart rate/RHR 2025.11.08 Health Connect.csv": "2025-11-15T14:18:54.691505",
+    "Health Sync Heart rate/RHR 2025.10.12-2025.11.11 Health Connect.csv": "2025-11-15T14:18:42.081316",
+    "Health Sync Heart rate/RHR 2025.11.06 Health Connect.csv": "2025-11-15T14:19:03.109632",
+    "Health Sync Heart rate/RHR 2025.10.09-2025.11.08 Health Connect.csv": "2025-11-15T14:18:54.343500",
+    "Health Sync Heart rate/RHR 2025.11.05 Health Connect.csv": "2025-11-15T14:19:07.396697",
+    "Health Sync Heart rate/RHR 2025.10.07-2025.11.06 Health Connect.csv": "2025-11-15T14:19:02.381621",
+    "Health Sync Heart rate/RHR 2025.10.06-2025.11.05 Health Connect.csv": "2025-11-15T14:19:06.774688",
+    "Health Sync Heart rate/RHR 2025.11.04 Health Connect.csv": "2025-11-15T14:19:10.771748",
+    "Health Sync Heart rate/RHR 2025.10.05-2025.11.04 Health Connect.csv": "2025-11-15T14:19:10.365742",
+    "Health Sync Heart rate/RHR 2025.11.03 Health Connect.csv": "2025-11-15T14:19:15.275816",
+    "Health Sync Heart rate/RHR 2025.10.04-2025.11.03 Health Connect.csv": "2025-11-15T14:19:14.763808",
+    "Health Sync Heart rate/RHR 2025.10.03-2025.11.02 Health Connect.csv": "2025-11-15T14:19:19.372878",
+    "Health Sync Heart rate/RHR 2025.11.02 Health Connect.csv": "2025-11-15T14:19:19.831885",
+    "Health Sync Heart rate/RHR 2025.10.02-2025.11.01 Health Connect.csv": "2025-11-15T14:19:23.065934",
+    "Health Sync Heart rate/RHR 2025.11.01 Health Connect.csv": "2025-11-15T14:18:29.399125",
+    "Health Sync Heart rate/RHR October 2025 Health Connect.csv": "2025-11-15T14:18:28.852117",
+    "Health Sync Activities/RUNNING 2025.11.15 11:47:02 Garmin.csv": "2025-11-15T14:14:51.886953",
+    "Health Sync Activities/RUNNING 2025.10.01 18:03:37 Garmin.csv": "2025-11-15T14:14:55.575005",
+    "Health Sync Activities/RUNNING 2025.10.02 08:01:28 Garmin.csv": "2025-11-15T14:14:57.212028",
+    "Health Sync Activities/RUNNING 2025.10.04 07:13:18 Garmin.csv": "2025-11-15T14:14:58.411045",
+    "Health Sync Activities/RUNNING 2025.10.06 09:12:36 Garmin.csv": "2025-11-15T14:15:01.616090",
+    "Health Sync Activities/RUNNING 2025.10.08 05:56:33 Garmin.csv": "2025-11-15T14:15:03.436116",
+    "Health Sync Activities/RUNNING 2025.10.13 17:45:30 Garmin.csv": "2025-11-15T14:15:05.638147",
+    "Health Sync Activities/RUNNING 2025.10.15 16:50:47 Garmin.csv": "2025-11-15T14:15:07.390171",
+    "Health Sync Activities/RUNNING 2025.10.16 17:17:45 Garmin.csv": "2025-11-15T14:15:08.931193",
+    "Health Sync Activities/RUNNING 2025.10.18 16:40:14 Garmin.csv": "2025-11-15T14:15:10.324213",
+    "Health Sync Activities/RUNNING 2025.10.20 10:44:21 Garmin.csv": "2025-11-15T14:15:11.993237",
+    "Health Sync Activities/RUNNING 2025.10.22 17:42:45 Garmin.csv": "2025-11-15T14:15:13.295255",
+    "Health Sync Activities/RUNNING 2025.10.24 10:48:20 Garmin.csv": "2025-11-15T14:15:14.771276",
+    "Health Sync Activities/RUNNING 2025.10.25 14:29:25 Garmin.csv": "2025-11-15T14:15:16.363298",
+    "Health Sync Activities/RUNNING 2025.10.27 16:38:41 Garmin.csv": "2025-11-15T14:15:18.127324",
+    "Health Sync Activities/RUNNING 2025.10.29 17:04:42 Garmin.csv": "2025-11-15T14:15:19.478343",
+    "Health Sync Activities/RUNNING 2025.10.30 11:55:24 Garmin.csv": "2025-11-15T14:15:20.779361",
+    "Health Sync Activities/RUNNING 2025.11.01 10:38:20 Garmin.csv": "2025-11-15T14:15:25.176424",
+    "Health Sync Activities/RUNNING 2025.11.14 13:22:58 Garmin.csv": "2025-11-15T14:15:29.265482",
+    "Health Sync Activities/RUNNING 2025.11.12 12:38:55 Garmin.csv": "2025-11-15T14:15:32.850533",
+    "Health Sync Activities/RUNNING 2025.11.10 10:59:05 Garmin.csv": "2025-11-15T14:15:37.253596",
+    "Health Sync Activities/RUNNING 2025.11.08 11:37:14 Garmin.csv": "2025-11-15T14:15:40.431642",
+    "Health Sync Activities/RUNNING 2025.11.06 16:45:26 Garmin.csv": "2025-11-15T14:15:44.711703",
+    "Health Sync Activities/RUNNING 2025.11.05 11:15:40 Garmin.csv": "2025-11-15T14:15:49.223768",
+    "Health Sync Activities/RUNNING 2025.11.03 10:50:48 Garmin.csv": "2025-11-15T14:15:52.817820",
+    "Health Sync Activities/WALKING 2025.11.15 09:59:20 Garmin.csv": "2025-11-15T14:14:55.163999",
+    "Health Sync Activities/WALKING 2025.10.05 19:14:05 Garmin.csv": "2025-11-15T14:14:59.875065",
+    "Health Sync Activities/WALKING 2025.10.30 09:57:22 Garmin.csv": "2025-11-15T14:15:22.381384",
+    "Health Sync Activities/WALKING 2025.11.13 12:12:47 Garmin.csv": "2025-11-15T14:15:32.364526",
+    "Health Sync Activities/WALKING 2025.11.11 12:27:51 Garmin.csv": "2025-11-15T14:15:36.737589",
+    "Health Sync Activities/WALKING 2025.11.07 10:59:44 Garmin.csv": "2025-11-15T14:15:44.325697",
+    "Health Sync Activities/WALKING 2025.11.05 12:43:07 Garmin.csv": "2025-11-15T14:15:48.865647",
+    "Health Sync Sleep/Sleep 2025.11.14 00:00:00 Health Connect.csv": "2025-11-15T14:14:26.043592",
+    "Health Sync Sleep/Sleep 2025.10.15 00:00:00 Health Connect.csv": "2025-11-15T14:14:30.996661",
+    "Health Sync Sleep/Sleep 2025.10.16 00:00:00 Health Connect.csv": "2025-11-15T14:14:31.509668",
+    "Health Sync Sleep/Sleep 2025.10.17 00:00:00 Health Connect.csv": "2025-11-15T14:14:31.929674",
+    "Health Sync Sleep/Sleep 2025.11.13 00:00:00 Health Connect.csv": "2025-11-15T14:14:32.431681",
+    "Health Sync Sleep/Sleep 2025.10.19 00:00:00 Health Connect.csv": "2025-11-15T14:14:32.838687",
+    "Health Sync Sleep/Sleep 2025.10.20 00:00:00 Health Connect.csv": "2025-11-15T14:14:34.143705",
+    "Health Sync Sleep/Sleep 2025.10.21 00:00:00 Health Connect.csv": "2025-11-15T14:14:34.580711",
+    "Health Sync Sleep/Sleep 2025.10.22 00:00:00 Health Connect.csv": "2025-11-15T14:14:34.990717",
+    "Health Sync Sleep/Sleep 2025.10.23 00:00:00 Health Connect.csv": "2025-11-15T14:14:35.398722",
+    "Health Sync Sleep/Sleep 2025.10.24 00:00:00 Health Connect.csv": "2025-11-15T14:14:36.249734",
+    "Health Sync Sleep/Sleep 2025.10.25 00:00:00 Health Connect.csv": "2025-11-15T14:14:36.658740",
+    "Health Sync Sleep/Sleep 2025.10.26 00:00:00 Health Connect.csv": "2025-11-15T14:14:37.037745",
+    "Health Sync Sleep/Sleep 2025.10.28 00:00:00 Health Connect.csv": "2025-11-15T14:14:38.215762",
+    "Health Sync Sleep/Sleep 2025.10.29 00:00:00 Health Connect.csv": "2025-11-15T14:14:38.880771",
+    "Health Sync Sleep/Sleep 2025.10.31 00:00:00 Health Connect.csv": "2025-11-15T14:14:39.914785",
+    "Health Sync Sleep/Sleep 2025.11.01 00:00:00 Health Connect.csv": "2025-11-15T14:14:40.880799",
+    "Health Sync Sleep/Sleep 2025.11.12 00:00:00 Health Connect.csv": "2025-11-15T14:14:41.277804",
+    "Health Sync Sleep/Sleep 2025.11.11 00:00:00 Health Connect.csv": "2025-11-15T14:14:41.750811",
+    "Health Sync Sleep/Sleep 2025.11.10 00:00:00 Health Connect.csv": "2025-11-15T14:14:42.464821",
+    "Health Sync Sleep/Sleep 2025.11.09 00:00:00 Health Connect.csv": "2025-11-15T14:14:44.303847",
+    "Health Sync Sleep/Sleep 2025.11.07 00:00:00 Health Connect.csv": "2025-11-15T14:14:45.296861",
+    "Health Sync Sleep/Sleep 2025.11.06 00:00:00 Health Connect.csv": "2025-11-15T14:14:46.233874",
+    "Health Sync Sleep/Sleep 2025.11.04 00:00:00 Health Connect.csv": "2025-11-15T14:14:47.111886",
+    "Health Sync Sleep/Sleep 2025.11.03 00:00:00 Health Connect.csv": "2025-11-15T14:14:47.603893",
+    "Health Sync Sleep/Sleep 2025.11.02 00:00:00 Health Connect.csv": "2025-11-15T14:14:49.245916",
+    "Health Sync VO2 max/VO2 max 2025.11.14 Health Connect.csv": "2025-11-15T14:14:21.984536",
+    "Health Sync VO2 max/VO2 max 2025.10.14-2025.11.13 Health Connect.csv": "2025-11-15T14:14:22.496543",
+    "Health Sync Heart rate/RHR 2025.11.15 Health Connect.csv": "2025-11-15T14:17:54.127598",
+    "Health Sync Heart rate/RHR 2025.10.15-2025.11.14 Health Connect.csv": "2025-11-15T14:17:57.505648",
+    "Health Sync Heart rate/RHR 2025.11.14 Health Connect.csv": "2025-11-15T14:17:57.959655",
+    "Health Sync Heart rate/RHR 2025.10.15 Health Connect.csv": "2025-11-15T14:18:00.698696",
+    "Health Sync Heart rate/RHR 2025.10.16 Health Connect.csv": "2025-11-15T14:18:01.799712",
+    "Health Sync Heart rate/RHR 2025.10.17 Health Connect.csv": "2025-11-15T14:18:03.177733",
+    "Health Sync Heart rate/RHR 2025.10.18 Health Connect.csv": "2025-11-15T14:18:04.659755",
+    "Health Sync Heart rate/RHR 2025.10.19 Health Connect.csv": "2025-11-15T14:18:06.392781",
+    "Health Sync Heart rate/RHR 42-2025 Health Connect.csv": "2025-11-15T14:18:07.183793",
+    "Health Sync Heart rate/RHR 2025.10.20 Health Connect.csv": "2025-11-15T14:18:07.816802",
+    "Health Sync Heart rate/RHR 2025.10.21 Health Connect.csv": "2025-11-15T14:18:10.179837",
+    "Health Sync Heart rate/RHR 2025.10.22 Health Connect.csv": "2025-11-15T14:18:11.462857",
+    "Health Sync Heart rate/RHR 2025.10.23 Health Connect.csv": "2025-11-15T14:18:12.688875",
+    "Health Sync Heart rate/RHR 2025.10.24 Health Connect.csv": "2025-11-15T14:18:14.250898",
+    "Health Sync Heart rate/RHR 2025.10.25 Health Connect.csv": "2025-11-15T14:18:16.541933",
+    "Health Sync Heart rate/RHR 2025.10.26 Health Connect.csv": "2025-11-15T14:18:18.038955",
+    "Health Sync Heart rate/RHR 43-2025 Health Connect.csv": "2025-11-15T14:18:19.883983",
+    "Health Sync Heart rate/RHR 2025.10.27 Health Connect.csv": "2025-11-15T14:18:20.491992",
+    "Health Sync Heart rate/RHR 2025.10.28 Health Connect.csv": "2025-11-15T14:18:22.646024",
+    "Health Sync Heart rate/RHR 2025.10.29 Health Connect.csv": "2025-11-15T14:18:24.639054",
+    "Health Sync Heart rate/RHR 2025.10.30 Health Connect.csv": "2025-11-15T14:18:26.094076",
+    "Health Sync Heart rate/RHR 2025.10.31 Health Connect.csv": "2025-11-15T14:18:27.554098",
+    "Health Sync Heart rate/RHR 2025.10.14-2025.11.13 Health Connect.csv": "2025-11-15T14:18:33.903193"
+  },
+  "activities": [
+    {
+      "date": "2025-11-15T11:47:02",
+      "activity_type": "RUNNING",
+      "duration_seconds": 5401,
+      "distance_miles": 17.380001,
+      "calories": 1534.0,
+      "avg_heart_rate": 157,
+      "max_heart_rate": 178,
+      "avg_speed": 6.096714,
+      "pace_per_mile": 5.1793245965099
+    },
+    {
+      "date": "2025-11-15T09:59:20",
+      "activity_type": "WALKING",
+      "duration_seconds": 2223,
+      "distance_miles": 3.6560364,
+      "calories": 130.0,
+      "avg_heart_rate": 90,
+      "max_heart_rate": 111,
+      "avg_speed": 3.1094077,
+      "pace_per_mile": 10.133925362449892
+    },
+    {
+      "date": "2025-11-14T13:22:58",
+      "activity_type": "RUNNING",
+      "duration_seconds": 1809,
+      "distance_miles": 4.675899,
+      "calories": 309.0,
+      "avg_heart_rate": 147,
+      "max_heart_rate": 161,
+      "avg_speed": 5.963261,
+      "pace_per_mile": 6.447957922102252
+    },
+    {
+      "date": "2025-11-13T12:12:47",
+      "activity_type": "WALKING",
+      "duration_seconds": 711,
+      "distance_miles": 1.1326852,
+      "calories": 56.0,
+      "avg_heart_rate": 78,
+      "max_heart_rate": 86,
+      "avg_speed": 3.029443,
+      "pace_per_mile": 10.461865309090292
+    },
+    {
+      "date": "2025-11-12T12:38:55",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2641,
+      "distance_miles": 4.3519225,
+      "calories": 409.0,
+      "avg_heart_rate": 131,
+      "max_heart_rate": 142,
+      "avg_speed": 5.9003077,
+      "pace_per_mile": 10.114303889066653
+    },
+    {
+      "date": "2025-11-11T12:27:51",
+      "activity_type": "WALKING",
+      "duration_seconds": 3807,
+      "distance_miles": 5.964567,
+      "calories": 398.0,
+      "avg_heart_rate": 76,
+      "max_heart_rate": 96,
+      "avg_speed": 3.268292,
+      "pace_per_mile": 10.637821655788258
+    },
+    {
+      "date": "2025-11-10T10:59:05",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2282,
+      "distance_miles": 3.6627781,
+      "calories": 349.0,
+      "avg_heart_rate": 130,
+      "max_heart_rate": 145,
+      "avg_speed": 5.7957177,
+      "pace_per_mile": 10.383739417174448
+    },
+    {
+      "date": "2025-11-08T11:37:14",
+      "activity_type": "RUNNING",
+      "duration_seconds": 6604,
+      "distance_miles": 22.279997,
+      "calories": 1814.0,
+      "avg_heart_rate": 156,
+      "max_heart_rate": 175,
+      "avg_speed": 6.5247073,
+      "pace_per_mile": 4.9401562606434215
+    },
+    {
+      "date": "2025-11-07T10:59:44",
+      "activity_type": "WALKING",
+      "duration_seconds": 2056,
+      "distance_miles": 3.4302983,
+      "calories": 125.0,
+      "avg_heart_rate": 87,
+      "max_heart_rate": 112,
+      "avg_speed": 3.2859423,
+      "pace_per_mile": 9.989413068439752
+    },
+    {
+      "date": "2025-11-06T16:45:26",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4204,
+      "distance_miles": 6.756828,
+      "calories": 658.0,
+      "avg_heart_rate": 132,
+      "max_heart_rate": 148,
+      "avg_speed": 5.7015195,
+      "pace_per_mile": 10.3697573279454
+    },
+    {
+      "date": "2025-11-05T12:43:07",
+      "activity_type": "WALKING",
+      "duration_seconds": 3434,
+      "distance_miles": 5.0681643,
+      "calories": 365.0,
+      "avg_heart_rate": 90,
+      "max_heart_rate": 118,
+      "avg_speed": 3.0758765,
+      "pace_per_mile": 11.292714668570104
+    },
+    {
+      "date": "2025-11-05T11:15:40",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4260,
+      "distance_miles": 7.0167227,
+      "calories": 713.0,
+      "avg_heart_rate": 141,
+      "max_heart_rate": 159,
+      "avg_speed": 5.8929114,
+      "pace_per_mile": 10.118684040342652
+    },
+    {
+      "date": "2025-11-03T10:50:48",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4206,
+      "distance_miles": 8.502602,
+      "calories": 690.0,
+      "avg_heart_rate": 138,
+      "max_heart_rate": 158,
+      "avg_speed": 5.888716,
+      "pace_per_mile": 8.244535025866199
+    },
+    {
+      "date": "2025-11-01T10:38:20",
+      "activity_type": "RUNNING",
+      "duration_seconds": 7661,
+      "distance_miles": 12.716529,
+      "calories": 1298.0,
+      "avg_heart_rate": 143,
+      "max_heart_rate": 158,
+      "avg_speed": 5.944777,
+      "pace_per_mile": 10.040737793570347
+    },
+    {
+      "date": "2025-10-30T11:55:24",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3483,
+      "distance_miles": 6.0118103,
+      "calories": 636.0,
+      "avg_heart_rate": 153,
+      "max_heart_rate": 178,
+      "avg_speed": 6.258351,
+      "pace_per_mile": 9.65599330371419
+    },
+    {
+      "date": "2025-10-30T09:57:22",
+      "activity_type": "WALKING",
+      "duration_seconds": 2331,
+      "distance_miles": 1.9335333,
+      "calories": 138.0,
+      "avg_heart_rate": 86,
+      "max_heart_rate": 103,
+      "avg_speed": 3.159514,
+      "pace_per_mile": 20.092749372353712
+    },
+    {
+      "date": "2025-10-29T17:04:42",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4204,
+      "distance_miles": 6.755691,
+      "calories": 712.0,
+      "avg_heart_rate": 146,
+      "max_heart_rate": 161,
+      "avg_speed": 5.7582974,
+      "pace_per_mile": 10.371502584512326
+    },
+    {
+      "date": "2025-10-27T16:38:41",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4255,
+      "distance_miles": 6.7212415,
+      "calories": 713.0,
+      "avg_heart_rate": 148,
+      "max_heart_rate": 165,
+      "avg_speed": 5.642445,
+      "pace_per_mile": 10.551126107679165
+    },
+    {
+      "date": "2025-10-25T14:29:25",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4800,
+      "distance_miles": 8.119998,
+      "calories": 829.0,
+      "avg_heart_rate": 156,
+      "max_heart_rate": 175,
+      "avg_speed": 5.790453,
+      "pace_per_mile": 9.852219175423441
+    },
+    {
+      "date": "2025-10-24T10:48:20",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4254,
+      "distance_miles": 7.026926,
+      "calories": 727.0,
+      "avg_heart_rate": 145,
+      "max_heart_rate": 162,
+      "avg_speed": 5.8764415,
+      "pace_per_mile": 10.089760444325158
+    },
+    {
+      "date": "2025-10-22T17:42:45",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4300,
+      "distance_miles": 7.046561,
+      "calories": 728.0,
+      "avg_heart_rate": 144,
+      "max_heart_rate": 160,
+      "avg_speed": 5.834423,
+      "pace_per_mile": 10.170445791452977
+    },
+    {
+      "date": "2025-10-20T10:44:21",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3979,
+      "distance_miles": 6.461559,
+      "calories": 683.0,
+      "avg_heart_rate": 149,
+      "max_heart_rate": 163,
+      "avg_speed": 5.8107505,
+      "pace_per_mile": 10.263261028285381
+    },
+    {
+      "date": "2025-10-18T16:40:14",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4250,
+      "distance_miles": 7.0155168,
+      "calories": 737.0,
+      "avg_heart_rate": 149,
+      "max_heart_rate": 165,
+      "avg_speed": 5.9117055,
+      "pace_per_mile": 10.096666482693523
+    },
+    {
+      "date": "2025-10-16T17:17:45",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4265,
+      "distance_miles": 7.0115895,
+      "calories": 744.0,
+      "avg_heart_rate": 151,
+      "max_heart_rate": 164,
+      "avg_speed": 5.8874407,
+      "pace_per_mile": 10.137977035497205
+    },
+    {
+      "date": "2025-10-15T16:50:47",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4274,
+      "distance_miles": 7.0276713,
+      "calories": 744.0,
+      "avg_heart_rate": 152,
+      "max_heart_rate": 166,
+      "avg_speed": 5.786483,
+      "pace_per_mile": 10.13612195171014
+    },
+    {
+      "date": "2025-10-13T17:45:30",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4348,
+      "distance_miles": 7.1246543,
+      "calories": 758.0,
+      "avg_heart_rate": 150,
+      "max_heart_rate": 168,
+      "avg_speed": 5.868036,
+      "pace_per_mile": 10.171253736011678
+    },
+    {
+      "date": "2025-10-08T05:56:33",
+      "activity_type": "RUNNING",
+      "duration_seconds": 9003,
+      "distance_miles": 15.28135,
+      "calories": 1592.0,
+      "avg_heart_rate": 156,
+      "max_heart_rate": 175,
+      "avg_speed": 5.9758334,
+      "pace_per_mile": 9.819158647632573
+    },
+    {
+      "date": "2025-10-06T09:12:36",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4229,
+      "distance_miles": 7.017245,
+      "calories": 741.0,
+      "avg_heart_rate": 150,
+      "max_heart_rate": 166,
+      "avg_speed": 5.878505,
+      "pace_per_mile": 10.044302761743866
+    },
+    {
+      "date": "2025-10-05T19:14:05",
+      "activity_type": "WALKING",
+      "duration_seconds": 1623,
+      "distance_miles": 1.2390329,
+      "calories": 82.0,
+      "avg_heart_rate": 78,
+      "max_heart_rate": 88,
+      "avg_speed": 2.825399,
+      "pace_per_mile": 21.83154297194207
+    },
+    {
+      "date": "2025-10-04T07:13:18",
+      "activity_type": "RUNNING",
+      "duration_seconds": 7804,
+      "distance_miles": 12.973969,
+      "calories": 1337.0,
+      "avg_heart_rate": 151,
+      "max_heart_rate": 170,
+      "avg_speed": 5.8935385,
+      "pace_per_mile": 10.025202516413186
+    },
+    {
+      "date": "2025-10-02T08:01:28",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3693,
+      "distance_miles": 6.081559,
+      "calories": 634.0,
+      "avg_heart_rate": 147,
+      "max_heart_rate": 166,
+      "avg_speed": 5.8748674,
+      "pace_per_mile": 10.12076015376978
+    },
+    {
+      "date": "2025-10-01T18:03:37",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2900,
+      "distance_miles": 4.794314,
+      "calories": 501.0,
+      "avg_heart_rate": 148,
+      "max_heart_rate": 163,
+      "avg_speed": 5.890883,
+      "pace_per_mile": 10.08138668709086
+    }
+  ],
+  "sleep_sessions": [
+    {
+      "date": "2025-11-14",
+      "total_duration_minutes": 1064.0,
+      "light_sleep_minutes": 434.0,
+      "deep_sleep_minutes": 224.0,
+      "rem_sleep_minutes": 36.0,
+      "awake_minutes": 370.0,
+      "sleep_efficiency": 65.22556390977444,
+      "deep_sleep_percentage": 32.27665706051873
+    },
+    {
+      "date": "2025-11-13",
+      "total_duration_minutes": 958.0,
+      "light_sleep_minutes": 520.0,
+      "deep_sleep_minutes": 138.0,
+      "rem_sleep_minutes": 92.0,
+      "awake_minutes": 208.0,
+      "sleep_efficiency": 78.28810020876827,
+      "deep_sleep_percentage": 18.4
+    },
+    {
+      "date": "2025-11-12",
+      "total_duration_minutes": 1046.0,
+      "light_sleep_minutes": 472.0,
+      "deep_sleep_minutes": 248.0,
+      "rem_sleep_minutes": 52.0,
+      "awake_minutes": 274.0,
+      "sleep_efficiency": 73.80497131931166,
+      "deep_sleep_percentage": 32.12435233160622
+    },
+    {
+      "date": "2025-11-11",
+      "total_duration_minutes": 1000.0,
+      "light_sleep_minutes": 576.0,
+      "deep_sleep_minutes": 102.0,
+      "rem_sleep_minutes": 40.0,
+      "awake_minutes": 282.0,
+      "sleep_efficiency": 71.8,
+      "deep_sleep_percentage": 14.206128133704734
+    },
+    {
+      "date": "2025-11-10",
+      "total_duration_minutes": 2012.0,
+      "light_sleep_minutes": 1046.0,
+      "deep_sleep_minutes": 238.0,
+      "rem_sleep_minutes": 274.0,
+      "awake_minutes": 454.0,
+      "sleep_efficiency": 77.43538767395626,
+      "deep_sleep_percentage": 15.275994865211809
+    },
+    {
+      "date": "2025-11-09",
+      "total_duration_minutes": 652.0,
+      "light_sleep_minutes": 402.0,
+      "deep_sleep_minutes": 74.0,
+      "rem_sleep_minutes": 92.0,
+      "awake_minutes": 84.0,
+      "sleep_efficiency": 87.11656441717791,
+      "deep_sleep_percentage": 13.028169014084506
+    },
+    {
+      "date": "2025-11-07",
+      "total_duration_minutes": 1492.0,
+      "light_sleep_minutes": 586.0,
+      "deep_sleep_minutes": 282.0,
+      "rem_sleep_minutes": 138.0,
+      "awake_minutes": 486.0,
+      "sleep_efficiency": 67.42627345844504,
+      "deep_sleep_percentage": 28.031809145129227
+    },
+    {
+      "date": "2025-11-06",
+      "total_duration_minutes": 454.0,
+      "light_sleep_minutes": 244.0,
+      "deep_sleep_minutes": 90.0,
+      "rem_sleep_minutes": 108.0,
+      "awake_minutes": 12.0,
+      "sleep_efficiency": 97.3568281938326,
+      "deep_sleep_percentage": 20.361990950226243
+    },
+    {
+      "date": "2025-11-04",
+      "total_duration_minutes": 1048.0,
+      "light_sleep_minutes": 460.0,
+      "deep_sleep_minutes": 192.0,
+      "rem_sleep_minutes": 86.0,
+      "awake_minutes": 310.0,
+      "sleep_efficiency": 70.41984732824427,
+      "deep_sleep_percentage": 26.01626016260163
+    },
+    {
+      "date": "2025-11-03",
+      "total_duration_minutes": 2000.0,
+      "light_sleep_minutes": 918.0,
+      "deep_sleep_minutes": 242.0,
+      "rem_sleep_minutes": 252.0,
+      "awake_minutes": 588.0,
+      "sleep_efficiency": 70.6,
+      "deep_sleep_percentage": 17.138810198300284
+    },
+    {
+      "date": "2025-11-02",
+      "total_duration_minutes": 1116.0,
+      "light_sleep_minutes": 514.0,
+      "deep_sleep_minutes": 118.0,
+      "rem_sleep_minutes": 112.0,
+      "awake_minutes": 372.0,
+      "sleep_efficiency": 66.66666666666666,
+      "deep_sleep_percentage": 15.86021505376344
+    },
+    {
+      "date": "2025-11-01",
+      "total_duration_minutes": 30.0,
+      "light_sleep_minutes": 30.0,
+      "deep_sleep_minutes": 0,
+      "rem_sleep_minutes": 0,
+      "awake_minutes": 0,
+      "sleep_efficiency": 100.0,
+      "deep_sleep_percentage": 0.0
+    },
+    {
+      "date": "2025-10-31",
+      "total_duration_minutes": 998.0,
+      "light_sleep_minutes": 545.0,
+      "deep_sleep_minutes": 155.0,
+      "rem_sleep_minutes": 151.0,
+      "awake_minutes": 147.0,
+      "sleep_efficiency": 85.27054108216433,
+      "deep_sleep_percentage": 18.213866039952997
+    },
+    {
+      "date": "2025-10-29",
+      "total_duration_minutes": 938.0,
+      "light_sleep_minutes": 602.0,
+      "deep_sleep_minutes": 126.0,
+      "rem_sleep_minutes": 114.0,
+      "awake_minutes": 96.0,
+      "sleep_efficiency": 89.76545842217483,
+      "deep_sleep_percentage": 14.964370546318289
+    },
+    {
+      "date": "2025-10-28",
+      "total_duration_minutes": 1464.0,
+      "light_sleep_minutes": 692.0,
+      "deep_sleep_minutes": 246.0,
+      "rem_sleep_minutes": 42.0,
+      "awake_minutes": 484.0,
+      "sleep_efficiency": 66.93989071038251,
+      "deep_sleep_percentage": 25.102040816326532
+    },
+    {
+      "date": "2025-10-26",
+      "total_duration_minutes": 1333.9333333333334,
+      "light_sleep_minutes": 759.9333333333334,
+      "deep_sleep_minutes": 104.0,
+      "rem_sleep_minutes": 94.0,
+      "awake_minutes": 376.0,
+      "sleep_efficiency": 71.81268429206857,
+      "deep_sleep_percentage": 10.856705407474424
+    },
+    {
+      "date": "2025-10-25",
+      "total_duration_minutes": 1312.0,
+      "light_sleep_minutes": 852.0,
+      "deep_sleep_minutes": 88.0,
+      "rem_sleep_minutes": 0,
+      "awake_minutes": 372.0,
+      "sleep_efficiency": 71.64634146341463,
+      "deep_sleep_percentage": 9.361702127659575
+    },
+    {
+      "date": "2025-10-24",
+      "total_duration_minutes": 1106.0,
+      "light_sleep_minutes": 398.0,
+      "deep_sleep_minutes": 184.0,
+      "rem_sleep_minutes": 60.0,
+      "awake_minutes": 464.0,
+      "sleep_efficiency": 58.04701627486437,
+      "deep_sleep_percentage": 28.66043613707165
+    },
+    {
+      "date": "2025-10-23",
+      "total_duration_minutes": 1622.0,
+      "light_sleep_minutes": 673.0,
+      "deep_sleep_minutes": 154.0,
+      "rem_sleep_minutes": 124.0,
+      "awake_minutes": 671.0,
+      "sleep_efficiency": 58.63131935881628,
+      "deep_sleep_percentage": 16.19348054679285
+    },
+    {
+      "date": "2025-10-22",
+      "total_duration_minutes": 94.85,
+      "light_sleep_minutes": 94.85,
+      "deep_sleep_minutes": 0,
+      "rem_sleep_minutes": 0,
+      "awake_minutes": 0,
+      "sleep_efficiency": 100.0,
+      "deep_sleep_percentage": 0.0
+    },
+    {
+      "date": "2025-10-21",
+      "total_duration_minutes": 6764.0,
+      "light_sleep_minutes": 3376.0,
+      "deep_sleep_minutes": 771.0,
+      "rem_sleep_minutes": 541.0,
+      "awake_minutes": 2076.0,
+      "sleep_efficiency": 69.30810171496155,
+      "deep_sleep_percentage": 16.446245733788395
+    },
+    {
+      "date": "2025-10-20",
+      "total_duration_minutes": 598.0,
+      "light_sleep_minutes": 360.0,
+      "deep_sleep_minutes": 96.0,
+      "rem_sleep_minutes": 70.0,
+      "awake_minutes": 72.0,
+      "sleep_efficiency": 87.95986622073578,
+      "deep_sleep_percentage": 18.250950570342205
+    },
+    {
+      "date": "2025-10-19",
+      "total_duration_minutes": 263.0,
+      "light_sleep_minutes": 207.0,
+      "deep_sleep_minutes": 32.0,
+      "rem_sleep_minutes": 13.0,
+      "awake_minutes": 11.0,
+      "sleep_efficiency": 95.81749049429658,
+      "deep_sleep_percentage": 12.698412698412698
+    },
+    {
+      "date": "2025-10-17",
+      "total_duration_minutes": 990.0,
+      "light_sleep_minutes": 506.0,
+      "deep_sleep_minutes": 104.0,
+      "rem_sleep_minutes": 90.0,
+      "awake_minutes": 290.0,
+      "sleep_efficiency": 70.70707070707071,
+      "deep_sleep_percentage": 14.857142857142858
+    },
+    {
+      "date": "2025-10-16",
+      "total_duration_minutes": 1242.0,
+      "light_sleep_minutes": 714.0,
+      "deep_sleep_minutes": 156.0,
+      "rem_sleep_minutes": 88.0,
+      "awake_minutes": 284.0,
+      "sleep_efficiency": 77.13365539452496,
+      "deep_sleep_percentage": 16.2839248434238
+    },
+    {
+      "date": "2025-10-15",
+      "total_duration_minutes": 259.0,
+      "light_sleep_minutes": 163.0,
+      "deep_sleep_minutes": 33.0,
+      "rem_sleep_minutes": 33.0,
+      "awake_minutes": 30.0,
+      "sleep_efficiency": 88.41698841698842,
+      "deep_sleep_percentage": 14.41048034934498
+    },
+    {
+      "date": "2025-10-10",
+      "total_duration_minutes": 16835.083333333332,
+      "light_sleep_minutes": 8645.083333333332,
+      "deep_sleep_minutes": 2101.0,
+      "rem_sleep_minutes": 1560.0,
+      "awake_minutes": 4529.0,
+      "sleep_efficiency": 73.09784626350726,
+      "deep_sleep_percentage": 17.07285692035782
+    },
+    {
+      "date": "2025-10-09",
+      "total_duration_minutes": 16657.083333333332,
+      "light_sleep_minutes": 8487.083333333332,
+      "deep_sleep_minutes": 2068.0,
+      "rem_sleep_minutes": 1475.0,
+      "awake_minutes": 4627.0,
+      "sleep_efficiency": 72.2220276659079,
+      "deep_sleep_percentage": 17.19023836077611
+    },
+    {
+      "date": "2025-10-07",
+      "total_duration_minutes": 16129.083333333332,
+      "light_sleep_minutes": 8545.083333333332,
+      "deep_sleep_minutes": 1935.0,
+      "rem_sleep_minutes": 1396.0,
+      "awake_minutes": 4253.0,
+      "sleep_efficiency": 73.63148350030224,
+      "deep_sleep_percentage": 16.29325044031071
+    },
+    {
+      "date": "2025-10-06",
+      "total_duration_minutes": 16176.083333333332,
+      "light_sleep_minutes": 8688.083333333332,
+      "deep_sleep_minutes": 1883.0,
+      "rem_sleep_minutes": 1315.0,
+      "awake_minutes": 4290.0,
+      "sleep_efficiency": 73.47936511207389,
+      "deep_sleep_percentage": 15.84205618615608
+    }
+  ],
+  "vo2_max_readings": [
+    {
+      "date": "2025-11-14T00:00:00",
+      "vo2_max": 51.0
+    },
+    {
+      "date": "2025-11-06T00:00:00",
+      "vo2_max": 51.0
+    },
+    {
+      "date": "2025-11-05T00:00:00",
+      "vo2_max": 51.0
+    },
+    {
+      "date": "2025-11-05T00:00:00",
+      "vo2_max": 51.0
+    },
+    {
+      "date": "2025-11-03T00:00:00",
+      "vo2_max": 51.0
+    },
+    {
+      "date": "2025-11-03T00:00:00",
+      "vo2_max": 51.0
+    },
+    {
+      "date": "2025-11-03T00:00:00",
+      "vo2_max": 51.0
+    }
+  ],
+  "weight_readings": [
+    {
+      "timestamp": "2025-11-13T08:19:34",
+      "weight_lbs": 165.99925,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-13T08:19:34",
+      "weight_lbs": 165.99925,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-09T09:30:32",
+      "weight_lbs": 166.59892,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-09T09:30:32",
+      "weight_lbs": 166.59892,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-09T09:30:32",
+      "weight_lbs": 166.59892,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-09T09:30:32",
+      "weight_lbs": 166.59892,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-09T09:30:32",
+      "weight_lbs": 166.59892,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-09T09:30:32",
+      "weight_lbs": 166.59892,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-05T09:10:15",
+      "weight_lbs": 168.4993,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-05T09:10:15",
+      "weight_lbs": 168.4993,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-05T09:10:15",
+      "weight_lbs": 168.4993,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-05T09:10:15",
+      "weight_lbs": 168.4993,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-05T09:10:15",
+      "weight_lbs": 168.4993,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-05T09:10:15",
+      "weight_lbs": 168.4993,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-05T09:10:15",
+      "weight_lbs": 168.4993,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-11-05T09:10:15",
+      "weight_lbs": 168.4993,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    }
+  ],
+  "resting_hr_readings": [
+    [
+      "2025-11-15T07:49:23",
+      45
+    ],
+    [
+      "2025-11-15T00:00:00",
+      45
+    ],
+    [
+      "2025-11-14T07:16:47",
+      46
+    ],
+    [
+      "2025-11-14T07:16:47",
+      46
+    ],
+    [
+      "2025-11-14T00:00:00",
+      46
+    ],
+    [
+      "2025-11-14T00:00:00",
+      46
+    ],
+    [
+      "2025-11-13T07:07:05",
+      46
+    ],
+    [
+      "2025-11-13T00:00:00",
+      46
+    ],
+    [
+      "2025-11-12T06:07:26",
+      46
+    ],
+    [
+      "2025-11-12T06:07:26",
+      46
+    ],
+    [
+      "2025-11-12T00:00:00",
+      45
+    ],
+    [
+      "2025-11-12T00:00:00",
+      45
+    ],
+    [
+      "2025-11-11T08:24:15",
+      45
+    ],
+    [
+      "2025-11-11T08:24:15",
+      45
+    ],
+    [
+      "2025-11-11T08:24:15",
+      45
+    ],
+    [
+      "2025-11-11T00:00:00",
+      45
+    ],
+    [
+      "2025-11-11T00:00:00",
+      45
+    ],
+    [
+      "2025-11-11T00:00:00",
+      45
+    ],
+    [
+      "2025-11-10T07:33:40",
+      45
+    ],
+    [
+      "2025-11-10T07:33:40",
+      45
+    ],
+    [
+      "2025-11-10T07:33:40",
+      45
+    ],
+    [
+      "2025-11-10T07:33:40",
+      45
+    ],
+    [
+      "2025-11-10T00:00:00",
+      45
+    ],
+    [
+      "2025-11-10T00:00:00",
+      45
+    ],
+    [
+      "2025-11-10T00:00:00",
+      45
+    ],
+    [
+      "2025-11-10T00:00:00",
+      45
+    ],
+    [
+      "2025-11-09T08:49:50",
+      50
+    ],
+    [
+      "2025-11-09T08:49:50",
+      50
+    ],
+    [
+      "2025-11-09T08:49:50",
+      50
+    ],
+    [
+      "2025-11-09T08:49:50",
+      50
+    ],
+    [
+      "2025-11-09T08:49:50",
+      50
+    ],
+    [
+      "2025-11-09T00:00:00",
+      50
+    ],
+    [
+      "2025-11-09T00:00:00",
+      50
+    ],
+    [
+      "2025-11-09T00:00:00",
+      50
+    ],
+    [
+      "2025-11-09T00:00:00",
+      50
+    ],
+    [
+      "2025-11-09T00:00:00",
+      50
+    ],
+    [
+      "2025-11-08T07:37:39",
+      48
+    ],
+    [
+      "2025-11-08T07:37:39",
+      48
+    ],
+    [
+      "2025-11-08T07:37:39",
+      48
+    ],
+    [
+      "2025-11-08T07:37:39",
+      48
+    ],
+    [
+      "2025-11-08T07:37:39",
+      48
+    ],
+    [
+      "2025-11-08T07:37:39",
+      48
+    ],
+    [
+      "2025-11-08T00:00:00",
+      48
+    ],
+    [
+      "2025-11-08T00:00:00",
+      48
+    ],
+    [
+      "2025-11-08T00:00:00",
+      48
+    ],
+    [
+      "2025-11-08T00:00:00",
+      48
+    ],
+    [
+      "2025-11-08T00:00:00",
+      48
+    ],
+    [
+      "2025-11-08T00:00:00",
+      48
+    ],
+    [
+      "2025-11-07T05:08:30",
+      47
+    ],
+    [
+      "2025-11-07T05:08:30",
+      47
+    ],
+    [
+      "2025-11-07T05:08:30",
+      47
+    ],
+    [
+      "2025-11-07T05:08:30",
+      47
+    ],
+    [
+      "2025-11-07T05:08:30",
+      47
+    ],
+    [
+      "2025-11-07T05:08:30",
+      47
+    ],
+    [
+      "2025-11-07T05:08:30",
+      47
+    ],
+    [
+      "2025-11-07T00:00:00",
+      47
+    ],
+    [
+      "2025-11-07T00:00:00",
+      47
+    ],
+    [
+      "2025-11-07T00:00:00",
+      47
+    ],
+    [
+      "2025-11-07T00:00:00",
+      47
+    ],
+    [
+      "2025-11-07T00:00:00",
+      47
+    ],
+    [
+      "2025-11-07T00:00:00",
+      47
+    ],
+    [
+      "2025-11-07T00:00:00",
+      47
+    ],
+    [
+      "2025-11-06T06:43:26",
+      45
+    ],
+    [
+      "2025-11-06T06:43:26",
+      45
+    ],
+    [
+      "2025-11-06T06:43:26",
+      45
+    ],
+    [
+      "2025-11-06T06:43:26",
+      45
+    ],
+    [
+      "2025-11-06T06:43:26",
+      45
+    ],
+    [
+      "2025-11-06T06:43:26",
+      45
+    ],
+    [
+      "2025-11-06T06:43:26",
+      45
+    ],
+    [
+      "2025-11-06T06:43:26",
+      45
+    ],
+    [
+      "2025-11-06T00:00:00",
+      45
+    ],
+    [
+      "2025-11-06T00:00:00",
+      45
+    ],
+    [
+      "2025-11-06T00:00:00",
+      45
+    ],
+    [
+      "2025-11-06T00:00:00",
+      45
+    ],
+    [
+      "2025-11-06T00:00:00",
+      45
+    ],
+    [
+      "2025-11-06T00:00:00",
+      45
+    ],
+    [
+      "2025-11-06T00:00:00",
+      45
+    ],
+    [
+      "2025-11-06T00:00:00",
+      45
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T06:34:07",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-05T00:00:00",
+      48
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T08:27:45",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-04T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T06:53:48",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-03T00:00:00",
+      45
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T08:58:29",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-02T01:00:00",
+      46
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T03:13:50",
+      48
+    ],
+    [
+      "2025-11-01T00:00:00",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T06:45:05",
+      47
+    ],
+    [
+      "2025-10-31T00:00:00",
+      47
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T07:01:05",
+      49
+    ],
+    [
+      "2025-10-30T00:00:00",
+      49
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T04:42:50",
+      45
+    ],
+    [
+      "2025-10-29T00:00:00",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T06:59:33",
+      45
+    ],
+    [
+      "2025-10-28T00:00:00",
+      45
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T09:03:43",
+      47
+    ],
+    [
+      "2025-10-27T00:00:00",
+      47
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T07:51:36",
+      46
+    ],
+    [
+      "2025-10-26T00:00:00",
+      46
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T06:46:06",
+      47
+    ],
+    [
+      "2025-10-25T00:00:00",
+      47
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T07:53:31",
+      46
+    ],
+    [
+      "2025-10-24T00:00:00",
+      46
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T07:45:08",
+      48
+    ],
+    [
+      "2025-10-23T00:00:00",
+      48
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T05:28:32",
+      46
+    ],
+    [
+      "2025-10-22T00:00:00",
+      46
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T08:20:55",
+      49
+    ],
+    [
+      "2025-10-21T00:00:00",
+      49
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T08:15:15",
+      46
+    ],
+    [
+      "2025-10-20T00:00:00",
+      46
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T04:58:01",
+      48
+    ],
+    [
+      "2025-10-19T00:00:00",
+      48
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T07:04:09",
+      47
+    ],
+    [
+      "2025-10-18T00:00:00",
+      47
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T03:24:14",
+      50
+    ],
+    [
+      "2025-10-17T00:00:00",
+      48
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T09:41:57",
+      49
+    ],
+    [
+      "2025-10-16T00:00:00",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T04:58:16",
+      49
+    ],
+    [
+      "2025-10-15T00:00:00",
+      49
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-14T09:52:16",
+      51
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-13T06:04:15",
+      46
+    ],
+    [
+      "2025-10-12T10:00:00",
+      47
+    ],
+    [
+      "2025-10-12T10:00:00",
+      47
+    ],
+    [
+      "2025-10-12T10:00:00",
+      47
+    ],
+    [
+      "2025-10-12T10:00:00",
+      47
+    ],
+    [
+      "2025-10-12T10:00:00",
+      47
+    ],
+    [
+      "2025-10-12T10:00:00",
+      47
+    ],
+    [
+      "2025-10-12T10:00:00",
+      47
+    ],
+    [
+      "2025-10-12T10:00:00",
+      47
+    ],
+    [
+      "2025-10-11T09:35:14",
+      46
+    ],
+    [
+      "2025-10-11T09:35:14",
+      46
+    ],
+    [
+      "2025-10-11T09:35:14",
+      46
+    ],
+    [
+      "2025-10-11T09:35:14",
+      46
+    ],
+    [
+      "2025-10-11T09:35:14",
+      46
+    ],
+    [
+      "2025-10-11T09:35:14",
+      46
+    ],
+    [
+      "2025-10-11T09:35:14",
+      46
+    ],
+    [
+      "2025-10-10T06:25:44",
+      48
+    ],
+    [
+      "2025-10-10T06:25:44",
+      48
+    ],
+    [
+      "2025-10-10T06:25:44",
+      48
+    ],
+    [
+      "2025-10-10T06:25:44",
+      48
+    ],
+    [
+      "2025-10-10T06:25:44",
+      48
+    ],
+    [
+      "2025-10-10T06:25:44",
+      48
+    ],
+    [
+      "2025-10-09T07:23:31",
+      48
+    ],
+    [
+      "2025-10-09T07:23:31",
+      48
+    ],
+    [
+      "2025-10-09T07:23:31",
+      48
+    ],
+    [
+      "2025-10-09T07:23:31",
+      48
+    ],
+    [
+      "2025-10-09T07:23:31",
+      48
+    ],
+    [
+      "2025-10-08T04:54:46",
+      47
+    ],
+    [
+      "2025-10-08T04:54:46",
+      47
+    ],
+    [
+      "2025-10-08T04:54:46",
+      47
+    ],
+    [
+      "2025-10-08T04:54:46",
+      47
+    ],
+    [
+      "2025-10-07T07:56:32",
+      47
+    ],
+    [
+      "2025-10-07T07:56:32",
+      47
+    ],
+    [
+      "2025-10-07T07:56:32",
+      47
+    ],
+    [
+      "2025-10-06T07:21:14",
+      48
+    ],
+    [
+      "2025-10-06T07:21:14",
+      48
+    ],
+    [
+      "2025-10-05T06:53:15",
+      47
+    ]
+  ],
+  "hrv_readings": []
+}
