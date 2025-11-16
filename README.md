@@ -272,6 +272,33 @@ This project is actively evolving. Current development priorities:
 - [ ] **Community Forums** - Athlete discussion and peer support
 - [ ] **Coach Dashboard** - Interface for human coaches to monitor athlete progress
 
+### Advanced Analytics & Intelligence
+- [ ] **Injury Risk Prediction** - ML model to detect overtraining patterns from training load trends
+- [ ] **HRV Tracking** - Heart rate variability monitoring for recovery assessment
+- [ ] **Automated VDOT Adjustments** - Update training paces based on race results and workout performance
+- [ ] **Performance Prediction** - Race time estimates based on current fitness and training phase
+- [ ] **Training Load Analytics** - Acute/chronic workload ratio, TSS/CTL tracking
+
+### Mobile & Offline Support
+- [ ] **Native iOS/Android Apps** - Full-featured mobile applications
+- [ ] **Offline Mode** - Access plans and log workouts without internet connection
+- [ ] **Watch App Integration** - Apple Watch, Garmin Connect IQ companion apps
+- [ ] **Push Notifications** - Workout reminders and recovery alerts on mobile devices
+
+### Extended Integrations
+- [ ] **Strava Sync** - Two-way sync of activities and training data
+- [ ] **TrainingPeaks Integration** - Import/export structured workouts and plans
+- [ ] **Zwift Integration** - Indoor training workouts and structured plans
+- [ ] **Weather API** - Real-time weather data for workout planning and race day
+- [ ] **Calendar Sync** - Export workouts to Google Calendar, Outlook, Apple Calendar
+
+### Race Day Features
+- [ ] **Race Strategy Generator** - Custom pacing plan based on course elevation profile
+- [ ] **Course Analysis** - Import GPX files and analyze elevation, terrain, splits
+- [ ] **Pre-race Checklist** - Equipment, nutrition, logistics planning tools
+- [ ] **Race Day Weather** - Location-specific forecasts and gear recommendations
+- [ ] **Multi-Race Season Planning** - Coordinate multiple goal races throughout the year
+
 Contributions welcome! See [Contributing](#contributing) section for guidelines.
 
 ## License
