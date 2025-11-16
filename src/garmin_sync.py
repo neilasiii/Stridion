@@ -120,6 +120,8 @@ def get_garmin_client() -> Garmin:
     """
     Authenticate with Garmin Connect and return client.
 
+    Reads credentials from environment variables first, then falls back to config file.
+
     Returns:
         Garmin: Authenticated Garmin client
 
@@ -129,11 +131,27 @@ def get_garmin_client() -> Garmin:
     email = os.getenv("GARMIN_EMAIL")
     password = os.getenv("GARMIN_PASSWORD")
 
+    # If not in environment, try loading from config file
+    if not email or not password:
+        config_file = Path(__file__).parent.parent / "config" / ".garmin_config.json"
+        if config_file.exists():
+            try:
+                with open(config_file, 'r') as f:
+                    config = json.load(f)
+                    email = email or config.get("email")
+                    password = password or config.get("password")
+            except Exception as e:
+                # Config file exists but couldn't read it - continue to check credentials
+                pass
+
     if not email or not password:
         raise GarminSyncError(
-            "GARMIN_EMAIL and GARMIN_PASSWORD environment variables must be set.\n"
-            "Example: export GARMIN_EMAIL=your@email.com\n"
-            "         export GARMIN_PASSWORD=yourpassword"
+            "GARMIN_EMAIL and GARMIN_PASSWORD must be set.\n"
+            "Option 1 - Environment variables:\n"
+            "  export GARMIN_EMAIL=your@email.com\n"
+            "  export GARMIN_PASSWORD=yourpassword\n"
+            "Option 2 - Config file (config/.garmin_config.json):\n"
+            "  {\"email\": \"your@email.com\", \"password\": \"yourpassword\"}"
         )
 
     try:
@@ -142,6 +160,60 @@ def get_garmin_client() -> Garmin:
         return client
     except Exception as e:
         raise GarminSyncError(f"Failed to authenticate with Garmin Connect: {e}")
+
+
+def _fetch_activity_splits(client: Garmin, activity_id: str, quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Fetch typed splits/laps for a specific activity.
+
+    Returns parsed list of splits with metrics like distance, duration, HR, pace, etc.
+    Useful for identifying warmup, intervals, cooldown, etc.
+    """
+    try:
+        split_data = client.get_activity_typed_splits(activity_id)
+
+        if not split_data or 'splits' not in split_data:
+            return []
+
+        splits = []
+        for split in split_data['splits']:
+            # Parse split data
+            split_type = split.get('type', 'UNKNOWN')  # RWD_RUN, RWD_WALK, RWD_STAND, etc.
+            distance_meters = split.get('distance', 0)
+            distance_miles = distance_meters / METERS_TO_MILES
+            duration_secs = split.get('duration', 0)
+
+            # Calculate pace if distance > 0
+            if distance_miles > 0 and duration_secs > 0:
+                pace_per_mile = (duration_secs / SECONDS_TO_MINUTES) / distance_miles
+            else:
+                pace_per_mile = None
+
+            # Convert speed if available
+            avg_speed_ms = split.get('averageSpeed')
+            avg_speed_mph = (avg_speed_ms * MS_TO_MPH) if avg_speed_ms else None
+
+            split_dict = {
+                'type': split_type,
+                'distance_miles': round(distance_miles, 6),
+                'duration_seconds': round(duration_secs, 3),
+                'avg_heart_rate': split.get('averageHR'),
+                'max_heart_rate': split.get('maxHR'),
+                'avg_speed_mph': round(avg_speed_mph, 6) if avg_speed_mph else None,
+                'pace_per_mile': round(pace_per_mile, 6) if pace_per_mile else None,
+                'avg_cadence': split.get('averageRunCadence'),
+                'avg_power': split.get('averagePower'),
+                'calories': split.get('calories')
+            }
+
+            splits.append(split_dict)
+
+        return splits
+
+    except Exception as e:
+        if not quiet:
+            print(f"  Warning: Could not fetch splits for activity {activity_id}: {e}", file=sys.stderr)
+        return []
 
 
 def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> List[Dict[str, Any]]:
@@ -183,6 +255,11 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             if activity_type in ['TRAIL_RUNNING', 'TREADMILL_RUNNING']:
                 activity_type = 'RUNNING'
 
+            # Get activity ID for fetching splits
+            activity_id = activity.get('activityId')
+            if not activity_id:
+                continue
+
             # Parse activity data - use local time to preserve athlete's date
             start_time = activity.get('startTimeLocal') or activity.get('startTimeGMT')
             if start_time:
@@ -199,11 +276,19 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             max_hr = activity.get('maxHR')
             avg_speed = activity.get('averageSpeed', 0) * MS_TO_MPH  # m/s to mph
 
+            # Get activity name (user-defined workout description)
+            activity_name = activity.get('activityName', '')
+
             # Calculate pace (minutes per mile)
             pace_per_mile = (duration / SECONDS_TO_MINUTES) / distance if distance > 0 else 0
 
+            # Fetch splits/laps for this activity
+            splits = _fetch_activity_splits(client, str(activity_id), quiet)
+
             activities.append({
+                'activity_id': activity_id,
                 'date': activity_date,
+                'activity_name': activity_name,
                 'activity_type': activity_type,
                 'duration_seconds': duration,
                 'distance_miles': round(distance, 6),
@@ -211,7 +296,8 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
                 'avg_heart_rate': avg_hr,
                 'max_heart_rate': max_hr,
                 'avg_speed': round(avg_speed, 6),
-                'pace_per_mile': round(pace_per_mile, 6)
+                'pace_per_mile': round(pace_per_mile, 6),
+                'splits': splits
             })
 
         if not quiet:
@@ -262,6 +348,15 @@ def fetch_sleep_data(client: Garmin, start_date: date, end_date: date, quiet: bo
                     deep_sleep = daily_sleep.get('deepSleepSeconds', 0) / SECONDS_TO_MINUTES
                     rem_sleep = daily_sleep.get('remSleepSeconds', 0) / SECONDS_TO_MINUTES
                     awake = daily_sleep.get('awakeSleepSeconds', 0) / SECONDS_TO_MINUTES
+
+                    # Validate sleep duration (reject unrealistic values)
+                    # Normal human sleep range: 1-16 hours (60-960 minutes)
+                    # Values outside this range indicate API data errors
+                    if total_duration < 60 or total_duration > 960:
+                        if not quiet:
+                            print(f"  Warning: Skipping {current_date} - unrealistic sleep duration: {total_duration:.1f} min ({total_duration/60:.1f} hrs)", file=sys.stderr)
+                        current_date += timedelta(days=1)
+                        continue
 
                     # Calculate efficiency
                     actual_sleep = light_sleep + deep_sleep + rem_sleep
@@ -371,42 +466,46 @@ def fetch_weight_data(client: Garmin, start_date: date, end_date: date, quiet: b
         print(f"Fetching weight data...")
 
     try:
-        # Get weigh-ins for date range
-        current_date = start_date
-        while current_date <= end_date:
+        # Get weigh-ins for date range (API requires both start and end date)
+        weigh_ins = client.get_weigh_ins(start_date.isoformat(), end_date.isoformat())
+
+        # Skip if no data returned
+        if not weigh_ins or 'dateWeightList' not in weigh_ins or not weigh_ins['dateWeightList']:
+            if not quiet:
+                print(f"  Found 0 weight readings")
+            return weight_readings
+
+        for weigh_in in weigh_ins['dateWeightList']:
             try:
-                weigh_ins = client.get_weigh_ins(current_date.isoformat())
+                timestamp = weigh_in.get('date')
+                if not timestamp:
+                    continue
 
-                if weigh_ins and 'dateWeightList' in weigh_ins:
-                    for weigh_in in weigh_ins['dateWeightList']:
-                        timestamp = weigh_in.get('date')
-                        if timestamp:
-                            # Convert timestamp (milliseconds) to local time
-                            # Note: fromtimestamp without tz uses local time
-                            dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS)
+                # Convert timestamp (milliseconds) to local time
+                # Note: fromtimestamp without tz uses local time
+                if isinstance(timestamp, str):
+                    # Already a date string, parse it
+                    dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                else:
+                    # Numeric timestamp in milliseconds
+                    dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS)
 
-                            weight_grams = weigh_in.get('weight')
-                            weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
+                weight_grams = weigh_in.get('weight')
+                weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
 
-                            body_fat = weigh_in.get('bodyFat')
-                            muscle = weigh_in.get('muscleMass')
+                body_fat = weigh_in.get('bodyFat')
+                muscle = weigh_in.get('muscleMass')
 
-                            if weight_lbs:
-                                weight_readings.append({
-                                    'timestamp': dt.isoformat(),
-                                    'weight_lbs': round(weight_lbs, 5),
-                                    'body_fat_percentage': body_fat,
-                                    'skeletal_muscle_percentage': muscle
-                                })
-
-            except KeyError:
-                # Expected: No weight data for this date
-                pass
-            except Exception as e:
-                if not quiet:
-                    print(f"  Warning: Error fetching weight for {current_date}: {type(e).__name__}", file=sys.stderr)
-
-            current_date += timedelta(days=1)
+                if weight_lbs:
+                    weight_readings.append({
+                        'timestamp': dt.isoformat(),
+                        'weight_lbs': round(weight_lbs, 5),
+                        'body_fat_percentage': body_fat,
+                        'skeletal_muscle_percentage': muscle
+                    })
+            except (TypeError, ValueError) as e:
+                # Individual weigh-in parsing error - skip this entry
+                continue
 
         if not quiet:
             print(f"  Found {len(weight_readings)} weight readings")
@@ -472,6 +571,397 @@ def fetch_resting_hr(client: Garmin, start_date: date, end_date: date, quiet: bo
         return []
 
 
+def fetch_hrv_data(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Fetch HRV (Heart Rate Variability) data from Garmin Connect for the specified date range.
+
+    Args:
+        client: Authenticated Garmin client
+        start_date: Start date for HRV fetch
+        end_date: End date for HRV fetch
+        quiet: Suppress output
+
+    Returns:
+        List of daily HRV summary dictionaries
+    """
+    hrv_readings = []
+
+    if not quiet:
+        print(f"Fetching HRV data...")
+
+    try:
+        current_date = start_date
+        while current_date <= end_date:
+            try:
+                hrv_data = client.get_hrv_data(current_date.isoformat())
+
+                if hrv_data and 'hrvSummary' in hrv_data:
+                    summary = hrv_data['hrvSummary']
+                    hrv_readings.append({
+                        'date': summary.get('calendarDate'),
+                        'weekly_avg': summary.get('weeklyAvg'),
+                        'last_night_avg': summary.get('lastNightAvg'),
+                        'last_night_5min_high': summary.get('lastNight5MinHigh'),
+                        'status': summary.get('status'),
+                        'baseline_low_upper': summary.get('baseline', {}).get('lowUpper'),
+                        'baseline_balanced_low': summary.get('baseline', {}).get('balancedLow'),
+                        'baseline_balanced_upper': summary.get('baseline', {}).get('balancedUpper')
+                    })
+
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching HRV for {current_date}: {type(e).__name__}", file=sys.stderr)
+
+            current_date += timedelta(days=1)
+
+        if not quiet:
+            print(f"  Found {len(hrv_readings)} HRV readings")
+
+        return hrv_readings
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch HRV data: {e}", file=sys.stderr)
+        return []
+
+
+def fetch_training_readiness(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Fetch Training Readiness data from Garmin Connect for the specified date range.
+
+    Args:
+        client: Authenticated Garmin client
+        start_date: Start date for readiness fetch
+        end_date: End date for readiness fetch
+        quiet: Suppress output
+
+    Returns:
+        List of daily training readiness dictionaries
+    """
+    readiness_data = []
+
+    if not quiet:
+        print(f"Fetching training readiness data...")
+
+    try:
+        current_date = start_date
+        while current_date <= end_date:
+            try:
+                data = client.get_training_readiness(current_date.isoformat())
+
+                # Get the most recent readiness for the day (first entry)
+                if data and len(data) > 0:
+                    entry = data[0]
+                    readiness_data.append({
+                        'date': entry.get('calendarDate'),
+                        'score': entry.get('score'),
+                        'level': entry.get('level'),  # POOR, LOW, MODERATE, HIGH, EXCELLENT
+                        'recovery_time': entry.get('recoveryTime'),  # minutes
+                        'sleep_score': entry.get('sleepScore'),
+                        'hrv_feedback': entry.get('hrvFactorFeedback'),
+                        'stress_feedback': entry.get('stressHistoryFactorFeedback'),
+                        'acute_load': entry.get('acuteLoad')
+                    })
+
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching readiness for {current_date}: {type(e).__name__}", file=sys.stderr)
+
+            current_date += timedelta(days=1)
+
+        if not quiet:
+            print(f"  Found {len(readiness_data)} readiness readings")
+
+        return readiness_data
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch training readiness data: {e}", file=sys.stderr)
+        return []
+
+
+def fetch_stress_data(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Fetch all-day stress data from Garmin Connect for the specified date range.
+
+    Args:
+        client: Authenticated Garmin client
+        start_date: Start date for stress fetch
+        end_date: End date for stress fetch
+        quiet: Suppress output
+
+    Returns:
+        List of daily stress summary dictionaries
+    """
+    stress_data = []
+
+    if not quiet:
+        print(f"Fetching stress data...")
+
+    try:
+        current_date = start_date
+        while current_date <= end_date:
+            try:
+                data = client.get_stress_data(current_date.isoformat())
+
+                if data:
+                    stress_data.append({
+                        'date': data.get('calendarDate'),
+                        'avg_stress': data.get('avgStressLevel'),
+                        'max_stress': data.get('maxStressLevel')
+                    })
+
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching stress for {current_date}: {type(e).__name__}", file=sys.stderr)
+
+            current_date += timedelta(days=1)
+
+        if not quiet:
+            print(f"  Found {len(stress_data)} stress readings")
+
+        return stress_data
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch stress data: {e}", file=sys.stderr)
+        return []
+
+
+def fetch_spo2_data(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Fetch SpO2 (blood oxygen saturation) data from Garmin Connect for the specified date range.
+
+    Args:
+        client: Authenticated Garmin client
+        start_date: Start date for SpO2 fetch
+        end_date: End date for SpO2 fetch
+        quiet: Suppress output
+
+    Returns:
+        List of daily SpO2 summary dictionaries
+    """
+    spo2_data = []
+
+    if not quiet:
+        print(f"Fetching SpO2 data...")
+
+    try:
+        current_date = start_date
+        while current_date <= end_date:
+            try:
+                data = client.get_spo2_data(current_date.isoformat())
+
+                if data:
+                    spo2_data.append({
+                        'date': data.get('calendarDate'),
+                        'avg_spo2': data.get('averageSpO2'),
+                        'lowest_spo2': data.get('lowestSpO2'),
+                        'avg_sleep_spo2': data.get('avgSleepSpO2')
+                    })
+
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching SpO2 for {current_date}: {type(e).__name__}", file=sys.stderr)
+
+            current_date += timedelta(days=1)
+
+        if not quiet:
+            print(f"  Found {len(spo2_data)} SpO2 readings")
+
+        return spo2_data
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch SpO2 data: {e}", file=sys.stderr)
+        return []
+
+
+def fetch_body_battery(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Fetch Body Battery data from Garmin Connect for the specified date range.
+
+    Args:
+        client: Authenticated Garmin client
+        start_date: Start date for body battery fetch
+        end_date: End date for body battery fetch
+        quiet: Suppress output
+
+    Returns:
+        List of daily body battery summary dictionaries
+    """
+    battery_data = []
+
+    if not quiet:
+        print(f"Fetching body battery data...")
+
+    try:
+        current_date = start_date
+        while current_date <= end_date:
+            try:
+                data = client.get_body_battery(current_date.isoformat())
+
+                if data and len(data) > 0:
+                    entry = data[0]
+                    battery_data.append({
+                        'date': entry.get('date'),
+                        'charged': entry.get('charged'),
+                        'drained': entry.get('drained')
+                    })
+
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching body battery for {current_date}: {type(e).__name__}", file=sys.stderr)
+
+            current_date += timedelta(days=1)
+
+        if not quiet:
+            print(f"  Found {len(battery_data)} body battery readings")
+
+        return battery_data
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch body battery data: {e}", file=sys.stderr)
+        return []
+
+
+def fetch_race_predictions(client: Garmin, quiet: bool = False) -> Dict[str, Any]:
+    """
+    Fetch race time predictions from Garmin Connect.
+
+    Args:
+        client: Authenticated Garmin client
+        quiet: Suppress output
+
+    Returns:
+        Dictionary with race predictions
+    """
+    if not quiet:
+        print(f"Fetching race predictions...")
+
+    try:
+        data = client.get_race_predictions()
+
+        if data:
+            predictions = {
+                'date': data.get('calendarDate'),
+                'time_5k': data.get('time5K'),  # seconds
+                'time_10k': data.get('time10K'),  # seconds
+                'time_half_marathon': data.get('timeHalfMarathon'),  # seconds
+                'time_marathon': data.get('timeMarathon')  # seconds
+            }
+
+            if not quiet:
+                print(f"  Found race predictions for {predictions['date']}")
+
+            return predictions
+
+        return {}
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch race predictions: {e}", file=sys.stderr)
+        return {}
+
+
+def fetch_training_status(client: Garmin, target_date: date, quiet: bool = False) -> Dict[str, Any]:
+    """
+    Fetch training status from Garmin Connect.
+
+    Args:
+        client: Authenticated Garmin client
+        target_date: Date for training status
+        quiet: Suppress output
+
+    Returns:
+        Dictionary with training status data
+    """
+    if not quiet:
+        print(f"Fetching training status...")
+
+    try:
+        data = client.get_training_status(target_date.isoformat())
+
+        if data:
+            # Extract key training status information
+            status_data = {
+                'date': target_date.isoformat(),
+                'vo2_max': None,
+                'training_load': {},
+                'training_status': {}
+            }
+
+            # VO2 Max
+            if 'mostRecentVO2Max' in data and data['mostRecentVO2Max']:
+                vo2_data = data['mostRecentVO2Max'].get('generic', {})
+                status_data['vo2_max'] = {
+                    'date': vo2_data.get('calendarDate'),
+                    'value': vo2_data.get('vo2MaxValue'),
+                    'precise_value': vo2_data.get('vo2MaxPreciseValue')
+                }
+
+            # Training Load Balance
+            if 'mostRecentTrainingLoadBalance' in data and data['mostRecentTrainingLoadBalance']:
+                load_data = data['mostRecentTrainingLoadBalance']
+                if 'metricsTrainingLoadBalanceDTOMap' in load_data:
+                    # Get first device's data
+                    device_data = next(iter(load_data['metricsTrainingLoadBalanceDTOMap'].values()), {})
+                    status_data['training_load'] = {
+                        'date': device_data.get('calendarDate'),
+                        'aerobic_low': device_data.get('monthlyLoadAerobicLow'),
+                        'aerobic_high': device_data.get('monthlyLoadAerobicHigh'),
+                        'anaerobic': device_data.get('monthlyLoadAnaerobic'),
+                        'feedback': device_data.get('trainingBalanceFeedbackPhrase')
+                    }
+
+            if not quiet:
+                print(f"  Found training status")
+
+            return status_data
+
+        return {}
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch training status: {e}", file=sys.stderr)
+        return {}
+
+
+def fetch_scheduled_workouts(client: Garmin, quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Fetch scheduled workouts from Garmin Connect (from training plans like FinalSurge).
+
+    Args:
+        client: Authenticated Garmin client
+        quiet: Suppress output
+
+    Returns:
+        List of scheduled workout dictionaries
+    """
+    if not quiet:
+        print(f"Fetching scheduled workouts...")
+
+    try:
+        workouts = client.get_workouts()
+
+        scheduled_workouts = []
+        for workout in workouts:
+            scheduled_workouts.append({
+                'workout_id': workout.get('workoutId'),
+                'name': workout.get('workoutName'),
+                'description': workout.get('description'),
+                'sport_type': workout.get('sportType', {}).get('sportTypeKey'),
+                'estimated_duration_seconds': workout.get('estimatedDurationInSecs'),
+                'estimated_distance_meters': workout.get('estimatedDistanceInMeters'),
+                'workout_provider': workout.get('workoutProvider'),  # e.g., "FinalSurge"
+                'created_date': workout.get('createdDate'),
+                'updated_date': workout.get('updateDate')
+            })
+
+        if not quiet:
+            print(f"  Found {len(scheduled_workouts)} scheduled workouts")
+
+        return scheduled_workouts
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch scheduled workouts: {e}", file=sys.stderr)
+        return []
+
+
 def load_cache() -> Dict[str, Any]:
     """
     Load existing health data cache with corruption handling.
@@ -486,7 +976,15 @@ def load_cache() -> Dict[str, Any]:
         'sleep_sessions': [],
         'vo2_max_readings': [],
         'weight_readings': [],
-        'resting_hr_readings': []
+        'resting_hr_readings': [],
+        'hrv_readings': [],
+        'training_readiness': [],
+        'stress_readings': [],
+        'spo2_readings': [],
+        'body_battery': [],
+        'race_predictions': {},
+        'training_status': {},
+        'scheduled_workouts': []
     }
 
     if not CACHE_FILE.exists():
@@ -496,11 +994,10 @@ def load_cache() -> Dict[str, Any]:
         with open(CACHE_FILE, 'r') as f:
             cache = json.load(f)
 
-        # Validate cache structure
-        required_keys = {'activities', 'sleep_sessions', 'vo2_max_readings',
-                        'weight_readings', 'resting_hr_readings'}
-        if not all(key in cache for key in required_keys):
-            raise ValueError("Cache missing required keys")
+        # Ensure all fields exist (add missing fields from empty_cache)
+        for key, value in empty_cache.items():
+            if key not in cache:
+                cache[key] = value
 
         return cache
 
@@ -727,6 +1224,14 @@ def main():
         new_vo2_max = fetch_vo2_max(client, start_date, end_date, args.quiet)
         new_weight = fetch_weight_data(client, start_date, end_date, args.quiet)
         new_rhr = fetch_resting_hr(client, start_date, end_date, args.quiet)
+        new_hrv = fetch_hrv_data(client, start_date, end_date, args.quiet)
+        new_readiness = fetch_training_readiness(client, start_date, end_date, args.quiet)
+        new_stress = fetch_stress_data(client, start_date, end_date, args.quiet)
+        new_spo2 = fetch_spo2_data(client, start_date, end_date, args.quiet)
+        new_battery = fetch_body_battery(client, start_date, end_date, args.quiet)
+        new_race_predictions = fetch_race_predictions(client, args.quiet)
+        new_training_status = fetch_training_status(client, end_date, args.quiet)
+        new_scheduled_workouts = fetch_scheduled_workouts(client, args.quiet)
 
         # Display fetch summary
         if not args.quiet:
@@ -738,6 +1243,14 @@ def main():
             print(f"  {'✓' if new_vo2_max else '⚠'} VO2 Max: {len(new_vo2_max)} records")
             print(f"  {'✓' if new_weight else '⚠'} Weight: {len(new_weight)} records")
             print(f"  {'✓' if new_rhr else '⚠'} Resting HR: {len(new_rhr)} records")
+            print(f"  {'✓' if new_hrv else '⚠'} HRV: {len(new_hrv)} records")
+            print(f"  {'✓' if new_readiness else '⚠'} Training Readiness: {len(new_readiness)} records")
+            print(f"  {'✓' if new_stress else '⚠'} Stress: {len(new_stress)} records")
+            print(f"  {'✓' if new_spo2 else '⚠'} SpO2: {len(new_spo2)} records")
+            print(f"  {'✓' if new_battery else '⚠'} Body Battery: {len(new_battery)} records")
+            print(f"  {'✓' if new_race_predictions else '⚠'} Race Predictions: {'Yes' if new_race_predictions else 'No'}")
+            print(f"  {'✓' if new_training_status else '⚠'} Training Status: {'Yes' if new_training_status else 'No'}")
+            print(f"  {'✓' if new_scheduled_workouts else '⚠'} Scheduled Workouts: {len(new_scheduled_workouts)} workouts")
             print(f"{'='*60}\n")
 
         if args.check_only:
@@ -754,6 +1267,18 @@ def main():
         cache['vo2_max_readings'] = merge_data(cache['vo2_max_readings'], new_vo2_max, 'date')
         cache['weight_readings'] = merge_data(cache['weight_readings'], new_weight, 'timestamp')
         cache['resting_hr_readings'] = merge_data(cache['resting_hr_readings'], new_rhr, None)
+        cache['hrv_readings'] = merge_data(cache['hrv_readings'], new_hrv, 'date')
+        cache['training_readiness'] = merge_data(cache['training_readiness'], new_readiness, 'date')
+        cache['stress_readings'] = merge_data(cache['stress_readings'], new_stress, 'date')
+        cache['spo2_readings'] = merge_data(cache['spo2_readings'], new_spo2, 'date')
+        cache['body_battery'] = merge_data(cache['body_battery'], new_battery, 'date')
+        cache['scheduled_workouts'] = merge_data(cache['scheduled_workouts'], new_scheduled_workouts, 'workout_id')
+
+        # Update single-value fields (most recent only)
+        if new_race_predictions:
+            cache['race_predictions'] = new_race_predictions
+        if new_training_status:
+            cache['training_status'] = new_training_status
 
         # Update last sync date
         cache['last_sync_date'] = end_date.isoformat()
