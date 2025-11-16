@@ -1,14 +1,20 @@
-# Google Drive OAuth credentials and tokens
-#config/credentials.json
-#config/.drive_token.json
-config/.drive_token.pickle  # Legacy - can be deleted if found
-#config/.drive_sync_state.json
-#config/.drive_sync_config.json
+# Garmin Connect credentials
+# Environment variables: GARMIN_EMAIL and GARMIN_PASSWORD
+# Or config file: config/.garmin_config.json
+# Tokens stored in ~/.garminconnect/ by garminconnect library
+.garmin_credentials.json
+config/.garmin_config.json
 
-# Health data exports (raw CSVs/TCX/GPX - keep local, sync from Drive)
-health_connect_export/
+# Calendar URLs (may contain private calendar links)
+config/calendar_sources.json
+
+# Cache backups (created automatically on corruption or before updates)
+*.json.bak
 
 # Note: data/health/health_data_cache.json is committed for cross-session persistence
+
+# Garmin raw exports (manual exports from Garmin Connect)
+health_connect_export/
 
 # Python
 __pycache__/
