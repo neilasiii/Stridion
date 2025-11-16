@@ -29,9 +29,12 @@ A personalized training guidance system that integrates objective health data fr
 
 ### Prerequisites
 
+- **[Claude Code](https://docs.claude.com/en/docs/claude-code)** - Required for running the AI coaching agents
 - Python 3.7+
 - Garmin Connect account with activity data
 - (Optional) Training calendar from FinalSurge, TrainingPeaks, etc.
+
+> **Note**: The coaching agents currently require Claude Code to function. See the [Roadmap](#roadmap) section for plans to make this system available as a standalone application.
 
 ### Installation
 
@@ -91,6 +94,8 @@ bash bin/sync_garmin_data.sh --check-only
 
 ### Work with Coaching Agents
 
+**Currently requires [Claude Code](https://docs.claude.com/en/docs/claude-code)** to interact with the coaching agents.
+
 The system uses specialized AI coaching agents defined in `.claude/agents/`:
 
 - `vdot-running-coach.md` - Running workouts and pacing
@@ -98,7 +103,7 @@ The system uses specialized AI coaching agents defined in `.claude/agents/`:
 - `mobility-coach-runner.md` - Mobility and recovery
 - `endurance-nutrition-coach.md` - Nutrition and fueling
 
-These agents automatically access your athlete profile and health data to provide personalized guidance.
+When using Claude Code, these agents automatically access your athlete profile and health data to provide personalized guidance. Simply open this repository in Claude Code and interact with the agents conversationally to get training recommendations.
 
 ### Calendar Integration
 
@@ -236,6 +241,38 @@ The nutrition coach respects dietary requirements configured in `data/athlete/tr
 - Gluten-free meal planning
 - Dairy-free alternatives
 - Customizable restrictions
+
+## Roadmap
+
+This project is actively evolving. Current development priorities:
+
+### Standalone Application
+- [ ] **Decouple from Claude Code** - Make coaching agents accessible without Claude Code dependency
+- [ ] **HTTP/REST API** - Provide web service interface for coaching interactions
+- [ ] **Web Frontend** - Build user-friendly web interface for athlete interaction
+- [ ] **Mobile-responsive UI** - Support access from phones and tablets
+
+### Data & Persistence
+- [ ] **Database Integration** - Replace JSON files with proper database (PostgreSQL/SQLite)
+- [ ] **Chat History** - Store and retrieve coaching conversation history
+- [ ] **Training Plan Versioning** - Track plan changes over time
+- [ ] **Multi-athlete Support** - Support multiple athlete profiles in single instance
+
+### Enhanced Features
+- [ ] **Workout Library** - Searchable database of workouts and training blocks
+- [ ] **Progress Visualization** - Charts and graphs for training metrics over time
+- [ ] **Automated Plan Generation** - Generate multi-week training plans based on race goals
+- [ ] **Email/SMS Notifications** - Workout reminders and recovery alerts
+- [ ] **Integration Testing** - Comprehensive test suite for all coaching domains
+- [ ] **Additional Wearables** - Support for Strava, Polar, Wahoo, etc.
+
+### Community & Collaboration
+- [ ] **Multi-coach Support** - Allow multiple coaching perspectives/methodologies
+- [ ] **Sharing & Templates** - Share workout templates and training frameworks
+- [ ] **Community Forums** - Athlete discussion and peer support
+- [ ] **Coach Dashboard** - Interface for human coaches to monitor athlete progress
+
+Contributions welcome! See [Contributing](#contributing) section for guidelines.
 
 ## License
 
