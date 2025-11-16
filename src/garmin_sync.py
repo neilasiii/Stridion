@@ -55,31 +55,6 @@ RETRY_MAX_ATTEMPTS = 3
 RETRY_BASE_DELAY = 2  # Base delay in seconds for exponential backoff (2^0=1s, 2^1=2s, 2^2=4s)
 
 
-def to_utc_isoformat(dt_string: str) -> str:
-    """
-    Convert a datetime string to UTC and return ISO format.
-
-    Args:
-        dt_string: ISO format datetime string (may include timezone)
-
-    Returns:
-        ISO format string in UTC
-    """
-    # Parse the datetime string
-    # Replace 'Z' with '+00:00' for Python's fromisoformat
-    dt_string = dt_string.replace('Z', '+00:00')
-    dt = datetime.fromisoformat(dt_string)
-
-    # Convert to UTC if it has timezone info
-    if dt.tzinfo is not None:
-        dt_utc = dt.astimezone(timezone.utc)
-    else:
-        # Assume UTC if no timezone info
-        dt_utc = dt.replace(tzinfo=timezone.utc)
-
-    return dt_utc.isoformat()
-
-
 def utc_now() -> str:
     """Return current time in UTC as ISO format string"""
     return datetime.now(timezone.utc).isoformat()
@@ -208,11 +183,12 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             if activity_type in ['TRAIL_RUNNING', 'TREADMILL_RUNNING']:
                 activity_type = 'RUNNING'
 
-            # Parse activity data - use GMT for consistency
-            start_time = activity.get('startTimeGMT') or activity.get('startTimeLocal')
+            # Parse activity data - use local time to preserve athlete's date
+            start_time = activity.get('startTimeLocal') or activity.get('startTimeGMT')
             if start_time:
-                # Normalize to UTC ISO format
-                activity_date = to_utc_isoformat(start_time)
+                # Parse ISO format datetime, preserving timezone if present
+                dt_string = start_time.replace('Z', '+00:00')
+                activity_date = datetime.fromisoformat(dt_string).isoformat()
             else:
                 continue
 
@@ -405,8 +381,9 @@ def fetch_weight_data(client: Garmin, start_date: date, end_date: date, quiet: b
                     for weigh_in in weigh_ins['dateWeightList']:
                         timestamp = weigh_in.get('date')
                         if timestamp:
-                            # Convert timestamp (milliseconds) to UTC ISO format
-                            dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS, tz=timezone.utc)
+                            # Convert timestamp (milliseconds) to local time
+                            # Note: fromtimestamp without tz uses local time
+                            dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS)
 
                             weight_grams = weigh_in.get('weight')
                             weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
@@ -469,8 +446,8 @@ def fetch_resting_hr(client: Garmin, start_date: date, end_date: date, quiet: bo
                 if hr_data and 'restingHeartRate' in hr_data:
                     rhr = hr_data['restingHeartRate']
                     if rhr:
-                        # Create timestamp (using noon UTC of that day)
-                        dt = datetime.combine(current_date, datetime.min.time().replace(hour=12), tzinfo=timezone.utc)
+                        # Create timestamp (using noon local time of that day)
+                        dt = datetime.combine(current_date, datetime.min.time().replace(hour=12))
                         rhr_readings.append([
                             dt.isoformat(),
                             int(rhr)
