@@ -1,7 +1,6 @@
 # Garmin Connect credentials (use environment variables)
 # No config files needed - credentials via GARMIN_EMAIL and GARMIN_PASSWORD
 # Tokens stored in ~/.garminconnect/ by garminconnect library
-.garmin_credentials.json  # Local testing credentials (if used)
 
 # Note: data/health/health_data_cache.json is committed for cross-session persistence
 
