@@ -29,9 +29,12 @@ A personalized training guidance system that integrates objective health data fr
 
 ### Prerequisites
 
+- **[Claude Code](https://docs.claude.com/en/docs/claude-code)** - Required for running the AI coaching agents
 - Python 3.7+
 - Garmin Connect account with activity data
 - (Optional) Training calendar from FinalSurge, TrainingPeaks, etc.
+
+> **Note**: The coaching agents currently require Claude Code to function. See the [Roadmap](#roadmap) section for plans to make this system available as a standalone application.
 
 ### Installation
 
@@ -91,6 +94,8 @@ bash bin/sync_garmin_data.sh --check-only
 
 ### Work with Coaching Agents
 
+**Currently requires [Claude Code](https://docs.claude.com/en/docs/claude-code)** to interact with the coaching agents.
+
 The system uses specialized AI coaching agents defined in `.claude/agents/`:
 
 - `vdot-running-coach.md` - Running workouts and pacing
@@ -98,7 +103,7 @@ The system uses specialized AI coaching agents defined in `.claude/agents/`:
 - `mobility-coach-runner.md` - Mobility and recovery
 - `endurance-nutrition-coach.md` - Nutrition and fueling
 
-These agents automatically access your athlete profile and health data to provide personalized guidance.
+When using Claude Code, these agents automatically access your athlete profile and health data to provide personalized guidance. Simply open this repository in Claude Code and interact with the agents conversationally to get training recommendations.
 
 ### Calendar Integration
 
@@ -236,6 +241,65 @@ The nutrition coach respects dietary requirements configured in `data/athlete/tr
 - Gluten-free meal planning
 - Dairy-free alternatives
 - Customizable restrictions
+
+## Roadmap
+
+This project is actively evolving. Current development priorities:
+
+### Standalone Application
+- [ ] **Decouple from Claude Code** - Make coaching agents accessible without Claude Code dependency
+- [ ] **HTTP/REST API** - Provide web service interface for coaching interactions
+- [ ] **Web Frontend** - Build user-friendly web interface for athlete interaction
+- [ ] **Mobile-responsive UI** - Support access from phones and tablets
+
+### Data & Persistence
+- [ ] **Database Integration** - Replace JSON files with proper database (PostgreSQL/SQLite)
+- [ ] **Chat History** - Store and retrieve coaching conversation history
+- [ ] **Training Plan Versioning** - Track plan changes over time
+- [ ] **Multi-athlete Support** - Support multiple athlete profiles in single instance
+
+### Enhanced Features
+- [ ] **Workout Library** - Searchable database of workouts and training blocks
+- [ ] **Progress Visualization** - Charts and graphs for training metrics over time
+- [ ] **Automated Plan Generation** - Generate multi-week training plans based on race goals
+- [ ] **Email/SMS Notifications** - Workout reminders and recovery alerts
+- [ ] **Integration Testing** - Comprehensive test suite for all coaching domains
+- [ ] **Additional Wearables** - Support for Strava, Polar, Wahoo, etc.
+
+### Community & Collaboration
+- [ ] **Multi-coach Support** - Allow multiple coaching perspectives/methodologies
+- [ ] **Sharing & Templates** - Share workout templates and training frameworks
+- [ ] **Community Forums** - Athlete discussion and peer support
+- [ ] **Coach Dashboard** - Interface for human coaches to monitor athlete progress
+
+### Advanced Analytics & Intelligence
+- [ ] **Injury Risk Prediction** - ML model to detect overtraining patterns from training load trends
+- [ ] **HRV Tracking** - Heart rate variability monitoring for recovery assessment
+- [ ] **Automated VDOT Adjustments** - Update training paces based on race results and workout performance
+- [ ] **Performance Prediction** - Race time estimates based on current fitness and training phase
+- [ ] **Training Load Analytics** - Acute/chronic workload ratio, TSS/CTL tracking
+
+### Mobile & Offline Support
+- [ ] **Native iOS/Android Apps** - Full-featured mobile applications
+- [ ] **Offline Mode** - Access plans and log workouts without internet connection
+- [ ] **Watch App Integration** - Apple Watch, Garmin Connect IQ companion apps
+- [ ] **Push Notifications** - Workout reminders and recovery alerts on mobile devices
+
+### Extended Integrations
+- [ ] **Strava Sync** - Two-way sync of activities and training data
+- [ ] **TrainingPeaks Integration** - Import/export structured workouts and plans
+- [ ] **Zwift Integration** - Indoor training workouts and structured plans
+- [ ] **Weather API** - Real-time weather data for workout planning and race day
+- [ ] **Calendar Sync** - Export workouts to Google Calendar, Outlook, Apple Calendar
+
+### Race Day Features
+- [ ] **Race Strategy Generator** - Custom pacing plan based on course elevation profile
+- [ ] **Course Analysis** - Import GPX files and analyze elevation, terrain, splits
+- [ ] **Pre-race Checklist** - Equipment, nutrition, logistics planning tools
+- [ ] **Race Day Weather** - Location-specific forecasts and gear recommendations
+- [ ] **Multi-Race Season Planning** - Coordinate multiple goal races throughout the year
+
+Contributions welcome! See [Contributing](#contributing) section for guidelines.
 
 ## License
 
