@@ -22,9 +22,10 @@ Environment Variables:
 import json
 import os
 import sys
+import time
 from datetime import datetime, timedelta, date
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Callable
 import tempfile
 import shutil
 
@@ -40,10 +41,68 @@ except ImportError:
 CACHE_FILE = Path(__file__).parent.parent / "data" / "health" / "health_data_cache.json"
 DEFAULT_DAYS = 30
 
+# Unit conversion constants
+METERS_TO_MILES = 1609.34
+MS_TO_MPH = 2.23694
+GRAMS_TO_LBS = 453.592
+SECONDS_TO_MINUTES = 60
+SECONDS_TO_HOURS = 3600
+
 
 class GarminSyncError(Exception):
     """Custom exception for Garmin sync errors"""
     pass
+
+
+def retry_with_backoff(func: Callable, *args, max_retries: int = 3, quiet: bool = False, **kwargs):
+    """
+    Retry a function with exponential backoff on failure.
+
+    Args:
+        func: Function to retry
+        *args: Positional arguments for func
+        max_retries: Maximum number of retry attempts (default: 3)
+        quiet: Suppress retry messages
+        **kwargs: Keyword arguments for func
+
+    Returns:
+        Result from successful function call
+
+    Raises:
+        Last exception if all retries fail
+    """
+    last_exception = None
+
+    for attempt in range(max_retries):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            last_exception = e
+            error_str = str(e).lower()
+
+            # Check if it's a rate limit or temporary error
+            if '429' in error_str or 'rate limit' in error_str or 'too many requests' in error_str:
+                if attempt < max_retries - 1:
+                    wait_time = 2 ** attempt  # Exponential backoff: 1s, 2s, 4s
+                    if not quiet:
+                        print(f"  Rate limit detected, waiting {wait_time}s before retry {attempt + 1}/{max_retries}...", file=sys.stderr)
+                    time.sleep(wait_time)
+                    continue
+
+            # For other errors, only retry on network-related issues
+            if any(keyword in error_str for keyword in ['timeout', 'connection', 'network']):
+                if attempt < max_retries - 1:
+                    wait_time = 2 ** attempt
+                    if not quiet:
+                        print(f"  Network error, retrying in {wait_time}s ({attempt + 1}/{max_retries})...", file=sys.stderr)
+                    time.sleep(wait_time)
+                    continue
+
+            # For other errors, don't retry
+            raise
+
+    # All retries exhausted
+    raise last_exception
 
 
 def get_garmin_client() -> Garmin:
@@ -105,10 +164,12 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
         print(f"Fetching activities from {start_date} to {end_date}...")
 
     try:
-        # Get activities for date range
-        garmin_activities = client.get_activities_by_date(
+        # Get activities for date range (with retry logic)
+        garmin_activities = retry_with_backoff(
+            client.get_activities_by_date,
             start_date.isoformat(),
-            end_date.isoformat()
+            end_date.isoformat(),
+            quiet=quiet
         )
 
         for activity in garmin_activities:
@@ -132,14 +193,14 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
                 continue
 
             duration = activity.get('duration', 0)  # seconds
-            distance = activity.get('distance', 0) / 1609.34  # meters to miles
+            distance = activity.get('distance', 0) / METERS_TO_MILES  # meters to miles
             calories = activity.get('calories', 0)
             avg_hr = activity.get('averageHR')
             max_hr = activity.get('maxHR')
-            avg_speed = activity.get('averageSpeed', 0) * 2.23694  # m/s to mph
+            avg_speed = activity.get('averageSpeed', 0) * MS_TO_MPH  # m/s to mph
 
             # Calculate pace (minutes per mile)
-            pace_per_mile = (duration / 60) / distance if distance > 0 else 0
+            pace_per_mile = (duration / SECONDS_TO_MINUTES) / distance if distance > 0 else 0
 
             activities.append({
                 'date': activity_date.isoformat(),
@@ -186,17 +247,21 @@ def fetch_sleep_data(client: Garmin, start_date: date, end_date: date, quiet: bo
         current_date = start_date
         while current_date <= end_date:
             try:
-                sleep_data = client.get_sleep_data(current_date.isoformat())
+                sleep_data = retry_with_backoff(
+                    client.get_sleep_data,
+                    current_date.isoformat(),
+                    quiet=quiet
+                )
 
                 if sleep_data and 'dailySleepDTO' in sleep_data:
                     daily_sleep = sleep_data['dailySleepDTO']
 
                     # Extract sleep stages
-                    total_duration = daily_sleep.get('sleepTimeSeconds', 0) / 60  # minutes
-                    light_sleep = daily_sleep.get('lightSleepSeconds', 0) / 60
-                    deep_sleep = daily_sleep.get('deepSleepSeconds', 0) / 60
-                    rem_sleep = daily_sleep.get('remSleepSeconds', 0) / 60
-                    awake = daily_sleep.get('awakeSleepSeconds', 0) / 60
+                    total_duration = daily_sleep.get('sleepTimeSeconds', 0) / SECONDS_TO_MINUTES
+                    light_sleep = daily_sleep.get('lightSleepSeconds', 0) / SECONDS_TO_MINUTES
+                    deep_sleep = daily_sleep.get('deepSleepSeconds', 0) / SECONDS_TO_MINUTES
+                    rem_sleep = daily_sleep.get('remSleepSeconds', 0) / SECONDS_TO_MINUTES
+                    awake = daily_sleep.get('awakeSleepSeconds', 0) / SECONDS_TO_MINUTES
 
                     # Calculate efficiency
                     actual_sleep = light_sleep + deep_sleep + rem_sleep
@@ -216,9 +281,12 @@ def fetch_sleep_data(client: Garmin, start_date: date, end_date: date, quiet: bo
                         'deep_sleep_percentage': round(deep_pct, 2)
                     })
 
-            except Exception as e:
-                # Some days may not have sleep data, which is fine
+            except KeyError:
+                # Expected: No sleep data for this date
                 pass
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching sleep for {current_date}: {type(e).__name__}", file=sys.stderr)
 
             current_date += timedelta(days=1)
 
@@ -265,9 +333,12 @@ def fetch_vo2_max(client: Garmin, start_date: date, end_date: date, quiet: bool 
                             'vo2_max': float(vo2_max)
                         })
 
-            except Exception:
-                # Some days may not have VO2 max data
+            except KeyError:
+                # Expected: No VO2 max data for this date
                 pass
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching VO2 max for {current_date}: {type(e).__name__}", file=sys.stderr)
 
             current_date += timedelta(days=1)
 
@@ -314,7 +385,7 @@ def fetch_weight_data(client: Garmin, start_date: date, end_date: date, quiet: b
                             dt = datetime.fromtimestamp(timestamp / 1000)
 
                             weight_grams = weigh_in.get('weight')
-                            weight_lbs = (weight_grams / 453.592) if weight_grams else None
+                            weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
 
                             body_fat = weigh_in.get('bodyFat')
                             muscle = weigh_in.get('muscleMass')
@@ -327,9 +398,12 @@ def fetch_weight_data(client: Garmin, start_date: date, end_date: date, quiet: b
                                     'skeletal_muscle_percentage': muscle
                                 })
 
-            except Exception:
-                # Some days may not have weight data
+            except KeyError:
+                # Expected: No weight data for this date
                 pass
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching weight for {current_date}: {type(e).__name__}", file=sys.stderr)
 
             current_date += timedelta(days=1)
 
@@ -378,9 +452,12 @@ def fetch_resting_hr(client: Garmin, start_date: date, end_date: date, quiet: bo
                             int(rhr)
                         ])
 
-            except Exception:
-                # Some days may not have RHR data
+            except KeyError:
+                # Expected: No RHR data for this date
                 pass
+            except Exception as e:
+                if not quiet:
+                    print(f"  Warning: Error fetching RHR for {current_date}: {type(e).__name__}", file=sys.stderr)
 
             current_date += timedelta(days=1)
 
@@ -514,10 +591,11 @@ def show_summary(cache: Dict[str, Any], days: int = 14):
     print(f"\nActivities: {len(recent_activities)} total")
     if running:
         total_miles = sum(a['distance_miles'] for a in running)
-        total_time = sum(a['duration_seconds'] for a in running) / 3600
-        avg_pace = sum(a['pace_per_mile'] for a in running) / len(running)
+        total_time = sum(a['duration_seconds'] for a in running) / SECONDS_TO_HOURS
+        avg_pace = sum(a['pace_per_mile'] for a in running) / len(running) if running else 0
         print(f"  Running: {len(running)} runs, {total_miles:.1f} miles, {total_time:.1f} hrs")
-        print(f"           Avg pace: {int(avg_pace)}:{int((avg_pace % 1) * 60):02d}/mile")
+        if avg_pace > 0:
+            print(f"           Avg pace: {int(avg_pace)}:{int((avg_pace % 1) * 60):02d}/mile")
     if walking:
         total_miles = sum(a['distance_miles'] for a in walking)
         print(f"  Walking: {len(walking)} walks, {total_miles:.1f} miles")
@@ -525,10 +603,10 @@ def show_summary(cache: Dict[str, Any], days: int = 14):
     # Sleep
     recent_sleep = [s for s in cache['sleep_sessions'] if s['date'] >= cutoff[:10]]
     if recent_sleep:
-        avg_duration = sum(s['total_duration_minutes'] for s in recent_sleep) / len(recent_sleep)
-        avg_efficiency = sum(s['sleep_efficiency'] for s in recent_sleep) / len(recent_sleep)
+        avg_duration = sum(s['total_duration_minutes'] for s in recent_sleep) / len(recent_sleep) if recent_sleep else 0
+        avg_efficiency = sum(s['sleep_efficiency'] for s in recent_sleep) / len(recent_sleep) if recent_sleep else 0
         print(f"\nSleep: {len(recent_sleep)} nights")
-        print(f"  Avg duration: {avg_duration/60:.1f} hrs")
+        print(f"  Avg duration: {avg_duration/SECONDS_TO_MINUTES:.1f} hrs")
         print(f"  Avg efficiency: {avg_efficiency:.1f}%")
 
     # VO2 Max
@@ -546,7 +624,7 @@ def show_summary(cache: Dict[str, Any], days: int = 14):
     # Resting HR
     recent_rhr = [r for r in cache['resting_hr_readings'] if r[0] >= cutoff]
     if recent_rhr:
-        avg_rhr = sum(r[1] for r in recent_rhr) / len(recent_rhr)
+        avg_rhr = sum(r[1] for r in recent_rhr) / len(recent_rhr) if recent_rhr else 0
         latest_rhr = recent_rhr[0][1]
         print(f"\nResting HR: {latest_rhr} bpm (most recent), {avg_rhr:.0f} bpm avg")
 
@@ -577,7 +655,17 @@ def main():
 
         # Determine date range
         end_date = date.today()
-        start_date = end_date - timedelta(days=args.days)
+
+        # Optimize: Use incremental sync if we have a recent sync
+        if cache.get('last_sync_date') and not args.days:
+            # Sync from last sync date forward (plus 1 day overlap for safety)
+            last_sync = date.fromisoformat(cache['last_sync_date'])
+            start_date = last_sync - timedelta(days=1)
+            if not args.quiet:
+                print(f"Using incremental sync from {start_date} (last sync: {last_sync})")
+        else:
+            # Full sync for specified number of days
+            start_date = end_date - timedelta(days=args.days if args.days else DEFAULT_DAYS)
 
         if not args.quiet:
             print(f"Garmin Connect Health Data Sync")
