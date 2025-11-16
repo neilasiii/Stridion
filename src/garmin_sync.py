@@ -47,6 +47,8 @@ MS_TO_MPH = 2.23694
 GRAMS_TO_LBS = 453.592
 SECONDS_TO_MINUTES = 60
 SECONDS_TO_HOURS = 3600
+MINUTES_TO_HOURS = 60
+MILLISECONDS_TO_SECONDS = 1000
 
 
 class GarminSyncError(Exception):
@@ -122,6 +124,8 @@ def get_garmin_client() -> Garmin:
     if not email or not password:
         creds_file = Path(__file__).parent.parent / ".garmin_credentials.json"
         if creds_file.exists():
+            print("⚠ WARNING: Using local credentials file (NOT recommended for production)", file=sys.stderr)
+            print("⚠ Use environment variables GARMIN_EMAIL and GARMIN_PASSWORD instead", file=sys.stderr)
             try:
                 with open(creds_file, 'r') as f:
                     creds = json.load(f)
@@ -381,8 +385,8 @@ def fetch_weight_data(client: Garmin, start_date: date, end_date: date, quiet: b
                     for weigh_in in weigh_ins['dateWeightList']:
                         timestamp = weigh_in.get('date')
                         if timestamp:
-                            # Convert timestamp to ISO format
-                            dt = datetime.fromtimestamp(timestamp / 1000)
+                            # Convert timestamp (milliseconds) to ISO format
+                            dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS)
 
                             weight_grams = weigh_in.get('weight')
                             weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
@@ -564,6 +568,9 @@ def save_cache(cache: Dict[str, Any], quiet: bool = False):
 
     shutil.move(tmp_path, CACHE_FILE)
 
+    # Set restrictive permissions (owner read/write only)
+    CACHE_FILE.chmod(0o600)
+
     if not quiet:
         print(f"\nCache updated: {CACHE_FILE}")
 
@@ -606,7 +613,7 @@ def show_summary(cache: Dict[str, Any], days: int = 14):
         avg_duration = sum(s['total_duration_minutes'] for s in recent_sleep) / len(recent_sleep) if recent_sleep else 0
         avg_efficiency = sum(s['sleep_efficiency'] for s in recent_sleep) / len(recent_sleep) if recent_sleep else 0
         print(f"\nSleep: {len(recent_sleep)} nights")
-        print(f"  Avg duration: {avg_duration/SECONDS_TO_MINUTES:.1f} hrs")
+        print(f"  Avg duration: {avg_duration/MINUTES_TO_HOURS:.1f} hrs")
         print(f"  Avg efficiency: {avg_efficiency:.1f}%")
 
     # VO2 Max
@@ -658,11 +665,11 @@ def main():
 
         # Optimize: Use incremental sync if we have a recent sync
         if cache.get('last_sync_date') and not args.days:
-            # Sync from last sync date forward (plus 1 day overlap for safety)
+            # Sync from last sync date forward (merge_data handles deduplication)
             last_sync = date.fromisoformat(cache['last_sync_date'])
-            start_date = last_sync - timedelta(days=1)
+            start_date = last_sync
             if not args.quiet:
-                print(f"Using incremental sync from {start_date} (last sync: {last_sync})")
+                print(f"Using incremental sync from {start_date}")
         else:
             # Full sync for specified number of days
             start_date = end_date - timedelta(days=args.days if args.days else DEFAULT_DAYS)
@@ -686,6 +693,18 @@ def main():
         new_vo2_max = fetch_vo2_max(client, start_date, end_date, args.quiet)
         new_weight = fetch_weight_data(client, start_date, end_date, args.quiet)
         new_rhr = fetch_resting_hr(client, start_date, end_date, args.quiet)
+
+        # Display fetch summary
+        if not args.quiet:
+            print(f"\n{'='*60}")
+            print("Fetch Summary")
+            print(f"{'='*60}")
+            print(f"  {'✓' if new_activities else '⚠'} Activities: {len(new_activities)} records")
+            print(f"  {'✓' if new_sleep else '⚠'} Sleep: {len(new_sleep)} records")
+            print(f"  {'✓' if new_vo2_max else '⚠'} VO2 Max: {len(new_vo2_max)} records")
+            print(f"  {'✓' if new_weight else '⚠'} Weight: {len(new_weight)} records")
+            print(f"  {'✓' if new_rhr else '⚠'} Resting HR: {len(new_rhr)} records")
+            print(f"{'='*60}\n")
 
         if args.check_only:
             if not args.quiet:

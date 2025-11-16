@@ -149,6 +149,22 @@ class TestUnitConversions(unittest.TestCase):
         lbs = 75000 / GRAMS_TO_LBS
         self.assertAlmostEqual(lbs, 165.35, places=2)
 
+    def test_minutes_to_hours(self):
+        """Test minutes to hours conversion"""
+        from src.garmin_sync import MINUTES_TO_HOURS
+
+        # 420 minutes = 7 hours
+        hours = 420 / MINUTES_TO_HOURS
+        self.assertEqual(hours, 7.0)
+
+    def test_milliseconds_to_seconds(self):
+        """Test milliseconds to seconds conversion"""
+        from src.garmin_sync import MILLISECONDS_TO_SECONDS
+
+        # 5000 milliseconds = 5 seconds
+        seconds = 5000 / MILLISECONDS_TO_SECONDS
+        self.assertEqual(seconds, 5.0)
+
 
 if __name__ == '__main__':
     # Run tests
