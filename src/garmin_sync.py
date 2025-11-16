@@ -36,9 +36,20 @@ except ImportError:
     print("Install with: pip3 install garminconnect", file=sys.stderr)
     sys.exit(1)
 
+try:
+    from ics_parser import parse_ics_file, parse_ics_url, merge_ics_with_garmin_workouts, filter_future_events
+except ImportError:
+    # ICS parser is optional - scheduled workouts will just be from Garmin templates
+    parse_ics_file = None
+    parse_ics_url = None
+    merge_ics_with_garmin_workouts = None
+    filter_future_events = None
+
 
 # Constants
 CACHE_FILE = Path(__file__).parent.parent / "data" / "health" / "health_data_cache.json"
+ICS_CALENDAR_DIR = Path(__file__).parent.parent / "data" / "calendar"
+CALENDAR_SOURCES_FILE = Path(__file__).parent.parent / "config" / "calendar_sources.json"
 DEFAULT_DAYS = 30
 
 # Unit conversion constants
@@ -953,13 +964,121 @@ def fetch_scheduled_workouts(client: Garmin, quiet: bool = False) -> List[Dict[s
             })
 
         if not quiet:
-            print(f"  Found {len(scheduled_workouts)} scheduled workouts")
+            print(f"  Found {len(scheduled_workouts)} workout templates")
 
         return scheduled_workouts
 
     except Exception as e:
         print(f"Warning: Failed to fetch scheduled workouts: {e}", file=sys.stderr)
         return []
+
+
+def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Import scheduled workout dates from ICS calendar files and URLs.
+
+    Sources checked in order:
+    1. Calendar URLs from config/calendar_sources.json
+    2. Local .ics files in data/calendar/ directory
+
+    Args:
+        garmin_workouts: List of Garmin workout templates (without dates)
+        quiet: Suppress output
+
+    Returns:
+        List of scheduled workouts with dates from ICS calendar
+    """
+    if parse_ics_file is None:
+        # ICS parser not available
+        return []
+
+    all_events = []
+
+    # First, try to load from calendar URLs
+    if CALENDAR_SOURCES_FILE.exists() and parse_ics_url is not None:
+        try:
+            with open(CALENDAR_SOURCES_FILE, 'r') as f:
+                calendar_config = json.load(f)
+
+            calendar_urls = calendar_config.get('calendar_urls', [])
+            enabled_urls = [c for c in calendar_urls if c.get('enabled', True)]
+
+            if enabled_urls and not quiet:
+                print(f"\nDownloading ICS calendars from URLs...")
+
+            for calendar_source in enabled_urls:
+                url = calendar_source.get('url')
+                name = calendar_source.get('name', 'Unknown')
+
+                if not url:
+                    continue
+
+                try:
+                    if not quiet:
+                        print(f"  Fetching: {name}")
+                        print(f"    URL: {url}")
+
+                    events = parse_ics_url(url)
+
+                    # Filter to include past 30 days + next 14 days (matches default sync window)
+                    filtered_events = filter_future_events(events, days_ahead=14, days_behind=30)
+
+                    if not quiet:
+                        print(f"    Found {len(events)} total events, {len(filtered_events)} in sync window")
+
+                    all_events.extend(filtered_events)
+
+                except Exception as e:
+                    print(f"  Warning: Error fetching {name}: {e}", file=sys.stderr)
+
+        except Exception as e:
+            if not quiet:
+                print(f"  Note: Could not load calendar sources config: {e}", file=sys.stderr)
+
+    # Second, check for local .ics files
+    if ICS_CALENDAR_DIR.exists():
+        ics_files = list(ICS_CALENDAR_DIR.glob('*.ics'))
+
+        if ics_files and not quiet:
+            print(f"\nImporting local ICS calendar files...")
+
+        for ics_file in ics_files:
+            try:
+                if not quiet:
+                    print(f"  Reading {ics_file.name}...")
+
+                events = parse_ics_file(str(ics_file))
+
+                # Filter to include past 30 days + next 14 days (matches default sync window)
+                filtered_events = filter_future_events(events, days_ahead=14, days_behind=30)
+
+                if not quiet:
+                    print(f"    Found {len(events)} total events, {len(filtered_events)} in sync window")
+
+                all_events.extend(filtered_events)
+
+            except Exception as e:
+                print(f"  Warning: Error parsing {ics_file.name}: {e}", file=sys.stderr)
+
+    # If no events found, provide helpful message
+    if not all_events and not quiet:
+        print(f"\nNo scheduled workouts found in calendar sources")
+        print(f"  To add scheduled workout dates:")
+        print(f"  1. Add calendar URL to: {CALENDAR_SOURCES_FILE}")
+        print(f"     OR")
+        print(f"  2. Save .ics file to: {ICS_CALENDAR_DIR}/")
+        return []
+
+    # Merge ICS events with Garmin workout templates
+    if not quiet:
+        print(f"  Merging {len(all_events)} calendar events with Garmin workout templates...")
+
+    scheduled_workouts = merge_ics_with_garmin_workouts(all_events, garmin_workouts)
+
+    if not quiet:
+        print(f"  Created {len(scheduled_workouts)} scheduled workouts with dates")
+
+    return scheduled_workouts
 
 
 def load_cache() -> Dict[str, Any]:
@@ -1231,7 +1350,14 @@ def main():
         new_battery = fetch_body_battery(client, start_date, end_date, args.quiet)
         new_race_predictions = fetch_race_predictions(client, args.quiet)
         new_training_status = fetch_training_status(client, end_date, args.quiet)
-        new_scheduled_workouts = fetch_scheduled_workouts(client, args.quiet)
+        garmin_workout_templates = fetch_scheduled_workouts(client, args.quiet)
+
+        # Import ICS calendar and merge with Garmin templates
+        new_scheduled_workouts = import_ics_calendar(garmin_workout_templates, args.quiet)
+
+        # If no ICS calendar available, use Garmin templates as-is (without dates)
+        if not new_scheduled_workouts and garmin_workout_templates:
+            new_scheduled_workouts = garmin_workout_templates
 
         # Display fetch summary
         if not args.quiet:
@@ -1272,7 +1398,11 @@ def main():
         cache['stress_readings'] = merge_data(cache['stress_readings'], new_stress, 'date')
         cache['spo2_readings'] = merge_data(cache['spo2_readings'], new_spo2, 'date')
         cache['body_battery'] = merge_data(cache['body_battery'], new_battery, 'date')
-        cache['scheduled_workouts'] = merge_data(cache['scheduled_workouts'], new_scheduled_workouts, 'workout_id')
+        # Merge scheduled workouts - use 'scheduled_date' if available (from ICS), else 'workout_id'
+        if new_scheduled_workouts and 'scheduled_date' in new_scheduled_workouts[0]:
+            cache['scheduled_workouts'] = merge_data(cache['scheduled_workouts'], new_scheduled_workouts, 'scheduled_date')
+        else:
+            cache['scheduled_workouts'] = merge_data(cache['scheduled_workouts'], new_scheduled_workouts, 'workout_id')
 
         # Update single-value fields (most recent only)
         if new_race_predictions:

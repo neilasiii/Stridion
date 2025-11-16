@@ -41,6 +41,36 @@ export GARMIN_PASSWORD=yourpassword
 bash bin/sync_garmin_data.sh
 ```
 
+**ICS Calendar Import (Optional)**
+
+For importing scheduled workout dates from FinalSurge, TrainingPeaks, or other platforms:
+
+**Option 1: Calendar URL (Recommended)**
+```bash
+# 1. Copy config/calendar_sources.json.example to config/calendar_sources.json
+cp config/calendar_sources.json.example config/calendar_sources.json
+
+# 2. Edit the file and add your calendar URL
+# Example FinalSurge URL: https://log.finalsurge.com/delivery/ical/YOUR_ID
+#   (Find this in FinalSurge under Settings → Calendar Integration)
+
+# 3. Run sync - it will automatically download and import the calendar
+bash bin/sync_garmin_data.sh
+```
+
+**Option 2: Local ICS File**
+```bash
+# 1. Export training calendar as .ics file from your platform
+# 2. Save to data/calendar/ directory
+mkdir -p data/calendar
+# Place your training_calendar.ics file there
+
+# 3. Run sync
+bash bin/sync_garmin_data.sh
+```
+
+The sync will merge calendar events (with dates) with Garmin workout templates (with details) to create a complete scheduled workout plan for the next 14 days.
+
 ### Testing
 
 **Verify Health Data System**

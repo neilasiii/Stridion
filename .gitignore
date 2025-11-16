@@ -5,6 +5,9 @@
 .garmin_credentials.json
 config/.garmin_config.json
 
+# Calendar URLs (may contain private calendar links)
+config/calendar_sources.json
+
 # Cache backups (created automatically on corruption or before updates)
 *.json.bak
 
