@@ -23,7 +23,7 @@ import json
 import os
 import sys
 import time
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Callable
 import tempfile
@@ -49,6 +49,40 @@ SECONDS_TO_MINUTES = 60
 SECONDS_TO_HOURS = 3600
 MINUTES_TO_HOURS = 60
 MILLISECONDS_TO_SECONDS = 1000
+
+# Retry configuration constants
+RETRY_MAX_ATTEMPTS = 3
+RETRY_BASE_DELAY = 2  # Base delay in seconds for exponential backoff (2^0=1s, 2^1=2s, 2^2=4s)
+
+
+def to_utc_isoformat(dt_string: str) -> str:
+    """
+    Convert a datetime string to UTC and return ISO format.
+
+    Args:
+        dt_string: ISO format datetime string (may include timezone)
+
+    Returns:
+        ISO format string in UTC
+    """
+    # Parse the datetime string
+    # Replace 'Z' with '+00:00' for Python's fromisoformat
+    dt_string = dt_string.replace('Z', '+00:00')
+    dt = datetime.fromisoformat(dt_string)
+
+    # Convert to UTC if it has timezone info
+    if dt.tzinfo is not None:
+        dt_utc = dt.astimezone(timezone.utc)
+    else:
+        # Assume UTC if no timezone info
+        dt_utc = dt.replace(tzinfo=timezone.utc)
+
+    return dt_utc.isoformat()
+
+
+def utc_now() -> str:
+    """Return current time in UTC as ISO format string"""
+    return datetime.now(timezone.utc).isoformat()
 
 
 class GarminSyncError(Exception):
@@ -85,7 +119,7 @@ def retry_with_backoff(func: Callable, *args, max_retries: int = 3, quiet: bool 
             # Check if it's a rate limit or temporary error
             if '429' in error_str or 'rate limit' in error_str or 'too many requests' in error_str:
                 if attempt < max_retries - 1:
-                    wait_time = 2 ** attempt  # Exponential backoff: 1s, 2s, 4s
+                    wait_time = RETRY_BASE_DELAY ** attempt  # Exponential backoff: 1s, 2s, 4s
                     if not quiet:
                         print(f"  Rate limit detected, waiting {wait_time}s before retry {attempt + 1}/{max_retries}...", file=sys.stderr)
                     time.sleep(wait_time)
@@ -94,7 +128,7 @@ def retry_with_backoff(func: Callable, *args, max_retries: int = 3, quiet: bool 
             # For other errors, only retry on network-related issues
             if any(keyword in error_str for keyword in ['timeout', 'connection', 'network']):
                 if attempt < max_retries - 1:
-                    wait_time = 2 ** attempt
+                    wait_time = RETRY_BASE_DELAY ** attempt
                     if not quiet:
                         print(f"  Network error, retrying in {wait_time}s ({attempt + 1}/{max_retries})...", file=sys.stderr)
                     time.sleep(wait_time)
@@ -174,11 +208,11 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             if activity_type in ['TRAIL_RUNNING', 'TREADMILL_RUNNING']:
                 activity_type = 'RUNNING'
 
-            # Parse activity data
-            start_time = activity.get('startTimeLocal', activity.get('startTimeGMT'))
+            # Parse activity data - use GMT for consistency
+            start_time = activity.get('startTimeGMT') or activity.get('startTimeLocal')
             if start_time:
-                # Parse ISO format datetime
-                activity_date = datetime.fromisoformat(start_time.replace('Z', '+00:00'))
+                # Normalize to UTC ISO format
+                activity_date = to_utc_isoformat(start_time)
             else:
                 continue
 
@@ -193,7 +227,7 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             pace_per_mile = (duration / SECONDS_TO_MINUTES) / distance if distance > 0 else 0
 
             activities.append({
-                'date': activity_date.isoformat(),
+                'date': activity_date,
                 'activity_type': activity_type,
                 'duration_seconds': duration,
                 'distance_miles': round(distance, 6),
@@ -371,8 +405,8 @@ def fetch_weight_data(client: Garmin, start_date: date, end_date: date, quiet: b
                     for weigh_in in weigh_ins['dateWeightList']:
                         timestamp = weigh_in.get('date')
                         if timestamp:
-                            # Convert timestamp (milliseconds) to ISO format
-                            dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS)
+                            # Convert timestamp (milliseconds) to UTC ISO format
+                            dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS, tz=timezone.utc)
 
                             weight_grams = weigh_in.get('weight')
                             weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
@@ -435,8 +469,8 @@ def fetch_resting_hr(client: Garmin, start_date: date, end_date: date, quiet: bo
                 if hr_data and 'restingHeartRate' in hr_data:
                     rhr = hr_data['restingHeartRate']
                     if rhr:
-                        # Create timestamp (using noon of that day)
-                        dt = datetime.combine(current_date, datetime.min.time().replace(hour=12))
+                        # Create timestamp (using noon UTC of that day)
+                        dt = datetime.combine(current_date, datetime.min.time().replace(hour=12), tzinfo=timezone.utc)
                         rhr_readings.append([
                             dt.isoformat(),
                             int(rhr)
@@ -495,7 +529,7 @@ def load_cache() -> Dict[str, Any]:
 
     except (json.JSONDecodeError, ValueError) as e:
         # Cache is corrupted - create backup and return empty
-        backup_file = CACHE_FILE.parent / f"{CACHE_FILE.stem}_corrupted_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json.bak"
+        backup_file = CACHE_FILE.parent / f"{CACHE_FILE.stem}_corrupted_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json.bak"
         try:
             shutil.copy2(CACHE_FILE, backup_file)
             print(f"⚠ WARNING: Cache file corrupted. Backup saved to {backup_file}", file=sys.stderr)
@@ -569,8 +603,8 @@ def save_cache(cache: Dict[str, Any], quiet: bool = False):
         cache: Cache dictionary to save
         quiet: Suppress output
     """
-    # Update timestamp
-    cache['last_updated'] = datetime.now().isoformat()
+    # Update timestamp (UTC)
+    cache['last_updated'] = utc_now()
 
     # Create parent directory if needed
     CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -610,8 +644,8 @@ def show_summary(cache: Dict[str, Any], days: int = 14):
     print(f"Health Data Summary (Last {days} Days)")
     print(f"{'='*60}")
 
-    # Calculate cutoff date
-    cutoff = (datetime.now() - timedelta(days=days)).isoformat()
+    # Calculate cutoff date (UTC)
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
 
     # Activities
     recent_activities = [a for a in cache['activities'] if a['date'] >= cutoff]

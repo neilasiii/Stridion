@@ -384,7 +384,24 @@ else:
 
 3. Check Garmin Connect account status (ensure not locked)
 
-4. If using 2FA, see `bin/garmin_login_with_mfa.py` for alternative login
+### Token Expiration
+
+OAuth tokens stored in `~/.garminconnect/` typically last ~1 year.
+
+**Symptoms of expired tokens:**
+- Authentication errors during sync
+- "Invalid token" or "Unauthorized" messages
+
+**Resolution:**
+```bash
+# Remove expired tokens
+rm -rf ~/.garminconnect
+
+# Re-authenticate (will prompt for credentials)
+bash bin/sync_garmin_data.sh
+```
+
+The garminconnect library will automatically create new tokens using your environment variables.
 
 ### Health Data Not Updating
 
@@ -439,6 +456,41 @@ bash bin/sync_garmin_data.sh --days 90
 - Sleep data requires Garmin device with sleep tracking
 - VO2 max requires GPS activities with heart rate data
 - Check Garmin Connect web/app to verify data is actually available
+
+### Sync Performance & Rate Limits
+
+**Expected Sync Times:**
+- Initial sync (30 days): 2-5 minutes
+- Incremental sync (daily): 30-60 seconds
+- Large sync (90+ days): 5-15 minutes
+
+**Performance Characteristics:**
+- Activities: Batch fetch (fast)
+- Sleep/VO2/Weight/RHR: Daily API calls (slower for large date ranges)
+- Automatic retry with exponential backoff (1s, 2s, 4s delay)
+
+**Garmin API Rate Limits:**
+- Not officially documented
+- System includes rate limit detection (HTTP 429)
+- Automatic retry after brief delay
+- Recommended: Sync once daily, avoid multiple concurrent syncs
+
+**Optimization:**
+- Incremental sync automatically enabled after first sync
+- Only fetches data from last sync date forward
+- De-duplication prevents duplicate entries on re-sync
+
+**Troubleshooting Slow Syncs:**
+```bash
+# Check sync performance with summary
+python3 src/garmin_sync.py --days 7 --summary
+
+# If consistently slow:
+# 1. Check network connection
+# 2. Verify Garmin Connect API status
+# 3. Reduce date range for testing
+python3 src/garmin_sync.py --days 3 --summary
+```
 
 ---
 
