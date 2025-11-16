@@ -29,6 +29,13 @@ set -e  # Exit on error
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Use venv Python if available, otherwise fall back to system python3
+if [ -f "$PROJECT_ROOT/venv/bin/python3" ]; then
+    PYTHON="$PROJECT_ROOT/venv/bin/python3"
+else
+    PYTHON="python3"
+fi
+
 # Default options
 DAYS=30
 CHECK_ONLY=""
@@ -53,4 +60,4 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Run the sync script with summary
-python3 "$PROJECT_ROOT/src/garmin_sync.py" --days "$DAYS" --summary $CHECK_ONLY
+"$PYTHON" "$PROJECT_ROOT/src/garmin_sync.py" --days "$DAYS" --summary $CHECK_ONLY

@@ -1,12 +1,17 @@
-# Garmin Connect credentials (use environment variables)
-# No config files needed - credentials via GARMIN_EMAIL and GARMIN_PASSWORD
+# Garmin Connect credentials
+# Environment variables: GARMIN_EMAIL and GARMIN_PASSWORD
+# Or config file: config/.garmin_config.json
 # Tokens stored in ~/.garminconnect/ by garminconnect library
 .garmin_credentials.json
+config/.garmin_config.json
 
 # Cache backups (created automatically on corruption or before updates)
 *.json.bak
 
 # Note: data/health/health_data_cache.json is committed for cross-session persistence
+
+# Garmin raw exports (manual exports from Garmin Connect)
+health_connect_export/
 
 # Python
 __pycache__/
