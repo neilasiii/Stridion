@@ -4,7 +4,16 @@
       "Bash(python3:*)",
       "Bash(/tmp/athlete_health_summary.json)",
       "Bash(bash:*)",
-      "Bash(source:*)"
+      "Bash(source:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(pip install:*)",
+      "Bash(chmod:*)",
+      "Bash(git restore:*)",
+      "Bash(xargs -I {} sh -c 'echo \"\"\"\"File: {}\"\"\"\"; cat \"\"\"\"{}\"\"\"\"')",
+      "Bash(./venv/bin/python3:*)",
+      "Bash(cat:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

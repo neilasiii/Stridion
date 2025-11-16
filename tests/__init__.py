@@ -1,1 +1,1 @@
-"""Test suite for running-coach health data sync system"""
+# Tests package for running-coach
