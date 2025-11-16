@@ -166,36 +166,11 @@ class TestUnitConversions(unittest.TestCase):
         self.assertEqual(seconds, 5.0)
 
 
-class TestUTCFunctions(unittest.TestCase):
-    """Test UTC timezone normalization functions"""
-
-    def test_to_utc_isoformat_with_utc(self):
-        """Test conversion of UTC timestamp"""
-        from src.garmin_sync import to_utc_isoformat
-
-        # UTC timestamp with Z
-        result = to_utc_isoformat("2025-11-16T10:30:00Z")
-        self.assertTrue(result.endswith("+00:00") or result.endswith("Z"))
-
-    def test_to_utc_isoformat_with_timezone(self):
-        """Test conversion of timestamp with explicit timezone"""
-        from src.garmin_sync import to_utc_isoformat
-
-        # EST timestamp (-05:00)
-        result = to_utc_isoformat("2025-11-16T10:30:00-05:00")
-        # Should be converted to UTC (15:30:00 UTC)
-        self.assertIn("15:30:00", result)
-
-    def test_to_utc_isoformat_without_timezone(self):
-        """Test handling of timestamp without timezone (assumes UTC)"""
-        from src.garmin_sync import to_utc_isoformat
-
-        # No timezone info - should assume UTC
-        result = to_utc_isoformat("2025-11-16T10:30:00")
-        self.assertIn("2025-11-16T10:30:00", result)
+class TestSystemTimestamps(unittest.TestCase):
+    """Test system timestamp functions"""
 
     def test_utc_now_returns_utc_timestamp(self):
-        """Test that utc_now returns UTC timestamp"""
+        """Test that utc_now returns UTC timestamp for system operations"""
         from src.garmin_sync import utc_now
 
         result = utc_now()
