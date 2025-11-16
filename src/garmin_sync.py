@@ -120,25 +120,11 @@ def get_garmin_client() -> Garmin:
     email = os.getenv("GARMIN_EMAIL")
     password = os.getenv("GARMIN_PASSWORD")
 
-    # Fallback: check for local credentials file (for testing only)
-    if not email or not password:
-        creds_file = Path(__file__).parent.parent / ".garmin_credentials.json"
-        if creds_file.exists():
-            print("⚠ WARNING: Using local credentials file (NOT recommended for production)", file=sys.stderr)
-            print("⚠ Use environment variables GARMIN_EMAIL and GARMIN_PASSWORD instead", file=sys.stderr)
-            try:
-                with open(creds_file, 'r') as f:
-                    creds = json.load(f)
-                    email = creds.get('garmin_email')
-                    password = creds.get('garmin_password')
-            except Exception:
-                pass  # Ignore errors, will raise below if still missing
-
     if not email or not password:
         raise GarminSyncError(
             "GARMIN_EMAIL and GARMIN_PASSWORD environment variables must be set.\n"
-            "Example: export GARMIN_EMAIL=your@email.com && export GARMIN_PASSWORD=yourpassword\n"
-            "Or create .garmin_credentials.json for testing (NOT recommended for production)"
+            "Example: export GARMIN_EMAIL=your@email.com\n"
+            "         export GARMIN_PASSWORD=yourpassword"
         )
 
     try:
@@ -477,16 +463,12 @@ def fetch_resting_hr(client: Garmin, start_date: date, end_date: date, quiet: bo
 
 def load_cache() -> Dict[str, Any]:
     """
-    Load existing health data cache.
+    Load existing health data cache with corruption handling.
 
     Returns:
-        Cache dictionary or empty structure if cache doesn't exist
+        Cache dictionary or empty structure if cache doesn't exist or is corrupted
     """
-    if CACHE_FILE.exists():
-        with open(CACHE_FILE, 'r') as f:
-            return json.load(f)
-
-    return {
+    empty_cache = {
         'last_updated': None,
         'last_sync_date': None,
         'activities': [],
@@ -495,6 +477,37 @@ def load_cache() -> Dict[str, Any]:
         'weight_readings': [],
         'resting_hr_readings': []
     }
+
+    if not CACHE_FILE.exists():
+        return empty_cache
+
+    try:
+        with open(CACHE_FILE, 'r') as f:
+            cache = json.load(f)
+
+        # Validate cache structure
+        required_keys = {'activities', 'sleep_sessions', 'vo2_max_readings',
+                        'weight_readings', 'resting_hr_readings'}
+        if not all(key in cache for key in required_keys):
+            raise ValueError("Cache missing required keys")
+
+        return cache
+
+    except (json.JSONDecodeError, ValueError) as e:
+        # Cache is corrupted - create backup and return empty
+        backup_file = CACHE_FILE.parent / f"{CACHE_FILE.stem}_corrupted_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json.bak"
+        try:
+            shutil.copy2(CACHE_FILE, backup_file)
+            print(f"⚠ WARNING: Cache file corrupted. Backup saved to {backup_file}", file=sys.stderr)
+            print(f"⚠ Error: {e}", file=sys.stderr)
+        except Exception as backup_error:
+            print(f"⚠ WARNING: Cache file corrupted and backup failed: {backup_error}", file=sys.stderr)
+
+        return empty_cache
+
+    except Exception as e:
+        print(f"⚠ WARNING: Unexpected error loading cache: {e}", file=sys.stderr)
+        return empty_cache
 
 
 def merge_data(existing: List, new: List, key_field: str = 'date') -> List:
@@ -550,7 +563,7 @@ def merge_data(existing: List, new: List, key_field: str = 'date') -> List:
 
 def save_cache(cache: Dict[str, Any], quiet: bool = False):
     """
-    Save health data cache atomically.
+    Save health data cache atomically with backup.
 
     Args:
         cache: Cache dictionary to save
@@ -559,9 +572,19 @@ def save_cache(cache: Dict[str, Any], quiet: bool = False):
     # Update timestamp
     cache['last_updated'] = datetime.now().isoformat()
 
-    # Write to temp file first, then rename (atomic operation)
+    # Create parent directory if needed
     CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
 
+    # Create backup of existing cache before overwriting
+    if CACHE_FILE.exists():
+        backup_file = CACHE_FILE.parent / f"{CACHE_FILE.stem}.json.bak"
+        try:
+            shutil.copy2(CACHE_FILE, backup_file)
+        except Exception as e:
+            if not quiet:
+                print(f"⚠ Warning: Failed to create backup: {e}", file=sys.stderr)
+
+    # Write to temp file first, then rename (atomic operation)
     with tempfile.NamedTemporaryFile(mode='w', delete=False, dir=CACHE_FILE.parent) as tmp:
         json.dump(cache, tmp, indent=2)
         tmp_path = tmp.name

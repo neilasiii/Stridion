@@ -3,6 +3,9 @@
 # Tokens stored in ~/.garminconnect/ by garminconnect library
 .garmin_credentials.json
 
+# Cache backups (created automatically on corruption or before updates)
+*.json.bak
+
 # Note: data/health/health_data_cache.json is committed for cross-session persistence
 
 # Python
