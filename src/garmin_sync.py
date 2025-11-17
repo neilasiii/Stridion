@@ -223,7 +223,9 @@ def _fetch_activity_splits(client: Garmin, activity_id: str, quiet: bool = False
                 'calories': split.get('calories')
             }
 
-            splits.append(split_dict)
+            # Only include INTERVAL_* splits (skip RWD_* splits)
+            if split_type.startswith('INTERVAL_'):
+                splits.append(split_dict)
 
         return splits
 
@@ -375,11 +377,12 @@ def fetch_sleep_data(client: Garmin, start_date: date, end_date: date, quiet: bo
                         current_date += timedelta(days=1)
                         continue
 
-                    # Calculate efficiency
-                    actual_sleep = light_sleep + deep_sleep + rem_sleep
-                    efficiency = (actual_sleep / total_duration * 100) if total_duration > 0 else 0
+                    # Get sleep score (Garmin's overall sleep quality metric)
+                    # Ranges from 0-100, considers duration, quality, and restoration
+                    sleep_score = daily_sleep.get('sleepScores', {}).get('overall', {}).get('value')
 
                     # Calculate deep sleep percentage
+                    actual_sleep = light_sleep + deep_sleep + rem_sleep
                     deep_pct = (deep_sleep / actual_sleep * 100) if actual_sleep > 0 else 0
 
                     sleep_sessions.append({
@@ -389,7 +392,7 @@ def fetch_sleep_data(client: Garmin, start_date: date, end_date: date, quiet: bo
                         'deep_sleep_minutes': round(deep_sleep, 1),
                         'rem_sleep_minutes': round(rem_sleep, 1),
                         'awake_minutes': round(awake, 1),
-                        'sleep_efficiency': round(efficiency, 2),
+                        'sleep_score': sleep_score,
                         'deep_sleep_percentage': round(deep_pct, 2)
                     })
 
@@ -416,14 +419,17 @@ def fetch_vo2_max(client: Garmin, start_date: date, end_date: date, quiet: bool 
     """
     Fetch VO2 max readings from Garmin Connect for the specified date range.
 
+    Note: VO2 max is typically only updated after GPS activities with HR data.
+    This function fetches from training status which provides the most recent VO2 max estimate.
+
     Args:
         client: Authenticated Garmin client
         start_date: Start date for VO2 max fetch
-        end_date: End date for VO2 max fetch
+        end_date: End date for VO2 max fetch (uses this date for training status)
         quiet: Suppress output
 
     Returns:
-        List of VO2 max reading dictionaries
+        List of VO2 max reading dictionaries (typically one reading with most recent value)
     """
     vo2_max_readings = []
 
@@ -431,28 +437,22 @@ def fetch_vo2_max(client: Garmin, start_date: date, end_date: date, quiet: bool 
         print(f"Fetching VO2 max data...")
 
     try:
-        # Get latest stats which includes VO2 max
-        current_date = start_date
-        while current_date <= end_date:
-            try:
-                stats = client.get_stats(current_date.isoformat())
+        # Get VO2 max from training status (most reliable source)
+        training_status = client.get_training_status(end_date.isoformat())
 
-                if stats and 'vo2Max' in stats:
-                    vo2_max = stats['vo2Max']
-                    if vo2_max:
-                        vo2_max_readings.append({
-                            'date': f"{current_date.isoformat()}T00:00:00",
-                            'vo2_max': float(vo2_max)
-                        })
+        if training_status and 'mostRecentVO2Max' in training_status:
+            vo2_data = training_status['mostRecentVO2Max'].get('generic', {})
 
-            except KeyError:
-                # Expected: No VO2 max data for this date
-                pass
-            except Exception as e:
-                if not quiet:
-                    print(f"  Warning: Error fetching VO2 max for {current_date}: {type(e).__name__}", file=sys.stderr)
+            vo2_value = vo2_data.get('vo2MaxValue')
+            vo2_precise = vo2_data.get('vo2MaxPreciseValue')
+            vo2_date = vo2_data.get('calendarDate')
 
-            current_date += timedelta(days=1)
+            # Use precise value if available, otherwise use standard value
+            if vo2_precise or vo2_value:
+                vo2_max_readings.append({
+                    'date': f"{vo2_date}T00:00:00" if vo2_date else f"{end_date.isoformat()}T00:00:00",
+                    'vo2_max': float(vo2_precise if vo2_precise else vo2_value)
+                })
 
         if not quiet:
             print(f"  Found {len(vo2_max_readings)} VO2 max readings")
@@ -487,42 +487,80 @@ def fetch_weight_data(client: Garmin, start_date: date, end_date: date, quiet: b
         weigh_ins = client.get_weigh_ins(start_date.isoformat(), end_date.isoformat())
 
         # Skip if no data returned
-        if not weigh_ins or 'dateWeightList' not in weigh_ins or not weigh_ins['dateWeightList']:
+        if not weigh_ins:
             if not quiet:
                 print(f"  Found 0 weight readings")
             return weight_readings
 
-        for weigh_in in weigh_ins['dateWeightList']:
-            try:
-                timestamp = weigh_in.get('date')
-                if not timestamp:
+        # Handle new API structure: dailyWeightSummaries
+        if 'dailyWeightSummaries' in weigh_ins and weigh_ins['dailyWeightSummaries']:
+            for daily_summary in weigh_ins['dailyWeightSummaries']:
+                try:
+                    # Each daily summary contains allWeightMetrics array
+                    if 'allWeightMetrics' not in daily_summary or not daily_summary['allWeightMetrics']:
+                        continue
+
+                    for weigh_in in daily_summary['allWeightMetrics']:
+                        timestamp = weigh_in.get('timestampGMT')
+                        if not timestamp:
+                            continue
+
+                        # Convert timestamp (milliseconds) to datetime
+                        dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS, tz=timezone.utc)
+
+                        weight_grams = weigh_in.get('weight')
+                        weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
+
+                        body_fat = weigh_in.get('bodyFat')
+                        muscle = weigh_in.get('muscleMass')
+
+                        if weight_lbs:
+                            weight_readings.append({
+                                'timestamp': dt.isoformat(),
+                                'weight_lbs': round(weight_lbs, 5),
+                                'body_fat_percentage': body_fat,
+                                'skeletal_muscle_percentage': muscle
+                            })
+                except (TypeError, ValueError, KeyError) as e:
+                    # Individual weigh-in parsing error - skip this entry
                     continue
 
-                # Convert timestamp (milliseconds) to local time
-                # Note: fromtimestamp without tz uses local time
-                if isinstance(timestamp, str):
-                    # Already a date string, parse it
-                    dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-                else:
-                    # Numeric timestamp in milliseconds
-                    dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS)
+        # Fallback: Handle old API structure if still present
+        elif 'dateWeightList' in weigh_ins and weigh_ins['dateWeightList']:
+            for weigh_in in weigh_ins['dateWeightList']:
+                try:
+                    timestamp = weigh_in.get('date')
+                    if not timestamp:
+                        continue
 
-                weight_grams = weigh_in.get('weight')
-                weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
+                    # Convert timestamp (milliseconds) to local time
+                    if isinstance(timestamp, str):
+                        # Already a date string, parse it
+                        dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                    else:
+                        # Numeric timestamp in milliseconds
+                        dt = datetime.fromtimestamp(timestamp / MILLISECONDS_TO_SECONDS)
 
-                body_fat = weigh_in.get('bodyFat')
-                muscle = weigh_in.get('muscleMass')
+                    weight_grams = weigh_in.get('weight')
+                    weight_lbs = (weight_grams / GRAMS_TO_LBS) if weight_grams else None
 
-                if weight_lbs:
-                    weight_readings.append({
-                        'timestamp': dt.isoformat(),
-                        'weight_lbs': round(weight_lbs, 5),
-                        'body_fat_percentage': body_fat,
-                        'skeletal_muscle_percentage': muscle
-                    })
-            except (TypeError, ValueError) as e:
-                # Individual weigh-in parsing error - skip this entry
-                continue
+                    body_fat = weigh_in.get('bodyFat')
+                    muscle = weigh_in.get('muscleMass')
+
+                    if weight_lbs:
+                        weight_readings.append({
+                            'timestamp': dt.isoformat(),
+                            'weight_lbs': round(weight_lbs, 5),
+                            'body_fat_percentage': body_fat,
+                            'skeletal_muscle_percentage': muscle
+                        })
+                except (TypeError, ValueError) as e:
+                    # Individual weigh-in parsing error - skip this entry
+                    continue
+        else:
+            if not quiet:
+                print(f"  Found 0 weight readings")
+            return weight_readings
 
         if not quiet:
             print(f"  Found {len(weight_readings)} weight readings")
@@ -1267,10 +1305,13 @@ def show_summary(cache: Dict[str, Any], days: int = 14):
     recent_sleep = [s for s in cache['sleep_sessions'] if s['date'] >= cutoff[:10]]
     if recent_sleep:
         avg_duration = sum(s['total_duration_minutes'] for s in recent_sleep) / len(recent_sleep) if recent_sleep else 0
-        avg_efficiency = sum(s['sleep_efficiency'] for s in recent_sleep) / len(recent_sleep) if recent_sleep else 0
+        # Calculate average sleep score (filter out None values)
+        sleep_scores = [s['sleep_score'] for s in recent_sleep if s.get('sleep_score') is not None]
+        avg_score = sum(sleep_scores) / len(sleep_scores) if sleep_scores else 0
         print(f"\nSleep: {len(recent_sleep)} nights")
         print(f"  Avg duration: {avg_duration/MINUTES_TO_HOURS:.1f} hrs")
-        print(f"  Avg efficiency: {avg_efficiency:.1f}%")
+        if avg_score > 0:
+            print(f"  Avg sleep score: {avg_score:.0f}/100")
 
     # VO2 Max
     recent_vo2 = [v for v in cache['vo2_max_readings'] if v['date'] >= cutoff]
