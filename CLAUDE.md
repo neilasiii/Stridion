@@ -125,6 +125,27 @@ bash bin/workout_library.sh search --help
 
 The library contains 19+ pre-built workouts across all domains (running, strength, mobility, nutrition) with searchable metadata.
 
+**Communication Preferences**
+
+Control the level of detail in coaching responses:
+
+```bash
+# View current communication preference (BRIEF/STANDARD/DETAILED)
+head -5 data/athlete/communication_preferences.md
+
+# Or just ask the coach to change modes
+# "Switch to brief mode"
+# "Give me detailed explanations"
+# "Use standard detail level"
+```
+
+**Detail Levels:**
+- **BRIEF** (default): Concise workouts with just time/intensity/pace - minimal explanations
+- **STANDARD**: Balanced detail with brief rationale and purpose statements
+- **DETAILED**: Comprehensive explanations with physiological reasoning and multiple options
+
+See [docs/COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md) for examples and usage guide.
+
 ### Testing
 
 **Verify Health Data System**
@@ -226,6 +247,7 @@ Coaching Agents (read JSON for decisions)
 All coaching agents MUST read these files in [data/athlete/](data/athlete/) before providing guidance:
 
 - **[goals.md](data/athlete/goals.md)** - Performance goals, training objectives
+- **[communication_preferences.md](data/athlete/communication_preferences.md)** - Detail level (BRIEF/STANDARD/DETAILED) and response format preferences
 - **[training_history.md](data/athlete/training_history.md)** - Injury history, past training patterns
 - **[training_preferences.md](data/athlete/training_preferences.md)** - Schedule constraints (Mon-Thu workdays 0700-1730), preferred workout structure, dietary requirements (gluten-free, dairy-free)
 - **[upcoming_races.md](data/athlete/upcoming_races.md)** - Race schedule, time goals, taper timing
@@ -237,6 +259,7 @@ All coaching agents MUST read these files in [data/athlete/](data/athlete/) befo
 - **[docs/HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Complete technical documentation for health data system
 - **[docs/AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on using health data
 - **[docs/AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md)** - Guide for agents on using the workout library
+- **[docs/COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md)** - Guide to BRIEF/STANDARD/DETAILED response modes
 - **[data/athlete/health_profile.md](data/athlete/health_profile.md)** - Human-readable health summary
 - **[data/library/workout_library_schema.md](data/library/workout_library_schema.md)** - Workout library data structure and schema
 
@@ -468,3 +491,43 @@ bash bin/sync_garmin_data.sh --days 90
 - Sleep data requires Garmin device with sleep tracking
 - VO2 max requires GPS activities with heart rate data
 - Check Garmin Connect web/app to verify data is actually available
+
+## Development Guidelines
+
+### Adding New Features
+
+When implementing new features, ALWAYS update the following files:
+
+1. **README.md** - Add to appropriate section:
+   - **Features section** - Brief description of the feature
+   - **Usage section** - How to use the feature with examples
+   - **Documentation section** - Link to any new documentation
+   - **Project Structure** - Update directory tree if new files/folders added
+   - **Roadmap** - Mark feature as completed `[x]` if it was on the roadmap
+
+2. **CLAUDE.md** (this file) - Update:
+   - **Key Commands** section if new CLI commands added
+   - **Architecture** section if new components added
+   - **Documentation** section with links to new guides
+   - **Athlete Context Files** if new context files added
+
+3. **Documentation** - Create comprehensive guides:
+   - User-facing guides in `docs/` directory
+   - Include examples for all usage patterns
+   - Provide troubleshooting sections
+   - Link guides from README.md and CLAUDE.md
+
+4. **Agent Prompts** - Update all relevant agents in `.claude/agents/`:
+   - Add new context files to required reading lists
+   - Update instructions for new capabilities
+   - Include examples of how to use new features
+   - Maintain consistency across all agents
+
+### Documentation Standards
+
+- Use clear, concise language
+- Provide working code examples
+- Include both simple and advanced usage patterns
+- Add troubleshooting sections for common issues
+- Keep examples consistent with actual implementation
+- Update all cross-references when renaming/moving files
