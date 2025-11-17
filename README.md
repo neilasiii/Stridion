@@ -107,7 +107,9 @@ When using Claude Code, these agents automatically access your athlete profile a
 
 ### Calendar Integration
 
-**Using a Calendar URL (Recommended)**
+**Import Workouts (from external sources)**
+
+Using a Calendar URL (Recommended):
 ```bash
 # 1. Configure your calendar source
 cp config/calendar_sources.json.example config/calendar_sources.json
@@ -117,7 +119,7 @@ cp config/calendar_sources.json.example config/calendar_sources.json
 bash bin/sync_garmin_data.sh
 ```
 
-**Using a Local ICS File**
+Using a Local ICS File:
 ```bash
 # 1. Save your exported .ics file to data/calendar/
 mkdir -p data/calendar
@@ -128,6 +130,29 @@ bash bin/sync_garmin_data.sh
 ```
 
 The system merges calendar events (dates) with Garmin workout templates (details) to create a complete 14-day scheduled workout plan.
+
+**Export Workouts (to external calendars)**
+
+Export scheduled workouts to ICS format for Google Calendar, Outlook, Apple Calendar, etc.:
+
+```bash
+# Export next 14 days (default)
+bash bin/export_calendar.sh
+
+# Export next 30 days
+bash bin/export_calendar.sh --days 30
+
+# Export to custom location
+bash bin/export_calendar.sh --output ~/Downloads/workouts.ics
+
+# Export automatically during sync
+python3 src/garmin_sync.py --export-calendar --export-days 21
+```
+
+Import the generated .ics file:
+- **Google Calendar**: Settings → Import & Export → Import
+- **Outlook**: File → Import/Export → Import an iCalendar file
+- **Apple Calendar**: File → Import
 
 ## Architecture
 
@@ -146,7 +171,10 @@ Garmin Connect API
 ### Key Components
 
 - **`src/garmin_sync.py`** - Main sync script using garminconnect library
+- **`src/ics_parser.py`** - ICS calendar import parser
+- **`src/ics_exporter.py`** - ICS calendar export generator
 - **`bin/sync_garmin_data.sh`** - Convenience wrapper for syncing
+- **`bin/export_calendar.sh`** - Convenience wrapper for calendar export
 - **`data/health/health_data_cache.json`** - Cached health metrics
 - **`data/athlete/`** - Athlete context files
 - **`.claude/agents/`** - Coaching agent configurations
@@ -290,7 +318,7 @@ This project is actively evolving. Current development priorities:
 - [ ] **TrainingPeaks Integration** - Import/export structured workouts and plans
 - [ ] **Zwift Integration** - Indoor training workouts and structured plans
 - [ ] **Weather API** - Real-time weather data for workout planning and race day
-- [ ] **Calendar Sync** - Export workouts to Google Calendar, Outlook, Apple Calendar
+- [x] **Calendar Sync Export** - Export workouts to Google Calendar, Outlook, Apple Calendar (ICS format)
 
 ### Race Day Features
 - [ ] **Race Strategy Generator** - Custom pacing plan based on course elevation profile

@@ -71,6 +71,35 @@ bash bin/sync_garmin_data.sh
 
 The sync will merge calendar events (with dates) with Garmin workout templates (with details) to create a complete scheduled workout plan for the next 14 days.
 
+**ICS Calendar Export**
+
+Export your scheduled workouts to ICS format for import into external calendar apps:
+
+```bash
+# Export next 14 days (default)
+bash bin/export_calendar.sh
+
+# Export next 30 days
+bash bin/export_calendar.sh --days 30
+
+# Export to custom location
+bash bin/export_calendar.sh --output ~/Downloads/my_workouts.ics
+
+# Quiet mode (no output except errors)
+bash bin/export_calendar.sh --quiet
+
+# Export during sync (automatic)
+python3 src/garmin_sync.py --export-calendar --export-days 21
+
+# Direct Python usage
+python3 src/ics_exporter.py --days 14 --output data/calendar/workouts.ics
+```
+
+The exported .ics file can be imported into:
+- **Google Calendar**: Settings → Import & Export → Import → Select file
+- **Outlook**: File → Open & Export → Import/Export → Import an iCalendar (.ics) file
+- **Apple Calendar**: File → Import → Select file
+
 ### Testing
 
 **Verify Health Data System**
@@ -233,16 +262,25 @@ All data is fetched directly from Garmin Connect API:
 ```
 running-coach/
 ├── bin/                            # Executable scripts
-│   └── sync_garmin_data.sh         # Garmin Connect sync + summary
+│   ├── sync_garmin_data.sh         # Garmin Connect sync + summary
+│   └── export_calendar.sh          # Export workouts to ICS calendar
 │
 ├── src/                            # Python source code
-│   └── garmin_sync.py              # Garmin Connect API sync script
+│   ├── garmin_sync.py              # Garmin Connect API sync script
+│   ├── ics_parser.py               # ICS calendar import parser
+│   └── ics_exporter.py             # ICS calendar export generator
 │
 ├── docs/                           # Documentation
 │   ├── HEALTH_DATA_SYSTEM.md       # Technical documentation
 │   ├── AGENT_HEALTH_DATA_GUIDE.md  # Agent quick reference
 │   ├── README.md                   # Project README
 │   └── SETUP_COMPLETE.md           # Setup completion notes
+│
+├── config/                         # Configuration files
+│   ├── calendar_sources.json       # Calendar import URLs
+│   ├── calendar_sources.json.example
+│   ├── calendar_export.json.example # Calendar export settings
+│   └── ...
 │
 ├── data/
 │   ├── athlete/                    # Athlete context files
@@ -259,6 +297,9 @@ running-coach/
 │   │
 │   ├── frameworks/                 # Training framework templates
 │   │   └── post_marathon_recovery_framework.md
+│   │
+│   ├── calendar/                   # Calendar import/export files
+│   │   └── running_coach_export.ics # Generated export file
 │   │
 │   └── health/                     # Health data cache
 │       └── health_data_cache.json  # Processed health metrics

@@ -45,6 +45,12 @@ except ImportError:
     merge_ics_with_garmin_workouts = None
     filter_future_events = None
 
+try:
+    from ics_exporter import export_calendar
+except ImportError:
+    # ICS exporter is optional
+    export_calendar = None
+
 
 # Constants
 CACHE_FILE = Path(__file__).parent.parent / "data" / "health" / "health_data_cache.json"
@@ -1303,6 +1309,13 @@ def main():
                         help='Suppress output')
     parser.add_argument('--check-only', action='store_true',
                         help='Check what would be synced without updating cache')
+    parser.add_argument('--export-calendar', action='store_true',
+                        help='Export scheduled workouts to ICS calendar file after sync')
+    parser.add_argument('--export-days', type=int, default=14,
+                        help='Number of days to export in calendar (default: 14)')
+    parser.add_argument('--export-path', type=str,
+                        default='data/calendar/running_coach_export.ics',
+                        help='Output path for exported calendar (default: data/calendar/running_coach_export.ics)')
 
     args = parser.parse_args()
 
@@ -1419,6 +1432,22 @@ def main():
         # Show summary if requested
         if args.summary and not args.quiet:
             show_summary(cache)
+
+        # Export calendar if requested
+        if args.export_calendar:
+            if export_calendar is None:
+                print("Warning: ICS exporter not available. Install requirements or check ics_exporter.py", file=sys.stderr)
+            else:
+                if not args.quiet:
+                    print(f"\nExporting calendar to {args.export_path}...")
+                success = export_calendar(
+                    cache_file=str(CACHE_FILE),
+                    output_file=args.export_path,
+                    days_ahead=args.export_days,
+                    quiet=args.quiet
+                )
+                if not success and not args.quiet:
+                    print("Warning: Calendar export failed", file=sys.stderr)
 
         if not args.quiet:
             print("✓ Sync complete!")
