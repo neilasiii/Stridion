@@ -63,11 +63,12 @@ The garminconnect library handles OAuth authentication and stores tokens in `~/.
 The health data cache is stored in: `data/health/health_data_cache.json`
 
 This JSON file contains:
-- **activities**: All parsed workouts with pace, HR, distance
+- **activities**: All parsed workouts with pace, HR, distance, splits, and HR zones
 - **sleep_sessions**: Nightly sleep with stages and efficiency
 - **vo2_max_readings**: VO2 max estimates from Garmin
 - **weight_readings**: Body weight trends
 - **resting_hr_readings**: Daily resting heart rate
+- **lactate_threshold**: Threshold heart rate and speed data
 - **last_updated**: Timestamp of last cache update
 - **last_sync_date**: Date of last successful sync
 
@@ -261,9 +262,11 @@ Last updated: 2025-11-16T10:30:15
 
 ### Activities
 - **Sources**: Garmin Connect API
-- **Metrics**: Date, distance, duration, pace, avg HR, max HR, calories, avg speed
+- **Metrics**: Date, distance, duration, pace, avg HR, max HR, calories, avg speed, splits (intervals), HR zones (time in each zone)
+- **HR Zone Data**: Zone number (1-5), time in zone (seconds), zone low boundary (bpm)
 - **Types**: Running, Walking, Trail Running, Treadmill Running
 - **Frequency**: Real-time (fetched on sync)
+- **Use**: Analyze workout intensity distribution, verify prescribed paces match actual effort
 
 ### Sleep
 - **Sources**: Garmin Connect sleep tracking
@@ -285,6 +288,13 @@ Last updated: 2025-11-16T10:30:15
 - **Metrics**: Daily RHR (bpm)
 - **Use**: Key recovery indicator - rising RHR = incomplete recovery
 - **Frequency**: Daily
+
+### Lactate Threshold
+- **Sources**: Garmin Connect auto-detected threshold (from qualifying workouts)
+- **Metrics**: Threshold heart rate (bpm), threshold speed (mph), functional threshold power (watts, if using power meter)
+- **Use**: Determine optimal training zones, validate VDOT paces against actual physiological markers
+- **Frequency**: Updated automatically by Garmin after threshold-level efforts
+- **Note**: Garmin auto-detects lactate threshold during sustained hard efforts (typically 10+ min at threshold pace)
 
 ---
 
@@ -362,6 +372,83 @@ elif total_sleep_hrs < 7.0 or deep_sleep_min < 60 or (sleep_score and sleep_scor
     print("⚠️ Suboptimal sleep - consider reducing intensity today")
 else:
     print("✓ Good sleep quality - proceed with planned workout")
+```
+
+### Example 4: Analyze HR Zone Distribution
+
+```python
+import json
+
+with open('data/health/health_data_cache.json', 'r') as f:
+    cache = json.load(f)
+
+# Get most recent activity with HR zones
+recent_activity = cache['activities'][0]
+
+if 'hr_zones' in recent_activity and recent_activity['hr_zones']:
+    print(f"Activity: {recent_activity['activity_name']}")
+    print(f"Date: {recent_activity['date']}")
+    print("\nHR Zone Distribution:")
+
+    total_time = sum(zone['time_in_zone_seconds'] for zone in recent_activity['hr_zones'])
+
+    for zone in recent_activity['hr_zones']:
+        zone_num = zone['zone_number']
+        time_secs = zone['time_in_zone_seconds']
+        time_mins = time_secs / 60
+        zone_low = zone['zone_low_boundary_bpm']
+        pct = (time_secs / total_time * 100) if total_time > 0 else 0
+
+        print(f"  Zone {zone_num} (≥{zone_low} bpm): {time_mins:.1f} min ({pct:.1f}%)")
+
+    # Verify workout intensity was appropriate
+    # For an easy run, expect 80%+ in zones 1-2
+    # For a threshold run, expect 60%+ in zones 3-4
+    zone_1_2_time = sum(z['time_in_zone_seconds'] for z in recent_activity['hr_zones'] if z['zone_number'] <= 2)
+    zone_1_2_pct = (zone_1_2_time / total_time * 100) if total_time > 0 else 0
+
+    if zone_1_2_pct > 80:
+        print("\n✓ Easy effort confirmed (80%+ in zones 1-2)")
+    elif zone_1_2_pct < 50:
+        print("\n⚠️ Hard effort detected - ensure recovery is adequate")
+```
+
+### Example 5: Validate VDOT Using Lactate Threshold
+
+```python
+import json
+
+with open('data/health/health_data_cache.json', 'r') as f:
+    cache = json.load(f)
+
+# Get Garmin's auto-detected lactate threshold
+lt_data = cache.get('lactate_threshold', {})
+
+if lt_data and 'threshold_heart_rate_bpm' in lt_data:
+    lt_hr = lt_data['threshold_heart_rate_bpm']
+    lt_speed_mph = lt_data.get('threshold_speed_mph')
+    lt_date = lt_data.get('date')
+
+    print(f"Garmin Lactate Threshold (detected {lt_date}):")
+    print(f"  Threshold HR: {lt_hr} bpm")
+
+    if lt_speed_mph:
+        # Convert mph to pace per mile
+        lt_pace_per_mile = 60 / lt_speed_mph
+        lt_pace_min = int(lt_pace_per_mile)
+        lt_pace_sec = int((lt_pace_per_mile % 1) * 60)
+        print(f"  Threshold Pace: {lt_pace_min}:{lt_pace_sec:02d}/mile")
+
+        # Compare to prescribed VDOT threshold pace
+        # From current_training_status.md
+        prescribed_t_pace = 8.25  # 8:15/mile for VDOT 44
+
+        if abs(lt_pace_per_mile - prescribed_t_pace) < 0.5:
+            print("\n✓ Lactate threshold aligns with VDOT threshold pace")
+        elif lt_pace_per_mile < prescribed_t_pace - 0.5:
+            print(f"\n⚠️ Running faster than VDOT predicts - consider VDOT increase")
+        else:
+            print(f"\n⚠️ Running slower than VDOT predicts - verify paces or consider VDOT decrease")
 ```
 
 ---
@@ -521,12 +608,19 @@ export GARMIN_PASSWORD=yourpassword
 
 ## Future Enhancements
 
-1. **HRV Integration**: Heart rate variability for recovery tracking
-2. **Training Load Metrics**: TSS/ATL/CTL calculation from activity data
-3. **Async API Calls**: Parallel data fetching for faster sync
-4. **Advanced Sleep Analysis**: Sleep stage quality metrics
-5. **Web Dashboard**: Visual trends and charts
-6. **VDOT Calculator**: Automatic VDOT estimation from workout data
+1. **Training Load Metrics**: TSS/ATL/CTL calculation from activity data
+2. **Async API Calls**: Parallel data fetching for faster sync
+3. **Advanced Sleep Analysis**: Sleep stage quality metrics
+4. **Web Dashboard**: Visual trends and charts
+5. **VDOT Calculator**: Automatic VDOT estimation from workout data using lactate threshold and recent performance
+
+**Recently Added**:
+- ✅ **HR Zone Data**: Time-in-zone analysis for each activity (Zone 1-5)
+- ✅ **Lactate Threshold**: Auto-detected threshold HR and pace from Garmin
+- ✅ **HRV Integration**: Heart rate variability for recovery tracking
+- ✅ **Training Readiness**: Garmin's daily readiness score
+- ✅ **Body Battery**: Energy level tracking throughout the day
+- ✅ **Stress Monitoring**: All-day stress level data
 
 ---
 
@@ -580,6 +674,11 @@ python3 -m unittest tests.test_garmin_sync.TestMergeData -v
 
 ---
 
-**Last Updated**: 2025-11-16
+**Last Updated**: 2025-11-17
 **Maintained By**: Neil Stagner
 **For Support**: Check authentication with `bash bin/sync_garmin_data.sh` or review logs in stderr
+
+**Version**: 2.0.0
+- Added HR zone data for activities (time-in-zone analysis)
+- Added lactate threshold tracking (auto-detected by Garmin)
+- Enhanced activity data with detailed zone boundaries

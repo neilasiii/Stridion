@@ -14,9 +14,11 @@ A personalized training guidance system that integrates objective health data fr
 ### 📊 Health Data Integration
 
 - **Direct Garmin Connect Sync** - Automatic import of activities, sleep, HR, and VO2 max data
+- **HR Zone Analysis** - Time-in-zone data for each activity to verify workout intensity distribution
+- **Lactate Threshold Tracking** - Auto-detected threshold heart rate and pace for validating VDOT
 - **Calendar Integration** - Import scheduled workouts from FinalSurge, TrainingPeaks, or any ICS calendar
-- **Recovery Monitoring** - Track resting heart rate trends and sleep quality
-- **Performance Tracking** - Monitor pace progression and training load
+- **Recovery Monitoring** - Track resting heart rate, HRV, sleep quality, and training readiness
+- **Performance Tracking** - Monitor pace progression, training load, and race predictions
 
 ### 📚 Workout Library
 
@@ -417,10 +419,13 @@ This project is actively evolving. Current development priorities:
 - [ ] **Coach Dashboard** - Interface for human coaches to monitor athlete progress
 
 ### Advanced Analytics & Intelligence
+- [x] **HR Zone Analysis** - Time-in-zone tracking for each activity to validate workout intensity
+- [x] **Lactate Threshold Tracking** - Auto-detected threshold HR and pace from Garmin for VDOT validation
+- [x] **HRV Tracking** - Heart rate variability monitoring for recovery assessment
+- [x] **Training Readiness** - Daily readiness scores incorporating sleep, HRV, and recovery metrics
 - [ ] **Injury Risk Prediction** - ML model to detect overtraining patterns from training load trends
-- [ ] **HRV Tracking** - Heart rate variability monitoring for recovery assessment
 - [ ] **Automated VDOT Adjustments** - Update training paces based on race results and workout performance
-- [ ] **Performance Prediction** - Race time estimates based on current fitness and training phase
+- [ ] **Performance Prediction** - Race time estimates based on current fitness and training phase (partially complete: Garmin race predictions available)
 - [ ] **Training Load Analytics** - Acute/chronic workload ratio, TSS/CTL tracking
 
 ### Mobile & Offline Support
