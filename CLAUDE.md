@@ -100,6 +100,31 @@ The exported .ics file can be imported into:
 - **Outlook**: File → Open & Export → Import/Export → Import an iCalendar (.ics) file
 - **Apple Calendar**: File → Import → Select file
 
+**Workout Library**
+
+Browse and search the pre-built workout library:
+
+```bash
+# View library statistics
+bash bin/workout_library.sh stats
+
+# List all workouts
+bash bin/workout_library.sh list
+
+# Search for specific workouts
+bash bin/workout_library.sh search --domain running --type tempo
+bash bin/workout_library.sh search --difficulty beginner --duration-max 30
+bash bin/workout_library.sh search --tags gluten_free dairy_free
+
+# Get detailed workout information
+bash bin/workout_library.sh get <workout-id>
+
+# See all search options
+bash bin/workout_library.sh search --help
+```
+
+The library contains 19+ pre-built workouts across all domains (running, strength, mobility, nutrition) with searchable metadata.
+
 ### Testing
 
 **Verify Health Data System**
@@ -146,6 +171,8 @@ Coaching Agents (read JSON for decisions)
 
 ### Core Components
 
+**Health Data System:**
+
 **[src/garmin_sync.py](src/garmin_sync.py)**: Main Garmin Connect sync script
 - Authenticates with Garmin Connect using OAuth (via garminconnect library)
 - Fetches activities (running, walking), sleep, VO2 max, weight, resting HR
@@ -168,6 +195,32 @@ Coaching Agents (read JSON for decisions)
 - Includes `last_updated` timestamp and `last_sync_date` metadata
 - No file tracking needed (direct API access)
 
+**Workout Library System:**
+
+**[src/workout_library.py](src/workout_library.py)**: Workout library manager with CRUD operations
+- Search and filter workouts by domain, type, difficulty, duration, tags, equipment
+- Add, update, delete workouts
+- Import/export workouts as JSON
+- Track workout statistics
+
+**[src/workout_library_cli.py](src/workout_library_cli.py)**: Command-line interface for library
+- Browse and search workouts
+- View detailed workout information
+- Manage library contents
+
+**[src/seed_workout_library.py](src/seed_workout_library.py)**: Seed script for populating library
+- Pre-built templates across all coaching domains
+- 19+ workouts: running (10), strength (3), mobility (3), nutrition (3)
+
+**[bin/workout_library.sh](bin/workout_library.sh)**: Convenience wrapper for CLI
+- Primary command for agents to search library
+- Supports all search and filter operations
+
+**[data/library/workout_library.json](data/library/workout_library.json)**: Main workout database
+- JSON-based storage with metadata
+- Searchable by multiple criteria
+- Extensible for custom workouts
+
 ### Athlete Context Files
 
 All coaching agents MUST read these files in [data/athlete/](data/athlete/) before providing guidance:
@@ -183,7 +236,9 @@ All coaching agents MUST read these files in [data/athlete/](data/athlete/) befo
 
 - **[docs/HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Complete technical documentation for health data system
 - **[docs/AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on using health data
+- **[docs/AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md)** - Guide for agents on using the workout library
 - **[data/athlete/health_profile.md](data/athlete/health_profile.md)** - Human-readable health summary
+- **[data/library/workout_library_schema.md](data/library/workout_library_schema.md)** - Workout library data structure and schema
 
 ## Health Data Integration
 
@@ -263,16 +318,21 @@ All data is fetched directly from Garmin Connect API:
 running-coach/
 ├── bin/                            # Executable scripts
 │   ├── sync_garmin_data.sh         # Garmin Connect sync + summary
-│   └── export_calendar.sh          # Export workouts to ICS calendar
+│   ├── export_calendar.sh          # Export workouts to ICS calendar
+│   └── workout_library.sh          # Browse and search workout library
 │
 ├── src/                            # Python source code
 │   ├── garmin_sync.py              # Garmin Connect API sync script
 │   ├── ics_parser.py               # ICS calendar import parser
-│   └── ics_exporter.py             # ICS calendar export generator
+│   ├── ics_exporter.py             # ICS calendar export generator
+│   ├── workout_library.py          # Workout library manager (CRUD ops)
+│   ├── workout_library_cli.py      # CLI for browsing workouts
+│   └── seed_workout_library.py     # Populate library with templates
 │
 ├── docs/                           # Documentation
 │   ├── HEALTH_DATA_SYSTEM.md       # Technical documentation
 │   ├── AGENT_HEALTH_DATA_GUIDE.md  # Agent quick reference
+│   ├── AGENT_WORKOUT_LIBRARY_GUIDE.md # Workout library integration guide
 │   ├── README.md                   # Project README
 │   └── SETUP_COMPLETE.md           # Setup completion notes
 │
@@ -300,6 +360,10 @@ running-coach/
 │   │
 │   ├── calendar/                   # Calendar import/export files
 │   │   └── running_coach_export.ics # Generated export file
+│   │
+│   ├── library/                    # Workout library
+│   │   ├── workout_library.json    # Main workout database
+│   │   └── workout_library_schema.md # Data structure documentation
 │   │
 │   └── health/                     # Health data cache
 │       └── health_data_cache.json  # Processed health metrics

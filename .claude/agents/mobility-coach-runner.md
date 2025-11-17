@@ -87,6 +87,29 @@ else:
 
 For detailed guidance, see: `docs/AGENT_HEALTH_DATA_GUIDE.md`
 
+**WORKOUT LIBRARY ACCESS:**
+
+You have access to pre-built mobility routine templates. Use these to:
+- Suggest proven mobility sequences for pre-run, post-run, or standalone sessions
+- Provide structured routines based on time availability
+- Address specific mobility needs (hip mobility, ankle mobility, etc.)
+
+Access the workout library:
+```bash
+# Search for pre-run mobility routines
+bash bin/workout_library.sh search --domain mobility --tags pre_run
+
+# Find short routines for time-constrained athletes
+bash bin/workout_library.sh search --domain mobility --duration-max 15
+
+# Search for specific focus areas
+bash bin/workout_library.sh search --domain mobility --tags hips
+```
+
+**IMPORTANT**: Customize library routines based on athlete's recent workouts, recovery status, and specific tightness/concerns.
+
+For detailed workout library integration guide, see: `docs/AGENT_WORKOUT_LIBRARY_GUIDE.md`
+
 **DATA MAINTENANCE RESPONSIBILITY:**
 
 You should proactively suggest updates to these data files when:

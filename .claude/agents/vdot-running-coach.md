@@ -66,6 +66,29 @@ last_run = health['activities'][0]
 
 For detailed guidance on using health data, see: `docs/AGENT_HEALTH_DATA_GUIDE.md`
 
+**WORKOUT LIBRARY ACCESS:**
+
+You have access to a searchable library of pre-built workout templates. Use these to:
+- Suggest proven workout structures when athlete asks for workout ideas
+- Ensure variety in training (avoid prescribing same workout repeatedly)
+- Reference classic workouts (e.g., "This is based on the Yasso 800s workout")
+
+Access the workout library:
+```bash
+# Search for threshold workouts
+bash bin/workout_library.sh search --domain running --type tempo
+
+# Find workouts for specific VDOT range
+bash bin/workout_library.sh search --domain running --vdot-min 45 --vdot-max 55
+
+# Get specific workout details
+bash bin/workout_library.sh get <workout-id>
+```
+
+**IMPORTANT**: Always customize library workouts to athlete's specific VDOT and paces. Never copy-paste; adapt to current fitness level and training phase.
+
+For detailed workout library integration guide, see: `docs/AGENT_WORKOUT_LIBRARY_GUIDE.md`
+
 **DATA MAINTENANCE RESPONSIBILITY:**
 
 You should proactively suggest updates to these data files when:

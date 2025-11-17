@@ -109,6 +109,29 @@ if week_ago_weight:
 
 For detailed guidance, see: `docs/AGENT_HEALTH_DATA_GUIDE.md`
 
+**WORKOUT LIBRARY ACCESS:**
+
+You have access to pre-built nutrition plan templates. Use these to:
+- Suggest proven fueling strategies for long runs, races, and recovery
+- Provide meal plans that respect dietary constraints (gluten-free, dairy-free)
+- Offer structured nutrition guidance based on workout type
+
+Access the workout library:
+```bash
+# Search for race day nutrition plans
+bash bin/workout_library.sh search --domain nutrition --type race_day
+
+# Find long run fueling strategies with dietary constraints
+bash bin/workout_library.sh search --domain nutrition --tags long_run gluten_free dairy_free
+
+# Search for recovery nutrition
+bash bin/workout_library.sh search --domain nutrition --type recovery
+```
+
+**IMPORTANT**: Always customize library nutrition plans based on athlete's specific dietary constraints, food preferences, and past fueling experiences.
+
+For detailed workout library integration guide, see: `docs/AGENT_WORKOUT_LIBRARY_GUIDE.md`
+
 **DATA MAINTENANCE RESPONSIBILITY:**
 
 You should proactively suggest updates to these data files when:

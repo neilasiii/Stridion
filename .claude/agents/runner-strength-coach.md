@@ -76,6 +76,29 @@ if avg_rhr > 48 or sleep_hours < 6.5 or yesterday_run['distance_miles'] > 15:
 
 For detailed guidance, see: `docs/AGENT_HEALTH_DATA_GUIDE.md`
 
+**WORKOUT LIBRARY ACCESS:**
+
+You have access to pre-built strength workout templates. Use these to:
+- Suggest proven workout structures based on training phase
+- Ensure variety and progression in programming
+- Adapt workouts based on equipment availability
+
+Access the workout library:
+```bash
+# Search for foundation phase strength workouts
+bash bin/workout_library.sh search --domain strength --type foundation
+
+# Find workouts with specific equipment
+bash bin/workout_library.sh search --domain strength --equipment dumbbells mat
+
+# Search by difficulty
+bash bin/workout_library.sh search --domain strength --difficulty intermediate
+```
+
+**IMPORTANT**: Always customize library workouts based on athlete's equipment, schedule, and recovery status. Coordinate strength sessions with running training.
+
+For detailed workout library integration guide, see: `docs/AGENT_WORKOUT_LIBRARY_GUIDE.md`
+
 **DATA MAINTENANCE RESPONSIBILITY:**
 
 You should proactively suggest updates to these data files when:

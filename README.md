@@ -18,6 +18,13 @@ A personalized training guidance system that integrates objective health data fr
 - **Recovery Monitoring** - Track resting heart rate trends and sleep quality
 - **Performance Tracking** - Monitor pace progression and training load
 
+### 📚 Workout Library
+
+- **Searchable Database** - 19+ pre-built workout templates across all coaching domains
+- **Smart Filtering** - Search by domain, type, difficulty, duration, VDOT range, equipment, and tags
+- **Easy Customization** - Import workouts as templates and adapt to athlete-specific needs
+- **Command-Line Access** - Simple CLI for browsing and managing workouts
+
 ### 🎯 Personalized Training
 
 - Athlete-specific context files for goals, preferences, and constraints
@@ -105,6 +112,43 @@ The system uses specialized AI coaching agents defined in `.claude/agents/`:
 
 When using Claude Code, these agents automatically access your athlete profile and health data to provide personalized guidance. Simply open this repository in Claude Code and interact with the agents conversationally to get training recommendations.
 
+### Workout Library
+
+**Browse Pre-Built Workouts**
+
+Access the searchable workout library:
+
+```bash
+# View library statistics
+bash bin/workout_library.sh stats
+
+# List all workouts (or filter by domain)
+bash bin/workout_library.sh list
+bash bin/workout_library.sh list --domain running
+
+# Search for specific workouts
+bash bin/workout_library.sh search --domain running --type tempo
+bash bin/workout_library.sh search --difficulty beginner --duration-max 30
+bash bin/workout_library.sh search --tags vo2_max intervals
+
+# Get detailed workout information
+bash bin/workout_library.sh get <workout-id>
+
+# Export a workout as JSON
+bash bin/workout_library.sh export <workout-id> --output my_workout.json
+
+# Import a custom workout
+bash bin/workout_library.sh import my_custom_workout.json
+```
+
+The library contains 19+ workouts:
+- **Running** (10): Intervals, tempo runs, long runs, recovery runs
+- **Strength** (3): Foundation, power, core workouts for runners
+- **Mobility** (3): Pre-run, post-run, hip mobility routines
+- **Nutrition** (3): Race day, long run fueling, recovery nutrition
+
+All workouts include detailed instructions, duration, difficulty, equipment needs, and searchable metadata.
+
 ### Calendar Integration
 
 **Import Workouts (from external sources)**
@@ -170,13 +214,23 @@ Garmin Connect API
 
 ### Key Components
 
+**Health Data System:**
 - **`src/garmin_sync.py`** - Main sync script using garminconnect library
 - **`src/ics_parser.py`** - ICS calendar import parser
 - **`src/ics_exporter.py`** - ICS calendar export generator
 - **`bin/sync_garmin_data.sh`** - Convenience wrapper for syncing
 - **`bin/export_calendar.sh`** - Convenience wrapper for calendar export
 - **`data/health/health_data_cache.json`** - Cached health metrics
-- **`data/athlete/`** - Athlete context files
+
+**Workout Library System:**
+- **`src/workout_library.py`** - Library manager with CRUD operations
+- **`src/workout_library_cli.py`** - Command-line interface
+- **`src/seed_workout_library.py`** - Pre-populate library with templates
+- **`bin/workout_library.sh`** - Convenience wrapper for CLI
+- **`data/library/workout_library.json`** - Main workout database
+
+**Athlete Context:**
+- **`data/athlete/`** - Athlete context files (goals, preferences, status, etc.)
 - **`.claude/agents/`** - Coaching agent configurations
 
 ### Health Data Types
@@ -191,8 +245,9 @@ All data synced from Garmin Connect:
 
 ## Documentation
 
-- **[HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Complete technical documentation
-- **[AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents
+- **[HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Complete technical documentation for health data
+- **[AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on health data
+- **[AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md)** - Guide for agents on workout library integration
 - **[CLAUDE.md](CLAUDE.md)** - Development guide for Claude Code
 
 ## Project Structure
@@ -200,15 +255,27 @@ All data synced from Garmin Connect:
 ```
 running-coach/
 ├── bin/                    # Executable scripts
-│   └── sync_garmin_data.sh
+│   ├── sync_garmin_data.sh
+│   ├── export_calendar.sh
+│   └── workout_library.sh
 ├── src/                    # Python source code
-│   └── garmin_sync.py
+│   ├── garmin_sync.py
+│   ├── ics_parser.py
+│   ├── ics_exporter.py
+│   ├── workout_library.py
+│   ├── workout_library_cli.py
+│   └── seed_workout_library.py
 ├── docs/                   # Documentation
+│   ├── HEALTH_DATA_SYSTEM.md
+│   ├── AGENT_HEALTH_DATA_GUIDE.md
+│   └── AGENT_WORKOUT_LIBRARY_GUIDE.md
 ├── data/
 │   ├── athlete/           # Athlete profile & context
 │   ├── health/            # Health data cache
+│   ├── library/           # Workout library database
 │   ├── plans/             # Generated training plans
-│   └── frameworks/        # Training templates
+│   ├── frameworks/        # Training templates
+│   └── calendar/          # Calendar import/export
 ├── .claude/agents/        # AI coaching agents
 └── config/                # Configuration files
 ```
@@ -287,7 +354,7 @@ This project is actively evolving. Current development priorities:
 - [ ] **Multi-athlete Support** - Support multiple athlete profiles in single instance
 
 ### Enhanced Features
-- [ ] **Workout Library** - Searchable database of workouts and training blocks
+- [x] **Workout Library** - Searchable database of workouts and training blocks
 - [ ] **Progress Visualization** - Charts and graphs for training metrics over time
 - [ ] **Automated Plan Generation** - Generate multi-week training plans based on race goals
 - [ ] **Email/SMS Notifications** - Workout reminders and recovery alerts
