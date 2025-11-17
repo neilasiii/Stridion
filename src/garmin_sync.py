@@ -223,7 +223,9 @@ def _fetch_activity_splits(client: Garmin, activity_id: str, quiet: bool = False
                 'calories': split.get('calories')
             }
 
-            splits.append(split_dict)
+            # Only include INTERVAL_* splits (skip RWD_* splits)
+            if split_type.startswith('INTERVAL_'):
+                splits.append(split_dict)
 
         return splits
 
