@@ -45,57 +45,17 @@ class PerformancePredictor:
         with open(self.cache_file, 'r') as f:
             return json.load(f)
 
-    def get_current_vdot_estimate(self) -> Tuple[float, str]:
+    def get_current_vdot_estimate(self) -> Tuple[Optional[float], str]:
         """
-        Get current VDOT estimate from available data sources.
+        VDOT must be specified manually based on recent race performance.
 
-        Prioritizes (in order):
-        1. Actual workout paces (marathon pace runs, long runs) - MOST ACCURATE
-        2. Recent race performance (if within 60 days)
-        3. VO2 max from Garmin (conservative estimate accounting for running economy)
+        Automatic estimation from VO2max and workouts is unreliable.
+        Use --vdot parameter with value from recent race result.
 
         Returns:
-            Tuple of (vdot, source)
+            Tuple of (None, error message)
         """
-        from vdot_calculator import VDOTCalculator
-
-        calc = VDOTCalculator(str(self.cache_file))
-
-        # Get both estimates
-        vdot_from_workouts = calc.estimate_vdot_from_workouts(days=60)
-
-        vo2_readings = self.cache.get('vo2_max_readings', [])
-        vdot_from_vo2 = None
-        if vo2_readings:
-            vo2_max = vo2_readings[0]['vo2_max']
-            vdot_from_vo2 = calc.estimate_vdot_from_vo2max(vo2_max)
-
-        # 1. If both available, use workout-based ONLY if it's within 8 points of VO2 estimate
-        #    (avoids using estimate from insufficient marathon-pace workout data)
-        if vdot_from_workouts and vdot_from_vo2:
-            diff = abs(vdot_from_workouts - vdot_from_vo2)
-            if diff <= 8:
-                # Workout data seems reliable, use it
-                return (vdot_from_workouts, 'Workout pace analysis (last 60 days)')
-            else:
-                # Large discrepancy suggests insufficient marathon-pace workout data
-                # Fall back to VO2max estimate
-                return (vdot_from_vo2, f'VO2max estimate ({vo2_max} ml/kg/min, adjusted for running economy)')
-
-        # 2. Use whatever estimate is available
-        if vdot_from_workouts:
-            return (vdot_from_workouts, 'Workout pace analysis (last 60 days)')
-
-        # 3. Check for recent race performance
-        # (Would need race data in cache - placeholder for now)
-
-        # 4. Use VO2 max if available
-        if vdot_from_vo2 and vo2_readings:
-            vo2_max = vo2_readings[0]['vo2_max']
-            return (vdot_from_vo2, f'VO2max estimate ({vo2_max} ml/kg/min, adjusted for running economy)')
-
-        # 5. Last resort fallback
-        return (42.0, 'Default conservative estimate')
+        return (None, 'VDOT must be specified manually (use --vdot parameter)')
 
     def calculate_fitness_adjustment(self) -> Tuple[float, str]:
         """
@@ -254,7 +214,7 @@ class PerformancePredictor:
         """
         from vdot_calculator import VDOTCalculator, RACE_DISTANCES
 
-        calc = VDOTCalculator(str(self.cache_file))
+        calc = VDOTCalculator()
 
         # Get VDOT
         if target_vdot:
@@ -262,9 +222,14 @@ class PerformancePredictor:
             vdot_source = "User-specified"
         else:
             vdot, vdot_source = self.get_current_vdot_estimate()
+            if vdot is None:
+                return {
+                    'error': 'VDOT required',
+                    'message': 'Please specify VDOT using --vdot parameter. Calculate from recent race: bash bin/vdot_calculator.sh --race Half 1:55:04'
+                }
 
         # Calculate base predictions
-        base_predictions = calc.calculate_race_predictions(vdot)
+        base_predictions = calc.predict_race_times(vdot)
 
         # Get adjustments
         fitness_adj, fitness_note = self.calculate_fitness_adjustment()
