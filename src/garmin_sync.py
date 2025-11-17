@@ -235,6 +235,35 @@ def _fetch_activity_splits(client: Garmin, activity_id: str, quiet: bool = False
         return []
 
 
+def _fetch_activity_hr_zones(client: Garmin, activity_id: str, quiet: bool = False) -> List[Dict[str, Any]]:
+    """
+    Fetch heart rate zone data for a specific activity.
+
+    Returns list of HR zones with time spent in each zone and zone boundaries.
+    Useful for analyzing workout intensity distribution.
+    """
+    try:
+        hr_zone_data = client.get_activity_hr_in_timezones(activity_id)
+
+        if not hr_zone_data:
+            return []
+
+        hr_zones = []
+        for zone in hr_zone_data:
+            hr_zones.append({
+                'zone_number': zone.get('zoneNumber'),
+                'time_in_zone_seconds': zone.get('secsInZone'),
+                'zone_low_boundary_bpm': zone.get('zoneLowBoundary')
+            })
+
+        return hr_zones
+
+    except Exception as e:
+        if not quiet:
+            print(f"  Warning: Could not fetch HR zones for activity {activity_id}: {e}", file=sys.stderr)
+        return []
+
+
 def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> List[Dict[str, Any]]:
     """
     Fetch activities from Garmin Connect for the specified date range.
@@ -304,6 +333,9 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             # Fetch splits/laps for this activity
             splits = _fetch_activity_splits(client, str(activity_id), quiet)
 
+            # Fetch HR zone data for this activity
+            hr_zones = _fetch_activity_hr_zones(client, str(activity_id), quiet)
+
             activities.append({
                 'activity_id': activity_id,
                 'date': activity_date,
@@ -316,7 +348,8 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
                 'max_heart_rate': max_hr,
                 'avg_speed': round(avg_speed, 6),
                 'pace_per_mile': round(pace_per_mile, 6),
-                'splits': splits
+                'splits': splits,
+                'hr_zones': hr_zones
             })
 
         if not quiet:
@@ -914,6 +947,57 @@ def fetch_race_predictions(client: Garmin, quiet: bool = False) -> Dict[str, Any
         return {}
 
 
+def fetch_lactate_threshold(client: Garmin, quiet: bool = False) -> Dict[str, Any]:
+    """
+    Fetch lactate threshold data from Garmin Connect.
+
+    Args:
+        client: Authenticated Garmin client
+        quiet: Suppress output
+
+    Returns:
+        Dictionary with lactate threshold heart rate and speed data
+    """
+    if not quiet:
+        print(f"Fetching lactate threshold data...")
+
+    try:
+        data = client.get_lactate_threshold()
+
+        if data:
+            threshold_data = {}
+
+            # Extract speed and heart rate threshold
+            if 'speed_and_heart_rate' in data and data['speed_and_heart_rate']:
+                speed_hr = data['speed_and_heart_rate']
+                threshold_data = {
+                    'date': speed_hr.get('calendarDate'),
+                    'threshold_heart_rate_bpm': speed_hr.get('heartRate'),
+                    'threshold_speed_mps': speed_hr.get('speed'),  # meters per second
+                    'threshold_speed_mph': (speed_hr.get('speed') * MS_TO_MPH) if speed_hr.get('speed') else None
+                }
+
+            # Extract power threshold (for running power meters)
+            if 'power' in data and data['power']:
+                power_data = data['power']
+                threshold_data.update({
+                    'functional_threshold_power': power_data.get('functionalThresholdPower'),
+                    'power_to_weight_ratio': power_data.get('powerToWeight'),
+                    'weight_kg': power_data.get('weight')
+                })
+
+            if not quiet and threshold_data:
+                print(f"  Found lactate threshold data")
+
+            return threshold_data
+
+        return {}
+
+    except Exception as e:
+        print(f"Warning: Failed to fetch lactate threshold: {e}", file=sys.stderr)
+        return {}
+
+
 def fetch_training_status(client: Garmin, target_date: date, quiet: bool = False) -> Dict[str, Any]:
     """
     Fetch training status from Garmin Connect.
@@ -1147,6 +1231,7 @@ def load_cache() -> Dict[str, Any]:
         'body_battery': [],
         'race_predictions': {},
         'training_status': {},
+        'lactate_threshold': {},
         'scheduled_workouts': []
     }
 
@@ -1403,6 +1488,7 @@ def main():
         new_spo2 = fetch_spo2_data(client, start_date, end_date, args.quiet)
         new_battery = fetch_body_battery(client, start_date, end_date, args.quiet)
         new_race_predictions = fetch_race_predictions(client, args.quiet)
+        new_lactate_threshold = fetch_lactate_threshold(client, args.quiet)
         new_training_status = fetch_training_status(client, end_date, args.quiet)
         garmin_workout_templates = fetch_scheduled_workouts(client, args.quiet)
 
@@ -1429,6 +1515,7 @@ def main():
             print(f"  {'✓' if new_spo2 else '⚠'} SpO2: {len(new_spo2)} records")
             print(f"  {'✓' if new_battery else '⚠'} Body Battery: {len(new_battery)} records")
             print(f"  {'✓' if new_race_predictions else '⚠'} Race Predictions: {'Yes' if new_race_predictions else 'No'}")
+            print(f"  {'✓' if new_lactate_threshold else '⚠'} Lactate Threshold: {'Yes' if new_lactate_threshold else 'No'}")
             print(f"  {'✓' if new_training_status else '⚠'} Training Status: {'Yes' if new_training_status else 'No'}")
             print(f"  {'✓' if new_scheduled_workouts else '⚠'} Scheduled Workouts: {len(new_scheduled_workouts)} workouts")
             print(f"{'='*60}\n")
@@ -1461,6 +1548,8 @@ def main():
         # Update single-value fields (most recent only)
         if new_race_predictions:
             cache['race_predictions'] = new_race_predictions
+        if new_lactate_threshold:
+            cache['lactate_threshold'] = new_lactate_threshold
         if new_training_status:
             cache['training_status'] = new_training_status
 
