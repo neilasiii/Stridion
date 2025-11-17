@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-11-16T22:05:16.400181+00:00",
+  "last_updated": "2025-11-17T08:37:54.274437",
   "last_processed_files": {
     "Health Sync Activities/RUNNING 2025.11.12 12_38_55 Garmin.csv": "2025-11-12T10:27:10",
     "Health Sync Activities/RUNNING 2025.11.08 11_37_14 Garmin.csv": "2025-11-08T10:56:44",
@@ -14579,44 +14579,52 @@
   },
   "scheduled_workouts": [
     {
-      "scheduled_date": "2025-11-23",
+      "scheduled_date": "2025-11-17",
       "scheduled_datetime": null,
-      "name": "Run: 10 min easy warm up Marathon day!!!!!!!",
+      "name": "Run: 40 min E",
       "description": "Workout: Run",
-      "duration_seconds": null,
       "location": null,
       "all_day": true,
-      "source": "ics_calendar"
-    },
-    {
-      "scheduled_date": "2025-11-21",
-      "scheduled_datetime": null,
-      "name": "Run: 20 min warm down",
-      "description": "Workout: Run",
+      "uid": "d1d67a8b-f072-42c5-9f9d-9c048f13a460",
       "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar"
+      "source": "ics_calendar",
+      "calendar_name": "FinalSurge Training Calendar"
     },
     {
       "scheduled_date": "2025-11-19",
       "scheduled_datetime": null,
       "name": "Run: 10 min warm up 8x40/40 (5k/ E pace) 10 min warm down",
       "description": "Workout: Run",
-      "duration_seconds": null,
       "location": null,
       "all_day": true,
-      "source": "ics_calendar"
+      "uid": "9ab5cfa9-f217-43ce-be7a-7110c85727da",
+      "duration_seconds": null,
+      "source": "ics_calendar",
+      "calendar_name": "FinalSurge Training Calendar"
     },
     {
-      "scheduled_date": "2025-11-17",
+      "scheduled_date": "2025-11-21",
       "scheduled_datetime": null,
-      "name": "Run: 40 min E",
+      "name": "Run: 20 min warm down",
       "description": "Workout: Run",
-      "duration_seconds": null,
       "location": null,
       "all_day": true,
-      "source": "ics_calendar"
+      "uid": "f9c6ec45-b484-48c2-91ad-5a12aac2ad17",
+      "duration_seconds": null,
+      "source": "ics_calendar",
+      "calendar_name": "FinalSurge Training Calendar"
+    },
+    {
+      "scheduled_date": "2025-11-23",
+      "scheduled_datetime": null,
+      "name": "Run: 10 min easy warm up Marathon day!!!!!!!",
+      "description": "Workout: Run",
+      "location": null,
+      "all_day": true,
+      "uid": "5449aff3-06e6-44f5-a750-fc493df1c5d3",
+      "duration_seconds": null,
+      "source": "ics_calendar",
+      "calendar_name": "FinalSurge Training Calendar"
     }
   ]
 }

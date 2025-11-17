@@ -8,6 +8,13 @@ config/.garmin_config.json
 # Calendar URLs (may contain private calendar links)
 config/calendar_sources.json
 
+# Calendar export config (may contain custom settings)
+config/calendar_export.json
+
+# Generated calendar export files
+data/calendar/*.ics
+!data/calendar/.gitkeep
+
 # Cache backups (created automatically on corruption or before updates)
 *.json.bak
 

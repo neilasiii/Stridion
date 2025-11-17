@@ -1,0 +1,39 @@
+{
+  "export_settings": {
+    "enabled": true,
+    "auto_export_on_sync": false,
+    "days_ahead": 14,
+    "output_path": "data/calendar/running_coach_export.ics",
+    "calendar_name": "Running Coach Workouts",
+    "include_workout_details": true,
+    "timezone": "America/New_York"
+  },
+  "export_destinations": [
+    {
+      "name": "Google Calendar",
+      "type": "local_file",
+      "enabled": true,
+      "path": "data/calendar/google_calendar_export.ics",
+      "notes": "Import manually: Google Calendar → Settings → Import & Export → Import"
+    },
+    {
+      "name": "Outlook Calendar",
+      "type": "local_file",
+      "enabled": false,
+      "path": "data/calendar/outlook_export.ics",
+      "notes": "Import manually: Outlook → File → Import/Export → Import an iCalendar file"
+    },
+    {
+      "name": "Apple Calendar",
+      "type": "local_file",
+      "enabled": false,
+      "path": "data/calendar/apple_calendar_export.ics",
+      "notes": "Import manually: Apple Calendar → File → Import → Select file"
+    }
+  ],
+  "filter_options": {
+    "include_activity_types": ["RUNNING", "CYCLING", "STRENGTH", "YOGA"],
+    "exclude_completed": false,
+    "min_duration_minutes": 0
+  }
+}

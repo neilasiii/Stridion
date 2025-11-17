@@ -13,7 +13,8 @@
       "Bash(xargs -I {} sh -c 'echo \"\"\"\"File: {}\"\"\"\"; cat \"\"\"\"{}\"\"\"\"')",
       "Bash(./venv/bin/python3:*)",
       "Bash(cat:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(pip3 list:*)"
     ],
     "deny": [],
     "ask": []
