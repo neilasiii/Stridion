@@ -354,11 +354,11 @@ last_night = cache['sleep_sessions'][0]
 
 total_sleep_hrs = last_night['total_duration_minutes'] / 60
 deep_sleep_min = last_night['deep_sleep_minutes']
-efficiency = last_night['sleep_efficiency']
+sleep_score = last_night['sleep_score']  # Garmin's 0-100 quality score
 
-if total_sleep_hrs < 6.0 or efficiency < 70:
+if total_sleep_hrs < 6.0 or (sleep_score and sleep_score < 60):
     print("🛑 Poor sleep detected - strongly recommend EASY or REST")
-elif total_sleep_hrs < 7.0 or deep_sleep_min < 60:
+elif total_sleep_hrs < 7.0 or deep_sleep_min < 60 or (sleep_score and sleep_score < 75):
     print("⚠️ Suboptimal sleep - consider reducing intensity today")
 else:
     print("✓ Good sleep quality - proceed with planned workout")
