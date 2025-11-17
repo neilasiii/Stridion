@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-11-17T08:37:54.274437",
+  "last_updated": "2025-11-17T14:53:10.292963+00:00",
   "last_processed_files": {
     "Health Sync Activities/RUNNING 2025.11.12 12_38_55 Garmin.csv": "2025-11-12T10:27:10",
     "Health Sync Activities/RUNNING 2025.11.08 11_37_14 Garmin.csv": "2025-11-08T10:56:44",
@@ -12517,6 +12517,16 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-11-17",
+      "total_duration_minutes": 345.0,
+      "light_sleep_minutes": 260.0,
+      "deep_sleep_minutes": 63.0,
+      "rem_sleep_minutes": 22.0,
+      "awake_minutes": 84.0,
+      "sleep_efficiency": 100.0,
+      "deep_sleep_percentage": 18.26
+    },
+    {
       "date": "2025-11-16",
       "total_duration_minutes": 487.0,
       "light_sleep_minutes": 355.0,
@@ -12966,6 +12976,10 @@
     }
   ],
   "resting_hr_readings": [
+    [
+      "2025-11-17T12:00:00",
+      46
+    ],
     [
       "2025-11-16T12:00:00",
       48
@@ -13429,6 +13443,16 @@
   ],
   "hrv_readings": [
     {
+      "date": "2025-11-17",
+      "weekly_avg": 71,
+      "last_night_avg": 71,
+      "last_night_5min_high": 108,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
       "date": "2025-11-16",
       "weekly_avg": 71,
       "last_night_avg": 68,
@@ -13739,13 +13763,23 @@
       "baseline_balanced_upper": 77
     }
   ],
-  "last_sync_date": "2025-11-16",
+  "last_sync_date": "2025-11-17",
   "training_readiness": [
     {
+      "date": "2025-11-17",
+      "score": 45,
+      "level": "LOW",
+      "recovery_time": 274,
+      "sleep_score": 59,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 346
+    },
+    {
       "date": "2025-11-16",
-      "score": 20,
-      "level": "POOR",
-      "recovery_time": 1689,
+      "score": 25,
+      "level": "LOW",
+      "recovery_time": 1219,
       "sleep_score": 52,
       "hrv_feedback": "GOOD",
       "stress_feedback": "GOOD",
@@ -14054,8 +14088,13 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-11-17",
+      "avg_stress": 12,
+      "max_stress": 73
+    },
+    {
       "date": "2025-11-16",
-      "avg_stress": 18,
+      "avg_stress": 21,
       "max_stress": 90
     },
     {
@@ -14211,9 +14250,15 @@
   ],
   "spo2_readings": [
     {
+      "date": "2025-11-17",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 95.0
+    },
+    {
       "date": "2025-11-16",
       "avg_spo2": 95.0,
-      "lowest_spo2": 86,
+      "lowest_spo2": 85,
       "avg_sleep_spo2": 95.0
     },
     {
@@ -14399,9 +14444,14 @@
   ],
   "body_battery": [
     {
+      "date": "2025-11-17",
+      "charged": 52,
+      "drained": 3
+    },
+    {
       "date": "2025-11-16",
-      "charged": 74,
-      "drained": 37
+      "charged": 81,
+      "drained": 61
     },
     {
       "date": "2025-11-15",
@@ -14555,22 +14605,22 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-11-16",
+    "date": "2025-11-17",
     "time_5k": 1458,
     "time_10k": 3054,
     "time_half_marathon": 6800,
-    "time_marathon": 15007
+    "time_marathon": 15034
   },
   "training_status": {
-    "date": "2025-11-16",
+    "date": "2025-11-17",
     "vo2_max": {
       "date": "2025-11-14",
       "value": 51.0,
       "precise_value": 50.6
     },
     "training_load": {
-      "date": "2025-11-16",
-      "aerobic_low": 1311.9229,
+      "date": "2025-11-17",
+      "aerobic_low": 1200.1754,
       "aerobic_high": 534.06323,
       "anaerobic": 0.0,
       "feedback": "AEROBIC_HIGH_SHORTAGE"
@@ -14579,52 +14629,44 @@
   },
   "scheduled_workouts": [
     {
-      "scheduled_date": "2025-11-17",
+      "scheduled_date": "2025-11-23",
       "scheduled_datetime": null,
-      "name": "Run: 40 min E",
+      "name": "Run: 10 min easy warm up Marathon day!!!!!!!",
       "description": "Workout: Run",
+      "duration_seconds": null,
       "location": null,
       "all_day": true,
-      "uid": "d1d67a8b-f072-42c5-9f9d-9c048f13a460",
-      "duration_seconds": null,
-      "source": "ics_calendar",
-      "calendar_name": "FinalSurge Training Calendar"
-    },
-    {
-      "scheduled_date": "2025-11-19",
-      "scheduled_datetime": null,
-      "name": "Run: 10 min warm up 8x40/40 (5k/ E pace) 10 min warm down",
-      "description": "Workout: Run",
-      "location": null,
-      "all_day": true,
-      "uid": "9ab5cfa9-f217-43ce-be7a-7110c85727da",
-      "duration_seconds": null,
-      "source": "ics_calendar",
-      "calendar_name": "FinalSurge Training Calendar"
+      "source": "ics_calendar"
     },
     {
       "scheduled_date": "2025-11-21",
       "scheduled_datetime": null,
       "name": "Run: 20 min warm down",
       "description": "Workout: Run",
+      "duration_seconds": null,
       "location": null,
       "all_day": true,
-      "uid": "f9c6ec45-b484-48c2-91ad-5a12aac2ad17",
-      "duration_seconds": null,
-      "source": "ics_calendar",
-      "calendar_name": "FinalSurge Training Calendar"
+      "source": "ics_calendar"
     },
     {
-      "scheduled_date": "2025-11-23",
+      "scheduled_date": "2025-11-19",
       "scheduled_datetime": null,
-      "name": "Run: 10 min easy warm up Marathon day!!!!!!!",
+      "name": "Run: 10 min warm up 8x40/40 (5k/ E pace) 10 min warm down",
       "description": "Workout: Run",
+      "duration_seconds": null,
       "location": null,
       "all_day": true,
-      "uid": "5449aff3-06e6-44f5-a750-fc493df1c5d3",
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-11-17",
+      "scheduled_datetime": null,
+      "name": "Run: 40 min E",
+      "description": "Workout: Run",
       "duration_seconds": null,
-      "source": "ics_calendar",
-      "calendar_name": "FinalSurge Training Calendar"
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
     }
   ]
 }
