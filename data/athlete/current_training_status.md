@@ -18,12 +18,14 @@ This file should be updated regularly as fitness evolves and new VDOT calculatio
 - **Threshold (T):** 8:30-8:40 /mile
 - **5K/Interval (I):** 7:55-8:05 /mile
 
-**Estimated VDOT:** ~45-46 (based on prescribed M pace)
+**Estimated VDOT:** ~45-46 (based on prescribed M pace from Coach Brant - reflects early block fitness)
 
-**Current Perceived Fitness (as of Nov 13, 2025):**
-- VDOT 42-43 based on recent workout performance
-- Marathon potential: 4:10-4:20
-- Note: Prescribed paces may reflect earlier-block fitness; current fatigue and sleep deprivation from newborn have temporarily reduced capacity
+**Current Actual VDOT (as of Nov 17, 2025):**
+- **VDOT 38-39** based on recent half marathon race performance (1:55:04)
+- This is the most accurate fitness assessment (race results > VO2max estimates)
+- VO2max-based estimate of 43 is inflated due to running economy factors
+- Marathon potential at VDOT 39: 4:01 (fresh) → 4:10-4:20 (with current fatigue)
+- Note: Prescribed paces from coach reflect earlier-block fitness; current fatigue and sleep deprivation from newborn have temporarily reduced capacity
 
 ---
 
