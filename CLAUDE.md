@@ -329,11 +329,16 @@ sleep_score = last_night['sleep_score']  # Garmin's 0-100 quality score
 
 All data is fetched directly from Garmin Connect API:
 
-- **Activities**: Date, distance, duration, pace, avg/max HR, calories (running, walking)
+- **Activities**: Date, distance, duration, pace, avg/max HR, calories, splits, **HR zones** (time-in-zone per activity) - running, walking
 - **Sleep**: Total duration, light/deep/REM/awake minutes, sleep score (0-100)
 - **VO2 Max**: Garmin estimates (ml/kg/min)
+- **Lactate Threshold**: Auto-detected threshold HR (bpm) and pace - **NEW**
 - **Weight**: Body weight (lbs), body fat %, muscle % when available
 - **Resting Heart Rate**: Daily RHR (bpm) - key recovery indicator
+- **HRV**: Heart rate variability daily summaries with baseline ranges
+- **Training Readiness**: Daily readiness score (0-100) with recovery time and contributing factors
+- **Body Battery**: Energy charged/drained throughout the day
+- **Stress**: All-day stress levels (avg/max)
 
 ## Project Structure
 
