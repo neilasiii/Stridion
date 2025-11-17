@@ -24,11 +24,12 @@ The health data cache is in: **`data/health/health_data_cache.json`**
 ### Available Data Types
 
 **Activity Data:**
-- `activities[]` - Running/walking activities with splits, HR, pace, **activity names**
+- `activities[]` - Running/walking activities with splits, HR, pace, **activity names**, **HR zones** (time-in-zone data)
 - `scheduled_workouts[]` - Planned workouts from training platforms (e.g., FinalSurge)
 
 **Performance Metrics:**
 - `vo2_max_readings[]` - VO2 max estimates
+- `lactate_threshold{}` - Auto-detected threshold HR (bpm) and pace - **NEW**
 - `race_predictions{}` - 5K, 10K, half marathon, marathon time predictions
 - `training_status{}` - Training load balance, VO2 max trends
 
