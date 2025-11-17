@@ -32,6 +32,14 @@ A personalized training guidance system that integrates objective health data fr
 - Conservative adjustments when recovery is compromised
 - Coordination across all coaching domains
 
+### 💬 Flexible Communication
+
+- **Adjustable Detail Levels** - Choose BRIEF, STANDARD, or DETAILED response modes
+- **BRIEF Mode** (default) - Quick, scannable workouts with just time/intensity/pace
+- **STANDARD Mode** - Balanced guidance with context and rationale
+- **DETAILED Mode** - Comprehensive explanations with physiological reasoning
+- **Dynamic Switching** - Change detail level anytime during coaching sessions
+
 ## Quick Start
 
 ### Prerequisites
@@ -83,6 +91,7 @@ Edit the files in `data/athlete/` to personalize your coaching:
 - `training_history.md` - Injury history and past training patterns
 - `upcoming_races.md` - Race schedule and goal times
 - `current_training_status.md` - Current VDOT and training phase
+- `communication_preferences.md` - Detail level for coaching responses (BRIEF/STANDARD/DETAILED)
 
 ## Usage
 
@@ -111,6 +120,43 @@ The system uses specialized AI coaching agents defined in `.claude/agents/`:
 - `endurance-nutrition-coach.md` - Nutrition and fueling
 
 When using Claude Code, these agents automatically access your athlete profile and health data to provide personalized guidance. Simply open this repository in Claude Code and interact with the agents conversationally to get training recommendations.
+
+### Control Response Detail Level
+
+Choose how much detail you want in coaching responses:
+
+```bash
+# View current detail setting
+head -5 data/athlete/communication_preferences.md
+
+# Or just ask the coach to switch modes:
+# "Switch to brief mode"
+# "Give me detailed explanations"
+# "Use standard detail level"
+```
+
+**Example Outputs:**
+
+**BRIEF Mode** (default - quick execution):
+```
+Tomorrow: 45 min E (10:00-11:10)
+Tuesday: 15 min E warmup, 3x10 min T (8:35) w/ 2 min jog, 10 min E cooldown
+```
+
+**STANDARD Mode** (balanced context):
+```
+Tomorrow: 45 min E (10:00-11:10) for recovery
+Tuesday: Threshold - 15 min E, 3x10 min T (8:35) w/ 2 min jog, 10 min E
+Purpose: lactate threshold development
+```
+
+**DETAILED Mode** (comprehensive):
+```
+Full workout with warmup/cooldown, physiological reasoning,
+modification options, integration notes with other training
+```
+
+See [COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md) for complete guide and examples.
 
 ### Workout Library
 
@@ -248,6 +294,7 @@ All data synced from Garmin Connect:
 - **[HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Complete technical documentation for health data
 - **[AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on health data
 - **[AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md)** - Guide for agents on workout library integration
+- **[COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md)** - Guide to BRIEF/STANDARD/DETAILED response modes
 - **[CLAUDE.md](CLAUDE.md)** - Development guide for Claude Code
 
 ## Project Structure
@@ -268,7 +315,8 @@ running-coach/
 ├── docs/                   # Documentation
 │   ├── HEALTH_DATA_SYSTEM.md
 │   ├── AGENT_HEALTH_DATA_GUIDE.md
-│   └── AGENT_WORKOUT_LIBRARY_GUIDE.md
+│   ├── AGENT_WORKOUT_LIBRARY_GUIDE.md
+│   └── COMMUNICATION_PREFERENCES_GUIDE.md
 ├── data/
 │   ├── athlete/           # Athlete profile & context
 │   ├── health/            # Health data cache
@@ -355,6 +403,7 @@ This project is actively evolving. Current development priorities:
 
 ### Enhanced Features
 - [x] **Workout Library** - Searchable database of workouts and training blocks
+- [x] **Adjustable Communication Detail** - BRIEF/STANDARD/DETAILED response modes for coaching agents
 - [ ] **Progress Visualization** - Charts and graphs for training metrics over time
 - [ ] **Automated Plan Generation** - Generate multi-week training plans based on race goals
 - [ ] **Email/SMS Notifications** - Workout reminders and recovery alerts
