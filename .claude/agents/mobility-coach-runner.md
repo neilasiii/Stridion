@@ -100,9 +100,9 @@ with open('data/health/health_data_cache.json', 'r') as f:
 
 # Determine mobility session type
 last_run = health['activities'][0]
-sleep_quality = health['sleep_sessions'][0]['sleep_efficiency']
+sleep_score = health['sleep_sessions'][0]['sleep_score']
 
-if last_run['distance_miles'] > 13 or sleep_quality < 75:
+if last_run['distance_miles'] > 13 or (sleep_score and sleep_score < 60):
     mobility_type = "gentle_recovery"
 elif last_run['avg_heart_rate'] > 150:
     mobility_type = "active_recovery"

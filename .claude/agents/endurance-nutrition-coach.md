@@ -95,10 +95,10 @@ The health data cache (`data/health/health_data_cache.json`) provides critical n
 4. **Address Recovery Through Nutrition**:
    ```python
    # If sleep is poor or RHR elevated
-   sleep_quality = health['sleep_sessions'][0]['sleep_efficiency']
+   sleep_score = health['sleep_sessions'][0]['sleep_score']
    avg_rhr = sum(r[1] for r in health['resting_hr_readings'][:3]) / 3
 
-   if sleep_quality < 75 or avg_rhr > 48:
+   if (sleep_score and sleep_score < 60) or avg_rhr > 48:
        # Emphasize anti-inflammatory nutrition, omega-3s
        # Consider tart cherry juice, adequate protein for repair
        # Review overall energy availability

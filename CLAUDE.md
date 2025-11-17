@@ -320,9 +320,9 @@ recent_runs = [a for a in cache['activities'] if a['activity_type'] == 'RUNNING'
 ```python
 last_night = cache['sleep_sessions'][0]
 total_sleep_hrs = last_night['total_duration_minutes'] / 60
-efficiency = last_night['sleep_efficiency']
+sleep_score = last_night['sleep_score']  # Garmin's 0-100 quality score
 
-# Sleep <6.5 hrs or efficiency <75% → consider conservative adjustment
+# Sleep <6.5 hrs or score <60 → consider conservative adjustment
 ```
 
 ### Supported Data Types
@@ -330,7 +330,7 @@ efficiency = last_night['sleep_efficiency']
 All data is fetched directly from Garmin Connect API:
 
 - **Activities**: Date, distance, duration, pace, avg/max HR, calories (running, walking)
-- **Sleep**: Total duration, light/deep/REM/awake minutes, efficiency %
+- **Sleep**: Total duration, light/deep/REM/awake minutes, sleep score (0-100)
 - **VO2 Max**: Garmin estimates (ml/kg/min)
 - **Weight**: Body weight (lbs), body fat %, muscle % when available
 - **Resting Heart Rate**: Daily RHR (bpm) - key recovery indicator

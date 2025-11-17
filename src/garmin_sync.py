@@ -377,11 +377,12 @@ def fetch_sleep_data(client: Garmin, start_date: date, end_date: date, quiet: bo
                         current_date += timedelta(days=1)
                         continue
 
-                    # Calculate efficiency
-                    actual_sleep = light_sleep + deep_sleep + rem_sleep
-                    efficiency = (actual_sleep / total_duration * 100) if total_duration > 0 else 0
+                    # Get sleep score (Garmin's overall sleep quality metric)
+                    # Ranges from 0-100, considers duration, quality, and restoration
+                    sleep_score = daily_sleep.get('sleepScores', {}).get('overall', {}).get('value')
 
                     # Calculate deep sleep percentage
+                    actual_sleep = light_sleep + deep_sleep + rem_sleep
                     deep_pct = (deep_sleep / actual_sleep * 100) if actual_sleep > 0 else 0
 
                     sleep_sessions.append({
@@ -391,7 +392,7 @@ def fetch_sleep_data(client: Garmin, start_date: date, end_date: date, quiet: bo
                         'deep_sleep_minutes': round(deep_sleep, 1),
                         'rem_sleep_minutes': round(rem_sleep, 1),
                         'awake_minutes': round(awake, 1),
-                        'sleep_efficiency': round(efficiency, 2),
+                        'sleep_score': sleep_score,
                         'deep_sleep_percentage': round(deep_pct, 2)
                     })
 
@@ -1304,10 +1305,13 @@ def show_summary(cache: Dict[str, Any], days: int = 14):
     recent_sleep = [s for s in cache['sleep_sessions'] if s['date'] >= cutoff[:10]]
     if recent_sleep:
         avg_duration = sum(s['total_duration_minutes'] for s in recent_sleep) / len(recent_sleep) if recent_sleep else 0
-        avg_efficiency = sum(s['sleep_efficiency'] for s in recent_sleep) / len(recent_sleep) if recent_sleep else 0
+        # Calculate average sleep score (filter out None values)
+        sleep_scores = [s['sleep_score'] for s in recent_sleep if s.get('sleep_score') is not None]
+        avg_score = sum(sleep_scores) / len(sleep_scores) if sleep_scores else 0
         print(f"\nSleep: {len(recent_sleep)} nights")
         print(f"  Avg duration: {avg_duration/MINUTES_TO_HOURS:.1f} hrs")
-        print(f"  Avg efficiency: {avg_efficiency:.1f}%")
+        if avg_score > 0:
+            print(f"  Avg sleep score: {avg_score:.0f}/100")
 
     # VO2 Max
     recent_vo2 = [v for v in cache['vo2_max_readings'] if v['date'] >= cutoff]
