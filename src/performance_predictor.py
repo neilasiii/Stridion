@@ -98,7 +98,7 @@ class PerformancePredictor:
             tsb_note = "moderately fatigued (TSB {:.0f})".format(tsb)
         elif tsb > -25:
             # Significantly fatigued
-            tsb_adjustment = 1.04  # 4% slower
+            tsb_adjustment = 1.03  # 3% slower
             tsb_note = "significantly fatigued (TSB {:.0f})".format(tsb)
         else:
             # Severely overreached
@@ -171,7 +171,7 @@ class PerformancePredictor:
             if rhr_risk['risk_score'] > 50:
                 concerns.append("elevated RHR")
         elif recovery_score >= 35:
-            adjustment = 1.05  # 5% slower
+            adjustment = 1.06  # 6% slower
             status = "Poor recovery"
             if sleep_risk['risk_score'] > 50:
                 concerns.append("sleep deprivation")
@@ -180,7 +180,7 @@ class PerformancePredictor:
             if readiness_risk['risk_score'] > 50:
                 concerns.append("low readiness")
         else:
-            adjustment = 1.08  # 8% slower for critical recovery issues
+            adjustment = 1.09  # 9% slower for critical recovery issues
             status = "Critical recovery deficit"
             if sleep_risk['risk_score'] > 50:
                 concerns.append("severe sleep deprivation")
@@ -191,7 +191,7 @@ class PerformancePredictor:
 
         # Additional penalty for severe sleep deprivation specifically
         if sleep_risk['risk_score'] > 70:
-            adjustment *= 1.02  # Extra 2% penalty for severe sleep issues
+            adjustment *= 1.01  # Extra 1% penalty for severe sleep issues
             if "sleep deprivation" in concerns:
                 concerns.remove("sleep deprivation")
                 concerns.insert(0, "severe sleep deprivation")
