@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="750" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10"/>
+      <feOffset dx="0" dy="10" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="750" fill="url(#grad1)"/>
+
+  <!-- Container with shadow -->
+  <rect x="80" y="60" width="1040" height="630" rx="12" fill="white" filter="url(#shadow)"/>
+
+  <!-- Header -->
+  <rect x="80" y="60" width="1040" height="80" rx="12" fill="#667eea"/>
+  <text x="115" y="108" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="28" fill="white" font-weight="bold">🏃 Running Coach Service</text>
+  <rect x="980" y="82" width="110" height="36" rx="18" fill="rgba(255,255,255,0.25)"/>
+  <text x="1005" y="107" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="13" fill="white" font-weight="600" letter-spacing="0.5">CLAUDE</text>
+
+  <!-- Tabs -->
+  <rect x="80" y="140" width="1040" height="60" fill="white"/>
+  <line x1="80" y1="200" x2="1120" y2="200" stroke="#e0e0e0" stroke-width="2"/>
+
+  <!-- Chat tab (inactive) -->
+  <text x="300" y="177" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="16" fill="#666" font-weight="600" text-anchor="middle">Chat</text>
+
+  <!-- Files tab (active) -->
+  <text x="820" y="177" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="16" fill="#667eea" font-weight="600" text-anchor="middle">Files</text>
+  <rect x="720" y="197" width="200" height="3" fill="#667eea"/>
+
+  <!-- Filter buttons bar -->
+  <rect x="80" y="200" width="1040" height="70" fill="#fafafa"/>
+
+  <!-- All Files button (active) -->
+  <rect x="115" y="220" width="110" height="36" rx="5" fill="#667eea"/>
+  <text x="170" y="244" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="white" font-weight="600" text-anchor="middle">All Files</text>
+
+  <!-- Plans button -->
+  <rect x="240" y="220" width="150" height="36" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+  <text x="315" y="244" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="#666" font-weight="600" text-anchor="middle">Training Plans</text>
+
+  <!-- Frameworks button -->
+  <rect x="405" y="220" width="130" height="36" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+  <text x="470" y="244" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="#666" font-weight="600" text-anchor="middle">Frameworks</text>
+
+  <!-- Calendars button -->
+  <rect x="550" y="220" width="120" height="36" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+  <text x="610" y="244" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="#666" font-weight="600" text-anchor="middle">Calendars</text>
+
+  <!-- Refresh button -->
+  <rect x="1000" y="220" width="90" height="36" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+  <text x="1045" y="244" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="#666" font-weight="600" text-anchor="middle">🔄 Refresh</text>
+
+  <!-- Files list background -->
+  <rect x="80" y="270" width="1040" height="420" fill="white"/>
+
+  <!-- File item 1 -->
+  <rect x="115" y="300" width="970" height="75" rx="8" fill="#f5f5f5"/>
+
+  <!-- Category badge -->
+  <rect x="130" y="315" width="60" height="22" rx="4" fill="#667eea"/>
+  <text x="160" y="331" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="11" fill="white" font-weight="600" text-anchor="middle">plans</text>
+
+  <!-- Filename -->
+  <text x="205" y="331" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="15" fill="#333" font-weight="600">marathon_training_plan_2025.md</text>
+
+  <!-- Metadata -->
+  <text x="205" y="355" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="12" fill="#666">Jan 15, 2025 10:30 AM • 12.5 KB</text>
+
+  <!-- Download button -->
+  <rect x="940" y="320" width="120" height="36" rx="5" fill="#667eea"/>
+  <text x="1000" y="344" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="white" font-weight="600" text-anchor="middle">⬇ Download</text>
+
+  <!-- File item 2 -->
+  <rect x="115" y="390" width="970" height="75" rx="8" fill="#f5f5f5"/>
+
+  <!-- Category badge -->
+  <rect x="130" y="405" width="90" height="22" rx="4" fill="#667eea"/>
+  <text x="175" y="421" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="11" fill="white" font-weight="600" text-anchor="middle">frameworks</text>
+
+  <!-- Filename -->
+  <text x="235" y="421" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="15" fill="#333" font-weight="600">base_building_framework.md</text>
+
+  <!-- Metadata -->
+  <text x="235" y="445" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="12" fill="#666">Jan 10, 2025 2:15 PM • 8.2 KB</text>
+
+  <!-- Download button -->
+  <rect x="940" y="410" width="120" height="36" rx="5" fill="#667eea"/>
+  <text x="1000" y="434" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="white" font-weight="600" text-anchor="middle">⬇ Download</text>
+
+  <!-- File item 3 -->
+  <rect x="115" y="480" width="970" height="75" rx="8" fill="#f5f5f5"/>
+
+  <!-- Category badge -->
+  <rect x="130" y="495" width="70" height="22" rx="4" fill="#667eea"/>
+  <text x="165" y="511" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="11" fill="white" font-weight="600" text-anchor="middle">calendar</text>
+
+  <!-- Filename -->
+  <text x="215" y="511" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="15" fill="#333" font-weight="600">workout_schedule_q1_2025.ics</text>
+
+  <!-- Metadata -->
+  <text x="215" y="535" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="12" fill="#666">Jan 5, 2025 9:00 AM • 4.8 KB</text>
+
+  <!-- Download button -->
+  <rect x="940" y="500" width="120" height="36" rx="5" fill="#667eea"/>
+  <text x="1000" y="524" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="white" font-weight="600" text-anchor="middle">⬇ Download</text>
+
+  <!-- File item 4 -->
+  <rect x="115" y="570" width="970" height="75" rx="8" fill="#f5f5f5"/>
+
+  <!-- Category badge -->
+  <rect x="130" y="585" width="60" height="22" rx="4" fill="#667eea"/>
+  <text x="160" y="601" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="11" fill="white" font-weight="600" text-anchor="middle">plans</text>
+
+  <!-- Filename -->
+  <text x="205" y="601" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="15" fill="#333" font-weight="600">post_marathon_recovery.md</text>
+
+  <!-- Metadata -->
+  <text x="205" y="625" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="12" fill="#666">Dec 28, 2024 4:45 PM • 6.1 KB</text>
+
+  <!-- Download button -->
+  <rect x="940" y="590" width="120" height="36" rx="5" fill="#667eea"/>
+  <text x="1000" y="614" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" font-size="14" fill="white" font-weight="600" text-anchor="middle">⬇ Download</text>
+</svg>
