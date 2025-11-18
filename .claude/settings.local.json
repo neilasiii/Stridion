@@ -14,7 +14,10 @@
       "Bash(./venv/bin/python3:*)",
       "Bash(cat:*)",
       "Bash(git push:*)",
-      "Bash(pip3 list:*)"
+      "Bash(pip3 list:*)",
+      "Bash(pip3 install:*)",
+      "Bash(sudo apt-get update:*)",
+      "Bash(sudo apt-get install:*)"
     ],
     "deny": [],
     "ask": []
