@@ -4,6 +4,7 @@ garminconnect>=0.2.0
 # Web framework
 flask>=3.0.0
 flask-cors>=4.0.0
+Flask-Limiter>=3.5.0
 
 # AI Provider SDKs
 anthropic>=0.40.0

@@ -12,12 +12,12 @@ BASE_URL = "http://localhost:5000"
 
 def get_health():
     """Check if service is healthy."""
-    response = requests.get(f"{BASE_URL}/api/health")
+    response = requests.get(f"{BASE_URL}/api/v1/health")
     return response.json()
 
 def list_agents():
     """Get available coaching agents."""
-    response = requests.get(f"{BASE_URL}/api/agents")
+    response = requests.get(f"{BASE_URL}/api/v1/agents")
     return response.json()
 
 def chat(query, agent=None, history=None):
@@ -31,7 +31,7 @@ def chat(query, agent=None, history=None):
         payload["history"] = history
 
     response = requests.post(
-        f"{BASE_URL}/api/chat",
+        f"{BASE_URL}/api/v1/chat",
         json=payload
     )
     return response.json()
@@ -47,7 +47,7 @@ def stream_chat(query, agent=None, history=None):
         payload["history"] = history
 
     response = requests.post(
-        f"{BASE_URL}/api/chat/stream",
+        f"{BASE_URL}/api/v1/chat/stream",
         json=payload,
         stream=True
     )
@@ -93,12 +93,12 @@ const axios = require('axios');
 const BASE_URL = 'http://localhost:5000';
 
 async function getHealth() {
-    const response = await axios.get(`${BASE_URL}/api/health`);
+    const response = await axios.get(`${BASE_URL}/api/v1/health`);
     return response.data;
 }
 
 async function listAgents() {
-    const response = await axios.get(`${BASE_URL}/api/agents`);
+    const response = await axios.get(`${BASE_URL}/api/v1/agents`);
     return response.data;
 }
 
@@ -107,7 +107,7 @@ async function chat(query, agent = null, history = null) {
     if (agent) payload.agent = agent;
     if (history) payload.history = history;
 
-    const response = await axios.post(`${BASE_URL}/api/chat`, payload);
+    const response = await axios.post(`${BASE_URL}/api/v1/chat`, payload);
     return response.data;
 }
 
@@ -116,7 +116,7 @@ async function streamChat(query, agent = null, history = null) {
     if (agent) payload.agent = agent;
     if (history) payload.history = history;
 
-    const response = await axios.post(`${BASE_URL}/api/chat/stream`, payload, {
+    const response = await axios.post(`${BASE_URL}/api/v1/chat/stream`, payload, {
         responseType: 'stream'
     });
 
@@ -160,17 +160,17 @@ async function streamChat(query, agent = null, history = null) {
 
 ### Check Health
 ```bash
-curl http://localhost:5000/api/health
+curl http://localhost:5000/api/v1/health
 ```
 
 ### List Agents
 ```bash
-curl http://localhost:5000/api/agents
+curl http://localhost:5000/api/v1/agents
 ```
 
 ### Simple Chat
 ```bash
-curl -X POST http://localhost:5000/api/chat \
+curl -X POST http://localhost:5000/api/v1/chat \
   -H "Content-Type: application/json" \
   -d '{
     "query": "What should I run today?"
@@ -179,7 +179,7 @@ curl -X POST http://localhost:5000/api/chat \
 
 ### Chat with Specific Agent
 ```bash
-curl -X POST http://localhost:5000/api/chat \
+curl -X POST http://localhost:5000/api/v1/chat \
   -H "Content-Type: application/json" \
   -d '{
     "query": "Design a strength workout",
@@ -189,7 +189,7 @@ curl -X POST http://localhost:5000/api/chat \
 
 ### Chat with History
 ```bash
-curl -X POST http://localhost:5000/api/chat \
+curl -X POST http://localhost:5000/api/v1/chat \
   -H "Content-Type: application/json" \
   -d '{
     "query": "What about tomorrow?",
@@ -202,7 +202,7 @@ curl -X POST http://localhost:5000/api/chat \
 
 ### Streaming Chat
 ```bash
-curl -X POST http://localhost:5000/api/chat/stream \
+curl -X POST http://localhost:5000/api/v1/chat/stream \
   -H "Content-Type: application/json" \
   -d '{
     "query": "Explain VDOT training"
@@ -218,7 +218,7 @@ You can integrate the Running Coach with Home Assistant using REST commands:
 # configuration.yaml
 rest_command:
   running_coach:
-    url: http://your-server:5000/api/chat
+    url: http://your-server:5000/api/v1/chat
     method: POST
     headers:
       Content-Type: application/json
@@ -249,7 +249,7 @@ Create an iOS Shortcut to query your running coach:
 
 1. Add a "Text" action with your query
 2. Add a "Get Contents of URL" action:
-   - URL: `http://your-server:5000/api/chat`
+   - URL: `http://your-server:5000/api/v1/chat`
    - Method: POST
    - Headers: `Content-Type: application/json`
    - Request Body: JSON
@@ -305,7 +305,7 @@ headers = {
 }
 
 response = requests.post(
-    f"{BASE_URL}/api/chat",
+    f"{BASE_URL}/api/v1/chat",
     headers=headers,
     json={"query": "What should I run?"}
 )

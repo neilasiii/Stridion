@@ -39,7 +39,7 @@ Use the filter buttons to view files by category:
 
 ### List Files
 
-**GET** `/api/files`
+**GET** `/api/v1/files`
 
 Query Parameters:
 - `category` (optional): Filter by category (plans, frameworks, calendar)
@@ -61,16 +61,16 @@ Response:
 
 ### Download a File
 
-**GET** `/api/files/<category>/<filename>`
+**GET** `/api/v1/files/<category>/<filename>`
 
 Example:
 ```bash
-curl -O http://localhost:5000/api/files/plans/marathon_plan_2025.md
+curl -O http://localhost:5000/api/v1/files/plans/marathon_plan_2025.md
 ```
 
 ### Save a New File
 
-**POST** `/api/files`
+**POST** `/api/v1/files`
 
 Request Body:
 ```json
@@ -97,11 +97,11 @@ Response:
 
 ### Delete a File
 
-**DELETE** `/api/files/<category>/<filename>`
+**DELETE** `/api/v1/files/<category>/<filename>`
 
 Example:
 ```bash
-curl -X DELETE http://localhost:5000/api/files/plans/old_plan.md
+curl -X DELETE http://localhost:5000/api/v1/files/plans/old_plan.md
 ```
 
 ## File Categories
@@ -163,7 +163,7 @@ import requests
 BASE_URL = "http://localhost:5000"
 
 # Save a file
-response = requests.post(f"{BASE_URL}/api/files", json={
+response = requests.post(f"{BASE_URL}/api/v1/files", json={
     "content": "# Marathon Training Plan\n\nWeek 1...",
     "filename": "marathon_plan.md",
     "category": "plans",
@@ -176,7 +176,7 @@ response = requests.post(f"{BASE_URL}/api/files", json={
 print(response.json())
 
 # List all files
-response = requests.get(f"{BASE_URL}/api/files")
+response = requests.get(f"{BASE_URL}/api/v1/files")
 files = response.json()['files']
 
 for file in files:
@@ -184,7 +184,7 @@ for file in files:
 
 # Download a specific file
 response = requests.get(
-    f"{BASE_URL}/api/files/plans/marathon_plan.md"
+    f"{BASE_URL}/api/v1/files/plans/marathon_plan.md"
 )
 
 with open("downloaded_plan.md", "w") as f:
@@ -196,7 +196,7 @@ with open("downloaded_plan.md", "w") as f:
 ```javascript
 // Save a file
 async function saveFile(content, filename, category) {
-    const response = await fetch('/api/files', {
+    const response = await fetch('/api/v1/files', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -217,8 +217,8 @@ async function saveFile(content, filename, category) {
 // List files
 async function listFiles(category = null) {
     const url = category
-        ? `/api/files?category=${category}`
-        : '/api/files';
+        ? `/api/v1/files?category=${category}`
+        : '/api/v1/files';
 
     const response = await fetch(url);
     const data = await response.json();
@@ -227,7 +227,7 @@ async function listFiles(category = null) {
 
 // Download a file
 async function downloadFile(category, filename) {
-    const response = await fetch(`/api/files/${category}/${filename}`);
+    const response = await fetch(`/api/v1/files/${category}/${filename}`);
     const blob = await response.blob();
 
     const url = window.URL.createObjectURL(blob);
@@ -270,7 +270,7 @@ async function downloadFile(category, filename) {
 ### File Not Found
 
 - Check the category and filename are correct
-- Use the `/api/files` endpoint to list available files
+- Use the `/api/v1/files` endpoint to list available files
 - Verify the file wasn't deleted
 
 ### Save Failed

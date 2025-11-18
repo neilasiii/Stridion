@@ -121,7 +121,7 @@ A dockerized, AI-agnostic web service that provides personalized training guidan
 
    Or use the API:
    ```bash
-   curl -X POST http://localhost:5000/api/chat \
+   curl -X POST http://localhost:5000/api/v1/chat \
      -H "Content-Type: application/json" \
      -d '{"query": "What should I run today?"}'
    ```
@@ -184,15 +184,20 @@ The service automatically routes queries to the appropriate agent:
 # Open http://localhost:5000 in your browser
 
 # REST API - auto-detect agent
-curl -X POST http://localhost:5000/api/chat \
+curl -X POST http://localhost:5000/api/v1/chat \
   -H "Content-Type: application/json" \
   -d '{"query": "What should I run today?"}'
 
 # REST API - specify agent
-curl -X POST http://localhost:5000/api/chat \
+curl -X POST http://localhost:5000/api/v1/chat \
   -H "Content-Type: application/json" \
   -d '{"query": "Design a strength workout", "agent": "strength-coach"}'
 ```
+
+**API Versioning:**
+- Current API version: **v1** (`/api/v1/*`)
+- Backward compatibility maintained for `/api/*` routes (redirect to v1)
+- Rate limiting: 200 requests/hour (global), 20 requests/minute (chat endpoints)
 
 See [API_CLIENT_EXAMPLES.md](docs/API_CLIENT_EXAMPLES.md) for Python, JavaScript, and integration examples.
 
@@ -356,12 +361,21 @@ Import the generated .ics file:
 
 **Web Service Layer:**
 - **`src/web/app.py`** - Flask application with REST API
-- **Endpoints:**
+- **API v1 Endpoints:**
   - `GET /` - Web interface
-  - `GET /api/health` - Health check
-  - `GET /api/agents` - List available coaches
-  - `POST /api/chat` - Coaching queries
-  - `POST /api/chat/stream` - Streaming responses
+  - `GET /api/v1/health` - Health check
+  - `GET /api/v1/agents` - List available coaches
+  - `POST /api/v1/chat` - Coaching queries (rate limited: 20/min)
+  - `POST /api/v1/chat/stream` - Streaming responses
+  - `GET /api/v1/files` - List saved files
+  - `GET /api/v1/files/<category>/<filename>` - Download file
+  - `POST /api/v1/files` - Save new file
+  - `DELETE /api/v1/files/<category>/<filename>` - Delete file
+  - Note: `/api/*` routes maintained for backward compatibility
+- **Features:**
+  - Structured logging with configurable levels
+  - Rate limiting (200/hour global, 20/min chat)
+  - CORS enabled for cross-origin requests
 
 **Coach Service Layer:**
 - **`src/coach_service/coach.py`** - Main coaching orchestration
@@ -531,6 +545,33 @@ The nutrition coach respects dietary requirements configured in `data/athlete/tr
 - Gluten-free meal planning
 - Dairy-free alternatives
 - Customizable restrictions
+
+## Testing
+
+Basic unit tests are provided for the web service:
+
+```bash
+# Run all tests
+python -m pytest tests/
+
+# Run specific test file
+python -m pytest tests/test_web_app.py
+
+# Run tests with verbose output
+python -m pytest tests/ -v
+```
+
+**Test Coverage:**
+- Web service endpoints (health, agents, chat, files)
+- API versioning and backward compatibility
+- File management operations
+- Rate limiting functionality
+- Input validation and error handling
+
+**Configuration for Testing:**
+- Structured logging: Set `LOG_LEVEL=DEBUG` for detailed test output
+- Rate limiting is disabled in testing mode by default
+- Test client uses Flask's testing mode
 
 ## Roadmap
 
