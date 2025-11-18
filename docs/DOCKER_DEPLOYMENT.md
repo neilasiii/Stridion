@@ -143,20 +143,27 @@ Each agent can specify a model preference (fast/default/powerful). The mapping v
 
 The service exposes the following HTTP endpoints:
 
+**API Versioning:**
+- Current version: **v1** (`/api/v1/*`)
+- Backward compatibility: `/api/*` routes redirect to v1
+- Rate limiting: 200 requests/hour (global), 20 requests/minute (chat)
+- Structured logging: Configurable via `LOG_LEVEL` environment variable
+
 ### `GET /`
 Web interface for interacting with the coach
 
-### `GET /api/health`
+### `GET /api/v1/health`
 Health check endpoint
 ```json
 {
   "status": "healthy",
+  "version": "v1",
   "provider": "Claude",
   "agents_loaded": 4
 }
 ```
 
-### `GET /api/agents`
+### `GET /api/v1/agents`
 List available coaching agents
 ```json
 {
@@ -168,8 +175,8 @@ List available coaching agents
 }
 ```
 
-### `POST /api/chat`
-Send a coaching query
+### `POST /api/v1/chat`
+Send a coaching query (rate limited: 20/minute)
 
 **Request:**
 ```json
@@ -188,8 +195,17 @@ Send a coaching query
 }
 ```
 
-### `POST /api/chat/stream`
+### `POST /api/v1/chat/stream`
 Stream a coaching response (for real-time output)
+
+### File Management Endpoints
+
+- `GET /api/v1/files` - List saved files (optional `category` query param)
+- `GET /api/v1/files/<category>/<filename>` - Download file
+- `POST /api/v1/files` - Save new file
+- `DELETE /api/v1/files/<category>/<filename>` - Delete file
+
+See [FILE_DOWNLOADS.md](FILE_DOWNLOADS.md) for complete file management documentation.
 
 ## Data Persistence
 
