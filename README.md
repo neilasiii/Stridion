@@ -4,8 +4,15 @@ A dockerized, AI-agnostic web service that provides personalized training guidan
 
 ## Screenshots
 
+### Chat Interface
+
 ![Running Coach Web Interface](docs/images/web-interface-screenshot.svg)
-*Web interface for interacting with your personalized running coach*
+*Chat with your AI running coach - get personalized training advice with auto-agent routing*
+
+### File Downloads
+
+![File Downloads](docs/images/files-tab-screenshot.svg)
+*Save and download AI-generated training plans, frameworks, and calendars*
 
 ## Features
 
