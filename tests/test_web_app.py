@@ -203,5 +203,92 @@ class TestRateLimiting(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class TestFileOperationsIntegration(unittest.TestCase):
+    """Integration tests for file operations."""
+
+    def setUp(self):
+        """Set up test client."""
+        app.config['TESTING'] = True
+        self.client = app.test_client()
+        self.test_filename = 'test_integration_file.md'
+        self.test_content = '# Test File\n\nThis is a test.'
+        self.test_category = 'plans'
+
+    def tearDown(self):
+        """Clean up test files."""
+        # Try to delete test file if it exists
+        self.client.delete(f'/api/v1/files/{self.test_category}/{self.test_filename}')
+
+    def test_file_lifecycle(self):
+        """Test complete file lifecycle: save, list, download, delete."""
+        # 1. Save file
+        save_response = self.client.post(
+            '/api/v1/files',
+            data=json.dumps({
+                'content': self.test_content,
+                'filename': self.test_filename,
+                'category': self.test_category
+            }),
+            content_type='application/json'
+        )
+
+        self.assertEqual(save_response.status_code, 200)
+        save_data = json.loads(save_response.data)
+        self.assertTrue(save_data.get('success'))
+        self.assertEqual(save_data.get('filename'), self.test_filename)
+
+        # 2. List files (verify it appears)
+        list_response = self.client.get(f'/api/v1/files?category={self.test_category}')
+        self.assertEqual(list_response.status_code, 200)
+        list_data = json.loads(list_response.data)
+        filenames = [f['filename'] for f in list_data['files']]
+        self.assertIn(self.test_filename, filenames)
+
+        # 3. Download file (verify content)
+        download_response = self.client.get(
+            f'/api/v1/files/{self.test_category}/{self.test_filename}'
+        )
+        self.assertEqual(download_response.status_code, 200)
+        self.assertEqual(download_response.data.decode('utf-8'), self.test_content)
+
+        # 4. Delete file
+        delete_response = self.client.delete(
+            f'/api/v1/files/{self.test_category}/{self.test_filename}'
+        )
+        self.assertEqual(delete_response.status_code, 200)
+        delete_data = json.loads(delete_response.data)
+        self.assertTrue(delete_data.get('success'))
+
+        # 5. Verify file is gone
+        download_after_delete = self.client.get(
+            f'/api/v1/files/{self.test_category}/{self.test_filename}'
+        )
+        self.assertEqual(download_after_delete.status_code, 404)
+
+
+class TestStreamingEndpoint(unittest.TestCase):
+    """Test cases for streaming endpoint."""
+
+    def setUp(self):
+        """Set up test client."""
+        app.config['TESTING'] = True
+        self.client = app.test_client()
+
+    def test_streaming_endpoint_exists(self):
+        """Test that streaming endpoint is available."""
+        # Skip if service not initialized
+        if not coach_service:
+            self.skipTest("Coach service not initialized")
+
+        response = self.client.post(
+            '/api/v1/chat/stream',
+            data=json.dumps({'query': 'test'}),
+            content_type='application/json'
+        )
+
+        # Should not return 404
+        self.assertNotEqual(response.status_code, 404)
+
+
 if __name__ == '__main__':
     unittest.main()

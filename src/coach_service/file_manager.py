@@ -163,7 +163,18 @@ class FileManager:
         else:
             return None
 
-        file_path = target_dir / filename
+        # Sanitize filename
+        filename = self._sanitize_filename(filename)
+
+        # Resolve path and validate it's within target directory
+        file_path = (target_dir / filename).resolve()
+
+        try:
+            # Check path is within target directory (prevents traversal)
+            file_path.relative_to(target_dir.resolve())
+        except ValueError:
+            # Path is outside target directory
+            return None
 
         if not file_path.exists():
             return None
@@ -191,7 +202,18 @@ class FileManager:
         else:
             return False
 
-        file_path = target_dir / filename
+        # Sanitize filename
+        filename = self._sanitize_filename(filename)
+
+        # Resolve path and validate it's within target directory
+        file_path = (target_dir / filename).resolve()
+
+        try:
+            # Check path is within target directory (prevents traversal)
+            file_path.relative_to(target_dir.resolve())
+        except ValueError:
+            # Path is outside target directory
+            return False
 
         if not file_path.exists():
             return False

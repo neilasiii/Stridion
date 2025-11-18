@@ -12,24 +12,46 @@ from flask_limiter.util import get_remote_address
 from ..coach_service import CoachService, FileManager
 from ..ai_providers import get_provider
 from ..config.logging_config import setup_logging, get_logger
+from ..config.constants import (
+    VALID_FILE_CATEGORIES,
+    MAX_FILE_SIZE,
+    DEFAULT_RATE_LIMIT_GLOBAL,
+    DEFAULT_RATE_LIMIT_PER_MINUTE,
+    DEFAULT_RATE_LIMIT_CHAT,
+    DEFAULT_LOG_LEVEL
+)
 
-# Setup logging
-log_level = os.getenv('LOG_LEVEL', 'INFO')
+# Setup logging with error handling
+log_level = os.getenv('LOG_LEVEL', DEFAULT_LOG_LEVEL)
 log_file = os.getenv('LOG_FILE')
-setup_logging(log_level=log_level, log_file=log_file)
+try:
+    setup_logging(log_level=log_level, log_file=log_file)
+except Exception as e:
+    print(f"Warning: Logging setup failed ({e}), using defaults")
+    setup_logging(log_level=DEFAULT_LOG_LEVEL)
+
 logger = get_logger(__name__)
 
 # Create Flask app
 app = Flask(__name__, template_folder='templates', static_folder='static')
-CORS(app)
 
-# Setup rate limiting
+# Setup CORS with configurable origins
+cors_origins = os.getenv('CORS_ORIGINS', '*')
+if cors_origins != '*':
+    # Split comma-separated origins
+    cors_origins = [origin.strip() for origin in cors_origins.split(',')]
+CORS(app, origins=cors_origins)
+logger.info(f"CORS enabled for origins: {cors_origins}")
+
+# Setup rate limiting with configurable storage
+rate_limit_storage = os.getenv('RATE_LIMIT_STORAGE_URI', 'memory://')
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
-    default_limits=["200 per hour", "50 per minute"],
-    storage_uri="memory://"
+    default_limits=[DEFAULT_RATE_LIMIT_GLOBAL, DEFAULT_RATE_LIMIT_PER_MINUTE],
+    storage_uri=rate_limit_storage
 )
+logger.info(f"Rate limiting enabled (storage: {rate_limit_storage})")
 
 # Initialize coach service
 try:
@@ -44,10 +66,6 @@ except Exception as e:
 # Initialize file manager
 file_manager = FileManager()
 logger.info("File manager initialized")
-
-# Constants
-VALID_CATEGORIES = ['plans', 'frameworks', 'calendar']
-MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
 # Create API v1 blueprint
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
@@ -92,7 +110,7 @@ def list_agents():
 
 
 @api_v1.route('/chat', methods=['POST'])
-@limiter.limit("20 per minute")
+@limiter.limit(DEFAULT_RATE_LIMIT_CHAT)
 def chat():
     """
     Handle coaching chat requests.
@@ -118,7 +136,8 @@ def chat():
     agent_name = data.get('agent')
     history = data.get('history', [])
 
-    logger.info(f"Chat request: query='{query[:50]}...', agent={agent_name}")
+    # Log query length instead of content to avoid PII in logs
+    logger.info(f"Chat request: query_length={len(query)}, agent={agent_name}")
 
     try:
         response = coach_service.chat(
@@ -141,7 +160,7 @@ def chat():
 
 
 @api_v1.route('/chat/stream', methods=['POST'])
-@limiter.limit("20 per minute")
+@limiter.limit(DEFAULT_RATE_LIMIT_CHAT)
 def chat_stream():
     """
     Stream coaching chat responses.
@@ -167,7 +186,8 @@ def chat_stream():
     agent_name = data.get('agent')
     history = data.get('history', [])
 
-    logger.info(f"Stream chat request: query='{query[:50]}...', agent={agent_name}")
+    # Log query length instead of content to avoid PII in logs
+    logger.info(f"Stream chat request: query_length={len(query)}, agent={agent_name}")
 
     def generate():
         """Generator for streaming response."""
@@ -362,14 +382,14 @@ def api_agents_compat():
 
 
 @app.route('/api/chat', methods=['POST'])
-@limiter.limit("20 per minute")
+@limiter.limit(DEFAULT_RATE_LIMIT_CHAT)
 def api_chat_compat():
     """Backward compatibility for /api/chat -> /api/v1/chat"""
     return chat()
 
 
 @app.route('/api/chat/stream', methods=['POST'])
-@limiter.limit("20 per minute")
+@limiter.limit(DEFAULT_RATE_LIMIT_CHAT)
 def api_chat_stream_compat():
     """Backward compatibility for /api/chat/stream -> /api/v1/chat/stream"""
     return chat_stream()
