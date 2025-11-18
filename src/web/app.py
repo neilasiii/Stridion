@@ -27,6 +27,10 @@ except Exception as e:
 # Initialize file manager
 file_manager = FileManager()
 
+# Constants
+VALID_CATEGORIES = ['plans', 'frameworks', 'calendar']
+MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+
 
 @app.route('/')
 def index():
@@ -162,6 +166,10 @@ def download_file(category, filename):
         category: File category (plans, frameworks, calendar)
         filename: Filename
     """
+    # Validate category
+    if category not in VALID_CATEGORIES:
+        return jsonify({'error': 'Invalid category'}), 400
+
     try:
         content = file_manager.get_file(filename, category)
 
@@ -212,6 +220,14 @@ def save_file():
     category = data.get('category', 'plans')
     metadata = data.get('metadata', {})
 
+    # Validate category
+    if category not in VALID_CATEGORIES:
+        return jsonify({'error': 'Invalid category'}), 400
+
+    # Validate file size
+    if len(content) > MAX_FILE_SIZE:
+        return jsonify({'error': f'File too large. Maximum size is {MAX_FILE_SIZE / (1024*1024):.0f}MB'}), 413
+
     try:
         file_path = file_manager.save_file(
             content=content,
@@ -239,6 +255,10 @@ def delete_file(category, filename):
         category: File category
         filename: Filename
     """
+    # Validate category
+    if category not in VALID_CATEGORIES:
+        return jsonify({'error': 'Invalid category'}), 400
+
     try:
         success = file_manager.delete_file(filename, category)
 
