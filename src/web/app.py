@@ -6,7 +6,7 @@ import os
 from flask import Flask, request, jsonify, render_template, Response
 from flask_cors import CORS
 
-from ..coach_service import CoachService
+from ..coach_service import CoachService, FileManager
 from ..ai_providers import get_provider
 
 
@@ -23,6 +23,9 @@ except Exception as e:
     print(f"Warning: Failed to initialize AI provider: {e}")
     print("Service will start but may not be functional.")
     coach_service = None
+
+# Initialize file manager
+file_manager = FileManager()
 
 
 @app.route('/')
@@ -131,6 +134,120 @@ def chat_stream():
             yield f"\n\nError: {str(e)}"
 
     return Response(generate(), mimetype='text/plain')
+
+
+@app.route('/api/files', methods=['GET'])
+def list_files():
+    """
+    List available files.
+
+    Query params:
+        category: Filter by category (plans, frameworks, calendar)
+    """
+    category = request.args.get('category')
+
+    try:
+        files = file_manager.list_files(category=category)
+        return jsonify({'files': files})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/files/<category>/<filename>', methods=['GET'])
+def download_file(category, filename):
+    """
+    Download a specific file.
+
+    Args:
+        category: File category (plans, frameworks, calendar)
+        filename: Filename
+    """
+    try:
+        content = file_manager.get_file(filename, category)
+
+        if content is None:
+            return jsonify({'error': 'File not found'}), 404
+
+        # Determine MIME type based on extension
+        if filename.endswith('.md'):
+            mimetype = 'text/markdown'
+        elif filename.endswith('.ics'):
+            mimetype = 'text/calendar'
+        elif filename.endswith('.json'):
+            mimetype = 'application/json'
+        else:
+            mimetype = 'text/plain'
+
+        return Response(
+            content,
+            mimetype=mimetype,
+            headers={
+                'Content-Disposition': f'attachment; filename="{filename}"'
+            }
+        )
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/files', methods=['POST'])
+def save_file():
+    """
+    Save a new file.
+
+    Expected JSON:
+    {
+        "content": "File content...",
+        "filename": "my_plan.md",
+        "category": "plans",
+        "metadata": {...}  // optional
+    }
+    """
+    data = request.get_json()
+
+    if not data or 'content' not in data or 'filename' not in data:
+        return jsonify({'error': 'Missing required parameters'}), 400
+
+    content = data['content']
+    filename = data['filename']
+    category = data.get('category', 'plans')
+    metadata = data.get('metadata', {})
+
+    try:
+        file_path = file_manager.save_file(
+            content=content,
+            filename=filename,
+            category=category,
+            metadata=metadata
+        )
+
+        return jsonify({
+            'success': True,
+            'filename': filename,
+            'category': category,
+            'path': file_path
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/files/<category>/<filename>', methods=['DELETE'])
+def delete_file(category, filename):
+    """
+    Delete a file.
+
+    Args:
+        category: File category
+        filename: Filename
+    """
+    try:
+        success = file_manager.delete_file(filename, category)
+
+        if not success:
+            return jsonify({'error': 'File not found'}), 404
+
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':

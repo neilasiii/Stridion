@@ -15,6 +15,7 @@ A dockerized, AI-agnostic web service that provides personalized training guidan
 - **AI Provider Agnostic** - Choose from Claude (Anthropic), ChatGPT (OpenAI), Gemini (Google), or Ollama (local LLMs)
 - **REST API** - Simple HTTP interface for chat and coaching queries
 - **Web Interface** - Clean, responsive UI for interacting with coaches
+- **File Downloads** - Save and download AI-generated training plans, frameworks, and calendars
 - **Data Persistence** - All athlete data and configurations persist across container restarts
 - **Easy Integration** - Use from web browsers, mobile apps, Home Assistant, or custom scripts
 
@@ -404,6 +405,7 @@ All data synced from Garmin Connect:
 - **[DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md)** - Complete Docker deployment guide
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System architecture and design
 - **[API_CLIENT_EXAMPLES.md](docs/API_CLIENT_EXAMPLES.md)** - Integration examples (Python, JS, cURL, Home Assistant)
+- **[FILE_DOWNLOADS.md](docs/FILE_DOWNLOADS.md)** - Save and download AI-generated files
 
 **Health Data & Features:**
 - **[HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Technical documentation for health data
