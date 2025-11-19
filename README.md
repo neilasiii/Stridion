@@ -598,7 +598,6 @@ This project is actively evolving. Current development priorities:
 ### Enhanced Features
 - [x] **Workout Library** - Searchable database of workouts and training blocks
 - [x] **Adjustable Communication Detail** - BRIEF/STANDARD/DETAILED response modes for coaching agents
-- [ ] **Progress Visualization** - Charts and graphs for training metrics over time
 - [ ] **Automated Plan Generation** - Generate multi-week training plans based on race goals
 - [ ] **Email/SMS Notifications** - Workout reminders and recovery alerts
 - [ ] **Integration Testing** - Comprehensive test suite for all coaching domains
@@ -631,7 +630,6 @@ This project is actively evolving. Current development priorities:
 
 ### Race Day Features
 - [ ] **Race Strategy Generator** - Custom pacing plan based on course elevation profile
-- [ ] **Course Analysis** - Import GPX files and analyze elevation, terrain, splits
 - [ ] **Pre-race Checklist** - Equipment, nutrition, logistics planning tools
 - [ ] **Race Day Weather** - Location-specific forecasts and gear recommendations
 - [ ] **Multi-Race Season Planning** - Coordinate multiple goal races throughout the year
