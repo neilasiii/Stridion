@@ -164,9 +164,9 @@ class CoachService:
         elif any(word in query_lower for word in ['strength', 'lift', 'squat', 'deadlift', 'gym']):
             return 'strength-coach'
         elif any(word in query_lower for word in ['mobility', 'stretch', 'flexibility', 'foam roll']):
-            return 'mobility-coach'
+            return 'mobility-coach-runner'
         elif any(word in query_lower for word in ['nutrition', 'diet', 'fuel', 'eat', 'meal']):
-            return 'nutrition-coach'
+            return 'endurance-nutrition-coach'
         else:
             # Default to running coach
             return 'running-coach'
