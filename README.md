@@ -1,8 +1,34 @@
 # Running Coach System
 
-A personalized training guidance system that integrates objective health data from Garmin Connect to provide expert coaching across four domains: running, strength, mobility, and nutrition.
+A dockerized, AI-agnostic web service that provides personalized training guidance across four domains: running, strength, mobility, and nutrition.
+
+**Data Philosophy:** Your Garmin device collects the data. This app makes intelligent coaching decisions based on that data. We leverage Garmin's expertise in biometric tracking (HR zones, lactate threshold, HRV, training readiness, VO2 max) and focus on what AI does best: interpreting those metrics to provide personalized training guidance.
+
+Supports multiple AI providers (Claude, ChatGPT, Gemini, and local LLMs via Ollama).
+
+## Screenshots
+
+### Chat Interface
+
+![Running Coach Web Interface](docs/images/web-interface-screenshot.svg)
+*Chat with your AI running coach - get personalized training advice with auto-agent routing*
+
+### File Downloads
+
+![File Downloads](docs/images/files-tab-screenshot.svg)
+*Save and download AI-generated training plans, frameworks, and calendars*
 
 ## Features
+
+### 🐳 Docker Deployment & AI Flexibility
+
+- **Dockerized Service** - Run anywhere with Docker, simple deployment to home servers
+- **AI Provider Agnostic** - Choose from Claude (Anthropic), ChatGPT (OpenAI), Gemini (Google), or Ollama (local LLMs)
+- **REST API** - Simple HTTP interface for chat and coaching queries
+- **Web Interface** - Clean, responsive UI for interacting with coaches
+- **File Downloads** - Save and download AI-generated training plans, frameworks, and calendars
+- **Data Persistence** - All athlete data and configurations persist across container restarts
+- **Easy Integration** - Use from web browsers, mobile apps, Home Assistant, or custom scripts
 
 ### 🏃 Specialized Coaching Domains
 
@@ -13,12 +39,14 @@ A personalized training guidance system that integrates objective health data fr
 
 ### 📊 Health Data Integration
 
-- **Direct Garmin Connect Sync** - Automatic import of activities, sleep, HR, and VO2 max data
-- **HR Zone Analysis** - Time-in-zone data for each activity to verify workout intensity distribution
-- **Lactate Threshold Tracking** - Auto-detected threshold heart rate and pace for validating VDOT
+The system uses objective metrics from your Garmin device to inform coaching decisions:
+
+- **Direct Garmin Connect Sync** - Automatic import of activities, sleep, HR, VO2 max, and biometric data
+- **Garmin-Provided Analytics** - Leverages Garmin's HR zone analysis, lactate threshold detection, HRV, and training readiness scores
 - **Calendar Integration** - Import scheduled workouts from FinalSurge, TrainingPeaks, or any ICS calendar
-- **Recovery Monitoring** - Track resting heart rate, HRV, sleep quality, and training readiness
-- **Performance Tracking** - Monitor pace progression, training load, and race predictions
+- **Data-Informed Coaching** - AI coaches interpret Garmin metrics to adjust training intensity, volume, and recovery
+
+*The app focuses on making intelligent coaching decisions based on data from your Garmin device, not on collecting or analyzing metrics.*
 
 ### 📚 Workout Library
 
@@ -44,16 +72,14 @@ A personalized training guidance system that integrates objective health data fr
 
 ## Quick Start
 
-### Prerequisites
+### Docker Deployment (Recommended)
 
-- **[Claude Code](https://docs.claude.com/en/docs/claude-code)** - Required for running the AI coaching agents
-- Python 3.7+
-- Garmin Connect account with activity data
-- (Optional) Training calendar from FinalSurge, TrainingPeaks, etc.
+**Prerequisites:**
+- Docker and Docker Compose
+- API key for your chosen AI provider (or Ollama for free local LLMs)
+- (Optional) Garmin Connect account for health data sync
 
-> **Note**: The coaching agents currently require Claude Code to function. See the [Roadmap](#roadmap) section for plans to make this system available as a standalone application.
-
-### Installation
+**Setup:**
 
 1. **Clone the repository**
    ```bash
@@ -61,28 +87,64 @@ A personalized training guidance system that integrates objective health data fr
    cd running-coach
    ```
 
-2. **Install Python dependencies**
+2. **Configure environment**
    ```bash
-   pip install -r requirements.txt
+   cp .env.example .env
+   nano .env  # Edit with your AI provider and API key
    ```
 
-3. **Set up Garmin Connect credentials**
+   Example configurations:
    ```bash
-   export GARMIN_EMAIL=your@email.com
-   export GARMIN_PASSWORD=yourpassword
+   # Using Claude (Anthropic)
+   AI_PROVIDER=claude
+   ANTHROPIC_API_KEY=sk-ant-your-key-here
+
+   # Or using ChatGPT (OpenAI)
+   AI_PROVIDER=openai
+   OPENAI_API_KEY=sk-your-key-here
+
+   # Or using Gemini (Google)
+   AI_PROVIDER=gemini
+   GOOGLE_API_KEY=your-google-api-key
+
+   # Or using Ollama (local, free)
+   AI_PROVIDER=ollama
    ```
 
-4. **Initial health data sync**
+3. **Start the service**
    ```bash
-   # Sync last 90 days of data
-   bash bin/sync_garmin_data.sh --days 90
+   # Using cloud AI providers (Claude/OpenAI/Gemini)
+   docker-compose up -d
+
+   # Or with Ollama for local LLMs
+   docker-compose --profile ollama up -d
+   docker exec ollama ollama pull llama3.1:latest
    ```
 
-5. **(Optional) Configure calendar integration**
+4. **Access the service**
+
+   Open your browser: **http://localhost:5000**
+
+   Or use the API:
    ```bash
-   cp config/calendar_sources.json.example config/calendar_sources.json
-   # Edit config/calendar_sources.json with your calendar URL
+   curl -X POST http://localhost:5000/api/v1/chat \
+     -H "Content-Type: application/json" \
+     -d '{"query": "What should I run today?"}'
    ```
+
+**See [DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md) for complete deployment guide.**
+
+### Alternative: Claude Code Integration
+
+You can also use this project directly in [Claude Code](https://docs.claude.com/en/docs/claude-code) without Docker:
+
+1. Clone the repository and open in Claude Code
+2. Set Garmin credentials: `export GARMIN_EMAIL=...` and `export GARMIN_PASSWORD=...`
+3. Install dependencies: `pip install -r requirements.txt`
+4. Sync health data: `bash bin/sync_garmin_data.sh --days 90`
+5. Interact with the coaching agents directly in Claude Code
+
+The agents in `.claude/agents/` will automatically load your athlete profile and health data.
 
 ### Customize Your Athlete Profile
 
@@ -112,8 +174,6 @@ bash bin/sync_garmin_data.sh --check-only
 
 ### Work with Coaching Agents
 
-**Currently requires [Claude Code](https://docs.claude.com/en/docs/claude-code)** to interact with the coaching agents.
-
 The system uses specialized AI coaching agents defined in `.claude/agents/`:
 
 - `vdot-running-coach.md` - Running workouts and pacing
@@ -121,7 +181,35 @@ The system uses specialized AI coaching agents defined in `.claude/agents/`:
 - `mobility-coach-runner.md` - Mobility and recovery
 - `endurance-nutrition-coach.md` - Nutrition and fueling
 
-When using Claude Code, these agents automatically access your athlete profile and health data to provide personalized guidance. Simply open this repository in Claude Code and interact with the agents conversationally to get training recommendations.
+**Using the Docker Web Service:**
+
+The service automatically routes queries to the appropriate agent:
+
+```bash
+# Web interface (recommended for most users)
+# Open http://localhost:5000 in your browser
+
+# REST API - auto-detect agent
+curl -X POST http://localhost:5000/api/v1/chat \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What should I run today?"}'
+
+# REST API - specify agent
+curl -X POST http://localhost:5000/api/v1/chat \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Design a strength workout", "agent": "strength-coach"}'
+```
+
+**API Versioning:**
+- Current API version: **v1** (`/api/v1/*`)
+- Backward compatibility maintained for `/api/*` routes (redirect to v1)
+- Rate limiting: 200 requests/hour (global), 20 requests/minute (chat endpoints)
+
+See [API_CLIENT_EXAMPLES.md](docs/API_CLIENT_EXAMPLES.md) for Python, JavaScript, and integration examples.
+
+**Using Claude Code:**
+
+When using Claude Code, these agents automatically access your athlete profile and health data. Simply open this repository in Claude Code and interact with the agents conversationally.
 
 ### Control Response Detail Level
 
@@ -248,86 +336,165 @@ Import the generated .ics file:
 
 ## Architecture
 
-### Data Flow
+### System Overview
 
 ```
-Garmin Connect API
-        ↓
-  garmin_sync.py (fetch & process)
-        ↓
-  health_data_cache.json (persistent storage)
-        ↓
-  Coaching Agents (read for decisions)
+┌─────────────┐
+│   Client    │  (Web Browser, Mobile App, API Client)
+└──────┬──────┘
+       │ HTTP
+       ▼
+┌─────────────────────┐
+│  Flask Web Service  │  (src/web/app.py)
+└──────┬──────────────┘
+       │
+       ▼
+┌─────────────────────┐
+│   Coach Service     │  (src/coach_service/)
+│  - Agent routing    │  - Loads athlete context
+│  - Context loading  │  - Manages conversation
+└──────┬──────────────┘
+       │
+       ▼
+┌─────────────────────┐
+│   AI Providers      │  (src/ai_providers/)
+│  Claude | OpenAI    │  - Provider abstraction
+│  Gemini | Ollama    │  - Unified interface
+└─────────────────────┘
 ```
 
 ### Key Components
 
+**Web Service Layer:**
+- **`src/web/app.py`** - Flask application with REST API
+- **API v1 Endpoints:**
+  - `GET /` - Web interface
+  - `GET /api/v1/health` - Health check
+  - `GET /api/v1/agents` - List available coaches
+  - `POST /api/v1/chat` - Coaching queries (rate limited: 20/min)
+  - `POST /api/v1/chat/stream` - Streaming responses
+  - `GET /api/v1/files` - List saved files
+  - `GET /api/v1/files/<category>/<filename>` - Download file
+  - `POST /api/v1/files` - Save new file
+  - `DELETE /api/v1/files/<category>/<filename>` - Delete file
+  - Note: `/api/*` routes maintained for backward compatibility
+- **Features:**
+  - Structured logging with configurable levels
+  - Rate limiting (200/hour global, 20/min chat)
+  - CORS enabled for cross-origin requests
+
+**Coach Service Layer:**
+- **`src/coach_service/coach.py`** - Main coaching orchestration
+- **`src/coach_service/agent_loader.py`** - Loads agent configs from `.claude/agents/*.md`
+- Auto-detects appropriate agent based on query keywords
+- Manages athlete context and health data loading
+
+**AI Provider Layer:**
+- **`src/ai_providers/base.py`** - Abstract provider interface
+- **`src/ai_providers/claude.py`** - Anthropic Claude integration
+- **`src/ai_providers/openai.py`** - OpenAI ChatGPT integration
+- **`src/ai_providers/gemini.py`** - Google Gemini integration
+- **`src/ai_providers/ollama.py`** - Local LLM integration
+- **`src/ai_providers/factory.py`** - Provider selection
+
 **Health Data System:**
-- **`src/garmin_sync.py`** - Main sync script using garminconnect library
-- **`src/ics_parser.py`** - ICS calendar import parser
-- **`src/ics_exporter.py`** - ICS calendar export generator
-- **`bin/sync_garmin_data.sh`** - Convenience wrapper for syncing
-- **`bin/export_calendar.sh`** - Convenience wrapper for calendar export
+- **`src/garmin_sync.py`** - Garmin Connect API sync
+- **`src/ics_parser.py`** - ICS calendar import
+- **`src/ics_exporter.py`** - ICS calendar export
+- **`bin/sync_garmin_data.sh`** - Sync wrapper script
 - **`data/health/health_data_cache.json`** - Cached health metrics
 
-**Workout Library System:**
-- **`src/workout_library.py`** - Library manager with CRUD operations
-- **`src/workout_library_cli.py`** - Command-line interface
-- **`src/seed_workout_library.py`** - Pre-populate library with templates
-- **`bin/workout_library.sh`** - Convenience wrapper for CLI
-- **`data/library/workout_library.json`** - Main workout database
+**Workout Library:**
+- **`src/workout_library.py`** - Library manager (CRUD)
+- **`src/workout_library_cli.py`** - CLI interface
+- **`bin/workout_library.sh`** - CLI wrapper
+- **`data/library/workout_library.json`** - Workout database
 
 **Athlete Context:**
-- **`data/athlete/`** - Athlete context files (goals, preferences, status, etc.)
-- **`.claude/agents/`** - Coaching agent configurations
+- **`data/athlete/`** - Profile, goals, preferences, status
+- **`.claude/agents/`** - Agent configurations
 
-### Health Data Types
+**See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for complete technical details.**
 
-All data synced from Garmin Connect:
+### Health Data from Garmin Connect
 
-- **Activities** - Distance, duration, pace, heart rate, calories
-- **Sleep** - Total duration, sleep stages, efficiency
-- **VO2 Max** - Garmin estimates
-- **Weight** - Body weight, composition
-- **Resting Heart Rate** - Daily RHR (key recovery indicator)
+The system consumes metrics directly from Garmin Connect (no manual data entry required):
+
+- **Activities** - Distance, duration, pace, heart rate, calories, HR zones (time-in-zone)
+- **Sleep** - Total duration, sleep stages, efficiency, sleep score
+- **Recovery Metrics** - Resting heart rate (RHR), HRV, training readiness score
+- **Fitness Indicators** - VO2 max estimates, lactate threshold (HR & pace)
+- **Body Composition** - Weight, body fat %, muscle mass (when available)
+
+These metrics inform coaching decisions but are calculated by Garmin devices, not by this application.
 
 ## Documentation
 
-- **[HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Complete technical documentation for health data
+**Deployment & Integration:**
+- **[DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md)** - Complete Docker deployment guide
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System architecture and design
+- **[API_CLIENT_EXAMPLES.md](docs/API_CLIENT_EXAMPLES.md)** - Integration examples (Python, JS, cURL, Home Assistant)
+- **[FILE_DOWNLOADS.md](docs/FILE_DOWNLOADS.md)** - Save and download AI-generated files
+
+**Health Data & Features:**
+- **[HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Technical documentation for health data
 - **[AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on health data
-- **[AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md)** - Guide for agents on workout library integration
-- **[COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md)** - Guide to BRIEF/STANDARD/DETAILED response modes
-- **[CLAUDE.md](CLAUDE.md)** - Development guide for Claude Code
+- **[AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md)** - Workout library integration guide
+- **[COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md)** - BRIEF/STANDARD/DETAILED response modes
+
+**Development:**
+- **[CLAUDE.md](CLAUDE.md)** - Development guide for Claude Code integration
 
 ## Project Structure
 
 ```
 running-coach/
-├── bin/                    # Executable scripts
-│   ├── sync_garmin_data.sh
-│   ├── export_calendar.sh
-│   └── workout_library.sh
-├── src/                    # Python source code
-│   ├── garmin_sync.py
-│   ├── ics_parser.py
-│   ├── ics_exporter.py
-│   ├── workout_library.py
-│   ├── workout_library_cli.py
+├── src/
+│   ├── ai_providers/          # AI provider implementations
+│   │   ├── base.py            # Abstract base class
+│   │   ├── claude.py          # Anthropic Claude
+│   │   ├── openai.py          # OpenAI ChatGPT
+│   │   ├── gemini.py          # Google Gemini
+│   │   ├── ollama.py          # Local LLMs
+│   │   └── factory.py         # Provider selection
+│   ├── coach_service/         # Core coaching logic
+│   │   ├── agent_loader.py    # Load agent configs
+│   │   └── coach.py           # Main orchestration
+│   ├── web/                   # Flask web service
+│   │   ├── app.py             # API and routes
+│   │   └── templates/         # Web UI
+│   ├── garmin_sync.py         # Garmin Connect sync
+│   ├── ics_parser.py          # Calendar import
+│   ├── ics_exporter.py        # Calendar export
+│   ├── workout_library.py     # Workout library CRUD
+│   ├── workout_library_cli.py # Workout CLI
 │   └── seed_workout_library.py
-├── docs/                   # Documentation
+├── bin/                       # Executable scripts
+│   ├── start_service.sh       # Start web service
+│   ├── sync_garmin_data.sh    # Health data sync
+│   ├── export_calendar.sh     # Calendar export
+│   └── workout_library.sh     # Workout CLI
+├── docs/                      # Documentation
+│   ├── DOCKER_DEPLOYMENT.md   # Deployment guide
+│   ├── ARCHITECTURE.md        # System design
+│   ├── API_CLIENT_EXAMPLES.md # Integration examples
 │   ├── HEALTH_DATA_SYSTEM.md
 │   ├── AGENT_HEALTH_DATA_GUIDE.md
 │   ├── AGENT_WORKOUT_LIBRARY_GUIDE.md
 │   └── COMMUNICATION_PREFERENCES_GUIDE.md
 ├── data/
-│   ├── athlete/           # Athlete profile & context
-│   ├── health/            # Health data cache
-│   ├── library/           # Workout library database
-│   ├── plans/             # Generated training plans
-│   ├── frameworks/        # Training templates
-│   └── calendar/          # Calendar import/export
-├── .claude/agents/        # AI coaching agents
-└── config/                # Configuration files
+│   ├── athlete/               # Athlete profile & context
+│   ├── health/                # Health data cache
+│   ├── library/               # Workout library
+│   ├── plans/                 # Training plans
+│   └── calendar/              # Calendar files
+├── .claude/agents/            # AI coaching agents
+├── config/                    # Configuration files
+├── Dockerfile                 # Container definition
+├── docker-compose.yml         # Multi-container setup
+├── .env.example              # Config template
+├── requirements.txt          # Python dependencies
+└── README.md                 # This file
 ```
 
 ## Troubleshooting
@@ -387,15 +554,44 @@ The nutrition coach respects dietary requirements configured in `data/athlete/tr
 - Dairy-free alternatives
 - Customizable restrictions
 
+## Testing
+
+Basic unit tests are provided for the web service:
+
+```bash
+# Run all tests
+python -m pytest tests/
+
+# Run specific test file
+python -m pytest tests/test_web_app.py
+
+# Run tests with verbose output
+python -m pytest tests/ -v
+```
+
+**Test Coverage:**
+- Web service endpoints (health, agents, chat, files)
+- API versioning and backward compatibility
+- File management operations
+- Rate limiting functionality
+- Input validation and error handling
+
+**Configuration for Testing:**
+- Structured logging: Set `LOG_LEVEL=DEBUG` for detailed test output
+- Rate limiting is disabled in testing mode by default
+- Test client uses Flask's testing mode
+
 ## Roadmap
 
 This project is actively evolving. Current development priorities:
 
 ### Standalone Application
-- [ ] **Decouple from Claude Code** - Make coaching agents accessible without Claude Code dependency
-- [ ] **HTTP/REST API** - Provide web service interface for coaching interactions
-- [ ] **Web Frontend** - Build user-friendly web interface for athlete interaction
-- [ ] **Mobile-responsive UI** - Support access from phones and tablets
+- [x] **Decouple from Claude Code** - Make coaching agents accessible without Claude Code dependency ✅
+- [x] **HTTP/REST API** - Provide web service interface for coaching interactions ✅
+- [x] **Web Frontend** - Build user-friendly web interface for athlete interaction ✅
+- [x] **Mobile-responsive UI** - Support access from phones and tablets ✅
+- [x] **AI Provider Agnostic** - Support Claude, OpenAI, Gemini, and Ollama ✅
+- [x] **Docker Deployment** - Containerized service for easy deployment ✅
 
 ### Data & Persistence
 - [ ] **Database Integration** - Replace JSON files with proper database (PostgreSQL/SQLite)
@@ -406,7 +602,6 @@ This project is actively evolving. Current development priorities:
 ### Enhanced Features
 - [x] **Workout Library** - Searchable database of workouts and training blocks
 - [x] **Adjustable Communication Detail** - BRIEF/STANDARD/DETAILED response modes for coaching agents
-- [ ] **Progress Visualization** - Charts and graphs for training metrics over time
 - [ ] **Automated Plan Generation** - Generate multi-week training plans based on race goals
 - [ ] **Email/SMS Notifications** - Workout reminders and recovery alerts
 - [ ] **Integration Testing** - Comprehensive test suite for all coaching domains
@@ -418,15 +613,11 @@ This project is actively evolving. Current development priorities:
 - [ ] **Community Forums** - Athlete discussion and peer support
 - [ ] **Coach Dashboard** - Interface for human coaches to monitor athlete progress
 
-### Advanced Analytics & Intelligence
-- [x] **HR Zone Analysis** - Time-in-zone tracking for each activity to validate workout intensity
-- [x] **Lactate Threshold Tracking** - Auto-detected threshold HR and pace from Garmin for VDOT validation
-- [x] **HRV Tracking** - Heart rate variability monitoring for recovery assessment
-- [x] **Training Readiness** - Daily readiness scores incorporating sleep, HRV, and recovery metrics
-- [ ] **Injury Risk Prediction** - ML model to detect overtraining patterns from training load trends
-- [ ] **Automated VDOT Adjustments** - Update training paces based on race results and workout performance
-- [ ] **Performance Prediction** - Race time estimates based on current fitness and training phase (partially complete: Garmin race predictions available)
-- [ ] **Training Load Analytics** - Acute/chronic workload ratio, TSS/CTL tracking
+### Enhanced Coaching Intelligence
+- [x] **Garmin Metrics Integration** - HR zones, lactate threshold, HRV, training readiness, and VO2 max all available to coaching agents
+- [ ] **Contextual Recovery Recommendations** - Suggest workout adjustments based on sleep quality, RHR trends, and training readiness
+- [ ] **Workout Adaptation Engine** - Automatically modify prescribed workouts based on recent performance and recovery data
+- [ ] **Race Strategy Planning** - Generate race-day pacing and fueling strategies using historical performance data
 
 ### Mobile & Offline Support
 - [ ] **Native iOS/Android Apps** - Full-featured mobile applications
@@ -443,7 +634,6 @@ This project is actively evolving. Current development priorities:
 
 ### Race Day Features
 - [ ] **Race Strategy Generator** - Custom pacing plan based on course elevation profile
-- [ ] **Course Analysis** - Import GPX files and analyze elevation, terrain, splits
 - [ ] **Pre-race Checklist** - Equipment, nutrition, logistics planning tools
 - [ ] **Race Day Weather** - Location-specific forecasts and gear recommendations
 - [ ] **Multi-Race Season Planning** - Coordinate multiple goal races throughout the year
