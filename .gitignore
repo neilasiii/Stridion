@@ -1,3 +1,6 @@
+# Environment configuration (contains API keys and credentials)
+.env
+
 # Garmin Connect credentials
 # Environment variables: GARMIN_EMAIL and GARMIN_PASSWORD
 # Or config file: config/.garmin_config.json

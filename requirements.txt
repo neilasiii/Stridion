@@ -1,2 +1,21 @@
 # Garmin Connect API for health data sync
 garminconnect>=0.2.0
+
+# Web framework
+flask>=3.0.0
+flask-cors>=4.0.0
+Flask-Limiter>=3.5.0
+
+# AI Provider SDKs
+anthropic>=0.40.0
+openai>=1.54.0
+google-generativeai>=0.8.0
+
+# HTTP client for Ollama
+requests>=2.31.0
+
+# Utilities
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=7.0.0

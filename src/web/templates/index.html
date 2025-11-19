@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Coach Service</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .provider-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .provider-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 10px;
+        }
+
+        /* Tabs */
+        .tabs {
+            background: white;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            background: #f5f5f5;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        /* Tab content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Chat tab */
+        .chat-container {
+            background: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 280px);
+            min-height: 500px;
+        }
+
+        .agents-bar {
+            background: #f5f5f5;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .agent-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message-content {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: #667eea;
+            color: white;
+        }
+
+        .message.assistant .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+
+        .message.assistant .message-content pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .message.assistant .message-content code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .agent-label {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .save-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .save-button:hover {
+            background: #5568d3;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #queryInput {
+            flex: 1;
+            padding: 12px 18px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #queryInput:focus {
+            border-color: #667eea;
+        }
+
+        #sendButton {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+
+        #sendButton:hover {
+            background: #5568d3;
+        }
+
+        #sendButton:active {
+            transform: scale(0.95);
+        }
+
+        #sendButton:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Files tab */
+        .files-container {
+            background: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 20px;
+            min-height: 500px;
+        }
+
+        .files-filter {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .files-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .file-item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .file-item:hover {
+            background: #e8e8e8;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .file-meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .file-category-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .download-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .download-button:hover {
+            background: #5568d3;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏃 Running Coach Service</h1>
+            <div class="provider-info">
+                AI Provider: <span class="provider-badge">{{ provider }}</span>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="chat">Chat</div>
+            <div class="tab" data-tab="files">Files</div>
+        </div>
+
+        <!-- Chat Tab -->
+        <div class="tab-content active" id="chat-tab">
+            <div class="chat-container">
+                <div class="agents-bar">
+                    <select id="agentSelect" class="agent-select">
+                        <option value="">Auto-detect agent from query</option>
+                        {% for agent_id, agent_desc in agents.items() %}
+                        <option value="{{ agent_id }}">{{ agent_id }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div id="messages" class="messages">
+                    <div class="message assistant">
+                        <div class="message-content">
+                            👋 Welcome! I'm your running coach. Ask me about training, workouts, nutrition, strength, or mobility.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <span style="margin-left: 10px;">Thinking...</span>
+                </div>
+
+                <div class="input-area">
+                    <form class="input-form" id="chatForm">
+                        <input
+                            type="text"
+                            id="queryInput"
+                            placeholder="Ask me anything about your training..."
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit" id="sendButton">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Files Tab -->
+        <div class="tab-content" id="files-tab">
+            <div class="files-container">
+                <div class="files-filter">
+                    <button class="filter-button active" data-category="">All Files</button>
+                    <button class="filter-button" data-category="plans">Training Plans</button>
+                    <button class="filter-button" data-category="frameworks">Frameworks</button>
+                    <button class="filter-button" data-category="calendar">Calendars</button>
+                    <button class="filter-button" onclick="loadFiles()" style="margin-left: auto;">🔄 Refresh</button>
+                </div>
+
+                <div id="filesList" class="files-list">
+                    <!-- Files will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const chatForm = document.getElementById('chatForm');
+        const queryInput = document.getElementById('queryInput');
+        const sendButton = document.getElementById('sendButton');
+        const agentSelect = document.getElementById('agentSelect');
+        const loadingDiv = document.getElementById('loading');
+        const filesListDiv = document.getElementById('filesList');
+
+        let conversationHistory = [];
+        let currentResponseContent = '';
+        let currentAgent = '';
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+
+                // Update tab active state
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Update content active state
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById(tabName + '-tab').classList.add('active');
+
+                // Load files when switching to files tab
+                if (tabName === 'files') {
+                    loadFiles();
+                }
+            });
+        });
+
+        // File category filtering
+        document.querySelectorAll('.filter-button[data-category]').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.filter-button[data-category]').forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+
+                const category = button.dataset.category;
+                loadFiles(category);
+            });
+        });
+
+        function addMessage(role, content, agent = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+
+            // Simple markdown-like formatting
+            let formatted = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+
+            contentDiv.innerHTML = formatted;
+            messageDiv.appendChild(contentDiv);
+
+            if (agent && role === 'assistant') {
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'agent-label';
+                labelDiv.textContent = agent;
+                messageDiv.appendChild(labelDiv);
+
+                // Add save button
+                const saveBtn = document.createElement('button');
+                saveBtn.className = 'save-button';
+                saveBtn.textContent = '💾 Save as File';
+                saveBtn.onclick = () => saveResponse(content, agent);
+                messageDiv.appendChild(saveBtn);
+            }
+
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = '❌ Error: ' + message;
+            messagesDiv.appendChild(errorDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        async function saveResponse(content, agent) {
+            const timestamp = new Date().toISOString().split('T')[0];
+            const filename = prompt('Enter filename (without extension):', `${agent}_${timestamp}`);
+
+            if (!filename) return;
+
+            try {
+                const response = await fetch('/api/files', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: content,
+                        filename: filename + '.md',
+                        category: 'plans',
+                        metadata: {
+                            agent: agent,
+                            created_at: new Date().toISOString()
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to save file');
+                }
+
+                alert('File saved successfully!');
+
+                // Switch to files tab
+                document.querySelector('.tab[data-tab="files"]').click();
+
+            } catch (error) {
+                alert('Error saving file: ' + error.message);
+                console.error('Save error:', error);
+            }
+        }
+
+        async function loadFiles(category = '') {
+            try {
+                const url = category ? `/api/files?category=${category}` : '/api/files';
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error('Failed to load files');
+                }
+
+                const data = await response.json();
+                displayFiles(data.files);
+
+            } catch (error) {
+                filesListDiv.innerHTML = '<div class="error">Error loading files: ' + error.message + '</div>';
+                console.error('Load files error:', error);
+            }
+        }
+
+        function displayFiles(files) {
+            if (files.length === 0) {
+                filesListDiv.innerHTML = '<div class="empty-state">No files found. Save a chat response to create your first file!</div>';
+                return;
+            }
+
+            filesListDiv.innerHTML = files.map(file => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-name">
+                            <span class="file-category-badge">${file.category}</span>
+                            ${file.filename}
+                        </div>
+                        <div class="file-meta">
+                            ${new Date(file.modified).toLocaleString()} • ${formatFileSize(file.size)}
+                        </div>
+                    </div>
+                    <button class="download-button" onclick="downloadFile('${file.category}', '${file.filename}')">
+                        ⬇ Download
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function downloadFile(category, filename) {
+            try {
+                const response = await fetch(`/api/files/${category}/${filename}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to download file');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } catch (error) {
+                alert('Error downloading file: ' + error.message);
+                console.error('Download error:', error);
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            const agent = agentSelect.value || null;
+
+            // Add user message to UI
+            addMessage('user', query);
+
+            // Add to history
+            conversationHistory.push({
+                role: 'user',
+                content: query
+            });
+
+            // Clear input
+            queryInput.value = '';
+
+            // Disable input while processing
+            sendButton.disabled = true;
+            queryInput.disabled = true;
+            loadingDiv.classList.add('active');
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        agent: agent,
+                        history: conversationHistory.slice(0, -1) // Don't include current query
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Request failed');
+                }
+
+                const data = await response.json();
+
+                // Add assistant response
+                addMessage('assistant', data.response, data.agent);
+
+                // Store for save functionality
+                currentResponseContent = data.response;
+                currentAgent = data.agent;
+
+                // Add to history
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: data.response
+                });
+
+            } catch (error) {
+                showError(error.message);
+                console.error('Chat error:', error);
+            } finally {
+                sendButton.disabled = false;
+                queryInput.disabled = false;
+                loadingDiv.classList.remove('active');
+                queryInput.focus();
+            }
+        });
+
+        // Focus input on load
+        queryInput.focus();
+    </script>
+</body>
+</html>

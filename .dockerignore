@@ -1,0 +1,46 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Environment files (will be provided via docker-compose)
+.env
+.env.*
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+.pytest_cache
+.coverage
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Documentation (not needed in container)
+*.md
+!README.md
+docs/*.md
+
+# Development files
+tests/
+.github/
+
+# MacOS
+.DS_Store
+
+# Temporary files
+*.tmp
+*.log
+tmp/
