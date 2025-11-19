@@ -238,7 +238,7 @@ def download_file(category, filename):
     logger.info(f"Download file request: category={category}, filename={filename}")
 
     # Validate category
-    if category not in VALID_CATEGORIES:
+    if category not in VALID_FILE_CATEGORIES:
         logger.warning(f"Invalid category requested: {category}")
         return jsonify({'error': 'Invalid category'}), 400
 
@@ -299,7 +299,7 @@ def save_file():
     logger.info(f"Save file request: filename={filename}, category={category}, size={len(content)} bytes")
 
     # Validate category
-    if category not in VALID_CATEGORIES:
+    if category not in VALID_FILE_CATEGORIES:
         logger.warning(f"Invalid category in save request: {category}")
         return jsonify({'error': 'Invalid category'}), 400
 
@@ -340,7 +340,7 @@ def delete_file(category, filename):
     logger.info(f"Delete file request: category={category}, filename={filename}")
 
     # Validate category
-    if category not in VALID_CATEGORIES:
+    if category not in VALID_FILE_CATEGORIES:
         logger.warning(f"Invalid category in delete request: {category}")
         return jsonify({'error': 'Invalid category'}), 400
 

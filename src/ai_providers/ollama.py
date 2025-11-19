@@ -3,6 +3,7 @@ Ollama local LLM provider implementation.
 """
 
 import os
+import json
 import requests
 from typing import List, Dict, Any, Optional
 
@@ -161,7 +162,6 @@ class OllamaProvider(AIProvider):
 
         for line in response.iter_lines():
             if line:
-                import json
                 chunk = json.loads(line)
                 if 'message' in chunk and 'content' in chunk['message']:
                     yield chunk['message']['content']
