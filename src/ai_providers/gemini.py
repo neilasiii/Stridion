@@ -13,10 +13,11 @@ class GeminiProvider(AIProvider):
     """Google Gemini API provider."""
 
     # Model mappings
+    # Note: Using Gemini 2.x models (1.5 models are deprecated)
     MODELS = {
-        "fast": "gemini-1.5-flash",
-        "default": "gemini-1.5-pro",
-        "powerful": "gemini-1.5-pro"
+        "fast": "gemini-2.5-flash",
+        "default": "gemini-2.5-flash",  # Using flash as default for better availability
+        "powerful": "gemini-2.5-pro"
     }
 
     def validate_config(self) -> None:
@@ -75,9 +76,22 @@ class GeminiProvider(AIProvider):
         messages: List[Message],
         agent_config: Optional[AgentConfig] = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
+        tools: Optional[List[Dict[str, Any]]] = None
     ) -> str:
-        """Send chat request to Gemini API."""
+        """
+        Send chat request to Gemini API.
+
+        Args:
+            messages: Conversation messages
+            agent_config: Agent configuration
+            temperature: Temperature for generation
+            max_tokens: Maximum tokens to generate
+            tools: Optional list of tool definitions for function calling
+
+        Returns:
+            Assistant's response text
+        """
         system_instruction, formatted_messages = self._format_messages(
             messages, agent_config
         )
@@ -93,10 +107,35 @@ class GeminiProvider(AIProvider):
         if max_tokens:
             generation_config['max_output_tokens'] = max_tokens
 
+        # Convert tools to Gemini format if provided
+        gemini_tools = None
+        if tools:
+            gemini_tools = [genai.protos.Tool(
+                function_declarations=[
+                    genai.protos.FunctionDeclaration(
+                        name=tool["name"],
+                        description=tool["description"],
+                        parameters=genai.protos.Schema(
+                            type=genai.protos.Type.OBJECT,
+                            properties={
+                                k: genai.protos.Schema(
+                                    type=self._get_gemini_type(v.get("type", "string")),
+                                    description=v.get("description", "")
+                                )
+                                for k, v in tool["parameters"].get("properties", {}).items()
+                            },
+                            required=tool["parameters"].get("required", [])
+                        )
+                    )
+                    for tool in tools
+                ]
+            )]
+
         model = genai.GenerativeModel(
             model_name=model_name,
             generation_config=generation_config,
-            system_instruction=system_instruction
+            system_instruction=system_instruction,
+            tools=gemini_tools
         )
 
         # Start chat with history
@@ -106,7 +145,21 @@ class GeminiProvider(AIProvider):
         last_message = formatted_messages[-1]['parts'][0] if formatted_messages else ""
         response = chat.send_message(last_message)
 
-        return response.text
+        # Check if response contains function calls (will be handled by caller)
+        # For now, just return the text. Tool calling loop will be in CoachService
+        return response
+
+    def _get_gemini_type(self, type_str: str) -> genai.protos.Type:
+        """Convert JSON schema type to Gemini type."""
+        type_map = {
+            "string": genai.protos.Type.STRING,
+            "integer": genai.protos.Type.INTEGER,
+            "number": genai.protos.Type.NUMBER,
+            "boolean": genai.protos.Type.BOOLEAN,
+            "object": genai.protos.Type.OBJECT,
+            "array": genai.protos.Type.ARRAY
+        }
+        return type_map.get(type_str, genai.protos.Type.STRING)
 
     def stream_chat(
         self,

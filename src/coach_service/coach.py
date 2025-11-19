@@ -3,11 +3,15 @@ Main coaching service that coordinates AI providers and agents.
 """
 
 import json
+import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from ..ai_providers import AIProvider, Message, get_provider
 from .agent_loader import AgentLoader
+from .tools import ToolExecutor
+
+logger = logging.getLogger(__name__)
 
 
 class CoachService:
@@ -36,8 +40,11 @@ class CoachService:
             # Default to data/ relative to project root
             project_root = Path(__file__).parent.parent.parent
             data_dir = project_root / 'data'
+        else:
+            project_root = Path(data_dir).parent
 
         self.data_dir = Path(data_dir)
+        self.tool_executor = ToolExecutor(project_root)
 
     def _load_athlete_context(self) -> str:
         """
@@ -90,9 +97,9 @@ class CoachService:
             summary_parts.append("### Recent Activities")
             for act in activities:
                 act_type = act.get('activity_type', 'Unknown')
-                date = act.get('start_time', '')[:10]
+                date = act.get('date', '')[:10]
                 distance = act.get('distance_miles', 0)
-                duration = act.get('duration_minutes', 0)
+                duration = act.get('duration_seconds', 0) / 60  # Convert seconds to minutes
                 avg_hr = act.get('avg_heart_rate', 'N/A')
                 summary_parts.append(
                     f"- {date}: {act_type}, {distance:.1f} mi, "
@@ -121,7 +128,9 @@ class CoachService:
         if vo2_readings:
             latest_vo2 = vo2_readings[0]
             summary_parts.append(f"\n### VO2 Max")
-            summary_parts.append(f"- {latest_vo2[1]} ml/kg/min ({latest_vo2[0]})")
+            vo2_value = latest_vo2.get('vo2_max', 'N/A')
+            vo2_date = latest_vo2.get('date', '')[:10]
+            summary_parts.append(f"- {vo2_value} ml/kg/min ({vo2_date})")
 
         return "\n".join(summary_parts) if summary_parts else "No health data available."
 
@@ -155,9 +164,9 @@ class CoachService:
         elif any(word in query_lower for word in ['strength', 'lift', 'squat', 'deadlift', 'gym']):
             return 'strength-coach'
         elif any(word in query_lower for word in ['mobility', 'stretch', 'flexibility', 'foam roll']):
-            return 'mobility-coach-runner'
+            return 'mobility-coach'
         elif any(word in query_lower for word in ['nutrition', 'diet', 'fuel', 'eat', 'meal']):
-            return 'endurance-nutrition-coach'
+            return 'nutrition-coach'
         else:
             # Default to running coach
             return 'running-coach'
@@ -222,13 +231,82 @@ class CoachService:
         # Add current query
         messages.append(Message(role='user', content=enhanced_query))
 
-        # Get response from AI provider
-        response = self.provider.chat(
-            messages=messages,
-            agent_config=agent_config
-        )
+        # Get tool schemas
+        tool_schemas = self.tool_executor.get_tool_schemas()
 
-        return response
+        # Tool calling loop - allow up to 20 tool calls
+        # (agent may need: get_current_date, sync_health_data, list_recent_activities,
+        # read multiple athlete files (goals, training_history, training_preferences,
+        # upcoming_races, current_training_status, communication_preferences),
+        # search workout library, then respond)
+        max_iterations = 20
+        for iteration in range(max_iterations):
+            logger.info(f"Tool calling iteration {iteration + 1}/{max_iterations}")
+
+            # Get response from AI provider with tools
+            response = self.provider.chat(
+                messages=messages,
+                agent_config=agent_config,
+                tools=tool_schemas if tool_schemas else None
+            )
+
+            # Check if this is a Gemini response object with function calls
+            if hasattr(response, 'candidates') and response.candidates:
+                candidate = response.candidates[0]
+
+                # Check for function calls
+                if hasattr(candidate.content, 'parts'):
+                    has_function_call = False
+                    text_response = ""
+
+                    for part in candidate.content.parts:
+                        if hasattr(part, 'function_call') and part.function_call:
+                            has_function_call = True
+                            # Execute the function call
+                            func_call = part.function_call
+                            tool_name = func_call.name
+                            tool_args = dict(func_call.args)
+
+                            logger.info(f"Executing tool: {tool_name} with args: {tool_args}")
+
+                            # Execute tool
+                            tool_result = self.tool_executor.execute_tool(tool_name, tool_args)
+
+                            logger.info(f"Tool {tool_name} result: success={tool_result.get('success', False)}")
+
+                            # Add function result to messages for next iteration
+                            messages.append(Message(
+                                role='assistant',
+                                content=f"[Called tool: {tool_name} with args: {tool_args}]"
+                            ))
+                            messages.append(Message(
+                                role='user',
+                                content=f"Tool result: {json.dumps(tool_result)}"
+                            ))
+                        elif hasattr(part, 'text') and part.text:
+                            text_response += part.text
+
+                    # If no function call, return the text response
+                    if not has_function_call:
+                        return text_response if text_response else "No response generated."
+
+                    # Continue loop for next iteration with tool result
+                    continue
+
+            # If response is a string (old behavior), return it
+            if isinstance(response, str):
+                return response
+
+            # If we got here with a response object but no function call, extract text
+            if hasattr(response, 'text'):
+                return response.text
+
+            # Fallback
+            return str(response)
+
+        # If we exhausted iterations, log and return helpful message
+        logger.warning(f"Tool calling limit ({max_iterations}) reached for query: {query[:100]}")
+        return "I apologize, but I'm having trouble completing this request. The system made too many tool calls. Please try asking your question in a simpler way, or contact support if this issue persists."
 
     def stream_chat(
         self,

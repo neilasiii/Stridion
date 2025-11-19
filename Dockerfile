@@ -22,20 +22,15 @@ COPY data/ ./data/
 COPY bin/ ./bin/
 COPY config/ ./config/
 
-# Create necessary directories
+# Create necessary directories with open permissions
+# (actual user will be set via docker-compose user: directive)
 RUN mkdir -p /app/data/health \
     /app/data/athlete \
     /app/data/library \
     /app/data/calendar \
     /app/data/plans \
-    /app/data/frameworks
-
-# Create non-root user for security
-RUN groupadd -r appuser && useradd -r -g appuser appuser && \
-    chown -R appuser:appuser /app
-
-# Switch to non-root user
-USER appuser
+    /app/data/frameworks && \
+    chmod -R 777 /app/data
 
 # Set Python path
 ENV PYTHONPATH=/app

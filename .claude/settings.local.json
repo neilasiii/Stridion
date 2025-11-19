@@ -17,7 +17,20 @@
       "Bash(pip3 list:*)",
       "Bash(pip3 install:*)",
       "Bash(sudo apt-get update:*)",
-      "Bash(sudo apt-get install:*)"
+      "Bash(sudo apt-get install:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker exec:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(docker-compose build:*)",
+      "Bash(docker-compose logs:*)",
+      "Bash(curl:*)",
+      "Bash(docker-compose restart:*)",
+      "Bash(timeout 120 curl:*)",
+      "Bash(timeout 60 curl:*)",
+      "Bash(for date in \"2025-11-23\" \"2025-11-24\" \"2025-11-29\" \"2025-12-06\")",
+      "Bash(do date -d \"$date\" +\"%A, %B %d, %Y\")",
+      "Bash(done)",
+      "Bash(time curl:*)"
     ],
     "deny": [],
     "ask": []

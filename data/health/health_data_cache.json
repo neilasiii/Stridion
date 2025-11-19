@@ -1,7 +1,265 @@
 {
-  "last_updated": "2025-11-18T18:33:01.892242+00:00",
-  "last_sync_date": "2025-11-18",
+  "last_updated": "2025-11-19T21:03:01.307728+00:00",
+  "last_sync_date": "2025-11-19",
   "activities": [
+    {
+      "activity_id": 21035097965,
+      "date": "2025-11-19T11:40:22",
+      "activity_name": "Altamonte Springs - 10 min warm up 8x40/40 (5k/ E pa",
+      "activity_type": "RUNNING",
+      "duration_seconds": 1783.6109619140625,
+      "distance_miles": 3.001541,
+      "calories": 353.0,
+      "avg_heart_rate": 145.0,
+      "max_heart_rate": 171.0,
+      "avg_speed": 6.057633,
+      "pace_per_mile": 9.903862,
+      "splits": [
+        {
+          "type": "INTERVAL_WARMUP",
+          "distance_miles": 0.94855,
+          "duration_seconds": 600.0,
+          "avg_heart_rate": 129.0,
+          "max_heart_rate": 146.0,
+          "avg_speed_mph": 5.690775,
+          "pace_per_mile": 10.542403,
+          "avg_cadence": 147.234375,
+          "avg_power": 295.0,
+          "calories": 108.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.087974,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 150.0,
+          "max_heart_rate": 155.0,
+          "avg_speed_mph": 7.916531,
+          "pace_per_mile": 7.578001,
+          "avg_cadence": 157.0625,
+          "avg_power": 355.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_REST",
+          "distance_miles": 0.068985,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 155.0,
+          "max_heart_rate": 159.0,
+          "avg_speed_mph": 6.207509,
+          "pace_per_mile": 9.663964,
+          "avg_cadence": 144.390625,
+          "avg_power": 292.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.08606,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 146.0,
+          "max_heart_rate": 149.0,
+          "avg_speed_mph": 7.744286,
+          "pace_per_mile": 7.746522,
+          "avg_cadence": 157.421875,
+          "avg_power": 363.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_REST",
+          "distance_miles": 0.069569,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 151.0,
+          "max_heart_rate": 152.0,
+          "avg_speed_mph": 6.261195,
+          "pace_per_mile": 9.582827,
+          "avg_cadence": 152.296875,
+          "avg_power": 339.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.084184,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 151.0,
+          "max_heart_rate": 156.0,
+          "avg_speed_mph": 7.576516,
+          "pace_per_mile": 7.919201,
+          "avg_cadence": 155.875,
+          "avg_power": 367.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_REST",
+          "distance_miles": 0.063243,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 158.0,
+          "max_heart_rate": 160.0,
+          "avg_speed_mph": 5.690775,
+          "pace_per_mile": 10.541298,
+          "avg_cadence": 149.875,
+          "avg_power": 324.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.084942,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 156.0,
+          "max_heart_rate": 162.0,
+          "avg_speed_mph": 7.645861,
+          "pace_per_mile": 7.848525,
+          "avg_cadence": 156.390625,
+          "avg_power": 344.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_REST",
+          "distance_miles": 0.070457,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 161.0,
+          "max_heart_rate": 163.0,
+          "avg_speed_mph": 6.341725,
+          "pace_per_mile": 9.461975,
+          "avg_cadence": 152.875,
+          "avg_power": 346.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.084196,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 159.0,
+          "max_heart_rate": 165.0,
+          "avg_speed_mph": 7.578753,
+          "pace_per_mile": 7.918032,
+          "avg_cadence": 156.671875,
+          "avg_power": 356.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_REST",
+          "distance_miles": 0.068239,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 164.0,
+          "max_heart_rate": 166.0,
+          "avg_speed_mph": 6.142637,
+          "pace_per_mile": 9.769562,
+          "avg_cadence": 152.390625,
+          "avg_power": 332.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.090745,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 165.0,
+          "max_heart_rate": 170.0,
+          "avg_speed_mph": 8.167068,
+          "pace_per_mile": 7.346572,
+          "avg_cadence": 159.0625,
+          "avg_power": 404.0,
+          "calories": 10.0
+        },
+        {
+          "type": "INTERVAL_REST",
+          "distance_miles": 0.06205,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 167.0,
+          "max_heart_rate": 171.0,
+          "avg_speed_mph": 5.583402,
+          "pace_per_mile": 10.743975,
+          "avg_cadence": 150.21875,
+          "avg_power": 313.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.090838,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 164.0,
+          "max_heart_rate": 168.0,
+          "avg_speed_mph": 8.176016,
+          "pace_per_mile": 7.339034,
+          "avg_cadence": 158.1875,
+          "avg_power": 359.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_REST",
+          "distance_miles": 0.065058,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 167.0,
+          "max_heart_rate": 169.0,
+          "avg_speed_mph": 5.856309,
+          "pace_per_mile": 10.24731,
+          "avg_cadence": 149.84375,
+          "avg_power": 321.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.087825,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 162.0,
+          "max_heart_rate": 164.0,
+          "avg_speed_mph": 7.905346,
+          "pace_per_mile": 7.590868,
+          "avg_cadence": 156.8125,
+          "avg_power": 353.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_REST",
+          "distance_miles": 0.020785,
+          "duration_seconds": 14.773,
+          "avg_heart_rate": 166.0,
+          "max_heart_rate": 168.0,
+          "avg_speed_mph": 5.064432,
+          "pace_per_mile": 11.845929,
+          "avg_cadence": 150.34375,
+          "avg_power": 335.0,
+          "calories": 3.0
+        },
+        {
+          "type": "INTERVAL_COOLDOWN",
+          "distance_miles": 0.867536,
+          "duration_seconds": 568.822,
+          "avg_heart_rate": 148.0,
+          "max_heart_rate": 168.0,
+          "avg_speed_mph": 5.489451,
+          "pace_per_mile": 10.927926,
+          "avg_cadence": 142.578125,
+          "avg_power": 263.0,
+          "calories": 106.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 566.0,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 784.794,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 362.318,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
     {
       "activity_id": 21024643360,
       "date": "2025-11-18T09:59:29",
@@ -18535,6 +18793,16 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-11-19",
+      "total_duration_minutes": 462.5,
+      "light_sleep_minutes": 334.0,
+      "deep_sleep_minutes": 62.0,
+      "rem_sleep_minutes": 67.0,
+      "awake_minutes": 132.0,
+      "sleep_score": 52,
+      "deep_sleep_percentage": 13.39
+    },
+    {
       "date": "2025-11-18",
       "total_duration_minutes": 319.0,
       "light_sleep_minutes": 207.0,
@@ -22177,6 +22445,10 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2025-11-19T00:00:00",
+      "vo2_max": 50.9
+    },
+    {
       "date": "2025-11-17T00:00:00",
       "vo2_max": 50.6
     },
@@ -22186,6 +22458,12 @@
     }
   ],
   "weight_readings": [
+    {
+      "timestamp": "2025-11-19T13:47:49.142000+00:00",
+      "weight_lbs": 168.19962,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
     {
       "timestamp": "2025-11-13T13:19:34.833000+00:00",
       "weight_lbs": 165.9994,
@@ -22680,6 +22958,10 @@
     }
   ],
   "resting_hr_readings": [
+    [
+      "2025-11-19T12:00:00",
+      45
+    ],
     [
       "2025-11-18T12:00:00",
       44
@@ -24146,6 +24428,16 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-11-19",
+      "weekly_avg": 71,
+      "last_night_avg": 68,
+      "last_night_5min_high": 98,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
     {
       "date": "2025-11-18",
       "weekly_avg": 72,
@@ -27809,6 +28101,16 @@
   ],
   "training_readiness": [
     {
+      "date": "2025-11-19",
+      "score": 28,
+      "level": "LOW",
+      "recovery_time": 1164,
+      "sleep_score": 52,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 378
+    },
+    {
       "date": "2025-11-18",
       "score": 40,
       "level": "LOW",
@@ -31471,8 +31773,13 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-11-19",
+      "avg_stress": 16,
+      "max_stress": 87
+    },
+    {
       "date": "2025-11-18",
-      "avg_stress": 15,
+      "avg_stress": 22,
       "max_stress": 96
     },
     {
@@ -33302,6 +33609,12 @@
     }
   ],
   "spo2_readings": [
+    {
+      "date": "2025-11-19",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
     {
       "date": "2025-11-18",
       "avg_spo2": 95.0,
@@ -35501,9 +35814,14 @@
   ],
   "body_battery": [
     {
+      "date": "2025-11-19",
+      "charged": 59,
+      "drained": 34
+    },
+    {
       "date": "2025-11-18",
-      "charged": 50,
-      "drained": 25
+      "charged": 60,
+      "drained": 66
     },
     {
       "date": "2025-11-17",
@@ -37332,22 +37650,22 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-11-18",
-    "time_5k": 1458,
-    "time_10k": 3060,
-    "time_half_marathon": 6820,
-    "time_marathon": 15062
+    "date": "2025-11-19",
+    "time_5k": 1454,
+    "time_10k": 3050,
+    "time_half_marathon": 6794,
+    "time_marathon": 15003
   },
   "training_status": {
-    "date": "2025-11-18",
+    "date": "2025-11-19",
     "vo2_max": {
-      "date": "2025-11-17",
+      "date": "2025-11-19",
       "value": 51.0,
-      "precise_value": 50.6
+      "precise_value": 50.9
     },
     "training_load": {
-      "date": "2025-11-18",
-      "aerobic_low": 1261.8167,
+      "date": "2025-11-19",
+      "aerobic_low": 1230.1759,
       "aerobic_high": 534.06323,
       "anaerobic": 0.0,
       "feedback": "AEROBIC_HIGH_SHORTAGE"
@@ -37364,7 +37682,7 @@
       "estimated_distance_meters": null,
       "workout_provider": "FinalSurge",
       "created_date": "2025-11-18T06:46:19.0",
-      "updated_date": "2025-11-18T06:46:19.0"
+      "updated_date": "2025-11-19T06:46:33.0"
     },
     {
       "workout_id": 1386547265,
@@ -37375,7 +37693,7 @@
       "estimated_distance_meters": null,
       "workout_provider": "FinalSurge",
       "created_date": "2025-11-17T06:46:11.0",
-      "updated_date": "2025-11-18T06:46:19.0"
+      "updated_date": "2025-11-19T06:46:33.0"
     },
     {
       "workout_id": 1386547258,
@@ -38154,7 +38472,7 @@
     "threshold_speed_mps": 0.34166571,
     "threshold_speed_mph": 0.7642856933274,
     "functional_threshold_power": 381,
-    "power_to_weight_ratio": 5.060029749256268,
-    "weight_kg": 75.296
+    "power_to_weight_ratio": 4.99383962041576,
+    "weight_kg": 76.294
   }
 }
