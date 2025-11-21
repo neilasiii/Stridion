@@ -159,13 +159,31 @@ bash bin/db_init.sh
 python3 src/database/init_db.py create
 ```
 
-**Migrate Data from JSON**
+**Migrate Data from JSON and Markdown**
 ```bash
-# Migrate workout library and health data from JSON files to PostgreSQL
+# Migrate all data (workouts, health data, athlete data) to PostgreSQL
 bash bin/db_migrate.sh
 
+# Or migrate specific types only
+bash bin/db_migrate.sh --workouts-only  # Just workouts and health data
+bash bin/db_migrate.sh --athlete-only   # Just athlete data
+
 # Or using Python directly
-python3 src/database/migrate_json_to_db.py
+python3 src/database/migrate_json_to_db.py      # Workouts and health data
+python3 src/database/migrate_athlete_data.py    # Athlete profile and preferences
+```
+
+**Manage Athlete Data**
+```bash
+# View athlete information
+bash bin/athlete_data.sh show-profile      # Profile info
+bash bin/athlete_data.sh show-status       # Current training status
+bash bin/athlete_data.sh show-prefs        # Communication preferences
+bash bin/athlete_data.sh list-races        # List all races
+bash bin/athlete_data.sh list-docs         # List athlete documents
+
+# Migrate athlete data
+bash bin/athlete_data.sh migrate
 ```
 
 **Database Access**
@@ -312,11 +330,19 @@ Coaching Agents (query database/cache for decisions)
 **Database Layer:**
 
 **[src/database/models.py](src/database/models.py)**: SQLAlchemy database models
-- `Workout` - Workout library with searchable metadata
-- `Activity` - Running/walking activities from Garmin
-- `SleepSession` - Sleep quality and duration data
-- `VO2MaxReading`, `WeightReading`, `RestingHRReading` - Fitness metrics
-- `HRVReading`, `TrainingReadiness` - Recovery indicators
+- **Health Data Models:**
+  - `Activity` - Running/walking activities from Garmin
+  - `SleepSession` - Sleep quality and duration data
+  - `VO2MaxReading`, `WeightReading`, `RestingHRReading` - Fitness metrics
+  - `HRVReading`, `TrainingReadiness` - Recovery indicators
+- **Workout Models:**
+  - `Workout` - Workout library with searchable metadata
+- **Athlete Data Models:**
+  - `AthleteProfile` - Core athlete information (name, email, active status)
+  - `TrainingStatus` - Current VDOT, paces, phase, volume (versioned)
+  - `CommunicationPreference` - Detail level, format preferences
+  - `Race` - Upcoming and historical race information
+  - `AthleteDocument` - Text-based documents (goals, preferences, history)
 
 **[src/database/connection.py](src/database/connection.py)**: Database connection management
 - PostgreSQL connection via SQLAlchemy
@@ -334,19 +360,27 @@ Coaching Agents (query database/cache for decisions)
 - Create/drop/reset database tables
 - Schema management
 
-**[src/database/migrate_json_to_db.py](src/database/migrate_json_to_db.py)**: Data migration utility
+**[src/database/migrate_json_to_db.py](src/database/migrate_json_to_db.py)**: Health/workout data migration
 - Migrate workout library from JSON to PostgreSQL
 - Migrate health data from JSON to PostgreSQL
 - De-duplication and data validation
+
+**[src/database/migrate_athlete_data.py](src/database/migrate_athlete_data.py)**: Athlete data migration
+- Migrate athlete profile from markdown files
+- Parse and store training status, paces, VDOT
+- Import communication preferences
+- Load races with goals and strategy notes
+- Version-tracked athlete documents (goals, preferences, history)
 
 **[src/celery_app.py](src/celery_app.py)** & **[src/tasks.py](src/tasks.py)**: Background job processing
 - Celery configuration with Redis backend
 - Background tasks: Garmin sync, metrics calculation, cache cleanup
 - Asynchronous job execution
 
-**[bin/db_init.sh](bin/db_init.sh)** & **[bin/db_migrate.sh](bin/db_migrate.sh)**: Database management scripts
+**[bin/db_init.sh](bin/db_init.sh)** & **[bin/db_migrate.sh](bin/db_migrate.sh)** & **[bin/athlete_data.sh](bin/athlete_data.sh)**: Database management scripts
 - Initialize database tables
-- Migrate data from JSON to PostgreSQL
+- Migrate data from JSON/markdown to PostgreSQL
+- View and manage athlete data
 - Convenience wrappers for Python scripts
 
 ### Athlete Context Files
@@ -360,6 +394,8 @@ All coaching agents MUST read these files in [data/athlete/](data/athlete/) befo
 - **[upcoming_races.md](data/athlete/upcoming_races.md)** - Race schedule, time goals, taper timing
 - **[current_training_status.md](data/athlete/current_training_status.md)** - Current VDOT, training paces, phase status
 - **[health_data_cache.json](data/health/health_data_cache.json)** - Objective metrics from Garmin Connect
+
+**Database Availability**: This athlete context data is also stored in PostgreSQL tables (`athlete_profiles`, `training_status`, `communication_preferences`, `races`, `athlete_documents`) and can be queried programmatically. See [docs/DATABASE_GUIDE.md](docs/DATABASE_GUIDE.md) for details.
 
 ### Documentation
 

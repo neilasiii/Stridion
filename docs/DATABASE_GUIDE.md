@@ -39,11 +39,38 @@ python3 src/database/init_db.py create
 ### 3. Migrate Existing Data
 
 ```bash
-# Migrate data from JSON files to PostgreSQL
+# Migrate all data (workouts, health data, athlete data)
 bash bin/db_migrate.sh
 
+# Or migrate specific types
+bash bin/db_migrate.sh --workouts-only  # Just workouts and health data
+bash bin/db_migrate.sh --athlete-only   # Just athlete profile and preferences
+
 # Or using Python directly
-python3 src/database/migrate_json_to_db.py
+python3 src/database/migrate_json_to_db.py      # Workouts and health data
+python3 src/database/migrate_athlete_data.py    # Athlete data
+```
+
+**What gets migrated:**
+- **Workout library** (data/library/workout_library.json)
+- **Health data** (data/health/health_data_cache.json)
+- **Athlete profile and preferences** (data/athlete/*.md files)
+- **Training status** (current VDOT, paces, phase)
+- **Communication preferences** (detail level, format options)
+- **Races** (upcoming and historical)
+- **Athlete documents** (goals, training preferences, history, health profile)
+
+### 4. Verify Migration
+
+```bash
+# Check athlete data
+bash bin/athlete_data.sh show-profile
+bash bin/athlete_data.sh show-status
+bash bin/athlete_data.sh list-races
+
+# Check health data
+docker exec -it running-coach-postgres psql -U coach -d running_coach \
+  -c "SELECT COUNT(*) FROM activities;"
 ```
 
 ## Database Schema
@@ -99,6 +126,47 @@ Fields:
 **Table: `training_readiness`**
 - Daily readiness scores (0-100)
 - Recovery time and contributing factors
+
+### Athlete and User Data
+
+**Table: `athlete_profiles`**
+- Core athlete profile information
+- Fields: id, name, email, is_active
+
+**Table: `training_status`**
+- Current training status with VDOT and paces
+- Versioned (valid_from/valid_until) for history tracking
+- Fields:
+  - `vdot_prescribed`, `vdot_current`: VDOT values
+  - `easy_pace`, `marathon_pace`, `threshold_pace`, `interval_pace`: Training paces (JSON)
+  - `current_phase`: base, quality, race_specific, taper, recovery
+  - `weekly_volume_hours`, `weekly_run_count`: Training volume
+  - `notes`: Free-form context notes
+
+**Table: `communication_preferences`**
+- Athlete communication preferences
+- Fields:
+  - `detail_level`: BRIEF, STANDARD, DETAILED
+  - `include_paces`, `show_weekly_mileage`, `provide_calendar_views`: Format preferences
+  - `include_heart_rate_targets`, `suggest_alternatives`, `offer_modifications`: Proactive features
+
+**Table: `races`**
+- Upcoming and historical race information
+- Fields:
+  - `name`, `date`, `location`, `distance`, `distance_miles`
+  - `priority`: A-race, B-race, C-race, training-race, shakeout
+  - `goal_time_a`, `goal_time_b`, `goal_time_c`, `actual_time`
+  - `strategy_notes`, `fueling_plan`, `course_notes`, `race_report`
+  - `status`: upcoming, completed, DNS, DNF
+
+**Table: `athlete_documents`**
+- Text-based athlete documents (goals, preferences, history)
+- Versioned with full history tracking
+- Fields:
+  - `document_type`: goals, training_preferences, training_history, health_profile
+  - `content`: Full markdown content
+  - `version`, `is_current`: Version tracking
+  - `superseded_by`: Link to newer version
 
 ## Using the Database
 

@@ -234,3 +234,244 @@ class TrainingReadiness(Base):
             'recovery_time_hours': self.recovery_time_hours,
             'factors': self.factors,
         }
+
+
+# ============================================================================
+# Athlete and User Data Models
+# ============================================================================
+
+
+class AthleteProfile(Base):
+    """Core athlete profile information."""
+
+    __tablename__ = 'athlete_profiles'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(255), nullable=False)
+    email = Column(String(255), unique=True, index=True)
+    is_active = Column(Boolean, default=True)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'is_active': self.is_active,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+
+class TrainingStatus(Base):
+    """Current training status with VDOT and paces."""
+
+    __tablename__ = 'training_status'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, index=True, nullable=False)  # Foreign key to athlete
+
+    # VDOT and fitness
+    vdot_prescribed = Column(Float)  # Prescribed VDOT
+    vdot_current = Column(Float)  # Current/estimated VDOT
+
+    # Training paces (stored as JSON with min/max)
+    easy_pace = Column(JSON)  # {"min": "10:00", "max": "11:10"}
+    marathon_pace = Column(JSON)
+    threshold_pace = Column(JSON)
+    interval_pace = Column(JSON)
+
+    # Training phase and volume
+    current_phase = Column(String(100))  # base, quality, race_specific, taper, recovery
+    weekly_volume_hours = Column(Float)
+    weekly_run_count = Column(Integer)
+
+    # Context
+    notes = Column(Text)  # Free-form notes about current status
+    valid_from = Column(DateTime, default=datetime.utcnow, index=True)
+    valid_until = Column(DateTime)  # Null means current
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_training_status_athlete_date', 'athlete_id', 'valid_from'),
+    )
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'vdot_prescribed': self.vdot_prescribed,
+            'vdot_current': self.vdot_current,
+            'easy_pace': self.easy_pace,
+            'marathon_pace': self.marathon_pace,
+            'threshold_pace': self.threshold_pace,
+            'interval_pace': self.interval_pace,
+            'current_phase': self.current_phase,
+            'weekly_volume_hours': self.weekly_volume_hours,
+            'weekly_run_count': self.weekly_run_count,
+            'notes': self.notes,
+            'valid_from': self.valid_from.isoformat() if self.valid_from else None,
+            'valid_until': self.valid_until.isoformat() if self.valid_until else None,
+        }
+
+
+class CommunicationPreference(Base):
+    """Athlete communication preferences."""
+
+    __tablename__ = 'communication_preferences'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, unique=True, nullable=False, index=True)
+
+    # Detail level
+    detail_level = Column(String(50), default='BRIEF')  # BRIEF, STANDARD, DETAILED
+
+    # Format preferences
+    include_paces = Column(Boolean, default=True)
+    show_weekly_mileage = Column(Boolean, default=True)
+    provide_calendar_views = Column(Boolean, default=True)
+    include_heart_rate_targets = Column(Boolean, default=False)
+
+    # Proactive features
+    suggest_alternatives = Column(Boolean, default=True)
+    offer_modifications = Column(Boolean, default=True)
+    comment_on_health_trends = Column(Boolean, default=True)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'detail_level': self.detail_level,
+            'include_paces': self.include_paces,
+            'show_weekly_mileage': self.show_weekly_mileage,
+            'provide_calendar_views': self.provide_calendar_views,
+            'include_heart_rate_targets': self.include_heart_rate_targets,
+            'suggest_alternatives': self.suggest_alternatives,
+            'offer_modifications': self.offer_modifications,
+            'comment_on_health_trends': self.comment_on_health_trends,
+        }
+
+
+class Race(Base):
+    """Upcoming and historical race information."""
+
+    __tablename__ = 'races'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, nullable=False, index=True)
+
+    # Race details
+    name = Column(String(255), nullable=False)
+    date = Column(DateTime, nullable=False, index=True)
+    location = Column(String(255))
+    distance = Column(String(50))  # "Marathon", "Half Marathon", "5K", etc.
+    distance_miles = Column(Float)  # Numeric distance for calculations
+
+    # Race priority
+    priority = Column(String(50))  # A-race, B-race, C-race, training-race, shakeout
+
+    # Goals and times
+    goal_time_a = Column(String(50))  # "4:00:00" format
+    goal_time_b = Column(String(50))
+    goal_time_c = Column(String(50))
+    actual_time = Column(String(50))  # Filled in after race
+
+    # Strategy and notes
+    strategy_notes = Column(Text)
+    fueling_plan = Column(Text)
+    course_notes = Column(Text)
+    race_report = Column(Text)  # Post-race summary
+
+    # Status
+    status = Column(String(50), default='upcoming')  # upcoming, completed, DNS, DNF
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_race_athlete_date', 'athlete_id', 'date'),
+        Index('idx_race_status', 'status'),
+    )
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'name': self.name,
+            'date': self.date.isoformat() if self.date else None,
+            'location': self.location,
+            'distance': self.distance,
+            'distance_miles': self.distance_miles,
+            'priority': self.priority,
+            'goal_time_a': self.goal_time_a,
+            'goal_time_b': self.goal_time_b,
+            'goal_time_c': self.goal_time_c,
+            'actual_time': self.actual_time,
+            'strategy_notes': self.strategy_notes,
+            'fueling_plan': self.fueling_plan,
+            'course_notes': self.course_notes,
+            'race_report': self.race_report,
+            'status': self.status,
+        }
+
+
+class AthleteDocument(Base):
+    """Text-based athlete documents (goals, preferences, history)."""
+
+    __tablename__ = 'athlete_documents'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, nullable=False, index=True)
+
+    # Document type
+    document_type = Column(String(100), nullable=False, index=True)
+    # goals, training_preferences, training_history, health_profile
+
+    # Content
+    title = Column(String(255))
+    content = Column(Text, nullable=False)  # Full markdown content
+    content_format = Column(String(50), default='markdown')  # markdown, html, plain
+
+    # Versioning
+    version = Column(Integer, default=1)
+    is_current = Column(Boolean, default=True, index=True)
+    superseded_by = Column(Integer)  # ID of newer version
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_athlete_doc_type', 'athlete_id', 'document_type', 'is_current'),
+    )
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'document_type': self.document_type,
+            'title': self.title,
+            'content': self.content,
+            'content_format': self.content_format,
+            'version': self.version,
+            'is_current': self.is_current,
+            'superseded_by': self.superseded_by,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
