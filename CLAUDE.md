@@ -146,6 +146,65 @@ head -5 data/athlete/communication_preferences.md
 
 See [docs/COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md) for examples and usage guide.
 
+### Database Management
+
+The system uses PostgreSQL for persistent storage and Redis for caching and background jobs.
+
+**Initialize Database**
+```bash
+# Create all database tables
+bash bin/db_init.sh
+
+# Or using Python directly
+python3 src/database/init_db.py create
+```
+
+**Migrate Data from JSON**
+```bash
+# Migrate workout library and health data from JSON files to PostgreSQL
+bash bin/db_migrate.sh
+
+# Or using Python directly
+python3 src/database/migrate_json_to_db.py
+```
+
+**Database Access**
+```bash
+# Connect to PostgreSQL
+docker exec -it running-coach-postgres psql -U coach -d running_coach
+
+# Common queries
+\dt                           # List tables
+\d workouts                   # Describe workouts table
+SELECT * FROM activities LIMIT 5;
+SELECT COUNT(*) FROM workouts;
+\q                            # Exit
+
+# Connect to Redis
+docker exec -it running-coach-redis redis-cli
+KEYS *                        # List all keys
+GET health:activities:recent:10
+exit
+```
+
+**Database Management**
+```bash
+# Reset database (WARNING: deletes all data!)
+python3 src/database/init_db.py reset
+
+# Backup PostgreSQL
+docker exec running-coach-postgres pg_dump -U coach running_coach > backup.sql
+
+# Restore PostgreSQL
+docker exec -i running-coach-postgres psql -U coach running_coach < backup.sql
+
+# View logs
+docker-compose logs postgres
+docker-compose logs redis
+```
+
+See [docs/DATABASE_GUIDE.md](docs/DATABASE_GUIDE.md) for complete database documentation.
+
 ### Testing
 
 **Verify Health Data System**
@@ -172,23 +231,31 @@ All agents share access to athlete context files in [data/](data/) and the healt
 
 ### Health Data Pipeline
 
-**Garmin Connect Direct Sync**
+**Database-First Architecture**
 ```
 Garmin Connect API (garminconnect library)
            ↓
 src/garmin_sync.py (authenticate & fetch)
            ↓
-data/health/health_data_cache.json (persistent cache)
+PostgreSQL Database (persistent storage)
            ↓
-Coaching Agents (read JSON for decisions)
+Redis Cache (fast lookups, 24hr TTL)
+           ↓
+Coaching Agents (query database/cache for decisions)
 ```
+
+**Legacy JSON Support**:
+- JSON files in data/health/ maintained for backward compatibility
+- Can be migrated to database using `bash bin/db_migrate.sh`
+- Database is now the primary source of truth
 
 **Key Design Principles**:
 - Direct API access - no intermediate CSV files or manual exports
 - OAuth authentication via garminconnect library (tokens cached in ~/.garminconnect)
 - Incremental updates - tracks last sync date to avoid refetching all historical data
-- Atomic cache updates - write to temp file, then rename
-- De-duplication by timestamp - safe to re-sync date ranges
+- Database transactions - atomic updates with rollback on errors
+- Redis caching - fast access to frequently queried data
+- De-duplication by timestamp/ID - safe to re-sync date ranges
 
 ### Core Components
 
@@ -237,10 +304,50 @@ Coaching Agents (read JSON for decisions)
 - Primary command for agents to search library
 - Supports all search and filter operations
 
-**[data/library/workout_library.json](data/library/workout_library.json)**: Main workout database
+**[data/library/workout_library.json](data/library/workout_library.json)**: Legacy workout storage
 - JSON-based storage with metadata
-- Searchable by multiple criteria
-- Extensible for custom workouts
+- Can be migrated to PostgreSQL using `bash bin/db_migrate.sh`
+- Database is now the primary source for workouts
+
+**Database Layer:**
+
+**[src/database/models.py](src/database/models.py)**: SQLAlchemy database models
+- `Workout` - Workout library with searchable metadata
+- `Activity` - Running/walking activities from Garmin
+- `SleepSession` - Sleep quality and duration data
+- `VO2MaxReading`, `WeightReading`, `RestingHRReading` - Fitness metrics
+- `HRVReading`, `TrainingReadiness` - Recovery indicators
+
+**[src/database/connection.py](src/database/connection.py)**: Database connection management
+- PostgreSQL connection via SQLAlchemy
+- Session management with context managers
+- Thread-safe session handling
+- Connection pooling and transaction support
+
+**[src/database/redis_cache.py](src/database/redis_cache.py)**: Redis cache manager
+- Fast caching for frequently accessed health data
+- 24-hour TTL for health data, 7-day for workouts
+- Cache invalidation patterns
+- Background job queue support
+
+**[src/database/init_db.py](src/database/init_db.py)**: Database initialization
+- Create/drop/reset database tables
+- Schema management
+
+**[src/database/migrate_json_to_db.py](src/database/migrate_json_to_db.py)**: Data migration utility
+- Migrate workout library from JSON to PostgreSQL
+- Migrate health data from JSON to PostgreSQL
+- De-duplication and data validation
+
+**[src/celery_app.py](src/celery_app.py)** & **[src/tasks.py](src/tasks.py)**: Background job processing
+- Celery configuration with Redis backend
+- Background tasks: Garmin sync, metrics calculation, cache cleanup
+- Asynchronous job execution
+
+**[bin/db_init.sh](bin/db_init.sh)** & **[bin/db_migrate.sh](bin/db_migrate.sh)**: Database management scripts
+- Initialize database tables
+- Migrate data from JSON to PostgreSQL
+- Convenience wrappers for Python scripts
 
 ### Athlete Context Files
 
@@ -256,6 +363,7 @@ All coaching agents MUST read these files in [data/athlete/](data/athlete/) befo
 
 ### Documentation
 
+- **[docs/DATABASE_GUIDE.md](docs/DATABASE_GUIDE.md)** - Complete PostgreSQL and Redis integration guide
 - **[docs/HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Complete technical documentation for health data system
 - **[docs/AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on using health data
 - **[docs/AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md)** - Guide for agents on using the workout library

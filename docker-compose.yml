@@ -30,6 +30,10 @@ services:
       - GARMIN_EMAIL=${GARMIN_EMAIL}
       - GARMIN_PASSWORD=${GARMIN_PASSWORD}
 
+      # Database Configuration
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-coach}:${POSTGRES_PASSWORD:-coach_password}@postgres:5432/${POSTGRES_DB:-running_coach}
+      - REDIS_URL=redis://redis:6379/0
+
       # Flask Configuration
       - FLASK_ENV=${FLASK_ENV:-production}
       - PORT=5000
@@ -47,12 +51,58 @@ services:
     networks:
       - running-coach-network
 
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
     healthcheck:
       test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5000/api/health')"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: running-coach-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-coach}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-coach_password}
+      - POSTGRES_DB=${POSTGRES_DB:-running_coach}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - running-coach-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-coach}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache and Queue
+  redis:
+    image: redis:7-alpine
+    container_name: running-coach-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - running-coach-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Optional: Include Ollama for local LLM support
   ollama:
@@ -73,5 +123,9 @@ networks:
     driver: bridge
 
 volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
   ollama_data:
     driver: local
