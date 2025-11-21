@@ -23,6 +23,7 @@ import json
 import os
 import sys
 import time
+import logging
 from datetime import datetime, timedelta, date, timezone
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Callable
@@ -76,6 +77,9 @@ except ImportError:
 # Constants
 CACHE_FILE = Path(__file__).parent.parent / "data" / "health" / "health_data_cache.json"
 ICS_CALENDAR_DIR = Path(__file__).parent.parent / "data" / "calendar"
+
+# Initialize logger
+logger = logging.getLogger(__name__)
 CALENDAR_SOURCES_FILE = Path(__file__).parent.parent / "config" / "calendar_sources.json"
 DEFAULT_DAYS = 30
 
@@ -1350,14 +1354,26 @@ def save_to_database(cache: Dict[str, Any], quiet: bool = False) -> bool:
         True if successful, False otherwise
     """
     if not DATABASE_AVAILABLE:
+        logger.warning("Database not available, skipping database write")
         if not quiet:
             print("  ⚠ Database not available, skipping database write")
         return False
 
+    logger.info("Starting database write operation")
+    activity_count = 0
+    sleep_count = 0
+    vo2_count = 0
+    weight_count = 0
+    rhr_count = 0
+    hrv_count = 0
+    readiness_count = 0
+
     try:
         with get_session() as session:
             # Save activities
-            for activity_data in cache.get('activities', []):
+            activities = cache.get('activities', [])
+            logger.debug(f"Processing {len(activities)} activities")
+            for activity_data in activities:
                 try:
                     # Parse datetime from ISO format
                     start_time = datetime.fromisoformat(activity_data['date'].replace('Z', '+00:00'))
@@ -1386,12 +1402,16 @@ def save_to_database(cache: Dict[str, Any], quiet: bool = False) -> bool:
                     )
                     # Use merge to update if exists, insert if new
                     session.merge(activity)
+                    activity_count += 1
                 except Exception as e:
+                    logger.error(f"Failed to save activity {activity_data.get('activity_id')}: {e}", exc_info=True)
                     if not quiet:
                         print(f"  ⚠ Warning: Failed to save activity {activity_data.get('activity_id')}: {e}", file=sys.stderr)
 
             # Save sleep sessions
-            for sleep_data in cache.get('sleep_sessions', []):
+            sleep_sessions = cache.get('sleep_sessions', [])
+            logger.debug(f"Processing {len(sleep_sessions)} sleep sessions")
+            for sleep_data in sleep_sessions:
                 try:
                     sleep_date = datetime.fromisoformat(sleep_data['date']).date() if isinstance(sleep_data['date'], str) else sleep_data['date']
 
@@ -1405,12 +1425,16 @@ def save_to_database(cache: Dict[str, Any], quiet: bool = False) -> bool:
                         sleep_score=sleep_data.get('sleep_score'),
                     )
                     session.merge(sleep_session)
+                    sleep_count += 1
                 except Exception as e:
+                    logger.error(f"Failed to save sleep session for {sleep_data.get('date')}: {e}", exc_info=True)
                     if not quiet:
                         print(f"  ⚠ Warning: Failed to save sleep data for {sleep_data.get('date')}: {e}", file=sys.stderr)
 
             # Save VO2 max readings
-            for vo2_data in cache.get('vo2_max_readings', []):
+            vo2_readings = cache.get('vo2_max_readings', [])
+            logger.debug(f"Processing {len(vo2_readings)} VO2 max readings")
+            for vo2_data in vo2_readings:
                 try:
                     vo2_date = datetime.fromisoformat(vo2_data['date']).date() if isinstance(vo2_data['date'], str) else vo2_data['date']
 
@@ -1419,12 +1443,16 @@ def save_to_database(cache: Dict[str, Any], quiet: bool = False) -> bool:
                         vo2_max=vo2_data.get('vo2_max'),
                     )
                     session.merge(vo2)
+                    vo2_count += 1
                 except Exception as e:
+                    logger.error(f"Failed to save VO2 max for {vo2_data.get('date')}: {e}", exc_info=True)
                     if not quiet:
                         print(f"  ⚠ Warning: Failed to save VO2 max for {vo2_data.get('date')}: {e}", file=sys.stderr)
 
             # Save weight readings
-            for weight_data in cache.get('weight_readings', []):
+            weight_readings = cache.get('weight_readings', [])
+            logger.debug(f"Processing {len(weight_readings)} weight readings")
+            for weight_data in weight_readings:
                 try:
                     # Weight readings use timestamp, not date
                     timestamp = datetime.fromisoformat(weight_data['timestamp'].replace('Z', '+00:00'))
@@ -1441,12 +1469,16 @@ def save_to_database(cache: Dict[str, Any], quiet: bool = False) -> bool:
                         muscle_mass_kg=weight_data.get('muscle_mass'),
                     )
                     session.merge(weight)
+                    weight_count += 1
                 except Exception as e:
+                    logger.error(f"Failed to save weight reading: {e}", exc_info=True)
                     if not quiet:
                         print(f"  ⚠ Warning: Failed to save weight reading: {e}", file=sys.stderr)
 
             # Save resting HR readings
-            for rhr_data in cache.get('resting_hr_readings', []):
+            rhr_readings = cache.get('resting_hr_readings', [])
+            logger.debug(f"Processing {len(rhr_readings)} resting HR readings")
+            for rhr_data in rhr_readings:
                 try:
                     # RHR readings are stored as [date, value] tuples
                     if isinstance(rhr_data, list) and len(rhr_data) >= 2:
@@ -1463,12 +1495,16 @@ def save_to_database(cache: Dict[str, Any], quiet: bool = False) -> bool:
                         resting_hr=rhr_value,
                     )
                     session.merge(rhr)
+                    rhr_count += 1
                 except Exception as e:
+                    logger.error(f"Failed to save resting HR: {e}", exc_info=True)
                     if not quiet:
                         print(f"  ⚠ Warning: Failed to save resting HR: {e}", file=sys.stderr)
 
             # Save HRV readings
-            for hrv_data in cache.get('hrv_readings', []):
+            hrv_readings = cache.get('hrv_readings', [])
+            logger.debug(f"Processing {len(hrv_readings)} HRV readings")
+            for hrv_data in hrv_readings:
                 try:
                     hrv_date = datetime.fromisoformat(hrv_data['date']).date() if isinstance(hrv_data['date'], str) else hrv_data['date']
 
@@ -1481,12 +1517,16 @@ def save_to_database(cache: Dict[str, Any], quiet: bool = False) -> bool:
                         baseline_balanced_high=hrv_data.get('baseline_balanced_high'),
                     )
                     session.merge(hrv)
+                    hrv_count += 1
                 except Exception as e:
+                    logger.error(f"Failed to save HRV reading for {hrv_data.get('date')}: {e}", exc_info=True)
                     if not quiet:
                         print(f"  ⚠ Warning: Failed to save HRV reading: {e}", file=sys.stderr)
 
             # Save training readiness
-            for readiness_data in cache.get('training_readiness', []):
+            readiness_readings = cache.get('training_readiness', [])
+            logger.debug(f"Processing {len(readiness_readings)} training readiness readings")
+            for readiness_data in readiness_readings:
                 try:
                     readiness_date = datetime.fromisoformat(readiness_data['date']).date() if isinstance(readiness_data['date'], str) else readiness_data['date']
 
@@ -1497,29 +1537,76 @@ def save_to_database(cache: Dict[str, Any], quiet: bool = False) -> bool:
                         factors=readiness_data.get('factors'),  # JSON field
                     )
                     session.merge(readiness)
+                    readiness_count += 1
                 except Exception as e:
+                    logger.error(f"Failed to save training readiness for {readiness_data.get('date')}: {e}", exc_info=True)
                     if not quiet:
                         print(f"  ⚠ Warning: Failed to save training readiness: {e}", file=sys.stderr)
 
             # Commit all changes
             session.commit()
 
+            # Log summary of database write
+            logger.info(
+                f"Database write complete: "
+                f"{activity_count} activities, {sleep_count} sleep sessions, "
+                f"{vo2_count} VO2 readings, {weight_count} weight readings, "
+                f"{rhr_count} RHR readings, {hrv_count} HRV readings, "
+                f"{readiness_count} readiness readings"
+            )
+
             if not quiet:
                 print("  ✓ Data saved to PostgreSQL")
 
-            # Invalidate Redis cache so it gets refreshed on next read
+            # Populate Redis cache with commonly queried data for fast access
             try:
+                logger.debug("Populating Redis cache with common queries")
                 cache_mgr = RedisCache()
-                cache_mgr.invalidate_health_cache()
-                if not quiet:
-                    print("  ✓ Redis cache invalidated")
+
+                # Cache recent activities (most recent 10)
+                recent_activities = cache.get('activities', [])[:10]
+                if recent_activities:
+                    cache_mgr.set_recent_activities(recent_activities, limit=10)
+                    logger.debug(f"Cached {len(recent_activities)} recent activities")
+                    if not quiet:
+                        print(f"  ✓ Cached {len(recent_activities)} recent activities")
+
+                # Cache recent sleep data (last 7 days)
+                recent_sleep = cache.get('sleep_sessions', [])[:7]
+                if recent_sleep:
+                    cache_mgr.set_sleep_data(recent_sleep, days=7)
+                    logger.debug(f"Cached {len(recent_sleep)} sleep sessions")
+                    if not quiet:
+                        print(f"  ✓ Cached {len(recent_sleep)} sleep sessions")
+
+                # Cache RHR trend (last 14 days)
+                recent_rhr = cache.get('resting_hr_readings', [])[:14]
+                if recent_rhr:
+                    # Convert to dict format if needed
+                    rhr_dicts = []
+                    for rhr in recent_rhr:
+                        if isinstance(rhr, list) and len(rhr) >= 2:
+                            rhr_dicts.append({'date': rhr[0], 'resting_hr': rhr[1]})
+                        elif isinstance(rhr, dict):
+                            rhr_dicts.append(rhr)
+
+                    if rhr_dicts:
+                        cache_mgr.set_resting_hr_trend(rhr_dicts, days=14)
+                        logger.debug(f"Cached {len(rhr_dicts)} RHR readings")
+                        if not quiet:
+                            print(f"  ✓ Cached {len(rhr_dicts)} RHR readings")
+
+                logger.info("Redis cache population complete")
+
             except Exception as e:
+                logger.error(f"Failed to populate Redis cache: {e}", exc_info=True)
                 if not quiet:
-                    print(f"  ⚠ Warning: Failed to invalidate Redis cache: {e}", file=sys.stderr)
+                    print(f"  ⚠ Warning: Failed to populate Redis cache: {e}", file=sys.stderr)
 
             return True
 
     except Exception as e:
+        logger.error(f"Database write operation failed: {e}", exc_info=True)
         if not quiet:
             print(f"  ✗ Error saving to database: {e}", file=sys.stderr)
         return False
