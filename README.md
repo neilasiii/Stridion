@@ -70,6 +70,15 @@ The system uses objective metrics from your Garmin device to inform coaching dec
 - **DETAILED Mode** - Comprehensive explanations with physiological reasoning
 - **Dynamic Switching** - Change detail level anytime during coaching sessions
 
+### 🗄️ Database & Caching
+
+- **PostgreSQL Database** - Primary persistent storage for all health data, workouts, and athlete information
+- **Redis Caching** - Intelligent caching layer for fast query response times
+- **Optimized Cache Population** - Pre-populates cache with common queries after data sync
+- **Comprehensive Logging** - Structured logging with sensitive data filtering for production monitoring
+- **Graceful Degradation** - Automatic fallback to JSON files if database unavailable
+- **Multi-athlete Support** - User accounts, athlete associations, and permission-based access
+
 ## Quick Start
 
 ### Docker Deployment (Recommended)
@@ -620,6 +629,8 @@ This project is actively evolving. Current development priorities:
 
 ### Data & Persistence
 - [x] **Database Integration** - PostgreSQL with Redis caching for workouts, health data, and athlete profiles ✅
+  - Phase 1: Database writes, reads, and migrations ✅
+  - Phase 2: Cache optimization and comprehensive logging ✅
 - [x] **Athlete Data Management** - Structured storage of training status, preferences, races, and documents ✅
 - [x] **Version Tracking** - Historical tracking for training status and athlete documents ✅
 - [x] **Training Plan Versioning** - Store and version training plans with full history ✅
