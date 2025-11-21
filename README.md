@@ -597,9 +597,9 @@ This project is actively evolving. Current development priorities:
 - [x] **Database Integration** - PostgreSQL with Redis caching for workouts, health data, and athlete profiles ✅
 - [x] **Athlete Data Management** - Structured storage of training status, preferences, races, and documents ✅
 - [x] **Version Tracking** - Historical tracking for training status and athlete documents ✅
+- [x] **Training Plan Versioning** - Store and version training plans with full history ✅
+- [x] **Multi-athlete Support** - User accounts, athlete associations, and permission-based access ✅
 - [ ] **Chat History** - Store and retrieve coaching conversation history
-- [ ] **Training Plan Versioning** - Track generated training plans over time
-- [ ] **Multi-athlete Support** - Support multiple athlete profiles in single instance (infrastructure ready)
 
 ### Enhanced Features
 - [x] **Workout Library** - Searchable database of workouts and training blocks ✅

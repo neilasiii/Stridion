@@ -168,6 +168,39 @@ Fields:
   - `version`, `is_current`: Version tracking
   - `superseded_by`: Link to newer version
 
+### Multi-Athlete Support
+
+**Table: `users`**
+- User accounts for authentication and access control
+- Fields:
+  - `username`, `email`, `password_hash`: Account credentials
+  - `full_name`, `role`: User profile (athlete, coach, admin)
+  - `is_active`, `email_verified`: Account status
+  - `last_login`: Activity tracking
+
+**Table: `user_athletes`**
+- Many-to-many relationship between users and athletes
+- Enables multi-athlete support and coaching relationships
+- Fields:
+  - `user_id`, `athlete_id`: Relationship link
+  - `relationship`: self, coach, family, admin
+  - `can_view`, `can_edit`, `can_coach`: Permissions
+
+### Training Plan Versioning
+
+**Table: `training_plans`**
+- Store and version training plans over time
+- Track plan history and evolution
+- Fields:
+  - `plan_name`, `description`, `plan_type`: Plan metadata (taper, recovery, base, quality, race_specific)
+  - `start_date`, `end_date`: Plan duration
+  - `goal_race_id`: Associated race (FK to races)
+  - `content`: Full plan content (markdown or JSON)
+  - `weekly_structure`: Structured weekly plan data (JSON)
+  - `version`, `is_current`, `parent_plan_id`, `superseded_by`: Version tracking
+  - `status`: draft, active, completed, archived
+  - `created_by_user_id`, `updated_by_user_id`: Authorship tracking
+
 ## Using the Database
 
 ### Python API

@@ -186,6 +186,31 @@ bash bin/athlete_data.sh list-docs         # List athlete documents
 bash bin/athlete_data.sh migrate
 ```
 
+**Manage Users (Multi-Athlete Support)**
+```bash
+# View users and associations
+bash bin/manage_users.sh list-users         # List all users
+bash bin/manage_users.sh list-athletes      # List all athletes
+bash bin/manage_users.sh list-associations  # User-athlete links
+
+# Create users and associations
+bash bin/manage_users.sh create-user <username> <email> <name>
+bash bin/manage_users.sh link-athlete <user_id> <athlete_id>
+```
+
+**Manage Training Plans**
+```bash
+# Migrate existing plans from markdown
+bash bin/manage_plans.sh migrate
+
+# View training plans
+bash bin/manage_plans.sh list               # All plans
+bash bin/manage_plans.sh list-active        # Active plans only
+bash bin/manage_plans.sh show <plan_id>     # Plan details
+bash bin/manage_plans.sh by-athlete <id>    # Plans for athlete
+bash bin/manage_plans.sh by-race <race_id>  # Plans for race
+```
+
 **Database Access**
 ```bash
 # Connect to PostgreSQL
@@ -343,6 +368,11 @@ Coaching Agents (query database/cache for decisions)
   - `CommunicationPreference` - Detail level, format preferences
   - `Race` - Upcoming and historical race information
   - `AthleteDocument` - Text-based documents (goals, preferences, history)
+- **Multi-Athlete Support:**
+  - `User` - User accounts for authentication and access control
+  - `UserAthlete` - Many-to-many user-athlete relationships with permissions
+- **Training Plan Versioning:**
+  - `TrainingPlan` - Versioned training plans with full history tracking
 
 **[src/database/connection.py](src/database/connection.py)**: Database connection management
 - PostgreSQL connection via SQLAlchemy
@@ -372,16 +402,33 @@ Coaching Agents (query database/cache for decisions)
 - Load races with goals and strategy notes
 - Version-tracked athlete documents (goals, preferences, history)
 
+**[src/database/migrate_training_plans.py](src/database/migrate_training_plans.py)**: Training plan migration
+- Migrate training plans from markdown files (data/plans/)
+- Parse plan metadata, dates, and type
+- Associate plans with races
+- Version tracking for plan history
+
 **[src/celery_app.py](src/celery_app.py)** & **[src/tasks.py](src/tasks.py)**: Background job processing
 - Celery configuration with Redis backend
 - Background tasks: Garmin sync, metrics calculation, cache cleanup
 - Asynchronous job execution
 
-**[bin/db_init.sh](bin/db_init.sh)** & **[bin/db_migrate.sh](bin/db_migrate.sh)** & **[bin/athlete_data.sh](bin/athlete_data.sh)**: Database management scripts
+**[bin/db_init.sh](bin/db_init.sh)** & **[bin/db_migrate.sh](bin/db_migrate.sh)**: Core database management
 - Initialize database tables
-- Migrate data from JSON/markdown to PostgreSQL
+- Migrate all data (workouts, health, athlete, plans)
+- Options: --workouts-only, --athlete-only, --plans-only, --skip-plans
+
+**[bin/athlete_data.sh](bin/athlete_data.sh)**: Athlete data management
 - View and manage athlete data
-- Convenience wrappers for Python scripts
+- Commands: show-profile, show-status, show-prefs, list-races, list-docs
+
+**[bin/manage_users.sh](bin/manage_users.sh)**: User and multi-athlete management
+- Manage users and athlete associations
+- Commands: list-users, list-athletes, create-user, link-athlete
+
+**[bin/manage_plans.sh](bin/manage_plans.sh)**: Training plan management
+- View and manage training plans
+- Commands: migrate, list, list-active, show, by-athlete, by-race
 
 ### Athlete Context Files
 

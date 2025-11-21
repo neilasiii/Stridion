@@ -475,3 +475,163 @@ class AthleteDocument(Base):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
         }
+
+
+# ============================================================================
+# User and Multi-Athlete Support
+# ============================================================================
+
+
+class User(Base):
+    """User accounts for multi-athlete support."""
+
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(100), unique=True, nullable=False, index=True)
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    password_hash = Column(String(255))  # For future authentication
+    full_name = Column(String(255))
+    role = Column(String(50), default='athlete')  # athlete, coach, admin
+
+    # Settings
+    is_active = Column(Boolean, default=True)
+    email_verified = Column(Boolean, default=False)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    last_login = Column(DateTime)
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'full_name': self.full_name,
+            'role': self.role,
+            'is_active': self.is_active,
+            'email_verified': self.email_verified,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            'last_login': self.last_login.isoformat() if self.last_login else None,
+        }
+
+
+class UserAthlete(Base):
+    """Many-to-many relationship between users and athletes."""
+
+    __tablename__ = 'user_athletes'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False, index=True)
+    athlete_id = Column(Integer, nullable=False, index=True)
+
+    # Relationship type
+    relationship = Column(String(50), default='self')  # self, coach, family, admin
+
+    # Permissions
+    can_view = Column(Boolean, default=True)
+    can_edit = Column(Boolean, default=False)
+    can_coach = Column(Boolean, default=False)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    created_by_user_id = Column(Integer)
+
+    __table_args__ = (
+        Index('idx_user_athlete', 'user_id', 'athlete_id'),
+    )
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'athlete_id': self.athlete_id,
+            'relationship': self.relationship,
+            'can_view': self.can_view,
+            'can_edit': self.can_edit,
+            'can_coach': self.can_coach,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+# ============================================================================
+# Training Plan Versioning
+# ============================================================================
+
+
+class TrainingPlan(Base):
+    """Training plans with versioning."""
+
+    __tablename__ = 'training_plans'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, nullable=False, index=True)
+
+    # Plan details
+    plan_name = Column(String(255), nullable=False)
+    description = Column(Text)
+    plan_type = Column(String(50), index=True)  # taper, recovery, base, quality, race_specific
+
+    # Date range
+    start_date = Column(DateTime, index=True)
+    end_date = Column(DateTime, index=True)
+
+    # Associated race
+    goal_race_id = Column(Integer, index=True)  # FK to races table
+
+    # Plan content
+    content = Column(Text, nullable=False)  # Full plan content (markdown or JSON)
+    content_format = Column(String(50), default='markdown')  # markdown, json, html
+    weekly_structure = Column(JSON)  # Structured weekly plan data
+
+    # Version tracking
+    version = Column(Integer, default=1)
+    is_current = Column(Boolean, default=True, index=True)
+    parent_plan_id = Column(Integer)  # Original plan this was based on
+    superseded_by = Column(Integer)  # ID of newer version
+
+    # Status
+    status = Column(String(50), default='draft')  # draft, active, completed, archived
+
+    # Authorship
+    created_by_user_id = Column(Integer)
+    updated_by_user_id = Column(Integer)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_plan_athlete_date', 'athlete_id', 'start_date', 'end_date'),
+        Index('idx_plan_status', 'status', 'is_current'),
+        Index('idx_plan_race', 'goal_race_id'),
+    )
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'plan_name': self.plan_name,
+            'description': self.description,
+            'plan_type': self.plan_type,
+            'start_date': self.start_date.isoformat() if self.start_date else None,
+            'end_date': self.end_date.isoformat() if self.end_date else None,
+            'goal_race_id': self.goal_race_id,
+            'content': self.content,
+            'content_format': self.content_format,
+            'weekly_structure': self.weekly_structure,
+            'version': self.version,
+            'is_current': self.is_current,
+            'parent_plan_id': self.parent_plan_id,
+            'superseded_by': self.superseded_by,
+            'status': self.status,
+            'created_by_user_id': self.created_by_user_id,
+            'updated_by_user_id': self.updated_by_user_id,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
