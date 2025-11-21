@@ -1,7 +1,7 @@
 """SQLAlchemy models for running coach database."""
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, Text, Boolean, Index
+from sqlalchemy import Column, Integer, String, Float, DateTime, Date, JSON, Text, Boolean, Index
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
@@ -61,40 +61,38 @@ class Activity(Base):
     __tablename__ = 'activities'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    activity_id = Column(String(50), unique=True, nullable=False, index=True)
-    date = Column(DateTime, nullable=False, index=True)
+    garmin_activity_id = Column(String(50), unique=True, nullable=False, index=True)
+    start_time = Column(DateTime, nullable=False, index=True)
     activity_name = Column(String(255))
     activity_type = Column(String(50), index=True)  # RUNNING, WALKING, etc.
-    duration_seconds = Column(Float)
-    distance_miles = Column(Float)
+    duration_minutes = Column(Float)
+    distance_km = Column(Float)
+    avg_pace_per_km = Column(String(10))  # Format: "MM:SS"
     calories = Column(Float)
     avg_heart_rate = Column(Float)
     max_heart_rate = Column(Float)
-    avg_speed = Column(Float)
-    pace_per_mile = Column(Float)
     splits = Column(JSON)  # Array of split data
     hr_zones = Column(JSON)  # Heart rate zone data
     created_at = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (
-        Index('idx_activity_date', 'date'),
-        Index('idx_activity_type_date', 'activity_type', 'date'),
+        Index('idx_activity_start_time', 'start_time'),
+        Index('idx_activity_type_time', 'activity_type', 'start_time'),
     )
 
     def to_dict(self):
         """Convert to dictionary format."""
         return {
-            'activity_id': self.activity_id,
-            'date': self.date.isoformat() if self.date else None,
+            'garmin_activity_id': self.garmin_activity_id,
+            'start_time': self.start_time.isoformat() if self.start_time else None,
             'activity_name': self.activity_name,
             'activity_type': self.activity_type,
-            'duration_seconds': self.duration_seconds,
-            'distance_miles': self.distance_miles,
+            'duration_minutes': self.duration_minutes,
+            'distance_km': self.distance_km,
+            'avg_pace_per_km': self.avg_pace_per_km,
             'calories': self.calories,
             'avg_heart_rate': self.avg_heart_rate,
             'max_heart_rate': self.max_heart_rate,
-            'avg_speed': self.avg_speed,
-            'pace_per_mile': self.pace_per_mile,
             'splits': self.splits,
             'hr_zones': self.hr_zones,
         }
@@ -106,7 +104,7 @@ class SleepSession(Base):
     __tablename__ = 'sleep_sessions'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    date = Column(DateTime, nullable=False, unique=True, index=True)
+    sleep_date = Column(Date, nullable=False, unique=True, index=True)
     total_duration_minutes = Column(Integer)
     light_sleep_minutes = Column(Integer)
     deep_sleep_minutes = Column(Integer)
@@ -118,7 +116,7 @@ class SleepSession(Base):
     def to_dict(self):
         """Convert to dictionary format."""
         return {
-            'date': self.date.isoformat() if self.date else None,
+            'sleep_date': self.sleep_date.isoformat() if self.sleep_date else None,
             'total_duration_minutes': self.total_duration_minutes,
             'light_sleep_minutes': self.light_sleep_minutes,
             'deep_sleep_minutes': self.deep_sleep_minutes,
@@ -134,18 +132,18 @@ class VO2MaxReading(Base):
     __tablename__ = 'vo2_max_readings'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    date = Column(DateTime, nullable=False, index=True)
+    reading_date = Column(Date, nullable=False, index=True)
     vo2_max = Column(Float, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (
-        Index('idx_vo2_date', 'date'),
+        Index('idx_vo2_reading_date', 'reading_date'),
     )
 
     def to_dict(self):
         """Convert to dictionary format."""
         return {
-            'date': self.date.isoformat() if self.date else None,
+            'reading_date': self.reading_date.isoformat() if self.reading_date else None,
             'vo2_max': self.vo2_max,
         }
 
@@ -156,19 +154,19 @@ class WeightReading(Base):
     __tablename__ = 'weight_readings'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    date = Column(DateTime, nullable=False, index=True)
-    weight_lbs = Column(Float, nullable=False)
-    body_fat_percent = Column(Float)
-    muscle_percent = Column(Float)
+    reading_date = Column(Date, nullable=False, index=True)
+    weight_kg = Column(Float, nullable=False)
+    body_fat_percentage = Column(Float)
+    muscle_mass_kg = Column(Float)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         """Convert to dictionary format."""
         return {
-            'date': self.date.isoformat() if self.date else None,
-            'weight_lbs': self.weight_lbs,
-            'body_fat_percent': self.body_fat_percent,
-            'muscle_percent': self.muscle_percent,
+            'reading_date': self.reading_date.isoformat() if self.reading_date else None,
+            'weight_kg': self.weight_kg,
+            'body_fat_percentage': self.body_fat_percentage,
+            'muscle_mass_kg': self.muscle_mass_kg,
         }
 
 
@@ -178,14 +176,14 @@ class RestingHRReading(Base):
     __tablename__ = 'resting_hr_readings'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    date = Column(DateTime, nullable=False, unique=True, index=True)
+    reading_date = Column(Date, nullable=False, unique=True, index=True)
     resting_hr = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         """Convert to dictionary format."""
         return {
-            'date': self.date.isoformat() if self.date else None,
+            'reading_date': self.reading_date.isoformat() if self.reading_date else None,
             'resting_hr': self.resting_hr,
         }
 
@@ -196,21 +194,23 @@ class HRVReading(Base):
     __tablename__ = 'hrv_readings'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    date = Column(DateTime, nullable=False, unique=True, index=True)
-    hrv_value = Column(Float, nullable=False)
-    hrv_status = Column(String(50))  # balanced, unbalanced, low, high
+    reading_date = Column(Date, nullable=False, unique=True, index=True)
+    hrv_value = Column(Float)
     baseline_low = Column(Float)
     baseline_high = Column(Float)
+    baseline_balanced_low = Column(Float)
+    baseline_balanced_high = Column(Float)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         """Convert to dictionary format."""
         return {
-            'date': self.date.isoformat() if self.date else None,
+            'reading_date': self.reading_date.isoformat() if self.reading_date else None,
             'hrv_value': self.hrv_value,
-            'hrv_status': self.hrv_status,
             'baseline_low': self.baseline_low,
             'baseline_high': self.baseline_high,
+            'baseline_balanced_low': self.baseline_balanced_low,
+            'baseline_balanced_high': self.baseline_balanced_high,
         }
 
 
@@ -220,8 +220,8 @@ class TrainingReadiness(Base):
     __tablename__ = 'training_readiness'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    date = Column(DateTime, nullable=False, unique=True, index=True)
-    readiness_score = Column(Integer)  # 0-100
+    reading_date = Column(Date, nullable=False, unique=True, index=True)
+    score = Column(Integer)  # 0-100
     recovery_time_hours = Column(Float)
     factors = Column(JSON)  # Contributing factors
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -229,8 +229,8 @@ class TrainingReadiness(Base):
     def to_dict(self):
         """Convert to dictionary format."""
         return {
-            'date': self.date.isoformat() if self.date else None,
-            'readiness_score': self.readiness_score,
+            'reading_date': self.reading_date.isoformat() if self.reading_date else None,
+            'score': self.score,
             'recovery_time_hours': self.recovery_time_hours,
             'factors': self.factors,
         }

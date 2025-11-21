@@ -4,6 +4,7 @@ Flask web application for the running coach service.
 
 import os
 import logging
+from datetime import datetime
 from flask import Flask, request, jsonify, render_template, Response, Blueprint
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -89,13 +90,85 @@ def index():
 
 @api_v1.route('/health')
 def health():
-    """Health check endpoint."""
-    return jsonify({
+    """
+    Health check endpoint with database and Redis status.
+
+    Returns:
+        200: All services healthy
+        503: One or more services unhealthy
+    """
+    health_status = {
         'status': 'healthy',
         'version': 'v1',
-        'provider': coach_service.provider.get_provider_name() if coach_service else None,
-        'agents_loaded': len(coach_service.agent_loader.agents) if coach_service else 0
-    })
+        'timestamp': datetime.now().isoformat(),
+        'services': {}
+    }
+
+    # Check AI provider
+    if coach_service:
+        health_status['services']['ai_provider'] = {
+            'status': 'healthy',
+            'name': coach_service.provider.get_provider_name(),
+            'agents_loaded': len(coach_service.agent_loader.agents)
+        }
+    else:
+        health_status['services']['ai_provider'] = {
+            'status': 'unhealthy',
+            'error': 'AI provider not initialized'
+        }
+        health_status['status'] = 'unhealthy'
+
+    # Check PostgreSQL database
+    try:
+        from ..database.connection import get_session
+        with get_session() as session:
+            session.execute("SELECT 1")
+        health_status['services']['database'] = {
+            'status': 'healthy',
+            'type': 'postgresql'
+        }
+    except ImportError:
+        health_status['services']['database'] = {
+            'status': 'not_configured',
+            'message': 'Database module not available'
+        }
+    except Exception as e:
+        health_status['services']['database'] = {
+            'status': 'unhealthy',
+            'error': str(e)
+        }
+        health_status['status'] = 'unhealthy'
+
+    # Check Redis cache
+    try:
+        from ..database.redis_cache import RedisCache
+        cache = RedisCache()
+        if cache.ping():
+            health_status['services']['redis'] = {
+                'status': 'healthy',
+                'type': 'cache'
+            }
+        else:
+            health_status['services']['redis'] = {
+                'status': 'unhealthy',
+                'error': 'Redis ping failed'
+            }
+            health_status['status'] = 'unhealthy'
+    except ImportError:
+        health_status['services']['redis'] = {
+            'status': 'not_configured',
+            'message': 'Redis module not available'
+        }
+    except Exception as e:
+        health_status['services']['redis'] = {
+            'status': 'unhealthy',
+            'error': str(e)
+        }
+        health_status['status'] = 'unhealthy'
+
+    # Return appropriate status code
+    status_code = 200 if health_status['status'] == 'healthy' else 503
+    return jsonify(health_status), status_code
 
 
 @api_v1.route('/agents')
