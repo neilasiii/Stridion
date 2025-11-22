@@ -7,6 +7,7 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -21,6 +22,9 @@ COPY .claude/ ./.claude/
 COPY data/ ./data/
 COPY bin/ ./bin/
 COPY config/ ./config/
+COPY alembic/ ./alembic/
+COPY alembic.ini ./alembic.ini
+COPY docker-entrypoint.sh ./docker-entrypoint.sh
 
 # Create necessary directories with open permissions
 # (actual user will be set via docker-compose user: directive)
@@ -30,7 +34,8 @@ RUN mkdir -p /app/data/health \
     /app/data/calendar \
     /app/data/plans \
     /app/data/frameworks && \
-    chmod -R 777 /app/data
+    chmod -R 777 /app/data && \
+    chmod +x /app/docker-entrypoint.sh
 
 # Set Python path
 ENV PYTHONPATH=/app
@@ -42,5 +47,5 @@ EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:5000/api/v1/health')" || exit 1
 
-# Run the web service
-CMD ["python", "-m", "src.web.app"]
+# Run the entrypoint script (handles DB init + starts web service)
+CMD ["/app/docker-entrypoint.sh"]
