@@ -25,6 +25,7 @@ celery>=5.3.0
 
 # Utilities
 python-dotenv>=1.0.0
+vdot-calculator>=0.0.0.4
 
 # Testing
 pytest>=7.0.0
