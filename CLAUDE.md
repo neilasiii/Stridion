@@ -146,6 +146,58 @@ head -5 data/athlete/communication_preferences.md
 
 See [docs/COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md) for examples and usage guide.
 
+### Settings Menu (Web UI)
+
+The web interface includes a comprehensive settings menu for managing all athlete preferences without manual file editing.
+
+**Access Settings:**
+1. Open the web interface: `http://localhost:5000`
+2. Click the "⚙️ Settings" tab
+3. Navigate between 8 setting categories using the tabs
+
+**Settings Categories:**
+
+1. **💬 Communication** - Detail level (BRIEF/STANDARD/DETAILED), format preferences
+2. **🏃 Training** - VDOT, training paces, phase, weekly volume, VDOT pace calculator
+3. **💪 Strength** - Available equipment, DOMS tolerance, session timing preferences
+4. **🍎 Nutrition** - Dietary restrictions (gluten-free, dairy-free, etc.), fueling strategy
+5. **😴 Recovery** - Sleep thresholds, RHR alerts, adjustment philosophy
+6. **🌡️ Environment** - Training location, climate, temperature/dew point thresholds
+7. **🩹 Injuries** - Active injury tracking and management
+8. **🎨 App** - Theme (light/dark/auto), units, auto-sync settings
+
+**Key Features:**
+- **Auto-calculate paces**: Enter VDOT → automatically calculate E/M/T/I paces
+- **Dark mode**: Toggle between light, dark, or auto (system preference)
+- **Save all**: Single button saves all categories to database
+- **Real-time feedback**: Success/error messages for all operations
+- **Responsive design**: Works on desktop and mobile
+
+**API Access** (for programmatic use):
+```bash
+# Get all settings
+curl http://localhost:5000/api/v1/settings | python3 -m json.tool
+
+# Get specific category
+curl http://localhost:5000/api/v1/settings/training | python3 -m json.tool
+
+# Update settings
+curl -X PUT http://localhost:5000/api/v1/settings/communication \
+  -H "Content-Type: application/json" \
+  -d '{"detail_level": "DETAILED"}'
+
+# Calculate paces from VDOT
+curl -X POST http://localhost:5000/api/v1/settings/calculate-paces \
+  -H "Content-Type: application/json" \
+  -d '{"vdot": 45}'
+```
+
+**Data Storage:**
+- All settings stored in PostgreSQL database (see Database Management section)
+- Settings persist across sessions
+- Changes immediately available to all coaching agents
+- Markdown files auto-generated from database for backward compatibility
+
 ### Database Management
 
 The system uses PostgreSQL for persistent storage and Redis for caching and background jobs.

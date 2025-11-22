@@ -55,6 +55,15 @@ The system uses objective metrics from your Garmin device to inform coaching dec
 - **Easy Customization** - Import workouts as templates and adapt to athlete-specific needs
 - **Command-Line Access** - Simple CLI for browsing and managing workouts
 
+### ⚙️ Settings Management
+
+- **Web-Based Settings Menu** - Comprehensive UI for managing all athlete preferences
+- **8 Setting Categories** - Communication, Training, Strength, Nutrition, Recovery, Environment, Injuries, App
+- **VDOT Pace Calculator** - Automatically calculate training paces from VDOT
+- **Dark Mode** - Light, dark, or auto (system preference) themes
+- **Database-Backed** - All settings persist in PostgreSQL with instant updates
+- **No Manual Editing** - Eliminate the need for JSON/markdown file manipulation
+
 ### 🎯 Personalized Training
 
 - Athlete-specific context files for goals, preferences, and constraints
