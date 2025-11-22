@@ -432,6 +432,127 @@ def delete_file(category, filename):
         return jsonify({'error': str(e)}), 500
 
 
+@api_v1.route('/settings', methods=['GET'])
+def get_all_settings():
+    """
+    Get all settings for the athlete.
+
+    Returns:
+        JSON with all settings organized by category
+    """
+    try:
+        from ..settings_manager import SettingsManager
+        manager = SettingsManager(athlete_id=1)  # Default athlete
+        settings = manager.get_all_settings()
+
+        logger.info("All settings retrieved successfully")
+        return jsonify(settings)
+    except Exception as e:
+        logger.error(f"Get all settings failed: {e}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
+
+
+@api_v1.route('/settings/<category>', methods=['GET'])
+def get_settings_category(category):
+    """
+    Get settings for a specific category.
+
+    Args:
+        category: Settings category (communication, training, strength, etc.)
+
+    Returns:
+        JSON with settings for the category
+    """
+    try:
+        from ..settings_manager import SettingsManager
+        manager = SettingsManager(athlete_id=1)
+        settings = manager.get_settings(category)
+
+        if settings is None:
+            logger.warning(f"Unknown settings category: {category}")
+            return jsonify({'error': f'Unknown category: {category}'}), 404
+
+        logger.info(f"Settings retrieved for category: {category}")
+        return jsonify(settings)
+    except Exception as e:
+        logger.error(f"Get settings for {category} failed: {e}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
+
+
+@api_v1.route('/settings/<category>', methods=['PUT'])
+def update_settings_category(category):
+    """
+    Update settings for a specific category.
+
+    Args:
+        category: Settings category
+
+    Expected JSON:
+        Settings data for the category
+
+    Returns:
+        Updated settings
+    """
+    data = request.get_json()
+
+    if not data:
+        logger.warning(f"Update settings for {category} missing data")
+        return jsonify({'error': 'Missing settings data'}), 400
+
+    try:
+        from ..settings_manager import SettingsManager
+        manager = SettingsManager(athlete_id=1)
+        updated_settings = manager.update_settings(category, data)
+
+        logger.info(f"Settings updated for category: {category}")
+        return jsonify(updated_settings)
+    except ValueError as e:
+        logger.warning(f"Invalid settings update for {category}: {e}")
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        logger.error(f"Update settings for {category} failed: {e}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
+
+
+@api_v1.route('/settings/calculate-paces', methods=['POST'])
+def calculate_paces():
+    """
+    Calculate training paces from VDOT.
+
+    Expected JSON:
+    {
+        "vdot": 45.0
+    }
+
+    Returns:
+        Calculated pace ranges for each zone
+    """
+    data = request.get_json()
+
+    if not data or 'vdot' not in data:
+        logger.warning("Calculate paces request missing VDOT")
+        return jsonify({'error': 'Missing VDOT parameter'}), 400
+
+    try:
+        vdot = float(data['vdot'])
+
+        if vdot < 30 or vdot > 85:
+            return jsonify({'error': 'VDOT must be between 30 and 85'}), 400
+
+        from ..settings_manager import SettingsManager
+        manager = SettingsManager(athlete_id=1)
+        paces = manager.calculate_paces_from_vdot(vdot)
+
+        logger.info(f"Paces calculated for VDOT: {vdot}")
+        return jsonify(paces)
+    except ValueError as e:
+        logger.warning(f"Invalid VDOT value: {e}")
+        return jsonify({'error': 'Invalid VDOT value'}), 400
+    except Exception as e:
+        logger.error(f"Calculate paces failed: {e}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
+
+
 # =============================================================================
 # Register API v1 Blueprint
 # =============================================================================
@@ -491,6 +612,30 @@ def api_files_save_compat():
 def api_files_delete_compat(category, filename):
     """Backward compatibility for DELETE /api/files/<category>/<filename>"""
     return delete_file(category, filename)
+
+
+@app.route('/api/settings', methods=['GET'])
+def api_settings_all_compat():
+    """Backward compatibility for GET /api/settings -> /api/v1/settings"""
+    return get_all_settings()
+
+
+@app.route('/api/settings/<category>', methods=['GET'])
+def api_settings_get_compat(category):
+    """Backward compatibility for GET /api/settings/<category>"""
+    return get_settings_category(category)
+
+
+@app.route('/api/settings/<category>', methods=['PUT'])
+def api_settings_update_compat(category):
+    """Backward compatibility for PUT /api/settings/<category>"""
+    return update_settings_category(category)
+
+
+@app.route('/api/settings/calculate-paces', methods=['POST'])
+def api_settings_paces_compat():
+    """Backward compatibility for POST /api/settings/calculate-paces"""
+    return calculate_paces()
 
 
 if __name__ == '__main__':

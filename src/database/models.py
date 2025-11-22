@@ -635,3 +635,302 @@ class TrainingPlan(Base):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
         }
+
+
+# ============================================================================
+# Settings Models (for Settings UI)
+# ============================================================================
+
+
+class StrengthPreference(Base):
+    """Strength training preferences and equipment."""
+
+    __tablename__ = 'strength_preferences'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, unique=True, nullable=False, index=True)
+
+    # Available equipment
+    equipment = Column(ARRAY(String), default=list)  # dumbbells, barbells, kettlebells, bands, machines, bodyweight
+
+    # Restrictions
+    has_restrictions = Column(Boolean, default=False)
+    restriction_notes = Column(Text)
+    wrist_loading_restricted = Column(Boolean, default=False)
+    wrist_restriction_until = Column(Date)
+
+    # Focus areas (ranked by priority)
+    focus_areas = Column(ARRAY(String), default=list)  # core, glutes, hamstrings, quads, calves, hip_stability
+
+    # Training preferences
+    doms_tolerance = Column(String(50), default='moderate')  # low, moderate, high
+    days_before_quality_run = Column(Integer, default=2)
+    days_before_long_run = Column(Integer, default=3)
+    preferred_session_days = Column(ARRAY(String), default=list)  # ["tuesday", "friday"]
+    max_session_duration_minutes = Column(Integer, default=45)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'equipment': self.equipment or [],
+            'has_restrictions': self.has_restrictions,
+            'restriction_notes': self.restriction_notes,
+            'wrist_loading_restricted': self.wrist_loading_restricted,
+            'wrist_restriction_until': self.wrist_restriction_until.isoformat() if self.wrist_restriction_until else None,
+            'focus_areas': self.focus_areas or [],
+            'doms_tolerance': self.doms_tolerance,
+            'days_before_quality_run': self.days_before_quality_run,
+            'days_before_long_run': self.days_before_long_run,
+            'preferred_session_days': self.preferred_session_days or [],
+            'max_session_duration_minutes': self.max_session_duration_minutes,
+        }
+
+
+class NutritionPreference(Base):
+    """Nutrition preferences and dietary restrictions."""
+
+    __tablename__ = 'nutrition_preferences'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, unique=True, nullable=False, index=True)
+
+    # Dietary restrictions
+    dietary_restrictions = Column(ARRAY(String), default=list)  # gluten_free, dairy_free, vegan, vegetarian, etc.
+
+    # Detail level
+    detail_level = Column(String(50), default='macros_only')  # full_meals, macros_only, general_guidelines
+
+    # Fueling strategy
+    fueling_start_minutes = Column(Integer, default=75)  # Start fueling on runs longer than X minutes
+    fuel_interval_minutes = Column(Integer, default=30)  # Fuel every X minutes
+
+    # Preferred products
+    preferred_gels = Column(ARRAY(String), default=list)  # ["Precision Fuel", "Huma"]
+    preferred_electrolytes = Column(ARRAY(String), default=list)  # ["Base salts", "FastChews"]
+    preferred_hydration = Column(String(100), default='water_with_electrolytes')
+
+    # Hydration strategy
+    hydration_strategy = Column(String(100))  # carry_water, plan_route, both
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'dietary_restrictions': self.dietary_restrictions or [],
+            'detail_level': self.detail_level,
+            'fueling_start_minutes': self.fueling_start_minutes,
+            'fuel_interval_minutes': self.fuel_interval_minutes,
+            'preferred_gels': self.preferred_gels or [],
+            'preferred_electrolytes': self.preferred_electrolytes or [],
+            'preferred_hydration': self.preferred_hydration,
+            'hydration_strategy': self.hydration_strategy,
+        }
+
+
+class RecoveryThreshold(Base):
+    """Recovery and workout adjustment thresholds."""
+
+    __tablename__ = 'recovery_thresholds'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, unique=True, nullable=False, index=True)
+
+    # Sleep-based adjustments
+    sleep_reduce_intensity_hours = Column(Float, default=6.0)  # Reduce intensity if sleep < X hours
+    sleep_skip_quality_hours = Column(Float, default=5.0)  # Skip quality workout if sleep < X hours
+
+    # Heart rate thresholds
+    rhr_alert_elevation_bpm = Column(Integer, default=5)  # Alert if RHR elevated by X bpm
+    rhr_suggest_easy_elevation_bpm = Column(Integer, default=7)  # Suggest easy day if RHR > baseline + X
+
+    # HRV baseline
+    hrv_baseline_low = Column(Float)
+    hrv_baseline_high = Column(Float)
+    hrv_threshold_percentage = Column(Float, default=0.8)  # Alert if HRV < 80% of baseline
+
+    # Adjustment philosophy
+    adjustment_philosophy = Column(String(50), default='conservative')  # conservative, moderate, aggressive
+    allow_back_to_back_hard_days = Column(Boolean, default=False)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'sleep_reduce_intensity_hours': self.sleep_reduce_intensity_hours,
+            'sleep_skip_quality_hours': self.sleep_skip_quality_hours,
+            'rhr_alert_elevation_bpm': self.rhr_alert_elevation_bpm,
+            'rhr_suggest_easy_elevation_bpm': self.rhr_suggest_easy_elevation_bpm,
+            'hrv_baseline_low': self.hrv_baseline_low,
+            'hrv_baseline_high': self.hrv_baseline_high,
+            'hrv_threshold_percentage': self.hrv_threshold_percentage,
+            'adjustment_philosophy': self.adjustment_philosophy,
+            'allow_back_to_back_hard_days': self.allow_back_to_back_hard_days,
+        }
+
+
+class EnvironmentalPreference(Base):
+    """Environmental and climate preferences."""
+
+    __tablename__ = 'environmental_preferences'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, unique=True, nullable=False, index=True)
+
+    # Location and climate
+    location = Column(String(255))  # "Central Florida"
+    climate = Column(String(100))  # hot_humid, temperate, cold, altitude
+
+    # Temperature thresholds (Fahrenheit)
+    temperature_adjust_f = Column(Integer, default=75)  # Adjust paces when temp > X°F
+    temperature_indoor_f = Column(Integer, default=90)  # Suggest indoor workout when temp > X°F
+
+    # Dew point awareness
+    dew_point_alert_f = Column(Integer, default=65)  # Alert when dew point > X°F
+
+    # Heat acclimation status
+    heat_acclimated = Column(Boolean, default=False)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'location': self.location,
+            'climate': self.climate,
+            'temperature_adjust_f': self.temperature_adjust_f,
+            'temperature_indoor_f': self.temperature_indoor_f,
+            'dew_point_alert_f': self.dew_point_alert_f,
+            'heat_acclimated': self.heat_acclimated,
+        }
+
+
+class InjuryTracking(Base):
+    """Active injury tracking and movement restrictions."""
+
+    __tablename__ = 'injury_tracking'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, nullable=False, index=True)
+
+    # Injury details
+    injury_name = Column(String(255), nullable=False)
+    body_area = Column(String(100))  # ankle, knee, hip, shoulder, wrist, etc.
+    side = Column(String(50))  # left, right, bilateral
+
+    # Status
+    status = Column(String(50), default='active')  # active, managed, resolved
+    severity = Column(String(50))  # mild, moderate, severe
+
+    # Monitoring
+    monitoring_enabled = Column(Boolean, default=True)
+    flare_triggers = Column(ARRAY(String), default=list)  # high_volume, fatigue, long_runs, etc.
+
+    # Notes and restrictions
+    restriction_notes = Column(Text)
+    management_notes = Column(Text)
+
+    # Timeline
+    onset_date = Column(Date)
+    resolved_date = Column(Date)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_injury_athlete_status', 'athlete_id', 'status'),
+    )
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'injury_name': self.injury_name,
+            'body_area': self.body_area,
+            'side': self.side,
+            'status': self.status,
+            'severity': self.severity,
+            'monitoring_enabled': self.monitoring_enabled,
+            'flare_triggers': self.flare_triggers or [],
+            'restriction_notes': self.restriction_notes,
+            'management_notes': self.management_notes,
+            'onset_date': self.onset_date.isoformat() if self.onset_date else None,
+            'resolved_date': self.resolved_date.isoformat() if self.resolved_date else None,
+        }
+
+
+class AppSetting(Base):
+    """UI and application settings."""
+
+    __tablename__ = 'app_settings'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    athlete_id = Column(Integer, unique=True, nullable=False, index=True)
+
+    # UI preferences
+    theme = Column(String(50), default='light')  # light, dark, auto
+    font_size = Column(String(50), default='medium')  # small, medium, large
+
+    # Units
+    distance_units = Column(String(50), default='imperial')  # imperial, metric
+    temperature_units = Column(String(50), default='fahrenheit')  # fahrenheit, celsius
+    weight_units = Column(String(50), default='pounds')  # pounds, kilograms
+
+    # Data display
+    metrics_shown = Column(ARRAY(String), default=list)  # rhr, hrv, sleep, vo2max, weight, etc.
+    show_charts = Column(Boolean, default=True)
+    chart_type = Column(String(50), default='line')  # line, bar, both
+
+    # Sync settings
+    auto_sync_enabled = Column(Boolean, default=True)
+    auto_sync_interval_hours = Column(Integer, default=6)  # 1, 6, 12, 24
+    last_sync = Column(DateTime)
+
+    # Notification preferences
+    workout_reminders = Column(Boolean, default=False)
+    sync_alerts = Column(Boolean, default=True)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        """Convert to dictionary format."""
+        return {
+            'id': self.id,
+            'athlete_id': self.athlete_id,
+            'theme': self.theme,
+            'font_size': self.font_size,
+            'distance_units': self.distance_units,
+            'temperature_units': self.temperature_units,
+            'weight_units': self.weight_units,
+            'metrics_shown': self.metrics_shown or [],
+            'show_charts': self.show_charts,
+            'chart_type': self.chart_type,
+            'auto_sync_enabled': self.auto_sync_enabled,
+            'auto_sync_interval_hours': self.auto_sync_interval_hours,
+            'last_sync': self.last_sync.isoformat() if self.last_sync else None,
+            'workout_reminders': self.workout_reminders,
+            'sync_alerts': self.sync_alerts,
+        }
