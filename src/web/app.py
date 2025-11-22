@@ -500,9 +500,22 @@ def update_settings_category(category):
         return jsonify({'error': 'Missing settings data'}), 400
 
     try:
+        # Validate input data using Marshmallow schemas
+        from ..schemas import validate_settings_data
+        from marshmallow import ValidationError
+
+        try:
+            validated_data = validate_settings_data(category, data)
+        except ValidationError as e:
+            logger.warning(f"Validation failed for {category}: {e.messages}")
+            return jsonify({
+                'error': 'Validation failed',
+                'details': e.messages
+            }), 400
+
         from ..settings_manager import SettingsManager
         manager = SettingsManager(athlete_id=1)
-        updated_settings = manager.update_settings(category, data)
+        updated_settings = manager.update_settings(category, validated_data)
 
         logger.info(f"Settings updated for category: {category}")
         return jsonify(updated_settings)
@@ -529,15 +542,26 @@ def calculate_paces():
     """
     data = request.get_json()
 
-    if not data or 'vdot' not in data:
-        logger.warning("Calculate paces request missing VDOT")
-        return jsonify({'error': 'Missing VDOT parameter'}), 400
+    if not data:
+        logger.warning("Calculate paces request missing data")
+        return jsonify({'error': 'Missing request data'}), 400
 
     try:
-        vdot = float(data['vdot'])
+        # Validate input using Marshmallow schema
+        from ..schemas import VDOTPaceCalculationSchema
+        from marshmallow import ValidationError
 
-        if vdot < 30 or vdot > 85:
-            return jsonify({'error': 'VDOT must be between 30 and 85'}), 400
+        schema = VDOTPaceCalculationSchema()
+        try:
+            validated_data = schema.load(data)
+        except ValidationError as e:
+            logger.warning(f"VDOT pace calculation validation failed: {e.messages}")
+            return jsonify({
+                'error': 'Validation failed',
+                'details': e.messages
+            }), 400
+
+        vdot = validated_data['vdot']
 
         from ..settings_manager import SettingsManager
         manager = SettingsManager(athlete_id=1)
@@ -569,13 +593,27 @@ def calculate_vdot():
     """
     data = request.get_json()
 
-    if not data or 'distance' not in data or 'time' not in data:
-        logger.warning("Calculate VDOT request missing distance or time")
-        return jsonify({'error': 'Missing distance or time parameter'}), 400
+    if not data:
+        logger.warning("Calculate VDOT request missing data")
+        return jsonify({'error': 'Missing request data'}), 400
 
     try:
-        distance = data['distance']
-        time_str = data['time']
+        # Validate input using Marshmallow schema
+        from ..schemas import VDOTCalculationSchema
+        from marshmallow import ValidationError
+
+        schema = VDOTCalculationSchema()
+        try:
+            validated_data = schema.load(data)
+        except ValidationError as e:
+            logger.warning(f"VDOT calculation validation failed: {e.messages}")
+            return jsonify({
+                'error': 'Validation failed',
+                'details': e.messages
+            }), 400
+
+        distance = validated_data['distance']
+        time_str = validated_data['time']
 
         from ..settings_manager import SettingsManager
         manager = SettingsManager(athlete_id=1)
