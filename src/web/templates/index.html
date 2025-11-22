@@ -389,6 +389,242 @@
             padding: 40px;
             color: #999;
         }
+
+        /* Settings Styles */
+        .settings-container {
+            background: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 20px;
+            min-height: 600px;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .settings-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .settings-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        /* Settings Navigation */
+        .settings-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .settings-nav-btn {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .settings-nav-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .settings-nav-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Settings Content */
+        .settings-content {
+            background: #fafafa;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .settings-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .settings-section h4 {
+            color: #555;
+            margin: 15px 0 10px 0;
+            font-size: 16px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group-checkbox {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group-checkbox label {
+            font-weight: normal;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group-checkbox input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .checkbox-grid label {
+            font-weight: normal !important;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-grid input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        /* Injuries List */
+        .injuries-list {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            min-height: 100px;
+        }
+
+        /* Success/Error Messages */
+        .settings-message {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .settings-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .settings-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-nav {
+                flex-direction: column;
+            }
+
+            .settings-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .pace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -403,6 +639,7 @@
         <div class="tabs">
             <div class="tab active" data-tab="chat">Chat</div>
             <div class="tab" data-tab="files">Files</div>
+            <div class="tab" data-tab="settings">⚙️ Settings</div>
         </div>
 
         <!-- Chat Tab -->
@@ -458,6 +695,287 @@
 
                 <div id="filesList" class="files-list">
                     <!-- Files will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings-tab">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <h2>⚙️ Settings</h2>
+                    <div class="settings-actions">
+                        <button id="saveAllSettings" class="btn-primary">💾 Save All</button>
+                        <button id="resetSettings" class="btn-secondary">🔄 Reset to Defaults</button>
+                    </div>
+                </div>
+
+                <!-- Settings Navigation -->
+                <div class="settings-nav">
+                    <button class="settings-nav-btn active" data-section="communication">💬 Communication</button>
+                    <button class="settings-nav-btn" data-section="training">🏃 Training</button>
+                    <button class="settings-nav-btn" data-section="strength">💪 Strength</button>
+                    <button class="settings-nav-btn" data-section="nutrition">🍎 Nutrition</button>
+                    <button class="settings-nav-btn" data-section="recovery">😴 Recovery</button>
+                    <button class="settings-nav-btn" data-section="environmental">🌡️ Environment</button>
+                    <button class="settings-nav-btn" data-section="injuries">🩹 Injuries</button>
+                    <button class="settings-nav-btn" data-section="app">🎨 App</button>
+                </div>
+
+                <!-- Settings Sections -->
+                <div class="settings-content">
+
+                    <!-- Communication Settings -->
+                    <div class="settings-section active" id="settings-communication">
+                        <h3>Communication Preferences</h3>
+                        <div class="form-group">
+                            <label>Detail Level</label>
+                            <select id="detail_level" class="form-control">
+                                <option value="BRIEF">Brief - Concise responses</option>
+                                <option value="STANDARD">Standard - Balanced detail</option>
+                                <option value="DETAILED">Detailed - Full explanations</option>
+                            </select>
+                        </div>
+                        <div class="form-group-checkbox">
+                            <label><input type="checkbox" id="include_paces"> Show paces in workouts</label>
+                            <label><input type="checkbox" id="show_weekly_mileage"> Show weekly mileage totals</label>
+                            <label><input type="checkbox" id="provide_calendar_views"> Provide calendar views</label>
+                            <label><input type="checkbox" id="include_heart_rate_targets"> Include heart rate targets</label>
+                        </div>
+                    </div>
+
+                    <!-- Training Settings -->
+                    <div class="settings-section" id="settings-training">
+                        <h3>Training Status</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>VDOT</label>
+                                <input type="number" id="vdot_prescribed" class="form-control" min="30" max="85" step="0.1">
+                                <button id="calculatePaces" class="btn-secondary" style="margin-top: 5px;">Calculate Paces</button>
+                            </div>
+                            <div class="form-group">
+                                <label>Training Phase</label>
+                                <select id="current_phase" class="form-control">
+                                    <option value="recovery">Recovery</option>
+                                    <option value="base">Base Building</option>
+                                    <option value="quality">Early Quality</option>
+                                    <option value="race_specific">Race Specific</option>
+                                    <option value="taper">Taper</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Weekly Volume (hours)</label>
+                                <input type="number" id="weekly_volume_hours" class="form-control" min="0" max="20" step="0.5">
+                            </div>
+                            <div class="form-group">
+                                <label>Runs per Week</label>
+                                <input type="number" id="weekly_run_count" class="form-control" min="1" max="7">
+                            </div>
+                        </div>
+                        <h4>Training Paces</h4>
+                        <div class="pace-grid">
+                            <div class="form-group">
+                                <label>Easy Pace (min)</label>
+                                <input type="text" id="easy_pace_min" class="form-control" placeholder="10:00">
+                            </div>
+                            <div class="form-group">
+                                <label>Easy Pace (max)</label>
+                                <input type="text" id="easy_pace_max" class="form-control" placeholder="11:10">
+                            </div>
+                            <div class="form-group">
+                                <label>Marathon Pace</label>
+                                <input type="text" id="marathon_pace_min" class="form-control" placeholder="9:05">
+                            </div>
+                            <div class="form-group">
+                                <label>Threshold Pace</label>
+                                <input type="text" id="threshold_pace_min" class="form-control" placeholder="8:30">
+                            </div>
+                            <div class="form-group">
+                                <label>Interval Pace</label>
+                                <input type="text" id="interval_pace_min" class="form-control" placeholder="7:55">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strength Settings -->
+                    <div class="settings-section" id="settings-strength">
+                        <h3>Strength Training Preferences</h3>
+                        <div class="form-group">
+                            <label>Available Equipment</label>
+                            <div class="checkbox-grid">
+                                <label><input type="checkbox" class="equipment-checkbox" value="dumbbells"> Dumbbells</label>
+                                <label><input type="checkbox" class="equipment-checkbox" value="barbells"> Barbells</label>
+                                <label><input type="checkbox" class="equipment-checkbox" value="kettlebells"> Kettlebells</label>
+                                <label><input type="checkbox" class="equipment-checkbox" value="bands"> Resistance Bands</label>
+                                <label><input type="checkbox" class="equipment-checkbox" value="machines"> Machines</label>
+                                <label><input type="checkbox" class="equipment-checkbox" value="bodyweight"> Bodyweight Only</label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>DOMS Tolerance</label>
+                                <select id="doms_tolerance" class="form-control">
+                                    <option value="low">Low - Minimize soreness</option>
+                                    <option value="moderate">Moderate</option>
+                                    <option value="high">High - Performance focused</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Max Session Duration (min)</label>
+                                <input type="number" id="max_session_duration_minutes" class="form-control" min="15" max="120" step="5">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Days Before Quality Run</label>
+                                <input type="number" id="days_before_quality_run" class="form-control" min="0" max="5">
+                            </div>
+                            <div class="form-group">
+                                <label>Days Before Long Run</label>
+                                <input type="number" id="days_before_long_run" class="form-control" min="0" max="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nutrition Settings -->
+                    <div class="settings-section" id="settings-nutrition">
+                        <h3>Nutrition Preferences</h3>
+                        <div class="form-group">
+                            <label>Dietary Restrictions</label>
+                            <div class="checkbox-grid">
+                                <label><input type="checkbox" class="dietary-checkbox" value="gluten_free"> Gluten-Free</label>
+                                <label><input type="checkbox" class="dietary-checkbox" value="dairy_free"> Dairy-Free</label>
+                                <label><input type="checkbox" class="dietary-checkbox" value="vegan"> Vegan</label>
+                                <label><input type="checkbox" class="dietary-checkbox" value="vegetarian"> Vegetarian</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Detail Level</label>
+                            <select id="nutrition_detail_level" class="form-control">
+                                <option value="general_guidelines">General Guidelines</option>
+                                <option value="macros_only">Macros Only</option>
+                                <option value="full_meals">Full Meal Plans</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Start Fueling After (minutes)</label>
+                                <input type="number" id="fueling_start_minutes" class="form-control" min="30" max="180" step="15">
+                            </div>
+                            <div class="form-group">
+                                <label>Fuel Every (minutes)</label>
+                                <input type="number" id="fuel_interval_minutes" class="form-control" min="15" max="60" step="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recovery Settings -->
+                    <div class="settings-section" id="settings-recovery">
+                        <h3>Recovery Thresholds</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Reduce Intensity if Sleep < (hours)</label>
+                                <input type="number" id="sleep_reduce_intensity_hours" class="form-control" min="4" max="10" step="0.5">
+                            </div>
+                            <div class="form-group">
+                                <label>Skip Quality if Sleep < (hours)</label>
+                                <input type="number" id="sleep_skip_quality_hours" class="form-control" min="3" max="8" step="0.5">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>RHR Alert Elevation (bpm)</label>
+                                <input type="number" id="rhr_alert_elevation_bpm" class="form-control" min="3" max="15">
+                            </div>
+                            <div class="form-group">
+                                <label>Adjustment Philosophy</label>
+                                <select id="adjustment_philosophy" class="form-control">
+                                    <option value="conservative">Conservative - Injury prevention</option>
+                                    <option value="moderate">Moderate - Balanced</option>
+                                    <option value="aggressive">Aggressive - Performance focused</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Environmental Settings -->
+                    <div class="settings-section" id="settings-environmental">
+                        <h3>Environmental Preferences</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Training Location</label>
+                                <input type="text" id="location" class="form-control" placeholder="Central Florida">
+                            </div>
+                            <div class="form-group">
+                                <label>Climate</label>
+                                <select id="climate" class="form-control">
+                                    <option value="hot_humid">Hot & Humid</option>
+                                    <option value="temperate">Temperate</option>
+                                    <option value="cold">Cold</option>
+                                    <option value="altitude">Altitude</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Adjust Paces When Temp > (°F)</label>
+                                <input type="number" id="temperature_adjust_f" class="form-control" min="60" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Dew Point Alert Threshold (°F)</label>
+                                <input type="number" id="dew_point_alert_f" class="form-control" min="50" max="80">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Injuries Settings -->
+                    <div class="settings-section" id="settings-injuries">
+                        <h3>Injury Tracking</h3>
+                        <div id="injuriesList" class="injuries-list">
+                            <p class="empty-state">No active injuries tracked</p>
+                        </div>
+                        <button id="addInjury" class="btn-secondary">➕ Add Injury</button>
+                    </div>
+
+                    <!-- App Settings -->
+                    <div class="settings-section" id="settings-app">
+                        <h3>App Preferences</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Theme</label>
+                                <select id="theme" class="form-control">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="auto">Auto (System)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Distance Units</label>
+                                <select id="distance_units" class="form-control">
+                                    <option value="imperial">Miles</option>
+                                    <option value="metric">Kilometers</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Auto Sync Interval</label>
+                                <select id="auto_sync_interval_hours" class="form-control">
+                                    <option value="1">Every Hour</option>
+                                    <option value="6">Every 6 Hours</option>
+                                    <option value="12">Every 12 Hours</option>
+                                    <option value="24">Daily</option>
+                                </select>
+                            </div>
+                            <div class="form-group-checkbox">
+                                <label><input type="checkbox" id="auto_sync_enabled"> Enable Auto Sync</label>
+                                <label><input type="checkbox" id="sync_alerts"> Sync Alerts</label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -732,6 +1250,325 @@
 
         // Focus input on load
         queryInput.focus();
+
+        // =====================================================================
+        // Settings Functionality
+        // =====================================================================
+
+        let currentSettings = {};
+
+        // Settings navigation
+        document.querySelectorAll('.settings-nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const section = btn.dataset.section;
+
+                // Update button states
+                document.querySelectorAll('.settings-nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Update section visibility
+                document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+                document.getElementById('settings-' + section).classList.add('active');
+            });
+        });
+
+        // Load settings when settings tab is clicked
+        document.querySelector('.tab[data-tab="settings"]').addEventListener('click', loadSettings);
+
+        async function loadSettings() {
+            try {
+                const response = await fetch('/api/v1/settings');
+                if (!response.ok) throw new Error('Failed to load settings');
+
+                currentSettings = await response.json();
+                populateSettingsForm(currentSettings);
+            } catch (error) {
+                console.error('Load settings error:', error);
+                showSettingsMessage('Failed to load settings: ' + error.message, 'error');
+            }
+        }
+
+        function populateSettingsForm(settings) {
+            // Communication
+            if (settings.communication) {
+                setValue('detail_level', settings.communication.detail_level);
+                setCheckbox('include_paces', settings.communication.include_paces);
+                setCheckbox('show_weekly_mileage', settings.communication.show_weekly_mileage);
+                setCheckbox('provide_calendar_views', settings.communication.provide_calendar_views);
+                setCheckbox('include_heart_rate_targets', settings.communication.include_heart_rate_targets);
+            }
+
+            // Training
+            if (settings.training) {
+                setValue('vdot_prescribed', settings.training.vdot_prescribed);
+                setValue('current_phase', settings.training.current_phase);
+                setValue('weekly_volume_hours', settings.training.weekly_volume_hours);
+                setValue('weekly_run_count', settings.training.weekly_run_count);
+
+                if (settings.training.easy_pace) {
+                    setValue('easy_pace_min', settings.training.easy_pace.min);
+                    setValue('easy_pace_max', settings.training.easy_pace.max);
+                }
+                if (settings.training.marathon_pace) {
+                    setValue('marathon_pace_min', settings.training.marathon_pace.min);
+                }
+                if (settings.training.threshold_pace) {
+                    setValue('threshold_pace_min', settings.training.threshold_pace.min);
+                }
+                if (settings.training.interval_pace) {
+                    setValue('interval_pace_min', settings.training.interval_pace.min);
+                }
+            }
+
+            // Strength
+            if (settings.strength) {
+                setCheckboxes('equipment-checkbox', settings.strength.equipment || []);
+                setValue('doms_tolerance', settings.strength.doms_tolerance);
+                setValue('max_session_duration_minutes', settings.strength.max_session_duration_minutes);
+                setValue('days_before_quality_run', settings.strength.days_before_quality_run);
+                setValue('days_before_long_run', settings.strength.days_before_long_run);
+            }
+
+            // Nutrition
+            if (settings.nutrition) {
+                setCheckboxes('dietary-checkbox', settings.nutrition.dietary_restrictions || []);
+                setValue('nutrition_detail_level', settings.nutrition.detail_level);
+                setValue('fueling_start_minutes', settings.nutrition.fueling_start_minutes);
+                setValue('fuel_interval_minutes', settings.nutrition.fuel_interval_minutes);
+            }
+
+            // Recovery
+            if (settings.recovery) {
+                setValue('sleep_reduce_intensity_hours', settings.recovery.sleep_reduce_intensity_hours);
+                setValue('sleep_skip_quality_hours', settings.recovery.sleep_skip_quality_hours);
+                setValue('rhr_alert_elevation_bpm', settings.recovery.rhr_alert_elevation_bpm);
+                setValue('adjustment_philosophy', settings.recovery.adjustment_philosophy);
+            }
+
+            // Environmental
+            if (settings.environmental) {
+                setValue('location', settings.environmental.location || '');
+                setValue('climate', settings.environmental.climate);
+                setValue('temperature_adjust_f', settings.environmental.temperature_adjust_f);
+                setValue('dew_point_alert_f', settings.environmental.dew_point_alert_f);
+            }
+
+            // App
+            if (settings.app) {
+                setValue('theme', settings.app.theme);
+                setValue('distance_units', settings.app.distance_units);
+                setValue('auto_sync_interval_hours', settings.app.auto_sync_interval_hours);
+                setCheckbox('auto_sync_enabled', settings.app.auto_sync_enabled);
+                setCheckbox('sync_alerts', settings.app.sync_alerts);
+
+                // Apply theme immediately
+                applyTheme(settings.app.theme);
+            }
+        }
+
+        function setValue(id, value) {
+            const element = document.getElementById(id);
+            if (element && value !== null && value !== undefined) {
+                element.value = value;
+            }
+        }
+
+        function setCheckbox(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.checked = !!value;
+            }
+        }
+
+        function setCheckboxes(className, values) {
+            document.querySelectorAll('.' + className).forEach(checkbox => {
+                checkbox.checked = values.includes(checkbox.value);
+            });
+        }
+
+        function getCheckboxValues(className) {
+            return Array.from(document.querySelectorAll('.' + className))
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+        }
+
+        // Save all settings
+        document.getElementById('saveAllSettings').addEventListener('click', async () => {
+            try {
+                // Collect all settings
+                const settingsToSave = {
+                    communication: {
+                        detail_level: document.getElementById('detail_level').value,
+                        include_paces: document.getElementById('include_paces').checked,
+                        show_weekly_mileage: document.getElementById('show_weekly_mileage').checked,
+                        provide_calendar_views: document.getElementById('provide_calendar_views').checked,
+                        include_heart_rate_targets: document.getElementById('include_heart_rate_targets').checked,
+                    },
+                    training: {
+                        vdot_prescribed: parseFloat(document.getElementById('vdot_prescribed').value),
+                        current_phase: document.getElementById('current_phase').value,
+                        weekly_volume_hours: parseFloat(document.getElementById('weekly_volume_hours').value),
+                        weekly_run_count: parseInt(document.getElementById('weekly_run_count').value),
+                        easy_pace: {
+                            min: document.getElementById('easy_pace_min').value,
+                            max: document.getElementById('easy_pace_max').value,
+                        },
+                        marathon_pace: {
+                            min: document.getElementById('marathon_pace_min').value,
+                            max: document.getElementById('marathon_pace_min').value,
+                        },
+                        threshold_pace: {
+                            min: document.getElementById('threshold_pace_min').value,
+                            max: document.getElementById('threshold_pace_min').value,
+                        },
+                        interval_pace: {
+                            min: document.getElementById('interval_pace_min').value,
+                            max: document.getElementById('interval_pace_min').value,
+                        },
+                    },
+                    strength: {
+                        equipment: getCheckboxValues('equipment-checkbox'),
+                        doms_tolerance: document.getElementById('doms_tolerance').value,
+                        max_session_duration_minutes: parseInt(document.getElementById('max_session_duration_minutes').value),
+                        days_before_quality_run: parseInt(document.getElementById('days_before_quality_run').value),
+                        days_before_long_run: parseInt(document.getElementById('days_before_long_run').value),
+                    },
+                    nutrition: {
+                        dietary_restrictions: getCheckboxValues('dietary-checkbox'),
+                        detail_level: document.getElementById('nutrition_detail_level').value,
+                        fueling_start_minutes: parseInt(document.getElementById('fueling_start_minutes').value),
+                        fuel_interval_minutes: parseInt(document.getElementById('fuel_interval_minutes').value),
+                    },
+                    recovery: {
+                        sleep_reduce_intensity_hours: parseFloat(document.getElementById('sleep_reduce_intensity_hours').value),
+                        sleep_skip_quality_hours: parseFloat(document.getElementById('sleep_skip_quality_hours').value),
+                        rhr_alert_elevation_bpm: parseInt(document.getElementById('rhr_alert_elevation_bpm').value),
+                        adjustment_philosophy: document.getElementById('adjustment_philosophy').value,
+                    },
+                    environmental: {
+                        location: document.getElementById('location').value,
+                        climate: document.getElementById('climate').value,
+                        temperature_adjust_f: parseInt(document.getElementById('temperature_adjust_f').value),
+                        dew_point_alert_f: parseInt(document.getElementById('dew_point_alert_f').value),
+                    },
+                    app: {
+                        theme: document.getElementById('theme').value,
+                        distance_units: document.getElementById('distance_units').value,
+                        auto_sync_interval_hours: parseInt(document.getElementById('auto_sync_interval_hours').value),
+                        auto_sync_enabled: document.getElementById('auto_sync_enabled').checked,
+                        sync_alerts: document.getElementById('sync_alerts').checked,
+                    },
+                };
+
+                // Save each category
+                for (const [category, data] of Object.entries(settingsToSave)) {
+                    const response = await fetch(`/api/v1/settings/${category}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(`Failed to save ${category}: ${error.error || 'Unknown error'}`);
+                    }
+                }
+
+                showSettingsMessage('All settings saved successfully!', 'success');
+
+                // Apply theme if changed
+                applyTheme(settingsToSave.app.theme);
+
+            } catch (error) {
+                console.error('Save settings error:', error);
+                showSettingsMessage('Failed to save settings: ' + error.message, 'error');
+            }
+        });
+
+        // Calculate paces from VDOT
+        document.getElementById('calculatePaces').addEventListener('click', async () => {
+            const vdot = parseFloat(document.getElementById('vdot_prescribed').value);
+
+            if (!vdot || vdot < 30 || vdot > 85) {
+                showSettingsMessage('Please enter a valid VDOT (30-85)', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/v1/settings/calculate-paces', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ vdot: vdot })
+                });
+
+                if (!response.ok) throw new Error('Failed to calculate paces');
+
+                const paces = await response.json();
+
+                // Update pace fields
+                document.getElementById('easy_pace_min').value = paces.easy_pace.min;
+                document.getElementById('easy_pace_max').value = paces.easy_pace.max;
+                document.getElementById('marathon_pace_min').value = paces.marathon_pace.min;
+                document.getElementById('threshold_pace_min').value = paces.threshold_pace.min;
+                document.getElementById('interval_pace_min').value = paces.interval_pace.min;
+
+                showSettingsMessage('Paces calculated successfully!', 'success');
+            } catch (error) {
+                console.error('Calculate paces error:', error);
+                showSettingsMessage('Failed to calculate paces: ' + error.message, 'error');
+            }
+        });
+
+        // Theme switching
+        document.getElementById('theme').addEventListener('change', (e) => {
+            applyTheme(e.target.value);
+        });
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+                document.querySelectorAll('img, video').forEach(el => {
+                    el.style.filter = 'invert(1) hue-rotate(180deg)';
+                });
+            } else if (theme === 'auto') {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (prefersDark) {
+                    document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+                    document.querySelectorAll('img, video').forEach(el => {
+                        el.style.filter = 'invert(1) hue-rotate(180deg)';
+                    });
+                } else {
+                    document.body.style.filter = '';
+                    document.querySelectorAll('img, video').forEach(el => {
+                        el.style.filter = '';
+                    });
+                }
+            } else {
+                document.body.style.filter = '';
+                document.querySelectorAll('img, video').forEach(el => {
+                    el.style.filter = '';
+                });
+            }
+        }
+
+        function showSettingsMessage(message, type) {
+            // Remove existing messages
+            document.querySelectorAll('.settings-message').forEach(el => el.remove());
+
+            // Create new message
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `settings-message ${type}`;
+            messageDiv.textContent = message;
+
+            // Insert at top of settings content
+            const settingsContent = document.querySelector('.settings-content');
+            settingsContent.insertBefore(messageDiv, settingsContent.firstChild);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
     </script>
 </body>
 </html>
