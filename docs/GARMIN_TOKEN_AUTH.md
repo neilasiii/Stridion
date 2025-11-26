@@ -20,6 +20,8 @@ Token-based authentication provides a more reliable way to access Garmin Connect
 
 ## Quick Start
 
+> **Mobile Users:** See [GARMIN_TOKEN_AUTH_MOBILE.md](GARMIN_TOKEN_AUTH_MOBILE.md) for iOS/Android-specific instructions.
+
 ### Option 1: Generate Tokens on Local Machine (Recommended)
 
 1. **On your LOCAL machine** (with browser access), run:

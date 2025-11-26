@@ -144,6 +144,10 @@ def extract_tokens_manual():
     print("="*70)
     print("\nFollow these steps to extract Garmin Connect OAuth tokens:\n")
 
+    print("MOBILE USERS: See docs/GARMIN_TOKEN_AUTH_MOBILE.md for mobile-specific")
+    print("              instructions (iOS/Android)")
+    print()
+
     print("1. Open a browser and navigate to:")
     print("   https://connect.garmin.com/")
     print()
