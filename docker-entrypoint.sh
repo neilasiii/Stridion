@@ -5,15 +5,18 @@ echo "🚀 Starting Running Coach Service..."
 
 # Wait for PostgreSQL to be ready
 echo "⏳ Waiting for PostgreSQL..."
-until pg_isready -h postgres -U coach; do
+until pg_isready -h postgres -p 5432; do
   echo "PostgreSQL is unavailable - sleeping"
   sleep 2
 done
 echo "✅ PostgreSQL is ready!"
 
+# Wait an additional 2 seconds for database to be fully initialized
+sleep 2
+
 # Check if database is initialized
 echo "🔍 Checking database initialization..."
-TABLE_COUNT=$(psql $DATABASE_URL -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'public';" 2>/dev/null || echo "0")
+TABLE_COUNT=$(psql "${DATABASE_URL}" -t -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'public';" 2>/dev/null || echo "0")
 
 if [ "$TABLE_COUNT" -eq "0" ]; then
   echo "📊 Database empty - initializing tables..."
