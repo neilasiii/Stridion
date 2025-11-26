@@ -81,7 +81,7 @@ services:
     networks:
       - running-coach-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-coach}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-coach} -d ${POSTGRES_DB:-running_coach}"]
       interval: 10s
       timeout: 5s
       retries: 5
