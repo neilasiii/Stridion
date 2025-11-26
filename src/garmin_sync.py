@@ -137,7 +137,10 @@ def get_garmin_client() -> Garmin:
     """
     Authenticate with Garmin Connect and return client.
 
-    Reads credentials from environment variables first, then falls back to config file.
+    Authentication priority:
+    1. Token-based authentication (from ~/.garminconnect/)
+    2. Password authentication (GARMIN_EMAIL and GARMIN_PASSWORD env vars)
+    3. Config file (config/.garmin_config.json)
 
     Returns:
         Garmin: Authenticated Garmin client
@@ -145,6 +148,23 @@ def get_garmin_client() -> Garmin:
     Raises:
         GarminSyncError: If authentication fails
     """
+    # Try token-based authentication first (imported from garmin_token_auth)
+    try:
+        # Import token auth helper
+        sys.path.insert(0, str(Path(__file__).parent))
+        from garmin_token_auth import authenticate_with_tokens
+
+        client = authenticate_with_tokens()
+        if client:
+            return client
+    except ImportError:
+        # Token auth module not available, fall back to password auth
+        pass
+    except Exception as e:
+        # Token auth failed, fall back to password auth
+        print(f"  Token authentication failed, trying password auth...", file=sys.stderr)
+
+    # Fall back to password authentication
     email = os.getenv("GARMIN_EMAIL")
     password = os.getenv("GARMIN_PASSWORD")
 
@@ -163,20 +183,51 @@ def get_garmin_client() -> Garmin:
 
     if not email or not password:
         raise GarminSyncError(
-            "GARMIN_EMAIL and GARMIN_PASSWORD must be set.\n"
-            "Option 1 - Environment variables:\n"
+            "Authentication failed. No valid tokens or credentials found.\n"
+            "\n"
+            "Option 1 - Token-based authentication (recommended for bots):\n"
+            "  python3 src/garmin_token_auth.py --extract\n"
+            "  (Follow the guide to extract tokens manually)\n"
+            "\n"
+            "Option 2 - Password authentication:\n"
             "  export GARMIN_EMAIL=your@email.com\n"
             "  export GARMIN_PASSWORD=yourpassword\n"
-            "Option 2 - Config file (config/.garmin_config.json):\n"
-            "  {\"email\": \"your@email.com\", \"password\": \"yourpassword\"}"
+            "\n"
+            "Option 3 - Config file (config/.garmin_config.json):\n"
+            "  {\"email\": \"your@email.com\", \"password\": \"yourpassword\"}\n"
+            "\n"
+            "Note: Password auth may fail due to Garmin's bot protection (403 errors).\n"
+            "      Token-based auth is more reliable for automated access."
         )
 
     try:
         client = Garmin(email, password)
         client.login()
+
+        # Save tokens for future use
+        try:
+            from garmin_token_auth import save_tokens
+            save_tokens(client)
+        except:
+            pass
+
         return client
     except Exception as e:
-        raise GarminSyncError(f"Failed to authenticate with Garmin Connect: {e}")
+        error_msg = str(e)
+        if '403' in error_msg or 'Forbidden' in error_msg:
+            raise GarminSyncError(
+                f"Password authentication blocked by Garmin (403 Forbidden).\n"
+                f"\n"
+                f"Garmin's security is blocking automated login attempts.\n"
+                f"Please use token-based authentication instead:\n"
+                f"\n"
+                f"  python3 src/garmin_token_auth.py --extract\n"
+                f"\n"
+                f"This will guide you through extracting OAuth tokens that work\n"
+                f"reliably for automated/bot access."
+            )
+        else:
+            raise GarminSyncError(f"Failed to authenticate with Garmin Connect: {e}")
 
 
 def _fetch_activity_splits(client: Garmin, activity_id: str, quiet: bool = False) -> List[Dict[str, Any]]:
