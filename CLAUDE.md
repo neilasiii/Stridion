@@ -31,15 +31,36 @@ python3 src/garmin_sync.py --quiet
 python3 src/garmin_sync.py --days 30 --summary
 ```
 
-**Environment Setup**
+**Authentication Setup**
+
+Token-based authentication is recommended for automated/bot access (more reliable than password auth):
+
 ```bash
-# Set credentials for Garmin Connect (required)
+# Option 1: Generate tokens on local machine (RECOMMENDED for bots)
+# Run this on a machine with browser access, then transfer tokens
+python3 bin/generate_garmin_tokens.py
+# Follow prompts, then transfer ~/.garmin_tokens/* to server at ~/.garminconnect/
+
+# Option 2: Extract tokens manually from browser
+python3 src/garmin_token_auth.py --extract
+# Follow the step-by-step guide
+
+# Option 3: Password authentication (may fail with 403 Forbidden in bot environments)
 export GARMIN_EMAIL=your@email.com
 export GARMIN_PASSWORD=yourpassword
+
+# Test authentication
+python3 src/garmin_token_auth.py --test
 
 # Then run sync
 bash bin/sync_garmin_data.sh
 ```
+
+**Why Token-Based Auth?**
+- Password auth often blocked by Garmin's bot protection (403 errors)
+- Tokens work reliably in automated/headless environments
+- Valid for ~1 year without re-authentication
+- See [docs/GARMIN_TOKEN_AUTH.md](docs/GARMIN_TOKEN_AUTH.md) for complete guide
 
 **ICS Calendar Import (Optional)**
 
