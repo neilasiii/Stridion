@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-11-28T03:56:25.117868+00:00",
+  "last_updated": "2025-11-28T08:20:18.491685+00:00",
   "last_sync_date": "2025-11-28",
   "activities": [
     {
@@ -28431,6 +28431,16 @@
   ],
   "training_readiness": [
     {
+      "date": "2025-11-28",
+      "score": 52,
+      "level": "MODERATE",
+      "recovery_time": 33,
+      "sleep_score": null,
+      "hrv_feedback": "POOR",
+      "stress_feedback": "GOOD",
+      "acute_load": 314
+    },
+    {
       "date": "2025-11-27",
       "score": 25,
       "level": "LOW",
@@ -32184,12 +32194,12 @@
   "stress_readings": [
     {
       "date": "2025-11-28",
-      "avg_stress": null,
-      "max_stress": null
+      "avg_stress": 12,
+      "max_stress": 35
     },
     {
       "date": "2025-11-27",
-      "avg_stress": 22,
+      "avg_stress": 23,
       "max_stress": 89
     },
     {
@@ -34066,8 +34076,8 @@
   "spo2_readings": [
     {
       "date": "2025-11-28",
-      "avg_spo2": null,
-      "lowest_spo2": null,
+      "avg_spo2": 95.0,
+      "lowest_spo2": 90,
       "avg_sleep_spo2": null
     },
     {
@@ -36324,13 +36334,13 @@
   "body_battery": [
     {
       "date": "2025-11-28",
-      "charged": null,
-      "drained": null
+      "charged": 28,
+      "drained": 0
     },
     {
       "date": "2025-11-27",
-      "charged": 68,
-      "drained": 48
+      "charged": 75,
+      "drained": 59
     },
     {
       "date": "2025-11-26",
@@ -38204,9 +38214,9 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-11-27",
+    "date": "2025-11-28",
     "time_5k": 1452,
-    "time_10k": 3048,
+    "time_10k": 3047,
     "time_half_marathon": 6806,
     "time_marathon": 14834
   },
@@ -38217,6 +38227,50 @@
     "training_status": {}
   },
   "scheduled_workouts": [
+    {
+      "workout_id": 1395832443,
+      "name": "Funk\u2019s Progressive thousands",
+      "description": "This is a progressive interval session that can be tough as you get further and further into the set - BUT, that\u2019s exactly the point. The intervals are followed by a nice cool down - so maybe use that as your motivation :) Overall, it\u2019s a pretty balanced workout between aerobic development and lactate control which is great to set a successful race day where the terrain is varied.\nI train several times a year at altitude and really like to execute this run while at altitude and conducting my lactate testing as part of the session. \nThis one requires a decent warm-up, so make sure to allow yourself the full time to warm up the legs before the main set. Once the warmup is complete, we\u2019ll dive straight into the intervals that alternate between 85, 90, and 95% of threshold pace.  \nThe key to this workout is of course to be mentally strong,  but also in control across all of the efforts. The session builds race readiness, pacing discipline, and metabolic strength\u2014(especially when done at elevation).  So Dial in...",
+      "sport_type": "running",
+      "estimated_duration_seconds": 2479,
+      "estimated_distance_meters": 6052.0,
+      "workout_provider": "HUMANGO",
+      "created_date": "2025-11-28T05:09:52.0",
+      "updated_date": "2025-11-28T05:09:52.0"
+    },
+    {
+      "workout_id": 1395832442,
+      "name": "Plank and crunch variations (HIIT)",
+      "description": "Focus on form on individual moves. If something is too easy, perform slower. Focus is on form and speed. Complete as many in the time as possible.\n",
+      "sport_type": "strength_training",
+      "estimated_duration_seconds": 1110,
+      "estimated_distance_meters": 0.0,
+      "workout_provider": "HUMANGO",
+      "created_date": "2025-11-28T05:09:51.0",
+      "updated_date": "2025-11-28T05:09:51.0"
+    },
+    {
+      "workout_id": 1395832439,
+      "name": "Endurance and tempo form-2",
+      "description": "This session is a fun one! With plenty of form tips to focus on you will be surprised how quickly this one flies by! Each interval has a form focus to help improve running efficiency.",
+      "sport_type": "running",
+      "estimated_duration_seconds": 2340,
+      "estimated_distance_meters": 5141.0,
+      "workout_provider": "HUMANGO",
+      "created_date": "2025-11-28T05:09:51.0",
+      "updated_date": "2025-11-28T05:09:51.0"
+    },
+    {
+      "workout_id": 1395832437,
+      "name": "90sec threshold intervals-2",
+      "description": "These short and focused threshold efforts will increase your bodies lactate tolerance - your ability to convert blood lactate to energy. The added bonus of this session is you have equal recovery to work intervals - nice for balancing the workload and recovery!",
+      "sport_type": "running",
+      "estimated_duration_seconds": 1740,
+      "estimated_distance_meters": 3721.0,
+      "workout_provider": "HUMANGO",
+      "created_date": "2025-11-28T05:09:50.0",
+      "updated_date": "2025-11-28T05:09:50.0"
+    },
     {
       "workout_id": 1395179199,
       "name": "Plank and crunch variations (HIIT)",

@@ -1,13 +1,13 @@
 # Communication Preferences
 
-## Detail Level: BRIEF
+## Detail Level: STANDARD
 
 **Options:**
 - `BRIEF`: Concise responses with just the essential information (schedule, key paces, quick adjustments)
 - `STANDARD`: Balanced detail with context and rationale
 - `DETAILED`: Full explanations including physiological reasoning, alternatives, and comprehensive context
 
-**Current Setting: BRIEF**
+**Current Setting: STANDARD**
 
 ---
 
