@@ -35,22 +35,22 @@ def format_duration(minutes):
     mins = minutes % 60
     return f"{hours}h{mins:02d}m"
 
-def format_pace(seconds_per_km):
-    """Format pace from seconds/km to min:sec/mi."""
-    if not seconds_per_km:
+def format_pace(pace_per_mile):
+    """Format pace from decimal minutes/mile to min:sec/mi."""
+    if not pace_per_mile:
         return "N/A"
-    # Convert to min/mile
-    seconds_per_mile = seconds_per_km * 1.60934
-    mins = int(seconds_per_mile // 60)
-    secs = int(seconds_per_mile % 60)
+    mins = int(pace_per_mile)
+    secs = int((pace_per_mile - mins) * 60)
     return f"{mins}:{secs:02d}/mi"
 
 def get_recent_activity(cache):
-    """Get most recent running activity."""
+    """Get most recent running activity with distance > 0."""
     activities = cache.get('activities', [])
     for activity in activities:
         if activity.get('activity_type') == 'RUNNING':
-            return activity
+            # Only return activities with actual distance data
+            if activity.get('distance_miles', 0) > 0:
+                return activity
     return None
 
 def get_last_night_sleep(cache):
@@ -184,11 +184,14 @@ def generate_report():
     # Recent activity
     activity = get_recent_activity(cache)
     if activity:
-        date = activity.get('date', 'Unknown')
-        distance_mi = round(activity.get('distance_km', 0) / 1.609, 1)
-        duration = format_duration(activity.get('duration_minutes', 0))
-        pace = format_pace(activity.get('avg_pace_seconds_per_km'))
-        lines.append(f"Last run ({date}): {distance_mi}mi in {duration} @ {pace}")
+        date = activity.get('date', 'Unknown')[:10]  # Just the date part
+        distance_mi = round(activity.get('distance_miles', 0), 2)
+        duration_mins = int(activity.get('duration_seconds', 0) / 60)
+        duration = format_duration(duration_mins)
+        pace = format_pace(activity.get('pace_per_mile'))
+        activity_name = activity.get('activity_name', 'Run')
+        lines.append(f"Last run ({date}): {activity_name}")
+        lines.append(f"  {distance_mi}mi in {duration} @ {pace}")
     else:
         lines.append("No recent runs found")
 
@@ -215,20 +218,21 @@ def generate_report():
             readiness_text += f" ({recovery_time_hrs}h recovery)"
         lines.append(readiness_text)
 
-    # Workout modification assessment
-    lines.append("")  # Blank line for separation
-    recommendation, reasoning = assess_workout_modification(
-        sleep, rhr, rhr_elevation, readiness_score, recovery_time_hrs
-    )
-    lines.append(recommendation)
-    if reasoning:
-        lines.append(f"→ {reasoning}")
-
     # Today's workout
     lines.append("")  # Blank line
     workout = get_scheduled_workout()
+
+    # Only show workout modification assessment if there's a run scheduled
     if workout:
         lines.append(f"TODAY: {workout}")
+        lines.append("")  # Blank line for separation
+
+        recommendation, reasoning = assess_workout_modification(
+            sleep, rhr, rhr_elevation, readiness_score, recovery_time_hrs
+        )
+        lines.append(recommendation)
+        if reasoning:
+            lines.append(f"→ {reasoning}")
     else:
         lines.append("No workout scheduled today")
 
