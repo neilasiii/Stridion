@@ -6,6 +6,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **running coach system** that provides personalized training guidance across four coaching domains: running, strength, mobility, and nutrition. The system integrates objective health data directly from **Garmin Connect** to inform coaching decisions with real metrics.
 
+## Automatic Git Commits
+
+Claude should automatically commit and push changes to the remote repository after completing these operations:
+
+1. **After syncing health data** (`bash bin/sync_garmin_data.sh`)
+   - Commit updated `data/health/health_data_cache.json`
+   - Include summary of what was synced in commit message
+
+2. **After creating or updating athlete context documents**
+   - Files in `data/athlete/` (goals.md, training_preferences.md, etc.)
+   - Commit immediately after changes
+   - Describe what was updated in commit message
+
+3. **After creating new training plans**
+   - Files in `data/plans/`
+   - Commit immediately after plan creation or major updates
+   - Include plan name and key details in commit message
+
+4. **After updating configuration files**
+   - Files in `config/` that are not in .gitignore
+   - System documentation (CLAUDE.md, README.md)
+   - Agent prompts in `.claude/agents/`
+
+**Important:** Do NOT commit files that are in `.gitignore` (like `config/calendar_sources.json` which contains private URLs).
+
 ## Key Commands
 
 ### Health Data Management
