@@ -18,24 +18,29 @@
 - **B Goal:** Sub-1:52:00 (8:33/mile pace) — 3+ minute improvement
 - **C Goal:** Sub-1:54:00 (8:42/mile pace) — 1+ minute improvement
 
-**Race Priority:** B-race (Important fitness check, secondary to marathon development)
+**Race Priority:** A-race (Primary goal race - full periodized training cycle with complete taper for peak performance)
 
 ---
 
 ## Plan Overview
 
-**Duration:** 12 weeks (December 15, 2025 - February 22, 2026)
-**Training Start:** December 15, 2025 (3 weeks post-marathon recovery completed)
-**Structure:** 4 runs per week + 2 strength sessions + 1 mobility session
+**Duration:** 12 weeks total (November 28, 2025 - February 22, 2026)
+- 2 weeks post-marathon recovery (Nov 28 - Dec 14)
+- 10 weeks structured training (Dec 15 - Feb 22)
+
+**Plan Start:** November 28, 2025 (Day 5 post-marathon)
+**Structured Training Start:** December 15, 2025 (Day 22 post-marathon)
+**Structure:** 4 runs per week + 2 strength sessions + 1 mobility session (after recovery phase)
 
 **Periodization:**
+- **Recovery Phase:** Weeks -2 to -1 (Nov 28 - Dec 14) — Post-marathon recovery integration
 - **Phase 1 — Base/Foundation:** Weeks 1-3 (Dec 15 - Jan 4)
 - **Phase 2 — Early Quality/Threshold Development:** Weeks 4-7 (Jan 5 - Feb 1)
-- **Phase 3 — Race-Specific Development:** Weeks 8-10 (Feb 2 - Feb 15)
-- **Phase 4 — Taper:** Weeks 11-12 (Feb 16 - Feb 22)
+- **Phase 3 — Race-Specific Development:** Weeks 8-9 (Feb 2 - Feb 15) — includes taper initiation
+- **Phase 4 — Race Week Taper:** Week 10 (Feb 16 - Feb 22) — Final A-race preparation
 
-**Peak Weekly Volume:** 40-45 miles / ~6.5 hours (Week 7-9)
-**Peak Long Run:** 100 minutes (Week 9)
+**Peak Weekly Volume:** 40-45 miles / ~6.5 hours (Week 7-8)
+**Peak Long Run:** 100 minutes (Week 8)
 
 ---
 
@@ -76,6 +81,102 @@
 - Use work fitness time (3 hrs/week) strategically for Thursday quality sessions
 - Weekend long runs on Saturday preferred
 - Adjust days as needed for recovery, sleep, or life demands
+
+---
+
+## RECOVERY PHASE: Post-Marathon Recovery
+**Weeks -2 to -1 (November 28 - December 14)**
+
+**Purpose:** Facilitate recovery from Chicago Marathon (Nov 23), reduce inflammation, allow connective tissue repair, prepare for structured training
+
+**Recovery Principles:**
+- Prioritize rest over running
+- All runs extremely easy (conversational pace)
+- No strength training in Week -2
+- Light mobility only
+- Monitor resting HR and sleep quality
+- Listen to body signals (soreness, fatigue, motivation)
+
+**Weekly Volume:** 10-20 miles / ~2-3 hours (minimal intensity)
+**Intensity:** 100% easy running (E pace)
+
+---
+
+### Recovery Week -2 (Nov 28 - Dec 6)
+**Days 5-13 Post-Marathon**
+
+**Focus:** Initial recovery from marathon, prioritize rest, very short easy runs only
+
+**Friday, Nov 28 (Day 5 post-marathon):** REST
+- Complete rest day
+- Light walking okay
+- Hydration and nutrition focus
+
+**Saturday, Nov 29:** REST
+- Complete rest day
+- Optional: 10-15 min light walking
+
+**Sunday, Nov 30:** 30-40 min E (10:00-11:10 pace)
+- Purpose: First extended easy run post-marathon
+- Keep conversational, stop if any pain appears
+- Week 1 post-marathon long run replacement
+
+**Monday, Dec 1:** REST
+
+**Tuesday, Dec 2:** REST or light mobility (20-30 min)
+- Gentle stretching, foam rolling
+- Focus on hip flexors, calves, hamstrings
+
+**Wednesday, Dec 3:** 30-40 min E (10:00-11:10 pace)
+- Purpose: Continued gentle movement for recovery
+
+**Thursday, Dec 4:** REST
+
+**Friday, Dec 5:** 30-40 min E (10:00-11:10 pace)
+- Purpose: Build consistency in easy running
+
+**Saturday, Dec 6:** REST
+
+**Weekly Total:** ~2 hours / ~10-12 miles
+
+---
+
+### Recovery Week -1 (Dec 7-14)
+**Days 14-21 Post-Marathon**
+
+**Focus:** Gradual reintroduction of consistent running, prepare for base phase
+
+**Sunday, Dec 7:** 40-50 min E (10:00-11:10 pace)
+- Purpose: Extended easy run to bridge to base phase
+- Week 2 post-marathon long run
+
+**Monday, Dec 8:** REST or light mobility (20-30 min)
+
+**Tuesday, Dec 9:** REST
+
+**Wednesday, Dec 10:** 40-50 min E (10:00-11:10 pace)
+- Purpose: Maintain running consistency
+
+**Thursday, Dec 11:** REST
+
+**Friday, Dec 12:** 40-50 min E (10:00-11:10 pace)
+- Purpose: Final recovery run before structured training begins
+
+**Saturday, Dec 13:** REST or light mobility
+
+**Sunday, Dec 14:** 50-60 min E (10:00-11:10 pace)
+- Purpose: Bridge long run into base phase
+- Assess readiness for structured training
+- Final recovery week long run
+
+**Weekly Total:** ~3-3.5 hours / ~18-20 miles
+
+**Recovery Assessment Before Base Phase:**
+- ✓ Resting HR returned to normal baseline (46-48 bpm)
+- ✓ No lingering soreness or injury concerns
+- ✓ Sleep quality normalized
+- ✓ Motivation for training returning
+- ✓ Ready to begin structured base building
 
 ---
 
@@ -290,142 +391,124 @@
 ---
 
 ## Phase 3: Race-Specific Development
-**Weeks 8-10 (February 2 - February 15)**
+**Weeks 8-9 (February 2 - February 15)**
 
-**Purpose:** Make half marathon pace feel sustainable, introduce interval work, practice race-pace segments
+**Purpose:** Make half marathon pace feel sustainable, introduce interval work, practice race-pace segments, initiate taper
 
-**Weekly Volume:** 38-45 miles / ~6-6.5 hours
+**Weekly Volume:** 38-45 miles / ~6-6.5 hours (Week 8), reducing to ~33 miles / ~5 hours (Week 9)
 **Intensity Distribution:** 75% easy, 15% threshold/tempo, 10% intervals/race-pace
-**Long Run Duration:** 90-100 minutes with race-pace segments
-**Quality Sessions:** 1 interval or tempo session + 1 long run with race-pace work
+**Long Run Duration:** 100 minutes (Week 8), 70 minutes (Week 9)
+**Quality Sessions:** 1 interval or tempo session + 1 long run with race-pace work (Week 8), final race-pace check (Week 9)
 
-### Week 8 (Feb 2-8)
-**Focus:** Introduce race-pace work, reduce threshold volume
+### Week 8 (Feb 2-8) — **PEAK WEEK**
+**Focus:** Peak training load, race-pace confidence building, maximum fitness
 
-**Monday, Feb 2:** 45 min E
+**Monday, Feb 2:** 50 min E
+- Purpose: Maintain aerobic volume at peak level
 
 **Tuesday, Feb 3:** Strength — Primary Lower Body
+- Final full-intensity lower body session before taper
 
-**Wednesday, Feb 4:** 50 min E
+**Wednesday, Feb 4:** 45 min E
+- Purpose: Recovery between quality sessions
 
-**Thursday, Feb 5:** **Interval Introduction**
-- Warmup: 15 min E + 4 strides
-- Main: 5 × 3 min I (8:10-8:20) with 3 min easy jog recovery
-- Cooldown: 10 min E
-- Purpose: VO2max development, prepare for race-pace intensity
-- **Total Time:** ~55 min
-
-**Friday, Feb 6:** Light Strength — Maintenance
-
-**Saturday, Feb 7:** **Long Run with Race-Pace Segment**
-- 15 min E warmup
-- 40 min steady M pace (9:20-9:30) — practice sustained moderate effort
-- 20 min E cooldown
-- Purpose: Make M pace feel comfortable and sustainable
-- **Total Time:** 75 min
-
-**Sunday, Feb 8:** Mobility/Yoga (45 min)
-
-**Weekly Total:** ~5.8 hours / ~38 miles
-
----
-
-### Week 9 (Feb 9-15) — **PEAK WEEK**
-**Focus:** Peak training load, race-pace confidence building
-
-**Monday, Feb 9:** 50 min E
-
-**Tuesday, Feb 10:** Strength — Primary Lower Body
-- Final heavy lower body session (taper begins next week)
-
-**Wednesday, Feb 11:** 45 min E
-
-**Thursday, Feb 12:** **Race-Pace Intervals**
+**Thursday, Feb 5:** **Race-Pace Intervals**
 - Warmup: 15 min E + 4 strides
 - Main: 4 × 5 min at HM goal pace (8:30-8:35) with 2 min easy jog recovery
 - Cooldown: 10 min E
 - Purpose: Practice sustaining goal race pace with recovery
 - **Total Time:** ~53 min
-- **Note:** If A goal pace (8:24) feels sustainable, use that. Otherwise stick to B goal pace.
+- **Note:** If A goal pace (8:24) feels sustainable, use that. Otherwise stick to B goal pace (8:33).
 
-**Friday, Feb 13:** Light Strength — Maintenance
+**Friday, Feb 6:** Light Strength — Maintenance
 
-**Saturday, Feb 14:** **Peak Long Run**
+**Saturday, Feb 7:** **Peak Long Run with Race-Pace Segments**
 - 20 min E warmup
-- 30 min M pace (9:20-9:30)
-- 5 min easy jog
-- 20 min at HM goal pace (8:30-8:35)
+- 30 min M pace (9:20-9:30) — moderate sustained effort
+- 5 min easy jog recovery
+- 20 min at HM goal pace (8:30-8:35) — practice race effort after fatigue
 - 15 min E cooldown
 - Purpose: Practice race-pace effort after sustained running, build confidence
 - **Total Time:** 100 min
 
-**Sunday, Feb 15:** Mobility/Yoga (45 min)
+**Sunday, Feb 8:** Mobility/Yoga (45 min)
+- Focus: Recovery from peak week
 
 **Weekly Total:** ~6.5 hours / ~43 miles
 
 ---
 
-### Week 10 (Feb 16-22) — **TAPER WEEK 1**
-**Focus:** Begin taper, maintain sharpness, reduce volume 30%
+### Week 9 (Feb 9-15) — **TAPER INITIATION**
+**Focus:** Begin taper, final race-pace confidence check, reduce volume 20%
 
-**Monday, Feb 16:** 40 min E
+**Monday, Feb 9:** 45 min E
 - Purpose: Begin reducing volume while maintaining consistency
 
-**Tuesday, Feb 17:** Strength — Light Maintenance Only
+**Tuesday, Feb 10:** Strength — Light Maintenance Only
 - Focus: Core, mobility-based movements, avoid DOMS
-- No heavy lower body work
+- No heavy lower body work (final taper begins)
 
-**Wednesday, Feb 18:** 35 min E
+**Wednesday, Feb 11:** 40 min E
+- Purpose: Easy running, minimize stress
 
-**Thursday, Feb 19:** **Sharpness Session**
+**Thursday, Feb 12:** **Final Quality Workout**
 - Warmup: 15 min E + 4 strides
-- Main: 3 × 3 min at HM goal pace (8:30-8:35) with 3 min easy jog
+- Main: 3 × 5 min at HM goal pace (8:30-8:35) with 3 min easy jog recovery
 - Cooldown: 10 min E
-- Purpose: Maintain neuromuscular sharpness without fatigue
-- **Total Time:** ~43 min
+- Purpose: Final race-pace confidence check, confirm pacing feels sustainable
+- **Total Time:** ~49 min
+- **Note:** If A goal pace (8:24) feels very comfortable, you're ready. Otherwise B goal (8:33) is the target.
 
-**Friday, Feb 20:** REST or 20-30 min E (very easy, optional)
-- Light mobility stretching
+**Friday, Feb 13:** REST or 20 min E (optional, very easy)
+- Light mobility if running
 
-**Saturday, Feb 21:** 60 min E
-- Purpose: Reduced long run, keep legs moving without stress
+**Saturday, Feb 14:** 70 min E
+- Purpose: Reduced long run (down from 100 min peak), maintain aerobic stimulus without stress
+- Keep entirely conversational
 
-**Sunday, Feb 22:** Mobility/Yoga (30 min)
-- Focus: Hip openers, calf/hamstring release
+**Sunday, Feb 15:** Mobility/Yoga (40 min)
+- Focus: Hip openers, hamstring/calf release, prepare for race week
 
-**Weekly Total:** ~4.5 hours / ~30 miles
+**Weekly Total:** ~5 hours / ~33 miles (~20% reduction from peak)
 
 ---
 
-## Phase 4: Taper
-**Weeks 11-12 (February 16-22)**
+## Phase 4: Race Week Taper
+**Week 10 (February 16-22)**
 
-### Week 11 (Feb 16-22) — Race Week
-**Focus:** Final taper, race prep, arrive fresh and sharp
+### Week 10 (Feb 16-22) — **RACE WEEK**
+**Focus:** Final taper for A-race, arrive fresh and sharp, maximum rest and preparation
 
 **Monday, Feb 16:** 30 min E
 - Purpose: Keep legs loose, minimal volume
+- Very easy conversational pace
 
 **Tuesday, Feb 17:** REST or Mobility Only (20 min)
-- Light stretching, foam rolling, no strength work
+- Light stretching, foam rolling only
+- No strength work this week
 
 **Wednesday, Feb 18:** 25 min E + 4 × 20-sec strides
 - Purpose: Final neuromuscular activation, maintain sharpness
-- Strides at race pace effort (not all-out)
+- Strides at race pace effort (smooth, not all-out)
+- This is your last workout before race day
 
 **Thursday, Feb 19:** REST
-- Complete rest day, prioritize sleep and hydration
+- Complete rest day
+- Prioritize sleep, hydration, and mental preparation
 
-**Friday, Feb 20:** 20 min E (very easy)
+**Friday, Feb 20:** 20 min E (very easy, optional)
 - Shakeout run to keep legs fresh
-- Optional: skip if feeling good
+- Skip if feeling good and prefer complete rest
 
 **Saturday, Feb 21:** REST + Race Prep
-- Travel to Tampa if needed
-- Hydration focus, light meal planning
-- Early bed time
+- Travel to Tampa if needed (race is local, so minimal travel)
+- Hydration focus throughout day
+- Prepare race gear, bib, nutrition
+- Light, familiar meals (gluten-free, dairy-free)
+- Early bed time (target 8+ hours sleep)
 
 **Sunday, Feb 22:** **RACE DAY — Gasparilla Half Marathon**
+- See Race Week Strategy section below for detailed race day protocol
 
 **Weekly Total:** ~2 hours / ~13 miles (pre-race)
 
@@ -498,9 +581,9 @@
 - Duration: 30-40 min
 - Purpose: Maintain strength without fatigue before weekend long run
 
-**Taper Adjustments:**
-- Week 10: Reduce to maintenance only (no heavy lower body)
-- Week 11-12: Optional light core work only, no lower body loading
+**Taper Adjustments (A-Race Protocol):**
+- Week 9: Reduce to light maintenance only (no heavy lower body work)
+- Week 10 (Race Week): Optional light core/mobility work only, no strength training with weights
 
 **Coordination with Running:**
 - Schedule primary strength 48+ hours before quality runs
@@ -600,15 +683,22 @@
 - ✓ Long runs at 90 min comfortably
 - ✓ Ready for race-pace intensity introduction
 
-**Week 9 (Peak Week):**
-- ✓ Completed peak training volume (43+ miles)
-- ✓ Race-pace segments feel sustainable
-- ✓ Confidence in A or B goal pacing
+**Week 8 (Peak Week):**
+- ✓ Completed peak training volume (43 miles)
+- ✓ Race-pace segments in long run feel sustainable
+- ✓ Confidence in A or B goal pacing established
+- ✓ No injury concerns, ready to begin taper
 
-**Week 11 (Race Week):**
-- ✓ Taper completed, feeling fresh
+**Week 9 (Taper Initiation):**
+- ✓ Reduced volume feels restorative, not detraining
+- ✓ Final quality workout confirms race pace readiness
+- ✓ Legs feel fresh, ready for race week
+
+**Week 10 (Race Week):**
+- ✓ Taper completed, feeling fresh and sharp
 - ✓ No injury or illness concerns
-- ✓ Race-day logistics confirmed
+- ✓ Race-day logistics confirmed (travel, gear, nutrition plan)
+- ✓ Mental preparation complete, confident in race strategy
 
 ---
 
@@ -685,26 +775,48 @@
 
 ## Summary
 
-**Total Training Weeks:** 12 weeks (Dec 15, 2025 - Feb 22, 2026)
+**Total Duration:** 12 weeks (Nov 28, 2025 - Feb 22, 2026)
+- **Recovery Phase:** 2 weeks (Nov 28 - Dec 14) — Post-marathon recovery
+- **Structured Training:** 10 weeks (Dec 15 - Feb 22) — Periodized half marathon training
 
 **Phase Breakdown:**
-- Phase 1 (Base): 3 weeks — rebuild aerobic foundation
-- Phase 2 (Early Quality): 4 weeks — threshold development
-- Phase 3 (Race-Specific): 3 weeks — race-pace work, intervals, peak volume
-- Phase 4 (Taper): 2 weeks — reduce volume, maintain sharpness
+- **Recovery Phase (Weeks -2 to -1):** 2 weeks — Post-marathon recovery, gradual return to running
+- **Phase 1 (Base):** 3 weeks (Weeks 1-3) — Rebuild aerobic foundation
+- **Phase 2 (Early Quality):** 4 weeks (Weeks 4-7) — Threshold development
+- **Phase 3 (Race-Specific):** 2 weeks (Weeks 8-9) — Race-pace work, intervals, peak volume, taper initiation
+- **Phase 4 (Race Week):** 1 week (Week 10) — Final taper, maximum rest for A-race
 
-**Peak Week:** Week 9 (Feb 9-15) — 43 miles, 100-min long run with race-pace segments
+**Complete Week Structure:**
+- Recovery Week -2 (Nov 28 - Dec 6): ~10-12 miles, rest-focused
+- Recovery Week -1 (Dec 7-14): ~18-20 miles, gradual return
+- Week 1 (Dec 15-21): 31 miles, base building begins
+- Week 2 (Dec 22-28): 33 miles, base building
+- Week 3 (Dec 29 - Jan 4): 35 miles, base completion
+- Week 4 (Jan 5-11): 36 miles, threshold introduction
+- Week 5 (Jan 12-18): 38 miles, threshold progression
+- Week 6 (Jan 19-25): 40 miles, extended threshold
+- Week 7 (Jan 26 - Feb 1): 40 miles, threshold peak
+- Week 8 (Feb 2-8): 43 miles, PEAK WEEK (race-pace work)
+- Week 9 (Feb 9-15): 33 miles, taper initiation
+- Week 10 (Feb 16-22): 13 miles, race week taper
+- **Sunday, Feb 22: RACE DAY**
+
+**Peak Week:** Week 8 (Feb 2-8) — 43 miles, 100-min long run with race-pace segments
 
 **Quality Sessions:**
-- Weeks 1-3: Strides only
+- Recovery Weeks -2/-1: No quality, all easy running
+- Weeks 1-3: Strides only (base building)
 - Weeks 4-7: Threshold work (2-3 × 8-15 min T)
-- Weeks 8-10: Intervals and race-pace segments
-- Weeks 11-12: Minimal intensity, taper
+- Week 8: Race-pace intervals + peak long run with HM pace segments
+- Week 9: Final quality check (3 × 5 min at goal pace), reduced volume
+- Week 10: Minimal running, strides only, complete taper
 
-**Taper Structure:**
-- Week 10: 30% volume reduction, light quality work
-- Week 11: 60% volume reduction, final sharpness session
-- Race week: 70% volume reduction, rest prioritized
+**Taper Structure (A-Race Protocol):**
+- Week 9: 20% volume reduction (~33 miles), final quality workout Thursday, reduced long run (70 min)
+- Week 10 (Race Week): 70% volume reduction (~13 miles), strides only (Wednesday), complete rest prioritized
+
+**Integration Rationale:**
+The recovery phase seamlessly transitions into base building, allowing proper post-marathon healing while maintaining the A-race optimization for Feb 22. The 2-week recovery ensures no compromise to the quality of structured training phases, and the athlete begins base phase on Day 22 post-marathon (Dec 15) — well within safe return-to-training guidelines.
 
 **File Location:** `/storage/running-coach/data/plans/gasparilla_half_marathon_plan_feb_2026.md`
 
