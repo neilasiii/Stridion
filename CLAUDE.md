@@ -464,6 +464,12 @@ running-coach/
 - Conservative adjustments when sleep/recovery compromised
 - Strength training supports running (doesn't compete with it)
 
+### Race Priority Logic
+- When athlete has only **one upcoming race** in their schedule, that race should be treated as an **A-race** (peak priority)
+- A-race designation means: full periodized training cycle, complete taper, maximum effort
+- Coaches should check `data/athlete/upcoming_races.md` to determine current race priority status
+- If multiple races are scheduled, follow the priority definitions in that file
+
 ### Current Status (as of system setup)
 - Training for marathon goal of 4:00 (9:10/mi pace)
 - Recent training: ~65 miles over 14 days
