@@ -7,44 +7,12 @@ Agents should use this information to align training phases, taper timing, and r
 
 ## Race Calendar
 
-### Central Florida Legends Skunk Ape Marathon
-- **Date:** November 23, 2025
+### Central Florida Legends Skunk Ape Marathon ✓ COMPLETED
+- **Date:** November 23, 2025 (Completed)
 - **Location:** Central Florida
 - **Distance:** Marathon (26.2 miles)
-- **Course Type:** [To be determined - update with course profile]
-- **Expected Conditions:** Mild temperatures, potentially warm/humid for Central Florida in November
-
-**Time Goals:**
-- **A Goal (Stretch):** Sub 4:00:00 (under 9:09/mile pace)
-- **B Goal (Target):** Sub 4:30:00 (under 10:18/mile pace)
-- **C Goal (Minimum Success):** Complete the marathon without injury
-
-**Race Priority:** A-race
-
-**Training Phase Alignment:**
-- **Current Phase:** Taper (race in 10 days from Nov 13)
-- **Weeks Until Race:** 1.5 weeks
-- **Taper Start:** November 9-10, 2025
-
-**Race Strategy Notes:**
-- Even pacing strategy - avoid going out too fast
-- Practice early-race restraint despite feeling fresh from taper
-- Primary target: sub-4:00 (9:09/mile pace), but flexible given injury prevention priority
-- If targeting A goal, aim for consistent 9:00-9:09/mile pace in first half
-- If conditions warrant or fatigue appears, adjust to B goal pace (10:00-10:18/mile)
-- Focus on maintaining form and rhythm in later miles (18+)
-- Priority: finish healthy and injury-free (C goal takes precedence if needed)
-
-**Fueling Plan:**
-- **Pre-race:** [Update with specific meal and timing - gluten-free, dairy-free]
-- **During race:** [Update with gel schedule - previously used Precision Fuel and Huma gels]
-- **Hydration:** [Update with water/electrolyte plan - previously used Base salts/FastChews]
-
-**Special Considerations:**
-- Monitor posterior tibialis symptoms during taper
-- Prioritize sleep despite newborn-related challenges
-- Final week: minimize new foods, trust taper protocol
-- [Add course-specific notes and logistics as race approaches]
+- **Race Priority:** A-race
+- **Status:** Race completed, in post-race recovery period (through Dec 14, 2025)
 
 ---
 
@@ -63,7 +31,7 @@ Agents should use this information to align training phases, taper timing, and r
 - **B Goal (Target):** Sub 1:52:00 (under 8:33/mile pace) - 3+ minute improvement
 - **C Goal (Minimum Success):** Sub 1:54:00 (under 8:42/mile pace) - 1+ minute improvement
 
-**Race Priority:** B-race (Important fitness check, but secondary to marathon development)
+**Race Priority:** A-race (Only upcoming race in schedule - full training cycle with peak taper)
 
 **Training Phase Alignment:**
 - **Current Phase:** Post-marathon recovery, then base rebuilding (race is 13 weeks after marathon)
