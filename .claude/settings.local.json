@@ -30,7 +30,9 @@
       "Bash(for date in \"2025-11-23\" \"2025-11-24\" \"2025-11-29\" \"2025-12-06\")",
       "Bash(do date -d \"$date\" +\"%A, %B %d, %Y\")",
       "Bash(done)",
-      "Bash(time curl:*)"
+      "Bash(time curl:*)",
+      "Bash(./venv/bin/pip3 install:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
