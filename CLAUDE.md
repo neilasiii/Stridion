@@ -448,7 +448,9 @@ running-coach/
 
 ### Schedule Constraints
 - Works Mon-Thu, 0700-1730 (in-office)
-- Has 3 hours/week of work-granted fitness time (typically morning sessions ~0715)
+- **Currently on paid parental leave through January 5, 2026** - full scheduling flexibility
+- Returns to work January 6, 2026
+- Has 3 hours/week of work-granted fitness time (typically morning sessions ~0715) when working
 - Prefers early morning workouts on workdays
 - Weekend flexibility for long runs (Saturday) and mobility (Sunday)
 

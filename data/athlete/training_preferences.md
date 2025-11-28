@@ -22,22 +22,29 @@ profile, and training history.
 
 ### Work Schedule
 - Works **four days per week**: **Monday–Thursday**, **0700–1730** in-office.
-- Commute, family responsibilities, and work hours limit training flexibility on these days.
+- **Currently on paid parental leave** through **January 5, 2026**
+  - Full scheduling flexibility during this period (no work constraints)
+  - Returns to normal work schedule January 6, 2026
+- Commute, family responsibilities, and work hours limit training flexibility on regular workdays.
 
 ### Fitness Hours Availability
-- Has **3 hours per week** of dedicated fitness time granted by work.
+- Has **3 hours per week** of dedicated fitness time granted by work (when working).
 - Typically used for **morning training sessions around 0715**.
 - These hours are ideal for:
   - Runs under 60 minutes
-  - Thursday morning quality sessions  
-  - Optional easy run mornings if recovery is good  
+  - Thursday morning quality sessions
+  - Optional easy run mornings if recovery is good
 
 ### Scheduling Preferences
 - Prefers **early morning workouts** on workdays.
 - Avoids evening sessions due to:
-  - family obligations  
-  - newborn care  
-  - fatigue from long workdays  
+  - family obligations
+  - newborn care
+  - fatigue from long workdays (when working)
+- **During parental leave (through Jan 5):**
+  - Flexible timing for workouts throughout the day
+  - Can schedule longer sessions on any day (not just weekends)
+  - Morning sessions still preferred but mid-day options available
 
 ### Weekend Flexibility
 - Friday, Saturday, and Sunday provide more flexibility.
@@ -45,10 +52,12 @@ profile, and training history.
 - Sunday is ideal for a longer mobility/yoga block.
 
 ### Agent Guidance Expectations
-- Favor **morning workouts** for workdays.
-- Avoid long/intense weekday evenings.
-- Keep weekday sessions **time-efficient**.
-- Schedule demanding or long sessions on weekends.
+- **Through January 5, 2026:** Full flexibility - can schedule workouts any day/time
+- **Starting January 6, 2026:** Return to standard work schedule guidance below
+- Favor **morning workouts** for workdays (when working).
+- Avoid long/intense weekday evenings (when working).
+- Keep weekday sessions **time-efficient** (when working).
+- Schedule demanding or long sessions on weekends (when working).
 
 ---
 
