@@ -54,24 +54,16 @@ profile, and training history.
 
 ## 3. Training Structure Preferences
 
-- Prefers a **consistent weekly cadence**, especially:
-  - Mon: Easy  
-  - Tue: Strength  
-  - Wed: Easy  
-  - Thu: Quality  
-  - Fri: Light strength  
-  - Sat: Long run  
-  - Sun: Mobility/Yoga  
-
 - Strong preference for **time-based workouts** instead of distance.
 - Likes **Jack Daniels–style zone labeling** (E, M, T, I, R).
 - Wants **periodized training**:
   - Base → Early Quality → Race-Specific → Taper.
 
 ### Flexibility Preference
-- While the above structure is preferred, **the athlete is flexible**.
+- **The athlete is flexible** regarding weekly scheduling.
 - The coach should:
-  - Allow deviations from the weekly structure when needed.  
+  - Design optimal weekly structure based on work schedule, recovery needs, and training phase.
+  - Allow deviations from any proposed structure when needed.
   - Provide **alternative scheduling options** if life, work, newborn care, or sleep interfere.
   - Encourage adjustments that preserve training intent even if the day shifts.
   - Avoid rigidity — emphasize **principles over exact day-by-day adherence**.
