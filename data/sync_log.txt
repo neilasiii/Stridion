@@ -1,0 +1,128 @@
+[2025-11-28 15:37:05] Sync attempt (exit code: 1)
+Error: garminconnect library not installed.
+Install with: pip3 install garminconnect
+---
+[2025-11-28 15:37:56] Sync attempt (exit code: 1)
+Error: garminconnect library not installed.
+Install with: pip3 install garminconnect
+---
+[2025-11-28 15:49:31] Sync attempt (exit code: 1)
+Error: garminconnect library not installed.
+Install with: pip3 install garminconnect
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-11-21 to 2025-11-28
+============================================================
+
+Authenticating with Garmin Connect...
+---
+[2025-11-28 17:17:27] Sync attempt (exit code: 0)
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/None?date=2025-11-21 (status=403)
+  Warning: Error fetching RHR for 2025-11-21: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/None?date=2025-11-22 (status=403)
+  Warning: Error fetching RHR for 2025-11-22: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/None?date=2025-11-23 (status=403)
+  Warning: Error fetching RHR for 2025-11-23: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/None?date=2025-11-24 (status=403)
+  Warning: Error fetching RHR for 2025-11-24: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/None?date=2025-11-25 (status=403)
+  Warning: Error fetching RHR for 2025-11-25: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/None?date=2025-11-26 (status=403)
+  Warning: Error fetching RHR for 2025-11-26: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/None?date=2025-11-27 (status=403)
+  Warning: Error fetching RHR for 2025-11-27: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/wellness-service/wellness/dailyHeartRate/None?date=2025-11-28 (status=403)
+  Warning: Error fetching RHR for 2025-11-28: GarminConnectConnectionError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-11-21 to 2025-11-28
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-11-21 to 2025-11-28...
+  Found 3 activities (running/walking)
+Fetching sleep data from 2025-11-21 to 2025-11-28...
+  Found 8 sleep sessions
+Fetching VO2 max data...
+  Found 1 VO2 max readings
+Fetching weight data...
+  Found 1 weight readings
+Fetching resting heart rate data...
+  Found 0 resting HR readings
+Fetching HRV data...
+  Found 8 HRV readings
+Fetching training readiness data...
+  Found 8 readiness readings
+Fetching stress data...
+  Found 8 stress readings
+Fetching SpO2 data...
+  Found 8 SpO2 readings
+Fetching body battery data...
+  Found 8 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-11-28
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 77 workout templates
+
+No scheduled workouts found in calendar sources
+  To add scheduled workout dates:
+  1. Add calendar URL to: /data/data/com.termux/files/home/running-coach/config/calendar_sources.json
+     OR
+  2. Save .ics file to: /data/data/com.termux/files/home/running-coach/data/calendar/
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 3 records
+  ✓ Sleep: 8 records
+  ✓ VO2 Max: 1 records
+  ✓ Weight: 1 records
+  ⚠ Resting HR: 0 records
+  ✓ HRV: 8 records
+  ✓ Training Readiness: 8 records
+  ✓ Stress: 8 records
+  ✓ SpO2: 8 records
+  ✓ Body Battery: 8 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 77 workouts
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 9 total
+  Running: 4 runs, 41.9 miles, 7.2 hrs
+           Avg pace: 10:18/mile
+  Walking: 5 walks, 7.2 miles
+
+Sleep: 15 nights
+  Avg duration: 6.8 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.6 ml/kg/min (most recent)
+
+Weight: 170.1 lbs (most recent)
+
+Resting HR: 45 bpm (most recent), 45 bpm avg
+
+============================================================
+Last updated: 2025-11-28T22:17:27.034813+00:00
+============================================================
+
+✓ Sync complete!
+---

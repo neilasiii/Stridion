@@ -61,22 +61,35 @@ def get_last_night_sleep(cache):
     return None
 
 def get_rhr_trend(cache, days=3):
-    """Get recent RHR trend."""
+    """Get recent RHR trend and baseline comparison."""
     rhr_readings = cache.get('resting_hr_readings', [])
     if not rhr_readings or len(rhr_readings) < days:
-        return None
+        return None, None
 
+    # Recent average (last 3 days)
     recent = rhr_readings[:days]
     avg_rhr = sum(r[1] for r in recent) / len(recent)
-    return round(avg_rhr)
+
+    # Baseline average (last 30 days if available)
+    baseline_days = min(30, len(rhr_readings))
+    if baseline_days >= 7:
+        baseline = rhr_readings[:baseline_days]
+        baseline_rhr = sum(r[1] for r in baseline) / len(baseline)
+        elevation = round(avg_rhr - baseline_rhr, 1)
+    else:
+        elevation = None
+
+    return round(avg_rhr), elevation
 
 def get_training_readiness(cache):
-    """Get most recent training readiness score."""
+    """Get most recent training readiness score and recovery time."""
     readiness = cache.get('training_readiness', [])
     if readiness:
         latest = readiness[0]
-        return latest.get('readiness_score')
-    return None
+        score = latest.get('readiness_score')
+        recovery_time_hrs = latest.get('recovery_time_hours')
+        return score, recovery_time_hrs
+    return None, None
 
 def get_scheduled_workout():
     """Get today's scheduled workout from health data cache."""
@@ -97,6 +110,71 @@ def get_scheduled_workout():
         pass
 
     return None
+
+def assess_workout_modification(sleep_data, rhr_avg, rhr_elevation, readiness_score, recovery_time_hrs):
+    """
+    Assess whether today's workout should be modified based on recovery indicators.
+
+    Returns: (recommendation, reasoning)
+    """
+    concerns = []
+    severity = 0  # 0=good, 1=caution, 2=modify, 3=rest
+
+    # Check sleep quality
+    if sleep_data:
+        sleep_hrs = sleep_data.get('total_duration_minutes', 0) / 60
+        sleep_score = sleep_data.get('sleep_score')
+
+        if sleep_hrs < 6.0:
+            concerns.append("poor sleep (<6h)")
+            severity = max(severity, 2)
+        elif sleep_hrs < 6.5:
+            concerns.append("limited sleep (<6.5h)")
+            severity = max(severity, 1)
+
+        if sleep_score and sleep_score < 50:
+            concerns.append(f"low sleep quality ({sleep_score})")
+            severity = max(severity, 2)
+        elif sleep_score and sleep_score < 60:
+            concerns.append(f"suboptimal sleep quality ({sleep_score})")
+            severity = max(severity, 1)
+
+    # Check RHR elevation
+    if rhr_elevation is not None:
+        if rhr_elevation >= 5:
+            concerns.append(f"RHR elevated +{rhr_elevation} bpm")
+            severity = max(severity, 3)
+        elif rhr_elevation >= 3:
+            concerns.append(f"RHR slightly elevated +{rhr_elevation} bpm")
+            severity = max(severity, 2)
+
+    # Check training readiness
+    if readiness_score is not None:
+        if readiness_score < 40:
+            concerns.append(f"low readiness ({readiness_score})")
+            severity = max(severity, 3)
+        elif readiness_score < 60:
+            concerns.append(f"moderate readiness ({readiness_score})")
+            severity = max(severity, 2)
+
+    # Check recovery time
+    if recovery_time_hrs and recovery_time_hrs > 24:
+        concerns.append(f"{recovery_time_hrs}h recovery needed")
+        severity = max(severity, 2)
+
+    # Generate recommendation
+    if severity >= 3:
+        recommendation = "⚠️ REST DAY RECOMMENDED"
+    elif severity == 2:
+        recommendation = "⚡ MODIFY: Easy pace or reduce volume"
+    elif severity == 1:
+        recommendation = "✓ Proceed with caution, monitor effort"
+    else:
+        recommendation = "✓ Good to go - ready to train"
+
+    reasoning = " | ".join(concerns) if concerns else "Recovery metrics look good"
+
+    return recommendation, reasoning
 
 def generate_report():
     """Generate morning report text."""
@@ -122,18 +200,35 @@ def generate_report():
         lines.append(f"Sleep: {total_hrs}h (score: {score})")
 
     # Recovery indicators
-    rhr = get_rhr_trend(cache)
+    rhr, rhr_elevation = get_rhr_trend(cache)
     if rhr:
-        lines.append(f"RHR (3-day avg): {rhr} bpm")
+        rhr_text = f"RHR: {rhr} bpm"
+        if rhr_elevation is not None and rhr_elevation != 0:
+            sign = "+" if rhr_elevation > 0 else ""
+            rhr_text += f" ({sign}{rhr_elevation} vs baseline)"
+        lines.append(rhr_text)
 
-    readiness = get_training_readiness(cache)
-    if readiness is not None:
-        lines.append(f"Readiness: {readiness}/100")
+    readiness_score, recovery_time_hrs = get_training_readiness(cache)
+    if readiness_score is not None:
+        readiness_text = f"Readiness: {readiness_score}/100"
+        if recovery_time_hrs and recovery_time_hrs > 0:
+            readiness_text += f" ({recovery_time_hrs}h recovery)"
+        lines.append(readiness_text)
+
+    # Workout modification assessment
+    lines.append("")  # Blank line for separation
+    recommendation, reasoning = assess_workout_modification(
+        sleep, rhr, rhr_elevation, readiness_score, recovery_time_hrs
+    )
+    lines.append(recommendation)
+    if reasoning:
+        lines.append(f"→ {reasoning}")
 
     # Today's workout
+    lines.append("")  # Blank line
     workout = get_scheduled_workout()
     if workout:
-        lines.append(f"Today: {workout}")
+        lines.append(f"TODAY: {workout}")
     else:
         lines.append("No workout scheduled today")
 
