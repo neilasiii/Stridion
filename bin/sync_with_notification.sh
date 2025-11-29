@@ -35,6 +35,7 @@ if [ $SYNC_EXIT_CODE -eq 0 ]; then
     termux-notification \
         --title "✓ Garmin Sync Complete" \
         --content "Activities: $ACTIVITIES | Sleep: $SLEEP" \
+        --channel garmin-sync \
         --priority high \
         --sound
 else
@@ -44,6 +45,7 @@ else
     termux-notification \
         --title "✗ Garmin Sync Failed" \
         --content "Check $LOG_FILE for details" \
+        --channel garmin-sync \
         --priority max \
         --sound \
         --vibrate 500,500,500

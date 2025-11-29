@@ -32,7 +32,7 @@ echo "=== Morning Report: $(date) ===" >> "$LOG_FILE"
 echo "Syncing Garmin data..." >> "$LOG_FILE"
 "$PYTHON" "$PROJECT_ROOT/src/garmin_sync.py" --days 7 --quiet >> "$LOG_FILE" 2>&1 || {
     echo "Garmin sync failed" >> "$LOG_FILE"
-    termux-notification --title "Morning Report Error" --content "Failed to sync Garmin data"
+    termux-notification --title "Morning Report Error" --content "Failed to sync Garmin data" --channel morning-report
     exit 1
 }
 
@@ -40,7 +40,7 @@ echo "Syncing Garmin data..." >> "$LOG_FILE"
 echo "Generating report..." >> "$LOG_FILE"
 REPORT=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$LOG_FILE") || {
     echo "Report generation failed" >> "$LOG_FILE"
-    termux-notification --title "Morning Report Error" --content "Failed to generate report"
+    termux-notification --title "Morning Report Error" --content "Failed to generate report" --channel morning-report
     exit 1
 }
 
@@ -49,6 +49,7 @@ echo "Sending notification..." >> "$LOG_FILE"
 termux-notification \
     --title "🏃 Morning Training Report" \
     --content "$REPORT" \
+    --channel morning-report \
     --priority high \
     --sound
 
