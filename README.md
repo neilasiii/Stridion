@@ -1,34 +1,12 @@
 # Running Coach System
 
-A dockerized, AI-agnostic web service that provides personalized training guidance across four domains: running, strength, mobility, and nutrition.
+An AI-powered training guidance system that provides personalized coaching across four domains: running, strength, mobility, and nutrition.
 
-**Data Philosophy:** Your Garmin device collects the data. This app makes intelligent coaching decisions based on that data. We leverage Garmin's expertise in biometric tracking (HR zones, lactate threshold, HRV, training readiness, VO2 max) and focus on what AI does best: interpreting those metrics to provide personalized training guidance.
+**Data Philosophy:** Your Garmin device collects the data. This system makes intelligent coaching decisions based on that data. We leverage Garmin's expertise in biometric tracking (HR zones, lactate threshold, HRV, training readiness, VO2 max) and focus on what AI does best: interpreting those metrics to provide personalized training guidance.
 
-Supports multiple AI providers (Claude, ChatGPT, Gemini, and local LLMs via Ollama).
-
-## Screenshots
-
-### Chat Interface
-
-![Running Coach Web Interface](docs/images/web-interface-screenshot.svg)
-*Chat with your AI running coach - get personalized training advice with auto-agent routing*
-
-### File Downloads
-
-![File Downloads](docs/images/files-tab-screenshot.svg)
-*Save and download AI-generated training plans, frameworks, and calendars*
+Designed to work with [Claude Code](https://docs.claude.com/en/docs/claude-code) or as a standalone CLI tool.
 
 ## Features
-
-### 🐳 Docker Deployment & AI Flexibility
-
-- **Dockerized Service** - Run anywhere with Docker, simple deployment to home servers
-- **AI Provider Agnostic** - Choose from Claude (Anthropic), ChatGPT (OpenAI), Gemini (Google), or Ollama (local LLMs)
-- **REST API** - Simple HTTP interface for chat and coaching queries
-- **Web Interface** - Clean, responsive UI for interacting with coaches
-- **File Downloads** - Save and download AI-generated training plans, frameworks, and calendars
-- **Data Persistence** - All athlete data and configurations persist across container restarts
-- **Easy Integration** - Use from web browsers, mobile apps, Home Assistant, or custom scripts
 
 ### 🏃 Specialized Coaching Domains
 
@@ -72,71 +50,9 @@ The system uses objective metrics from your Garmin device to inform coaching dec
 
 ## Quick Start
 
-### Docker Deployment (Recommended)
+### Using Claude Code (Recommended)
 
-**Prerequisites:**
-- Docker and Docker Compose
-- API key for your chosen AI provider (or Ollama for free local LLMs)
-- (Optional) Garmin Connect account for health data sync
-
-**Setup:**
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd running-coach
-   ```
-
-2. **Configure environment**
-   ```bash
-   cp .env.example .env
-   nano .env  # Edit with your AI provider and API key
-   ```
-
-   Example configurations:
-   ```bash
-   # Using Claude (Anthropic)
-   AI_PROVIDER=claude
-   ANTHROPIC_API_KEY=sk-ant-your-key-here
-
-   # Or using ChatGPT (OpenAI)
-   AI_PROVIDER=openai
-   OPENAI_API_KEY=sk-your-key-here
-
-   # Or using Gemini (Google)
-   AI_PROVIDER=gemini
-   GOOGLE_API_KEY=your-google-api-key
-
-   # Or using Ollama (local, free)
-   AI_PROVIDER=ollama
-   ```
-
-3. **Start the service**
-   ```bash
-   # Using cloud AI providers (Claude/OpenAI/Gemini)
-   docker-compose up -d
-
-   # Or with Ollama for local LLMs
-   docker-compose --profile ollama up -d
-   docker exec ollama ollama pull llama3.1:latest
-   ```
-
-4. **Access the service**
-
-   Open your browser: **http://localhost:5000**
-
-   Or use the API:
-   ```bash
-   curl -X POST http://localhost:5000/api/v1/chat \
-     -H "Content-Type: application/json" \
-     -d '{"query": "What should I run today?"}'
-   ```
-
-**See [DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md) for complete deployment guide.**
-
-### Alternative: Claude Code Integration
-
-You can also use this project directly in [Claude Code](https://docs.claude.com/en/docs/claude-code) without Docker:
+Use this project directly in [Claude Code](https://docs.claude.com/en/docs/claude-code):
 
 1. Clone the repository and open in Claude Code
 2. Set Garmin credentials: `export GARMIN_EMAIL=...` and `export GARMIN_PASSWORD=...`
@@ -180,34 +96,6 @@ The system uses specialized AI coaching agents defined in `.claude/agents/`:
 - `runner-strength-coach.md` - Strength programming
 - `mobility-coach-runner.md` - Mobility and recovery
 - `endurance-nutrition-coach.md` - Nutrition and fueling
-
-**Using the Docker Web Service:**
-
-The service automatically routes queries to the appropriate agent:
-
-```bash
-# Web interface (recommended for most users)
-# Open http://localhost:5000 in your browser
-
-# REST API - auto-detect agent
-curl -X POST http://localhost:5000/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"query": "What should I run today?"}'
-
-# REST API - specify agent
-curl -X POST http://localhost:5000/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"query": "Design a strength workout", "agent": "strength-coach"}'
-```
-
-**API Versioning:**
-- Current API version: **v1** (`/api/v1/*`)
-- Backward compatibility maintained for `/api/*` routes (redirect to v1)
-- Rate limiting: 200 requests/hour (global), 20 requests/minute (chat endpoints)
-
-See [API_CLIENT_EXAMPLES.md](docs/API_CLIENT_EXAMPLES.md) for Python, JavaScript, and integration examples.
-
-**Using Claude Code:**
 
 When using Claude Code, these agents automatically access your athlete profile and health data. Simply open this repository in Claude Code and interact with the agents conversationally.
 
@@ -336,66 +224,13 @@ Import the generated .ics file:
 
 ## Architecture
 
-### System Overview
-
-```
-┌─────────────┐
-│   Client    │  (Web Browser, Mobile App, API Client)
-└──────┬──────┘
-       │ HTTP
-       ▼
-┌─────────────────────┐
-│  Flask Web Service  │  (src/web/app.py)
-└──────┬──────────────┘
-       │
-       ▼
-┌─────────────────────┐
-│   Coach Service     │  (src/coach_service/)
-│  - Agent routing    │  - Loads athlete context
-│  - Context loading  │  - Manages conversation
-└──────┬──────────────┘
-       │
-       ▼
-┌─────────────────────┐
-│   AI Providers      │  (src/ai_providers/)
-│  Claude | OpenAI    │  - Provider abstraction
-│  Gemini | Ollama    │  - Unified interface
-└─────────────────────┘
-```
-
 ### Key Components
 
-**Web Service Layer:**
-- **`src/web/app.py`** - Flask application with REST API
-- **API v1 Endpoints:**
-  - `GET /` - Web interface
-  - `GET /api/v1/health` - Health check
-  - `GET /api/v1/agents` - List available coaches
-  - `POST /api/v1/chat` - Coaching queries (rate limited: 20/min)
-  - `POST /api/v1/chat/stream` - Streaming responses
-  - `GET /api/v1/files` - List saved files
-  - `GET /api/v1/files/<category>/<filename>` - Download file
-  - `POST /api/v1/files` - Save new file
-  - `DELETE /api/v1/files/<category>/<filename>` - Delete file
-  - Note: `/api/*` routes maintained for backward compatibility
-- **Features:**
-  - Structured logging with configurable levels
-  - Rate limiting (200/hour global, 20/min chat)
-  - CORS enabled for cross-origin requests
-
-**Coach Service Layer:**
-- **`src/coach_service/coach.py`** - Main coaching orchestration
-- **`src/coach_service/agent_loader.py`** - Loads agent configs from `.claude/agents/*.md`
-- Auto-detects appropriate agent based on query keywords
-- Manages athlete context and health data loading
-
-**AI Provider Layer:**
-- **`src/ai_providers/base.py`** - Abstract provider interface
-- **`src/ai_providers/claude.py`** - Anthropic Claude integration
-- **`src/ai_providers/openai.py`** - OpenAI ChatGPT integration
-- **`src/ai_providers/gemini.py`** - Google Gemini integration
-- **`src/ai_providers/ollama.py`** - Local LLM integration
-- **`src/ai_providers/factory.py`** - Provider selection
+**Coaching Agents:**
+- **`.claude/agents/`** - AI coaching agent configurations
+- Specialized agents for running, strength, mobility, and nutrition
+- Auto-loaded by Claude Code
+- Access athlete context and health data automatically
 
 **Health Data System:**
 - **`src/garmin_sync.py`** - Garmin Connect API sync
@@ -430,13 +265,7 @@ These metrics inform coaching decisions but are calculated by Garmin devices, no
 
 ## Documentation
 
-**Deployment & Integration:**
-- **[DOCKER_DEPLOYMENT.md](docs/DOCKER_DEPLOYMENT.md)** - Complete Docker deployment guide
-- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System architecture and design
-- **[API_CLIENT_EXAMPLES.md](docs/API_CLIENT_EXAMPLES.md)** - Integration examples (Python, JS, cURL, Home Assistant)
-- **[FILE_DOWNLOADS.md](docs/FILE_DOWNLOADS.md)** - Save and download AI-generated files
-
-**Health Data & Features:**
+**System Documentation:**
 - **[HEALTH_DATA_SYSTEM.md](docs/HEALTH_DATA_SYSTEM.md)** - Technical documentation for health data
 - **[AGENT_HEALTH_DATA_GUIDE.md](docs/AGENT_HEALTH_DATA_GUIDE.md)** - Quick reference for agents on health data
 - **[AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md)** - Workout library integration guide
@@ -449,20 +278,7 @@ These metrics inform coaching decisions but are calculated by Garmin devices, no
 
 ```
 running-coach/
-├── src/
-│   ├── ai_providers/          # AI provider implementations
-│   │   ├── base.py            # Abstract base class
-│   │   ├── claude.py          # Anthropic Claude
-│   │   ├── openai.py          # OpenAI ChatGPT
-│   │   ├── gemini.py          # Google Gemini
-│   │   ├── ollama.py          # Local LLMs
-│   │   └── factory.py         # Provider selection
-│   ├── coach_service/         # Core coaching logic
-│   │   ├── agent_loader.py    # Load agent configs
-│   │   └── coach.py           # Main orchestration
-│   ├── web/                   # Flask web service
-│   │   ├── app.py             # API and routes
-│   │   └── templates/         # Web UI
+├── src/                       # Python source code
 │   ├── garmin_sync.py         # Garmin Connect sync
 │   ├── ics_parser.py          # Calendar import
 │   ├── ics_exporter.py        # Calendar export
@@ -470,14 +286,10 @@ running-coach/
 │   ├── workout_library_cli.py # Workout CLI
 │   └── seed_workout_library.py
 ├── bin/                       # Executable scripts
-│   ├── start_service.sh       # Start web service
 │   ├── sync_garmin_data.sh    # Health data sync
 │   ├── export_calendar.sh     # Calendar export
 │   └── workout_library.sh     # Workout CLI
 ├── docs/                      # Documentation
-│   ├── DOCKER_DEPLOYMENT.md   # Deployment guide
-│   ├── ARCHITECTURE.md        # System design
-│   ├── API_CLIENT_EXAMPLES.md # Integration examples
 │   ├── HEALTH_DATA_SYSTEM.md
 │   ├── AGENT_HEALTH_DATA_GUIDE.md
 │   ├── AGENT_WORKOUT_LIBRARY_GUIDE.md
@@ -490,11 +302,8 @@ running-coach/
 │   └── calendar/              # Calendar files
 ├── .claude/agents/            # AI coaching agents
 ├── config/                    # Configuration files
-├── Dockerfile                 # Container definition
-├── docker-compose.yml         # Multi-container setup
-├── .env.example              # Config template
-├── requirements.txt          # Python dependencies
-└── README.md                 # This file
+├── requirements.txt           # Python dependencies
+└── README.md                  # This file
 ```
 
 ## Troubleshooting
@@ -554,44 +363,9 @@ The nutrition coach respects dietary requirements configured in `data/athlete/tr
 - Dairy-free alternatives
 - Customizable restrictions
 
-## Testing
-
-Basic unit tests are provided for the web service:
-
-```bash
-# Run all tests
-python -m pytest tests/
-
-# Run specific test file
-python -m pytest tests/test_web_app.py
-
-# Run tests with verbose output
-python -m pytest tests/ -v
-```
-
-**Test Coverage:**
-- Web service endpoints (health, agents, chat, files)
-- API versioning and backward compatibility
-- File management operations
-- Rate limiting functionality
-- Input validation and error handling
-
-**Configuration for Testing:**
-- Structured logging: Set `LOG_LEVEL=DEBUG` for detailed test output
-- Rate limiting is disabled in testing mode by default
-- Test client uses Flask's testing mode
-
 ## Roadmap
 
 This project is actively evolving. Current development priorities:
-
-### Standalone Application
-- [x] **Decouple from Claude Code** - Make coaching agents accessible without Claude Code dependency ✅
-- [x] **HTTP/REST API** - Provide web service interface for coaching interactions ✅
-- [x] **Web Frontend** - Build user-friendly web interface for athlete interaction ✅
-- [x] **Mobile-responsive UI** - Support access from phones and tablets ✅
-- [x] **AI Provider Agnostic** - Support Claude, OpenAI, Gemini, and Ollama ✅
-- [x] **Docker Deployment** - Containerized service for easy deployment ✅
 
 ### Data & Persistence
 - [ ] **Database Integration** - Replace JSON files with proper database (PostgreSQL/SQLite)
