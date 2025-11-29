@@ -28,13 +28,32 @@ echo "---" >> "$LOG_FILE"
 
 # Send notification based on result
 if [ $SYNC_EXIT_CODE -eq 0 ]; then
-    # Success - extract summary from output
-    ACTIVITIES=$(echo "$SYNC_OUTPUT" | grep -oP 'Activities: \K\d+' || echo "N/A")
-    SLEEP=$(echo "$SYNC_OUTPUT" | grep -oP 'Sleep sessions: \K\d+' || echo "N/A")
+    # Success - extract all synced data summaries
+    RUNNING=$(echo "$SYNC_OUTPUT" | grep "Running:" | sed 's/^[[:space:]]*Running: //' || echo "")
+    WALKING=$(echo "$SYNC_OUTPUT" | grep "Walking:" | sed 's/^[[:space:]]*Walking: //' || echo "")
+    SLEEP=$(echo "$SYNC_OUTPUT" | grep -oP 'Sleep: \K\d+ nights?' || echo "")
+    VO2=$(echo "$SYNC_OUTPUT" | grep -oP 'VO2 Max: \K[\d.]+ ml/kg/min' || echo "")
+    RHR=$(echo "$SYNC_OUTPUT" | grep -oP 'Resting HR: \K\d+ bpm \(most recent\)' || echo "")
+    WEIGHT=$(echo "$SYNC_OUTPUT" | grep -oP 'Weight: \K[\d.]+ lbs' || echo "")
+
+    # Build notification content (each item on new line)
+    CONTENT=""
+    [ -n "$RUNNING" ] && CONTENT="Run: $RUNNING"
+    [ -n "$WALKING" ] && CONTENT="$CONTENT
+Walk: $WALKING"
+    [ -n "$SLEEP" ] && CONTENT="$CONTENT
+Sleep: $SLEEP"
+    [ -n "$RHR" ] && CONTENT="$CONTENT
+RHR: $RHR"
+    [ -n "$VO2" ] && CONTENT="$CONTENT
+VO2: $VO2"
+    [ -n "$WEIGHT" ] && CONTENT="$CONTENT
+Weight: $WEIGHT"
+    [ -z "$CONTENT" ] && CONTENT="No data synced"
 
     termux-notification \
         --title "✓ Garmin Sync Complete" \
-        --content "Activities: $ACTIVITIES | Sleep: $SLEEP" \
+        --content "$CONTENT" \
         --channel garmin-sync \
         --priority high \
         --sound
