@@ -76,15 +76,49 @@ def get_weekly_summary(cache):
     return summary
 
 def get_training_load_trend(cache):
-    """Calculate training stress balance (TSB) from progress summary."""
+    """
+    Calculate training stress balance (TSB) from progress summary or activities.
+
+    First tries Garmin's progress_summary, then falls back to calculating
+    from activity duration if Garmin data is unavailable.
+    """
     progress = cache.get('progress_summary', {})
-    if not progress or not isinstance(progress, dict):
+
+    # Try Garmin's values first
+    if progress and isinstance(progress, dict):
+        atl = progress.get('acute_training_load')
+        ctl = progress.get('chronic_training_load')
+        tsb = progress.get('training_stress_balance')
+
+        if atl is not None and ctl is not None and tsb is not None:
+            return {'atl': atl, 'ctl': ctl, 'tsb': tsb}
+
+    # Fallback: calculate simple load from activities
+    # Load = total training hours in period
+    activities = cache.get('activities', [])
+    if not activities:
         return None
 
+    cutoff_7 = (datetime.now() - timedelta(days=7)).isoformat()
+    cutoff_42 = (datetime.now() - timedelta(days=42)).isoformat()
+
+    # Calculate Acute Training Load (last 7 days)
+    recent_7 = [a for a in activities if a.get('date', '') >= cutoff_7]
+    atl = sum(a.get('duration_seconds', 0) for a in recent_7) / 3600  # hours
+
+    # Calculate Chronic Training Load (last 42 days, averaged per week)
+    recent_42 = [a for a in activities if a.get('date', '') >= cutoff_42]
+    total_hours_42 = sum(a.get('duration_seconds', 0) for a in recent_42) / 3600
+    ctl = total_hours_42 / 6  # Average per week over 6 weeks
+
+    # Training Stress Balance = CTL - ATL
+    # Positive = fresh, negative = fatigued
+    tsb = ctl - atl
+
     return {
-        'atl': progress.get('acute_training_load'),  # 7-day load
-        'ctl': progress.get('chronic_training_load'),  # 42-day load
-        'tsb': progress.get('training_stress_balance'),  # Form = CTL - ATL
+        'atl': round(atl, 1),
+        'ctl': round(ctl, 1),
+        'tsb': round(tsb, 1)
     }
 
 def get_gear_status(cache):
