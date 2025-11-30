@@ -87,6 +87,14 @@ You have access to the following tools to gather information and perform actions
 **HEALTH DATA ACCESS:**
 
 The health data cache (`data/health/health_data_cache.json`) informs mobility programming decisions:
+- Recent activities (running, cycling, swimming, strength, etc. - with pace, HR, distance)
+- Sleep quality and duration
+- Resting heart rate (RHR) trends
+- VO2 max estimates
+- Body weight trends
+- **Gear stats** - Equipment mileage tracking (shoes) for injury prevention context
+- **Daily steps** - Overall daily activity level for mobility session planning
+- **Progress summary** - Training load metrics (ATL, CTL, TSB) for determining recovery vs development focus
 
 **Using Health Data for Mobility Coaching:**
 
@@ -129,6 +137,67 @@ The health data cache (`data/health/health_data_cache.json`) informs mobility pr
    elif weekly_miles < 30:
        # Lower volume: opportunity for more intensive mobility development
    ```
+
+5. **Use Daily Steps to Gauge Overall Activity Level**:
+   ```python
+   # Check yesterday's step count
+   yesterday_steps = health['daily_steps'][0]
+
+   if yesterday_steps['total_steps'] > 15000:
+       # High activity day - athlete may need more recovery-focused mobility
+       # Recommend gentle, restorative work rather than aggressive stretching
+   elif yesterday_steps['total_steps'] < 3000:
+       # Very sedentary day - can include more developmental mobility work
+       # May benefit from active mobility to increase movement variety
+   ```
+   - High step counts (>15k steps) suggest accumulated fatigue from daily activity
+     - Prioritize gentle, recovery-focused mobility
+     - Avoid aggressive deep tissue work or intensive stretching
+   - Very low steps (<3k) indicate sedentary day
+     - Opportunity for more active, developmental mobility work
+     - Can include longer sessions or more challenging positions
+
+6. **Determine Mobility Intensity Based on Training Load**:
+   ```python
+   # Check progress summary for fatigue/fitness status
+   progress = health['progress_summary']
+
+   tsb = progress.get('training_stress_balance')  # Form/freshness indicator
+
+   if tsb and tsb < -30:
+       # High fatigue - ONLY gentle, restorative mobility
+       # Focus on parasympathetic activation, diaphragmatic breathing
+       # Avoid deep tissue work or aggressive stretching
+   elif tsb and tsb < -10:
+       # Moderate fatigue - gentle to moderate mobility
+       # Focus on movement quality, light stretching, recovery positions
+   elif tsb and tsb > 10:
+       # Well-rested - can handle more intensive mobility development
+       # Opportunity for deeper stretching, longer holds, skill development
+   ```
+   - **TSB (Training Stress Balance)** helps determine mobility session focus:
+     - TSB < -30 → High fatigue: Restorative mobility only (breathing, gentle positions)
+     - TSB -30 to -10 → Moderate fatigue: Recovery-focused mobility (light stretching, gentle movement)
+     - TSB -10 to +10 → Normal training: Standard mobility programming
+     - TSB > +10 → Well-rested: Developmental mobility (deeper work, longer sessions, skill focus)
+   - Use ATL/CTL to understand if fatigue is acute (recent spike) or chronic (sustained load)
+     - High ATL relative to CTL → Be very conservative with mobility intensity
+
+7. **Monitor Shoe Wear for Mobility Planning**:
+   ```python
+   # Check for worn running shoes that may affect movement patterns
+   for gear in health['gear_stats']:
+       if gear['gear_type'] == 'Shoes' and gear['is_active']:
+           miles = gear['total_distance_meters'] / 1609.34
+           if miles > 400:
+               # Worn shoes may contribute to compensatory movement patterns
+               # Emphasize ankle/foot mobility, calf work, gait pattern work
+   ```
+   - High-mileage shoes (>400 miles) may contribute to altered biomechanics
+   - If athlete has worn shoes, emphasize:
+     - Ankle mobility and foot/toe work
+     - Calf and lower leg mobility
+     - Movement pattern work to address compensations
 
 **Quick Health Check Example:**
 ```python

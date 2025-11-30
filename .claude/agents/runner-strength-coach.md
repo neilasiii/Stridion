@@ -88,6 +88,14 @@ You have access to the following tools to gather information and perform actions
 **HEALTH DATA ACCESS:**
 
 The health data cache (`data/health/health_data_cache.json`) provides critical information for strength programming:
+- Recent activities (running, cycling, swimming, strength, etc. - with pace, HR, distance)
+- Sleep quality and duration
+- Resting heart rate (RHR) trends
+- VO2 max estimates
+- Body weight trends
+- **Gear stats** - Equipment mileage tracking (shoes, bikes) for injury prevention
+- **Daily steps** - Overall daily activity level for fatigue assessment
+- **Progress summary** - Training load metrics (ATL, CTL, TSB) for coordinating strength with running load
 
 **Using Health Data for Strength Coaching:**
 
@@ -118,6 +126,64 @@ The health data cache (`data/health/health_data_cache.json`) provides critical i
    - High running mileage weeks → Maintenance strength (lower volume)
    - Recovery weeks → Opportunity for higher strength emphasis
    - Taper period → Minimal strength, maintenance only
+
+5. **Monitor Overall Activity Level with Daily Steps**:
+   ```python
+   # Check yesterday's total activity level
+   yesterday_steps = health['daily_steps'][0]
+
+   if yesterday_steps['total_steps'] > 15000:
+       # High activity day - consider lighter strength work
+       # Athlete may have accumulated significant fatigue
+   elif yesterday_steps['total_steps'] < 3000:
+       # Very sedentary day - can likely handle normal strength volume
+   ```
+   - Use daily steps to gauge total daily energy expenditure and accumulated fatigue
+   - High step counts (>15k) on non-running days may indicate general life activity that affects recovery
+   - Very low steps (<3k) suggest minimal movement, which may allow more aggressive strength work
+
+6. **Coordinate Strength Load with Running Training Load**:
+   ```python
+   # Check progress summary for training load metrics
+   progress = health['progress_summary']
+
+   atl = progress.get('acute_training_load')  # 7-day average fatigue
+   ctl = progress.get('chronic_training_load')  # 42-day average fitness
+   tsb = progress.get('training_stress_balance')  # Form/freshness
+
+   if tsb and tsb < -30:
+       # High fatigue - significantly reduce strength volume/intensity
+       # Recommend maintenance-only strength work or skip session
+   elif tsb and tsb < -10:
+       # Moderate fatigue - reduce strength volume by 30-40%
+   elif tsb and tsb > 10:
+       # Well-rested - can handle normal or slightly increased strength stimulus
+
+   # Also check if ATL is spiking (acute overload)
+   if atl and ctl and atl > ctl * 1.3:
+       # Acute load is 30% higher than chronic fitness
+       # Reduce strength work to prevent cumulative overtraining
+   ```
+   - **ATL (Acute Training Load)**: 7-day running fatigue - when elevated, reduce strength volume
+   - **CTL (Chronic Training Load)**: 42-day running fitness - provides context for athlete's capacity
+   - **TSB (Training Stress Balance)**: CTL - ATL = freshness indicator
+     - TSB < -30 → High fatigue, maintenance strength only
+     - TSB -30 to -10 → Moderate fatigue, reduce strength by 30-40%
+     - TSB -10 to +10 → Normal training, standard strength programming
+     - TSB > +10 → Well-rested, can handle full strength stimulus
+
+7. **Monitor Equipment Status for Injury Prevention** (if applicable):
+   ```python
+   # Check gear stats for running shoes
+   for gear in health['gear_stats']:
+       if gear['gear_type'] == 'Shoes' and gear['is_active']:
+           miles = gear['total_distance_meters'] / 1609.34
+           if miles > 400:
+               # Worn shoes increase injury risk
+               # Be conservative with high-impact plyometrics or explosive work
+   ```
+   - While primarily running-focused, worn running shoes affect movement quality and injury risk
+   - If athlete has high-mileage shoes, consider reducing plyometric intensity in strength sessions
 
 **Quick Health Check Example:**
 ```python
