@@ -50,11 +50,33 @@ HEALTH_SUMMARY=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$
     exit 1
 }
 
-# 4. Generate AI-powered recommendations using the running coach agent
+# 4. Generate AI-powered recommendations using Claude Code (headless mode)
 echo "Generating AI recommendations..." >> "$LOG_FILE"
 
-# Simple prompt - let the agent access all context files directly
-PROMPT="Provide today's training recommendation in TWO formats:
+# Create the prompt for Claude with pre-extracted health data and weather
+PROMPT="Based on the following health summary and weather conditions, provide training recommendations in TWO formats.
+
+HEALTH SUMMARY:
+$HEALTH_SUMMARY
+
+CURRENT WEATHER:
+$WEATHER
+
+ATHLETE PROFILE (from data/athlete/goals.md):
+- Marathon goal: 4:00:00 (9:10/mi pace)
+- Currently in base building phase
+- Works Mon-Thu 0700-1730 (returns Jan 6, 2026 - currently on parental leave)
+
+DIETARY REQUIREMENTS:
+- Gluten-free
+- Dairy-free
+
+TRAINING PREFERENCES:
+- Early morning workouts preferred on workdays
+- Saturday long runs
+- Sunday mobility/recovery
+
+**CRITICAL: Provide TWO versions separated by '---DETAILED---' marker:**
 
 **BRIEF VERSION (under 250 chars, for notification):**
 Recovery: [2-3 words max]
@@ -66,16 +88,19 @@ Note: [1 brief insight]
 
 **DETAILED VERSION (for HTML report):**
 Provide a comprehensive analysis including:
-- Recovery status assessment with specific metrics
-- Detailed workout recommendation with rationale
-- Weather impact on training (specific timing recommendations)
-- Training context (where in training cycle, what's coming next)
-- Any adjustments or alternatives based on recovery status
+- Recovery status assessment with specific metrics (RHR, sleep, days since last hard effort)
+- Detailed workout recommendation with rationale (why this workout today)
+- Weather impact on training (specific timing, heat/cold considerations)
+- Training context (where you are in training cycle, what's coming next)
+- Any adjustments or alternatives based on how you feel
 
-Use the health data cache and weather data to inform your recommendations."
+Weather timing guidelines:
+- Over 80F or over 70pct humidity: early AM/evening or treadmill
+- Under 40F: mid-day
+- UV over 7: avoid midday"
 
-# Run Claude Code with the running coach agent
-AI_RESPONSE=$(claude @vdot-running-coach -p "$PROMPT" \
+# Run Claude Code in headless mode with running coach agent
+AI_RESPONSE=$(claude -p "$PROMPT" @vdot-running-coach \
     --output-format text \
     --permission-mode acceptEdits \
     --max-turns 5 \
@@ -95,17 +120,15 @@ REPORT="$REPORT_BRIEF"
 # 5. Generate enhanced HTML report for click action
 DETAILED_REPORT_HTML="$PROJECT_ROOT/data/morning_report_detailed.html"
 
-# Use the new enhanced HTML generator
-echo "Generating enhanced HTML report..." >> "$LOG_FILE"
-"$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_html.py" "$WEATHER" > "$DETAILED_REPORT_HTML" 2>> "$LOG_FILE" || {
-    echo "Enhanced HTML generation failed, creating basic HTML..." >> "$LOG_FILE"
+# Generate basic HTML report (skip AI commentary - already in notification)
+echo "Generating HTML report..." >> "$LOG_FILE"
 
-    # Fallback to basic HTML if enhanced generation fails
-    HEALTH_SUMMARY_HTML=$(echo "$HEALTH_SUMMARY" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
-    WEATHER_HTML=$(echo "$WEATHER" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
-    REPORT_DETAILED_HTML=$(echo "$REPORT_DETAILED" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
+# Create HTML report with AI recommendations
+HEALTH_SUMMARY_HTML=$(echo "$HEALTH_SUMMARY" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
+WEATHER_HTML=$(echo "$WEATHER" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
+REPORT_DETAILED_HTML=$(echo "$REPORT_DETAILED" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
 
-    cat > "$DETAILED_REPORT_HTML" << EOF
+cat > "$DETAILED_REPORT_HTML" << EOF
 <!DOCTYPE html>
 <html>
 <head>
@@ -196,7 +219,6 @@ echo "Generating enhanced HTML report..." >> "$LOG_FILE"
 </body>
 </html>
 EOF
-}
 
 # 6. Copy HTML to Downloads folder (accessible via file:// URIs)
 DOWNLOADS_HTML="$HOME/storage/downloads/morning_report.html"

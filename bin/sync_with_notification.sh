@@ -13,6 +13,42 @@ fi
 
 # Log file for debugging
 LOG_FILE="$HOME/running-coach/data/sync_log.txt"
+CACHE_FILE="$HOME/running-coach/data/health/health_data_cache.json"
+
+# Use venv Python if available, otherwise fall back to system python3
+if [ -f "$HOME/running-coach/venv/bin/python3" ]; then
+    PYTHON="$HOME/running-coach/venv/bin/python3"
+else
+    PYTHON="python3"
+fi
+
+# Capture BEFORE state (counts of existing data)
+if [ -f "$CACHE_FILE" ]; then
+    BEFORE_COUNTS=$("$PYTHON" -c "
+import json
+try:
+    with open('$CACHE_FILE', 'r') as f:
+        cache = json.load(f)
+    print(len(cache.get('activities', [])))
+    print(len(cache.get('sleep_sessions', [])))
+    print(len(cache.get('vo2_max_readings', [])))
+    print(len(cache.get('weight_readings', [])))
+    print(len(cache.get('resting_hr_readings', [])))
+except:
+    print('0\n0\n0\n0\n0')
+")
+    BEFORE_ACTIVITIES=$(echo "$BEFORE_COUNTS" | sed -n '1p')
+    BEFORE_SLEEP=$(echo "$BEFORE_COUNTS" | sed -n '2p')
+    BEFORE_VO2=$(echo "$BEFORE_COUNTS" | sed -n '3p')
+    BEFORE_WEIGHT=$(echo "$BEFORE_COUNTS" | sed -n '4p')
+    BEFORE_RHR=$(echo "$BEFORE_COUNTS" | sed -n '5p')
+else
+    BEFORE_ACTIVITIES=0
+    BEFORE_SLEEP=0
+    BEFORE_VO2=0
+    BEFORE_WEIGHT=0
+    BEFORE_RHR=0
+fi
 
 # Run sync and capture output
 SYNC_OUTPUT=$(bash bin/sync_garmin_data.sh $DAYS_ARG 2>&1)
@@ -28,28 +64,134 @@ echo "---" >> "$LOG_FILE"
 
 # Send notification based on result
 if [ $SYNC_EXIT_CODE -eq 0 ]; then
-    # Success - extract all synced data summaries
-    RUNNING=$(echo "$SYNC_OUTPUT" | grep "Running:" | sed 's/^[[:space:]]*Running: //' || echo "")
-    WALKING=$(echo "$SYNC_OUTPUT" | grep "Walking:" | sed 's/^[[:space:]]*Walking: //' || echo "")
-    SLEEP=$(echo "$SYNC_OUTPUT" | grep -oP 'Sleep: \K\d+ nights?' || echo "")
-    VO2=$(echo "$SYNC_OUTPUT" | grep -oP 'VO2 Max: \K[\d.]+ ml/kg/min' || echo "")
-    RHR=$(echo "$SYNC_OUTPUT" | grep -oP 'Resting HR: \K\d+ bpm \(most recent\)' || echo "")
-    WEIGHT=$(echo "$SYNC_OUTPUT" | grep -oP 'Weight: \K[\d.]+ lbs' || echo "")
+    # Capture AFTER state and calculate NEW items
+    if [ -f "$CACHE_FILE" ]; then
+        AFTER_COUNTS=$("$PYTHON" -c "
+import json
+try:
+    with open('$CACHE_FILE', 'r') as f:
+        cache = json.load(f)
 
-    # Build notification content (each item on new line)
+    # Get counts
+    activities = cache.get('activities', [])
+    sleep_sessions = cache.get('sleep_sessions', [])
+    vo2_max = cache.get('vo2_max_readings', [])
+    weight = cache.get('weight_readings', [])
+    resting_hr = cache.get('resting_hr_readings', [])
+
+    print(len(activities))
+    print(len(sleep_sessions))
+    print(len(vo2_max))
+    print(len(weight))
+    print(len(resting_hr))
+
+    # Get details of NEW activities
+    new_activity_count = len(activities) - $BEFORE_ACTIVITIES
+    if new_activity_count > 0:
+        new_activities = activities[:new_activity_count]
+        running = [a for a in new_activities if a.get('activity_type') == 'RUNNING']
+        walking = [a for a in new_activities if a.get('activity_type') == 'WALKING']
+
+        if running:
+            total_miles = sum(a.get('distance_miles', 0) for a in running)
+            total_hours = sum(a.get('duration_seconds', 0) for a in running) / 3600
+            print(f'{len(running)} runs, {total_miles:.1f} mi, {total_hours:.1f} hrs')
+        else:
+            print('')
+
+        if walking:
+            total_miles = sum(a.get('distance_miles', 0) for a in walking)
+            print(f'{len(walking)} walks, {total_miles:.1f} mi')
+        else:
+            print('')
+    else:
+        print('')
+        print('')
+
+    # Get details of NEW sleep
+    new_sleep_count = len(sleep_sessions) - $BEFORE_SLEEP
+    if new_sleep_count > 0:
+        print(f'{new_sleep_count} nights')
+    else:
+        print('')
+
+    # Get details of NEW VO2 max
+    new_vo2_count = len(vo2_max) - $BEFORE_VO2
+    if new_vo2_count > 0 and vo2_max:
+        latest_vo2 = vo2_max[0].get('vo2_max')
+        if latest_vo2:
+            print(f'{latest_vo2:.1f} ml/kg/min')
+        else:
+            print('')
+    else:
+        print('')
+
+    # Get details of NEW weight
+    new_weight_count = len(weight) - $BEFORE_WEIGHT
+    if new_weight_count > 0 and weight:
+        latest_weight = weight[0].get('weight_lbs')
+        if latest_weight:
+            print(f'{latest_weight:.1f} lbs')
+        else:
+            print('')
+    else:
+        print('')
+
+    # Get details of NEW RHR
+    new_rhr_count = len(resting_hr) - $BEFORE_RHR
+    if new_rhr_count > 0 and resting_hr:
+        latest_rhr = resting_hr[0][1]
+        print(f'{latest_rhr} bpm')
+    else:
+        print('')
+
+except Exception as e:
+    import sys
+    print(f'Error: {e}', file=sys.stderr)
+    print('0\n0\n0\n0\n0\n\n\n\n\n\n\n')
+")
+        # Parse results
+        AFTER_ACTIVITIES=$(echo "$AFTER_COUNTS" | sed -n '1p')
+        AFTER_SLEEP=$(echo "$AFTER_COUNTS" | sed -n '2p')
+        AFTER_VO2=$(echo "$AFTER_COUNTS" | sed -n '3p')
+        AFTER_WEIGHT=$(echo "$AFTER_COUNTS" | sed -n '4p')
+        AFTER_RHR=$(echo "$AFTER_COUNTS" | sed -n '5p')
+        NEW_RUNNING=$(echo "$AFTER_COUNTS" | sed -n '6p')
+        NEW_WALKING=$(echo "$AFTER_COUNTS" | sed -n '7p')
+        NEW_SLEEP=$(echo "$AFTER_COUNTS" | sed -n '8p')
+        NEW_VO2=$(echo "$AFTER_COUNTS" | sed -n '9p')
+        NEW_WEIGHT=$(echo "$AFTER_COUNTS" | sed -n '10p')
+        NEW_RHR=$(echo "$AFTER_COUNTS" | sed -n '11p')
+    else
+        AFTER_ACTIVITIES=0
+        AFTER_SLEEP=0
+        AFTER_VO2=0
+        AFTER_WEIGHT=0
+        AFTER_RHR=0
+        NEW_RUNNING=""
+        NEW_WALKING=""
+        NEW_SLEEP=""
+        NEW_VO2=""
+        NEW_WEIGHT=""
+        NEW_RHR=""
+    fi
+
+    # Build notification content (only NEW items)
     CONTENT=""
-    [ -n "$RUNNING" ] && CONTENT="Run: $RUNNING"
-    [ -n "$WALKING" ] && CONTENT="$CONTENT
-Walk: $WALKING"
-    [ -n "$SLEEP" ] && CONTENT="$CONTENT
-Sleep: $SLEEP"
-    [ -n "$RHR" ] && CONTENT="$CONTENT
-RHR: $RHR"
-    [ -n "$VO2" ] && CONTENT="$CONTENT
-VO2: $VO2"
-    [ -n "$WEIGHT" ] && CONTENT="$CONTENT
-Weight: $WEIGHT"
-    [ -z "$CONTENT" ] && CONTENT="No data synced"
+    [ -n "$NEW_RUNNING" ] && CONTENT="Run: $NEW_RUNNING"
+    [ -n "$NEW_WALKING" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
+Walk: $NEW_WALKING" || [ -n "$NEW_WALKING" ] && CONTENT="Walk: $NEW_WALKING"
+    [ -n "$NEW_SLEEP" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
+Sleep: $NEW_SLEEP" || [ -n "$NEW_SLEEP" ] && CONTENT="Sleep: $NEW_SLEEP"
+    [ -n "$NEW_RHR" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
+RHR: $NEW_RHR" || [ -n "$NEW_RHR" ] && CONTENT="RHR: $NEW_RHR"
+    [ -n "$NEW_VO2" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
+VO2: $NEW_VO2" || [ -n "$NEW_VO2" ] && CONTENT="VO2: $NEW_VO2"
+    [ -n "$NEW_WEIGHT" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
+Weight: $NEW_WEIGHT" || [ -n "$NEW_WEIGHT" ] && CONTENT="Weight: $NEW_WEIGHT"
+
+    # If no new items, show "No new data"
+    [ -z "$CONTENT" ] && CONTENT="No new data"
 
     termux-notification \
         --title "✓ Garmin Sync Complete" \

@@ -9,16 +9,16 @@ echo "Setting up automated Garmin sync..."
 mkdir -p ~/.local/var/spool/cron/crontabs
 
 # Create crontab entry
-# Default: sync every 2 hours at :05 past the hour (00:05, 02:05, 04:05, etc.)
-CRON_ENTRY="5 */2 * * * cd $HOME/running-coach && bash bin/sync_with_notification.sh --days 7"
+# Default: sync every 6 hours at :05 past the hour using incremental sync
+CRON_ENTRY="5 */6 * * * cd $HOME/running-coach && bash bin/sync_with_notification.sh"
 
 # Add to crontab (avoiding duplicates)
 (crontab -l 2>/dev/null | grep -v "sync_with_notification.sh"; echo "$CRON_ENTRY") | crontab -
 
 echo "✓ Cron job installed!"
 echo ""
-echo "Schedule: Every 2 hours at :05 (00:05, 02:05, 04:05, etc.)"
-echo "Command: sync_with_notification.sh --days 7"
+echo "Schedule: Every 6 hours at :05 (00:05, 06:05, 12:05, 18:05)"
+echo "Command: sync_with_notification.sh (incremental sync - fetches only new data)"
 echo ""
 echo "Starting cron daemon..."
 
