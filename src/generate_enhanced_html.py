@@ -82,6 +82,71 @@ def get_recovery_score(cache):
 
     return max(0, min(100, int(score)))
 
+def generate_ai_commentary(cache, weather_data, recovery_score, tsb):
+    """Generate AI commentary with Claude Code recommendations."""
+    import subprocess
+
+    # Get recent activity summary
+    activities = cache.get('activities', [])[:5]
+    activity_summary = "\n".join([
+        f"- {a.get('date', '')[:10]}: {a.get('activity_type', 'Unknown')} {a.get('distance_miles', 0):.1f}mi in {a.get('duration_seconds', 0)//60}min"
+        for a in activities
+    ])
+
+    # Get sleep
+    sleep = cache.get('sleep_sessions', [])
+    sleep_hrs = round(sleep[0].get('total_duration_minutes', 0) / 60, 1) if sleep else 0
+    sleep_score = sleep[0].get('sleep_score', 0) if sleep else 0
+
+    # Get RHR
+    rhr_readings = cache.get('resting_hr_readings', [])
+    rhr = int(sum(r[1] for r in rhr_readings[:3]) / 3) if len(rhr_readings) >= 3 else 0
+
+    # Create prompt for Claude
+    prompt = f"""Based on this athlete's data, provide concise training recommendations for TODAY in 3-4 bullet points.
+
+RECOVERY METRICS:
+- Recovery Score: {recovery_score}/100
+- Sleep: {sleep_hrs}h (quality: {sleep_score}/100)
+- Resting HR: {rhr} bpm
+- Training Stress Balance: {tsb:+.1f}
+
+RECENT ACTIVITIES:
+{activity_summary}
+
+WEATHER TODAY:
+{weather_data if weather_data else 'Not available'}
+
+Provide:
+1. Today's recommended workout type and duration
+2. Intensity guidance based on recovery
+3. Weather timing recommendation if relevant
+4. One key recovery or adaptation note
+
+Format as brief bullet points (50-80 words total). Be specific and actionable."""
+
+    try:
+        # Call Claude Code in headless mode
+        result = subprocess.run(
+            ['claude', '-p', prompt, '--output-format', 'text', '--max-turns', '3'],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()
+    except:
+        pass
+
+    # Fallback if AI generation fails
+    if recovery_score < 50:
+        return "• Rest day recommended - recovery score below 50\n• Focus on sleep and nutrition\n• Light walking (20-30min) if feeling restless"
+    elif tsb < -10:
+        return "• Easy recovery workout - TSB indicates fatigue\n• 30-40min easy effort\n• Prioritize movement quality over intensity"
+    else:
+        return "• Moderate training day based on recovery metrics\n• Follow scheduled workout or 45-60min easy run\n• Monitor effort and adjust as needed"
+
 def generate_html_report(weather_data=None):
     """Generate enhanced HTML report."""
     cache = load_health_data()
@@ -179,8 +244,11 @@ def generate_html_report(weather_data=None):
 
     # Weather HTML
     weather_html = "<p>Weather data unavailable</p>"
-    if weather_data:
+    if weather_data and weather_data.strip() and "unavailable" not in weather_data.lower():
         weather_html = f"<pre>{weather_data}</pre>"
+
+    # Generate AI Commentary
+    ai_commentary = generate_ai_commentary(cache, weather_data, recovery_score, tsb)
 
     # Weekly chart data
     chart_labels = []
@@ -490,6 +558,14 @@ def generate_html_report(weather_data=None):
                 <h2>7-Day Activity Summary</h2>
                 <div class="chart-container">
                     <canvas id="weeklyChart"></canvas>
+                </div>
+            </section>
+
+            <!-- AI Coaching Recommendations -->
+            <section class="section">
+                <h2>🤖 AI Coaching Recommendations</h2>
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin: 20px 0;">
+                    <pre style="background: transparent; color: white; padding: 0; margin: 0; white-space: pre-wrap; font-size: 1.05em; line-height: 1.8;">{ai_commentary}</pre>
                 </div>
             </section>
 
