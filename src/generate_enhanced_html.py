@@ -195,10 +195,10 @@ BE CONSERVATIVE - prioritize recovery over training. Coordinate across all train
     try:
         # Call Claude Code with the appropriate agent
         result = subprocess.run(
-            ['claude', f'@{agent}', '-p', prompt, '--output-format', 'text', '--max-turns', '3'],
+            ['claude', '-p', prompt, f'@{agent}', '--output-format', 'text', '--max-turns', '5'],
             capture_output=True,
             text=True,
-            timeout=30
+            timeout=60
         )
 
         if result.returncode == 0 and result.stdout.strip():
