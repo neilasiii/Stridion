@@ -90,14 +90,33 @@ def generate_html_report(weather_data=None):
     recovery_score = get_recovery_score(cache)
     weekly_activities = get_weekly_activities(cache)
 
-    # Get training load
+    # Get training load - try Garmin first, then calculate from activities
     progress = cache.get('progress_summary', {})
+    tsb = atl = ctl = 0
+
     if isinstance(progress, dict):
-        tsb = progress.get('training_stress_balance') or 0
-        atl = progress.get('acute_training_load') or 0
-        ctl = progress.get('chronic_training_load') or 0
-    else:
-        tsb = atl = ctl = 0
+        tsb_garmin = progress.get('training_stress_balance')
+        atl_garmin = progress.get('acute_training_load')
+        ctl_garmin = progress.get('chronic_training_load')
+
+        if tsb_garmin is not None and atl_garmin is not None and ctl_garmin is not None:
+            tsb, atl, ctl = tsb_garmin, atl_garmin, ctl_garmin
+        else:
+            # Fallback: calculate from activities
+            from datetime import datetime, timedelta
+            activities = cache.get('activities', [])
+            if activities:
+                cutoff_7 = (datetime.now() - timedelta(days=7)).isoformat()
+                cutoff_42 = (datetime.now() - timedelta(days=42)).isoformat()
+
+                recent_7 = [a for a in activities if a.get('date', '') >= cutoff_7]
+                atl = sum(a.get('duration_seconds', 0) for a in recent_7) / 3600
+
+                recent_42 = [a for a in activities if a.get('date', '') >= cutoff_42]
+                total_hours_42 = sum(a.get('duration_seconds', 0) for a in recent_42) / 3600
+                ctl = total_hours_42 / 6
+
+                tsb = ctl - atl
 
     # Recovery color
     if recovery_score >= 70:
