@@ -1,14 +1,11 @@
 #!/bin/bash
 #
-# Morning Report - Daily health and training summary
+# AI-Powered Morning Report - Daily health and training summary with Claude Code
 #
-# Syncs Garmin data and sends a notification with key metrics:
-# - Recent activities
-# - Sleep quality
-# - Recovery indicators (RHR, readiness)
-# - Today's scheduled workout (if any)
+# Uses Claude Code in headless mode to generate intelligent training recommendations
+# based on recent health data, recovery metrics, and scheduled workouts.
 #
-# Designed to run as a cron job at 0900 daily
+# Designed to run as a cron job at 0715 daily
 #
 
 set -e  # Exit on error
@@ -17,41 +14,232 @@ set -e  # Exit on error
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Use venv Python if available, otherwise fall back to system python3
+# Log file for debugging
+LOG_FILE="$PROJECT_ROOT/data/morning_report.log"
+echo "=== Morning Report (AI): $(date) ===" >> "$LOG_FILE"
+
+# 1. Sync latest Garmin data (incremental - only fetches new data)
+echo "Syncing latest Garmin data..." >> "$LOG_FILE"
+cd "$PROJECT_ROOT"
+
+# Use venv Python if available
 if [ -f "$PROJECT_ROOT/venv/bin/python3" ]; then
     PYTHON="$PROJECT_ROOT/venv/bin/python3"
 else
     PYTHON="python3"
 fi
 
-# Log file for debugging
-LOG_FILE="$PROJECT_ROOT/data/morning_report.log"
-echo "=== Morning Report: $(date) ===" >> "$LOG_FILE"
-
-# Sync Garmin data (quiet mode, last 7 days)
-echo "Syncing Garmin data..." >> "$LOG_FILE"
-"$PYTHON" "$PROJECT_ROOT/src/garmin_sync.py" --days 7 --quiet >> "$LOG_FILE" 2>&1 || {
+"$PYTHON" "$PROJECT_ROOT/src/garmin_sync.py" --quiet >> "$LOG_FILE" 2>&1 || {
     echo "Garmin sync failed" >> "$LOG_FILE"
     termux-notification --title "Morning Report Error" --content "Failed to sync Garmin data" --channel morning-report
     exit 1
 }
 
-# Generate report using Python
-echo "Generating report..." >> "$LOG_FILE"
-REPORT=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$LOG_FILE") || {
-    echo "Report generation failed" >> "$LOG_FILE"
-    termux-notification --title "Morning Report Error" --content "Failed to generate report" --channel morning-report
+# 2. Fetch current weather
+echo "Fetching weather..." >> "$LOG_FILE"
+WEATHER=$("$PYTHON" "$PROJECT_ROOT/src/get_weather.py" 2>> "$LOG_FILE") || {
+    echo "Weather fetch failed, continuing without weather data..." >> "$LOG_FILE"
+    WEATHER="Weather data unavailable"
+}
+
+# 3. Extract health summary using Python
+echo "Extracting health summary..." >> "$LOG_FILE"
+HEALTH_SUMMARY=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$LOG_FILE") || {
+    echo "Health summary extraction failed" >> "$LOG_FILE"
+    termux-notification --title "Morning Report Error" --content "Failed to extract health data" --channel morning-report
     exit 1
 }
 
-# Send notification
+# 4. Generate AI-powered recommendations using Claude Code (headless mode)
+echo "Generating AI recommendations..." >> "$LOG_FILE"
+
+# Create the prompt for Claude with pre-extracted health data and weather
+PROMPT="Based on the following health summary and weather conditions, provide training recommendations in TWO formats.
+
+HEALTH SUMMARY:
+$HEALTH_SUMMARY
+
+CURRENT WEATHER:
+$WEATHER
+
+ATHLETE PROFILE (from data/athlete/goals.md):
+- Marathon goal: 4:00:00 (9:10/mi pace)
+- Currently in base building phase
+- Works Mon-Thu 0700-1730 (returns Jan 6, 2026 - currently on parental leave)
+
+DIETARY REQUIREMENTS:
+- Gluten-free
+- Dairy-free
+
+TRAINING PREFERENCES:
+- Early morning workouts preferred on workdays
+- Saturday long runs
+- Sunday mobility/recovery
+
+**CRITICAL: Provide TWO versions separated by '---DETAILED---' marker:**
+
+**BRIEF VERSION (under 250 chars, for notification):**
+Recovery: [2-3 words max]
+Today: [workout + duration]
+Weather: [time window + temp]
+Note: [1 brief insight]
+
+---DETAILED---
+
+**DETAILED VERSION (for HTML report):**
+Provide a comprehensive analysis including:
+- Recovery status assessment with specific metrics (RHR, sleep, days since last hard effort)
+- Detailed workout recommendation with rationale (why this workout today)
+- Weather impact on training (specific timing, heat/cold considerations)
+- Training context (where you are in training cycle, what's coming next)
+- Any adjustments or alternatives based on how you feel
+
+Weather timing guidelines:
+- Over 80F or over 70pct humidity: early AM/evening or treadmill
+- Under 40F: mid-day
+- UV over 7: avoid midday"
+
+# Run Claude Code in headless mode
+AI_RESPONSE=$(claude -p "$PROMPT" \
+    --output-format text \
+    --permission-mode acceptEdits \
+    --max-turns 5 \
+    2>> "$LOG_FILE") || {
+    echo "Claude Code failed" >> "$LOG_FILE"
+    # Fall back to basic report if AI generation fails
+    AI_RESPONSE="$HEALTH_SUMMARY"
+}
+
+# Split response into BRIEF and DETAILED versions
+REPORT_BRIEF=$(echo "$AI_RESPONSE" | sed -n '1,/---DETAILED---/p' | grep -E "^(Recovery:|Today:|Weather:|Note:)" || echo "$AI_RESPONSE" | grep -E "^(Recovery:|Today:|Weather:|Note:)")
+REPORT_DETAILED=$(echo "$AI_RESPONSE" | sed -n '/---DETAILED---/,$p' | sed '1d' || echo "$AI_RESPONSE")
+
+# Use brief version for notification
+REPORT="$REPORT_BRIEF"
+
+# 5. Generate enhanced HTML report for click action
+DETAILED_REPORT_HTML="$PROJECT_ROOT/data/morning_report_detailed.html"
+
+# Use the new enhanced HTML generator
+echo "Generating enhanced HTML report..." >> "$LOG_FILE"
+"$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_html.py" "$WEATHER" > "$DETAILED_REPORT_HTML" 2>> "$LOG_FILE" || {
+    echo "Enhanced HTML generation failed, creating basic HTML..." >> "$LOG_FILE"
+
+    # Fallback to basic HTML if enhanced generation fails
+    HEALTH_SUMMARY_HTML=$(echo "$HEALTH_SUMMARY" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
+    WEATHER_HTML=$(echo "$WEATHER" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
+    REPORT_DETAILED_HTML=$(echo "$REPORT_DETAILED" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
+
+    cat > "$DETAILED_REPORT_HTML" << EOF
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Training Report</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+        }
+        .timestamp {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+            font-size: 0.85em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏃 Morning Training Report</h1>
+        <p class="timestamp">$(date '+%A, %B %d, %Y at %I:%M %p')</p>
+
+        <div class="section">
+            <h2>📊 Health Summary</h2>
+            <pre>$HEALTH_SUMMARY_HTML</pre>
+        </div>
+
+        <div class="section">
+            <h2>🌤️ Weather Conditions</h2>
+            <pre>$WEATHER_HTML</pre>
+        </div>
+
+        <div class="section">
+            <h2>🤖 AI Recommendation</h2>
+            <pre>$REPORT_DETAILED_HTML</pre>
+        </div>
+
+        <div class="footer">
+            Generated by Running Coach System<br>
+            Logs: data/morning_report.log
+        </div>
+    </div>
+</body>
+</html>
+EOF
+}
+
+# 6. Copy HTML to Downloads folder (accessible via file:// URIs)
+DOWNLOADS_HTML="$HOME/storage/downloads/morning_report.html"
+cp "$DETAILED_REPORT_HTML" "$DOWNLOADS_HTML" 2>> "$LOG_FILE"
+
+# 7. Send notification with clickable action
 echo "Sending notification..." >> "$LOG_FILE"
+
+# Try using termux-share directly (may work better than termux-open from notifications)
 termux-notification \
     --title "🏃 Morning Training Report" \
     --content "$REPORT" \
     --channel morning-report \
     --priority high \
-    --sound
+    --sound \
+    --button1 "View Details" \
+    --button1-action "termux-share $DOWNLOADS_HTML"
 
 echo "Report sent successfully" >> "$LOG_FILE"
 echo "$REPORT" >> "$LOG_FILE"
+echo "" >> "$LOG_FILE"
