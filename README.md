@@ -48,6 +48,16 @@ The system uses objective metrics from your Garmin device to inform coaching dec
 - **DETAILED Mode** - Comprehensive explanations with physiological reasoning
 - **Dynamic Switching** - Change detail level anytime during coaching sessions
 
+### 📱 Enhanced Morning Reports
+
+- **AI-Powered Notifications** - Daily training recommendations via Termux notifications
+- **Terminal Dashboard** - Comprehensive text report with visual indicators and recovery metrics
+- **HTML Dashboard** - Beautiful mobile-friendly report with charts and gauges
+- **Recovery Analytics** - Sleep quality, RHR trends, training readiness scoring
+- **Training Load Tracking** - ATL/CTL/TSB visualization (acute/chronic/balance)
+- **Weather Integration** - Pace adjustments and timing recommendations for heat/humidity
+- **Gear Tracking** - Shoe mileage alerts for injury prevention
+
 ## Quick Start
 
 ### Using Claude Code (Recommended)
@@ -245,6 +255,52 @@ Import the generated .ics file:
 - **Google Calendar**: Settings → Import & Export → Import
 - **Outlook**: File → Import/Export → Import an iCalendar file
 - **Apple Calendar**: File → Import
+
+### Morning Reports
+
+Get your daily training overview in three formats:
+
+**1. AI-Powered Brief Report** (Notification):
+```bash
+bash bin/morning_report.sh
+```
+- Uses Claude Code AI for intelligent recommendations
+- Concise notification (~300 chars) for quick glance
+- Includes recovery status and today's workout
+- Clickable "View Details" button for full report
+- Perfect for automated daily cron jobs
+
+**2. Enhanced Text Report** (Terminal):
+```bash
+bash bin/show_detailed_report.sh
+```
+- Comprehensive terminal dashboard with visual indicators (✓ ⚡ ⚠️)
+- **Recovery status**: Sleep quality, RHR trend, readiness score
+- **Training load**: ATL/CTL/TSB metrics (when available)
+- **Weekly summary**: Last 7 days activity breakdown
+- **Gear alerts**: Shoe mileage warnings (>350mi tracked)
+- **Weather-adjusted pacing**: Heat/humidity compensations
+- **Today's workout**: With timing recommendations
+
+**3. Enhanced HTML Report** (Browser):
+```bash
+bash bin/view_morning_report.sh  # Generate and open new report
+bash bin/open_morning_report.sh  # Open existing report
+```
+- Beautiful mobile-friendly dashboard
+- **Recovery gauge**: Visual 0-100 status indicator
+- **Interactive chart**: 7-day activity chart (Chart.js)
+- **Training stress balance**: TSB visualization with status
+- **Metric cards**: Sleep, RHR, training load at-a-glance
+- **Weather conditions**: Current + 6-hour forecast
+- Opens in browser via `termux-share` (most reliable method)
+- Saved to Downloads folder for easy re-access
+
+All reports include:
+- Current recovery metrics (sleep, RHR, readiness)
+- Days since last hard effort
+- Weather conditions and workout timing guidance
+- Scheduled workout for today
 
 ## Architecture
 

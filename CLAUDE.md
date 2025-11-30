@@ -223,8 +223,11 @@ bash bin/setup_cron.sh
 bash bin/sync_with_notification.sh
 bash bin/sync_with_notification.sh --days 7
 
-# Morning report (daily health summary + today's workout)
-bash bin/morning_report.sh
+# Morning reports
+bash bin/morning_report.sh              # AI-powered brief report (notification)
+bash bin/show_detailed_report.sh        # Enhanced text report (terminal)
+bash bin/view_morning_report.sh         # Enhanced HTML report (generate + open)
+bash bin/open_morning_report.sh         # Open existing HTML report
 ```
 
 **Sync with Notification** (`bin/sync_with_notification.sh`):
@@ -235,18 +238,39 @@ bash bin/morning_report.sh
 - Logs output to `data/sync_log.txt` for debugging
 - Designed for cron automation
 
-**Morning Report** (`bin/morning_report.sh`):
-- **AI-Powered** - Uses Claude Code in headless mode for intelligent recommendations
-- Incremental sync (fetches only latest data since last sync)
-- Reads cached health data for analysis (recent activities, sleep, RHR, readiness, scheduled workouts)
-- Generates AI analysis with personalized workout recommendations including:
-  - Recovery status assessment
-  - Today's primary workout (run/strength/mobility) with specific durations and intensities
-  - Alternative options based on fatigue level
-  - Contextual insights about training phase and goals
-- Sends concise notification (~300 chars) at scheduled time (default: 0715 daily)
-- Logs to `data/morning_report.log`
-- Falls back to basic metrics if AI generation fails
+**Morning Reports** - Three formats available:
+
+1. **AI-Powered Brief Report** (`bin/morning_report.sh`):
+   - Uses Claude Code in headless mode for intelligent recommendations
+   - Incremental sync (fetches only latest data since last sync)
+   - Generates AI analysis with personalized workout recommendations
+   - Sends concise notification (~300 chars) for quick glance
+   - Includes clickable "View Details" button to open full HTML report
+   - Designed for cron automation (default: 0715 daily)
+   - Logs to `data/morning_report.log`
+
+2. **Enhanced Text Report** (`bin/show_detailed_report.sh`):
+   - Detailed terminal-based report with visual indicators (✓ ⚡ ⚠️)
+   - Recovery status (sleep quality, RHR trend, readiness score)
+   - Training load metrics (ATL/CTL/TSB) if available
+   - Weekly activity summary (last 7 days by type)
+   - Gear mileage alerts (shoe replacement warnings)
+   - Weather-adjusted pacing recommendations
+   - Today's scheduled workout with timing guidance
+   - Perfect for quick command-line check
+
+3. **Enhanced HTML Report** (`bin/view_morning_report.sh` or `bin/open_morning_report.sh`):
+   - Beautiful, mobile-friendly HTML dashboard
+   - Recovery status gauge (0-100 with color indicators)
+   - Interactive weekly activity chart (Chart.js)
+   - Training stress balance visualization
+   - Key metrics cards (sleep, RHR, training load)
+   - Today's workout in highlighted card
+   - Current weather conditions
+   - Opens via `termux-share` (most reliable method for Termux)
+   - Saved to Downloads for easy re-access
+   - Use `view_morning_report.sh` to generate fresh report
+   - Use `open_morning_report.sh` to view existing report without regenerating
 
 **Setup Cron** (`bin/setup_cron.sh`):
 - Installs cron job for automated Garmin sync
