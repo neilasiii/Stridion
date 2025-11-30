@@ -280,7 +280,9 @@ Import the generated .ics file:
 
 The system consumes metrics directly from Garmin Connect (no manual data entry required):
 
-- **Activities** - Distance, duration, pace, heart rate, calories, HR zones (time-in-zone)
+- **Activities** - All activity types (running, cycling, swimming, strength, walking, yoga, etc.)
+  - Metrics: Distance, duration, pace/speed, heart rate, calories, HR zones (time-in-zone), splits
+  - Activity type normalization for consistency
 - **Sleep** - Total duration, sleep stages, efficiency, sleep score
 - **Recovery Metrics** - Resting heart rate (RHR), HRV, training readiness score
 - **Fitness Indicators** - VO2 max estimates, lactate threshold (HR & pace)
