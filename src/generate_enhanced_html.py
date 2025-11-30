@@ -83,65 +83,37 @@ def get_recovery_score(cache):
     return max(0, min(100, int(score)))
 
 def generate_ai_commentary(cache, weather_data, recovery_score, tsb):
-    """Generate AI commentary with Claude Code recommendations."""
+    """Generate AI commentary with Claude Code recommendations using the running coach agent."""
     import subprocess
 
-    # Get recent activity summary
-    activities = cache.get('activities', [])[:5]
-    activity_summary = "\n".join([
-        f"- {a.get('date', '')[:10]}: {a.get('activity_type', 'Unknown')} {a.get('distance_miles', 0):.1f}mi in {a.get('duration_seconds', 0)//60}min"
-        for a in activities
-    ])
-
-    # Get sleep
-    sleep = cache.get('sleep_sessions', [])
-    sleep_hrs = round(sleep[0].get('total_duration_minutes', 0) / 60, 1) if sleep else 0
-    sleep_score = sleep[0].get('sleep_score', 0) if sleep else 0
-
-    # Get RHR
-    rhr_readings = cache.get('resting_hr_readings', [])
-    rhr = int(sum(r[1] for r in rhr_readings[:3]) / 3) if len(rhr_readings) >= 3 else 0
-
-    # Check if post-marathon recovery
+    # Check if post-marathon recovery for fallback
+    activities = cache.get('activities', [])
     days_since_marathon = None
-    for a in activities:
+    for a in activities[:10]:
         if a.get('distance_miles', 0) > 20:  # Marathon distance
-            from datetime import datetime
             marathon_date = datetime.fromisoformat(a['date'][:10])
             days_since_marathon = (datetime.now().date() - marathon_date.date()).days
             break
 
-    # Create prompt for Claude
-    context_note = ""
-    if days_since_marathon and days_since_marathon < 14:
-        context_note = f"\n\nIMPORTANT: Athlete is {days_since_marathon} days post-marathon. Recommend very conservative recovery activities (rest, walking 20-30min max, no running)."
+    # Get sleep for fallback
+    sleep = cache.get('sleep_sessions', [])
+    sleep_score = sleep[0].get('sleep_score', 0) if sleep else 0
 
-    prompt = f"""Based on this athlete's data, provide concise training recommendations for TODAY in 3-4 bullet points.
+    # Simple prompt - let the agent access all context files
+    prompt = """Provide today's training recommendation in 3-4 concise bullet points (50-80 words total).
 
-RECOVERY METRICS:
-- Recovery Score: {recovery_score}/100
-- Sleep: {sleep_hrs}h (quality: {sleep_score}/100)
-- Resting HR: {rhr} bpm
-- Training Stress Balance: {tsb:+.1f}
-
-RECENT ACTIVITIES:
-{activity_summary}
-
-WEATHER TODAY:
-{weather_data if weather_data else 'Not available'}{context_note}
-
-Provide:
-1. Today's recommended workout type and duration (BE CONSERVATIVE - prioritize recovery)
-2. Intensity guidance based on recovery (if sleep <50 or recovery <50, recommend rest/walking only)
+Include:
+1. Recommended workout type and duration
+2. Intensity guidance based on current recovery status
 3. Weather timing recommendation if relevant
-4. One key recovery or adaptation note
+4. One key recovery or training note
 
-Format as brief bullet points (50-80 words total). Be specific and actionable."""
+BE CONSERVATIVE - prioritize recovery over training. Check the health data cache for recent activities and recovery metrics."""
 
     try:
-        # Call Claude Code in headless mode
+        # Call Claude Code with the running coach agent
         result = subprocess.run(
-            ['claude', '-p', prompt, '--output-format', 'text', '--max-turns', '3'],
+            ['claude', '-p', prompt, '--agent', 'vdot-running-coach', '--output-format', 'text', '--max-turns', '3'],
             capture_output=True,
             text=True,
             timeout=30

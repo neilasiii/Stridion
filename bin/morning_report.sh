@@ -50,33 +50,11 @@ HEALTH_SUMMARY=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$
     exit 1
 }
 
-# 4. Generate AI-powered recommendations using Claude Code (headless mode)
+# 4. Generate AI-powered recommendations using the running coach agent
 echo "Generating AI recommendations..." >> "$LOG_FILE"
 
-# Create the prompt for Claude with pre-extracted health data and weather
-PROMPT="Based on the following health summary and weather conditions, provide training recommendations in TWO formats.
-
-HEALTH SUMMARY:
-$HEALTH_SUMMARY
-
-CURRENT WEATHER:
-$WEATHER
-
-ATHLETE PROFILE (from data/athlete/goals.md):
-- Marathon goal: 4:00:00 (9:10/mi pace)
-- Currently in base building phase
-- Works Mon-Thu 0700-1730 (returns Jan 6, 2026 - currently on parental leave)
-
-DIETARY REQUIREMENTS:
-- Gluten-free
-- Dairy-free
-
-TRAINING PREFERENCES:
-- Early morning workouts preferred on workdays
-- Saturday long runs
-- Sunday mobility/recovery
-
-**CRITICAL: Provide TWO versions separated by '---DETAILED---' marker:**
+# Simple prompt - let the agent access all context files directly
+PROMPT="Provide today's training recommendation in TWO formats:
 
 **BRIEF VERSION (under 250 chars, for notification):**
 Recovery: [2-3 words max]
@@ -88,19 +66,17 @@ Note: [1 brief insight]
 
 **DETAILED VERSION (for HTML report):**
 Provide a comprehensive analysis including:
-- Recovery status assessment with specific metrics (RHR, sleep, days since last hard effort)
-- Detailed workout recommendation with rationale (why this workout today)
-- Weather impact on training (specific timing, heat/cold considerations)
-- Training context (where you are in training cycle, what's coming next)
-- Any adjustments or alternatives based on how you feel
+- Recovery status assessment with specific metrics
+- Detailed workout recommendation with rationale
+- Weather impact on training (specific timing recommendations)
+- Training context (where in training cycle, what's coming next)
+- Any adjustments or alternatives based on recovery status
 
-Weather timing guidelines:
-- Over 80F or over 70pct humidity: early AM/evening or treadmill
-- Under 40F: mid-day
-- UV over 7: avoid midday"
+Use the health data cache and weather data to inform your recommendations."
 
-# Run Claude Code in headless mode
+# Run Claude Code with the running coach agent
 AI_RESPONSE=$(claude -p "$PROMPT" \
+    --agent vdot-running-coach \
     --output-format text \
     --permission-mode acceptEdits \
     --max-turns 5 \
