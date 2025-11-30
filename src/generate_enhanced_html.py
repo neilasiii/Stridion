@@ -86,6 +86,26 @@ def generate_ai_commentary(cache, weather_data, recovery_score, tsb):
     """Generate AI commentary with Claude Code recommendations using appropriate coaching agents."""
     import subprocess
 
+    # Check for today's scheduled workout first
+    scheduled = cache.get('scheduled_workouts', [])
+    today = datetime.now().date().isoformat()
+    scheduled_workout = None
+    scheduled_type = None
+
+    for workout in scheduled:
+        if workout.get('date') == today:
+            scheduled_workout = workout
+            workout_name = workout.get('workout_name', '').lower()
+
+            # Determine workout type from name/description
+            if any(word in workout_name for word in ['strength', 'weight', 'gym']):
+                scheduled_type = 'strength'
+            elif any(word in workout_name for word in ['mobility', 'yoga', 'stretch', 'foam']):
+                scheduled_type = 'mobility'
+            elif any(word in workout_name for word in ['run', 'tempo', 'interval', 'easy', 'long']):
+                scheduled_type = 'running'
+            break
+
     # Check if post-marathon recovery for fallback
     activities = cache.get('activities', [])
     days_since_marathon = None
@@ -99,9 +119,43 @@ def generate_ai_commentary(cache, weather_data, recovery_score, tsb):
     sleep = cache.get('sleep_sessions', [])
     sleep_score = sleep[0].get('sleep_score', 0) if sleep else 0
 
-    # Determine which agent to use based on recovery
-    # On low recovery days, suggest mobility/strength instead of running
-    if recovery_score < 50 or sleep_score < 50 or (days_since_marathon and days_since_marathon < 10):
+    # Determine which agent to use based on scheduled workout and recovery
+    # Priority: scheduled workout type > recovery-based recommendation
+    if scheduled_type == 'strength':
+        agent = 'runner-strength-coach'
+        prompt = """Today's scheduled workout is strength training. Provide recommendations in 3-4 concise bullet points (50-80 words total).
+
+Include:
+1. Strength workout guidance based on schedule
+2. Key exercises and intensity based on recent running volume
+3. Any modifications needed based on current recovery
+4. How this supports current training phase
+
+Check health data and coordinate with running training."""
+    elif scheduled_type == 'mobility':
+        agent = 'mobility-coach-runner'
+        prompt = """Today's scheduled workout is mobility/recovery. Provide recommendations in 3-4 concise bullet points (50-80 words total).
+
+Include:
+1. Mobility workout guidance based on schedule
+2. Key areas to focus on based on recent training
+3. Duration and intensity
+4. Recovery benefits
+
+Check health data for recent hard efforts."""
+    elif scheduled_type == 'running':
+        agent = 'vdot-running-coach'
+        prompt = """Today's scheduled workout is running. Provide recommendations in 3-4 concise bullet points (50-80 words total).
+
+Include:
+1. Guidance for today's scheduled run
+2. Any modifications needed based on recovery status
+3. Weather timing recommendation if relevant
+4. Key focus areas
+
+Check health data and be conservative with recovery adjustments."""
+    # No scheduled workout - determine based on recovery
+    elif recovery_score < 50 or sleep_score < 50 or (days_since_marathon and days_since_marathon < 10):
         # Use mobility coach for recovery days
         agent = 'mobility-coach-runner'
         prompt = """Provide today's recovery/mobility recommendation in 3-4 concise bullet points (50-80 words total).
@@ -153,7 +207,10 @@ BE CONSERVATIVE - prioritize recovery over training. Coordinate across all train
         pass
 
     # Fallback if AI generation fails - match agent logic
-    if days_since_marathon and days_since_marathon < 14:
+    if scheduled_workout:
+        workout_name = scheduled_workout.get('workout_name', 'Scheduled workout')
+        return f"• Scheduled: {workout_name}\n• Check full workout details in 'Today's Workout' section below\n• Monitor recovery and adjust intensity as needed\n• Prioritize form and effort over prescribed paces/times"
+    elif days_since_marathon and days_since_marathon < 14:
         return f"• Day {days_since_marathon} post-marathon - prioritize recovery\n• Gentle mobility/stretching 15-20min (hips, quads, calves)\n• Optional: 20-30min easy walk if feeling restless\n• Focus on sleep quality and nutrition"
     elif recovery_score < 50 or sleep_score < 50:
         return "• Recovery day - mobility/stretching recommended\n• 15-20min gentle yoga or foam rolling\n• Focus on sleep and nutrition\n• Light walking (20-30min) optional"
