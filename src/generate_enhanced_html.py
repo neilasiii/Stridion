@@ -83,7 +83,7 @@ def get_recovery_score(cache):
     return max(0, min(100, int(score)))
 
 def generate_ai_commentary(cache, weather_data, recovery_score, tsb):
-    """Generate AI commentary with Claude Code recommendations using the running coach agent."""
+    """Generate AI commentary with Claude Code recommendations using appropriate coaching agents."""
     import subprocess
 
     # Check if post-marathon recovery for fallback
@@ -99,21 +99,49 @@ def generate_ai_commentary(cache, weather_data, recovery_score, tsb):
     sleep = cache.get('sleep_sessions', [])
     sleep_score = sleep[0].get('sleep_score', 0) if sleep else 0
 
-    # Simple prompt - let the agent access all context files
-    prompt = """Provide today's training recommendation in 3-4 concise bullet points (50-80 words total).
+    # Determine which agent to use based on recovery
+    # On low recovery days, suggest mobility/strength instead of running
+    if recovery_score < 50 or sleep_score < 50 or (days_since_marathon and days_since_marathon < 10):
+        # Use mobility coach for recovery days
+        agent = 'mobility-coach-runner'
+        prompt = """Provide today's recovery/mobility recommendation in 3-4 concise bullet points (50-80 words total).
 
 Include:
-1. Recommended workout type and duration
+1. Recommended mobility/recovery activity and duration
+2. Key areas to focus on (especially post-marathon recovery if applicable)
+3. Any gentle movement options (walking, light stretching)
+4. Recovery guidance
+
+BE SUPPORTIVE - this is a recovery day. Check health data for recent hard efforts."""
+    elif tsb < -5:
+        # Use strength coach on moderate fatigue days (strength as active recovery)
+        agent = 'runner-strength-coach'
+        prompt = """Provide today's strength training recommendation in 3-4 concise bullet points (50-80 words total).
+
+Include:
+1. Recommended strength workout type and duration (keep moderate - this is active recovery)
+2. Key exercises to focus on for runners
+3. Intensity guidance (lighter weights, focus on form)
+4. How this complements current running training
+
+Check health data to coordinate with recent running volume."""
+    else:
+        # Use running coach on normal training days
+        agent = 'vdot-running-coach'
+        prompt = """Provide today's training recommendation in 3-4 concise bullet points (50-80 words total).
+
+Include:
+1. Recommended workout type and duration (could be running, strength, or mobility based on training week)
 2. Intensity guidance based on current recovery status
 3. Weather timing recommendation if relevant
-4. One key recovery or training note
+4. One key training note
 
-BE CONSERVATIVE - prioritize recovery over training. Check the health data cache for recent activities and recovery metrics."""
+BE CONSERVATIVE - prioritize recovery over training. Coordinate across all training domains (running, strength, mobility)."""
 
     try:
-        # Call Claude Code with the running coach agent
+        # Call Claude Code with the appropriate agent
         result = subprocess.run(
-            ['claude', '-p', prompt, '--agent', 'vdot-running-coach', '--output-format', 'text', '--max-turns', '3'],
+            ['claude', '-p', prompt, '--agent', agent, '--output-format', 'text', '--max-turns', '3'],
             capture_output=True,
             text=True,
             timeout=30
@@ -124,15 +152,15 @@ BE CONSERVATIVE - prioritize recovery over training. Check the health data cache
     except:
         pass
 
-    # Fallback if AI generation fails - be conservative
+    # Fallback if AI generation fails - match agent logic
     if days_since_marathon and days_since_marathon < 14:
-        return f"• Day {days_since_marathon} post-marathon - prioritize recovery\n• Rest or 20-30min easy walk maximum\n• Focus on sleep quality and nutrition\n• No running until day 10-14 post-marathon"
+        return f"• Day {days_since_marathon} post-marathon - prioritize recovery\n• Gentle mobility/stretching 15-20min (hips, quads, calves)\n• Optional: 20-30min easy walk if feeling restless\n• Focus on sleep quality and nutrition"
     elif recovery_score < 50 or sleep_score < 50:
-        return "• Rest day recommended - recovery indicators below optimal\n• Focus on sleep and nutrition\n• Light walking (20-30min) if feeling restless"
-    elif tsb < -10:
-        return "• Easy recovery workout - TSB indicates fatigue\n• 30-40min easy effort or rest\n• Prioritize movement quality over intensity"
+        return "• Recovery day - mobility/stretching recommended\n• 15-20min gentle yoga or foam rolling\n• Focus on sleep and nutrition\n• Light walking (20-30min) optional"
+    elif tsb < -5:
+        return "• Active recovery - strength training recommended\n• 30-40min runner-specific strength (bodyweight or light weights)\n• Focus on form and stability over intensity\n• Helps maintain fitness while recovering"
     else:
-        return "• Moderate training day based on recovery metrics\n• 30-45min easy run or follow scheduled workout\n• Monitor effort and adjust as needed"
+        return "• Training day based on recovery metrics\n• Options: 30-45min easy run, strength session, or mobility work\n• Choose based on recent training pattern\n• Monitor effort and adjust as needed"
 
 def generate_html_report(weather_data=None):
     """Generate enhanced HTML report."""
