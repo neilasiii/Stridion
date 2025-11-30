@@ -246,7 +246,7 @@ bash bin/open_morning_report.sh         # Open existing HTML report
    - Generates AI analysis with personalized workout recommendations
    - Sends concise notification (~300 chars) for quick glance
    - Includes clickable "View Details" button to open full HTML report
-   - Designed for cron automation (default: 0715 daily)
+   - Designed for cron automation (default: 0900 daily)
    - Logs to `data/morning_report.log`
 
 2. **Enhanced Text Report** (`bin/show_detailed_report.sh`):
@@ -283,18 +283,18 @@ bash bin/open_morning_report.sh         # Open existing HTML report
 ```bash
 # Option A: Garmin sync every 2 hours + morning report
 5 */2 * * * cd $HOME/running-coach && bash bin/sync_with_notification.sh --days 1
-15 7 * * * cd $HOME/running-coach && bash bin/morning_report.sh
+0 9 * * * cd $HOME/running-coach && bash bin/morning_report.sh
 
 # Option B: Garmin sync every 6 hours + morning report (recommended)
 5 */6 * * * cd $HOME/running-coach && bash bin/sync_with_notification.sh --days 1
-15 7 * * * cd $HOME/running-coach && bash bin/morning_report.sh
+0 9 * * * cd $HOME/running-coach && bash bin/morning_report.sh
 
 # Option C: Morning report only (no automated sync)
-15 7 * * * cd $HOME/running-coach && bash bin/morning_report.sh
+0 9 * * * cd $HOME/running-coach && bash bin/morning_report.sh
 
 # Option D: Incremental sync (most efficient - auto-detects what's new since last sync)
 5 */6 * * * cd $HOME/running-coach && bash bin/sync_with_notification.sh
-15 7 * * * cd $HOME/running-coach && bash bin/morning_report.sh
+0 9 * * * cd $HOME/running-coach && bash bin/morning_report.sh
 ```
 
 **Note**:
