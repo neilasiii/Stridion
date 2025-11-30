@@ -75,8 +75,7 @@ Provide a comprehensive analysis including:
 Use the health data cache and weather data to inform your recommendations."
 
 # Run Claude Code with the running coach agent
-AI_RESPONSE=$(claude -p "$PROMPT" \
-    --agent vdot-running-coach \
+AI_RESPONSE=$(claude @vdot-running-coach -p "$PROMPT" \
     --output-format text \
     --permission-mode acceptEdits \
     --max-turns 5 \

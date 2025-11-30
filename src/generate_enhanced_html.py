@@ -195,7 +195,7 @@ BE CONSERVATIVE - prioritize recovery over training. Coordinate across all train
     try:
         # Call Claude Code with the appropriate agent
         result = subprocess.run(
-            ['claude', '-p', prompt, '--agent', agent, '--output-format', 'text', '--max-turns', '3'],
+            ['claude', f'@{agent}', '-p', prompt, '--output-format', 'text', '--max-turns', '3'],
             capture_output=True,
             text=True,
             timeout=30
