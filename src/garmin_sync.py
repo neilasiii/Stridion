@@ -346,13 +346,15 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             # Map Garmin activity to our format
             activity_type = activity.get('activityType', {}).get('typeKey', 'UNKNOWN').upper()
 
-            # Only include running and walking for now
-            if activity_type not in ['RUNNING', 'WALKING', 'TRAIL_RUNNING', 'TREADMILL_RUNNING']:
-                continue
-
-            # Normalize activity type
+            # Normalize common activity type variations
             if activity_type in ['TRAIL_RUNNING', 'TREADMILL_RUNNING']:
                 activity_type = 'RUNNING'
+            elif activity_type in ['INDOOR_CYCLING', 'ROAD_BIKING', 'MOUNTAIN_BIKING', 'GRAVEL_CYCLING']:
+                activity_type = 'CYCLING'
+            elif activity_type in ['LAP_SWIMMING', 'OPEN_WATER_SWIMMING']:
+                activity_type = 'SWIMMING'
+            elif activity_type in ['STRENGTH_TRAINING', 'CARDIO_TRAINING', 'HIIT']:
+                activity_type = 'STRENGTH'
 
             # Get activity ID for fetching splits
             activity_id = activity.get('activityId')
@@ -404,7 +406,7 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             })
 
         if not quiet:
-            print(f"  Found {len(activities)} activities (running/walking)")
+            print(f"  Found {len(activities)} activities")
 
         return activities
 

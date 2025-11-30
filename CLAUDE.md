@@ -331,7 +331,9 @@ Coaching Agents (read JSON for decisions)
 
 **[src/garmin_sync.py](src/garmin_sync.py)**: Main Garmin Connect sync script
 - Authenticates with Garmin Connect using OAuth (via garminconnect library)
-- Fetches activities (running, walking), sleep, VO2 max, weight, resting HR
+- Fetches all activity types (running, cycling, swimming, strength, walking, yoga, etc.)
+- Normalizes activity type variations (e.g., trail running → running, indoor cycling → cycling)
+- Fetches sleep, VO2 max, weight, resting HR, and other biometric data
 - Parses Garmin API responses into standardized format
 - Merges with existing cache data (de-duplicates by timestamp)
 - Updates [data/health/health_data_cache.json](data/health/health_data_cache.json) atomically
@@ -464,10 +466,12 @@ sleep_score = last_night['sleep_score']  # Garmin's 0-100 quality score
 
 All data is fetched directly from Garmin Connect API:
 
-- **Activities**: Date, distance, duration, pace, avg/max HR, calories, splits, **HR zones** (time-in-zone per activity) - running, walking
+- **Activities**: All activity types including running, cycling, swimming, strength training, walking, yoga, etc.
+  - Metrics: Date, distance, duration, pace/speed, avg/max HR, calories, splits, **HR zones** (time-in-zone per activity)
+  - Activity type normalization (trail running → running, indoor cycling → cycling, etc.)
 - **Sleep**: Total duration, light/deep/REM/awake minutes, sleep score (0-100)
 - **VO2 Max**: Garmin estimates (ml/kg/min)
-- **Lactate Threshold**: Auto-detected threshold HR (bpm) and pace - **NEW**
+- **Lactate Threshold**: Auto-detected threshold HR (bpm) and pace
 - **Weight**: Body weight (lbs), body fat %, muscle % when available
 - **Resting Heart Rate**: Daily RHR (bpm) - key recovery indicator
 - **HRV**: Heart rate variability daily summaries with baseline ranges
