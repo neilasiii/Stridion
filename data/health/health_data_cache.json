@@ -1,7 +1,61 @@
 {
-  "last_updated": "2025-12-02T15:04:53.245400+00:00",
+  "last_updated": "2025-12-02T16:39:20.725090+00:00",
   "last_sync_date": "2025-12-02",
   "activities": [
+    {
+      "activity_id": 21150342875,
+      "date": "2025-12-02T11:06:58",
+      "activity_name": "Altamonte Springs - 30 min E",
+      "activity_type": "RUNNING",
+      "duration_seconds": 1806.987060546875,
+      "distance_miles": 2.927554,
+      "calories": 356.0,
+      "avg_heart_rate": 147.0,
+      "max_heart_rate": 160.0,
+      "avg_speed": 5.831703,
+      "pace_per_mile": 10.287239,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 2.927374,
+          "duration_seconds": 1806.987,
+          "avg_heart_rate": 147.0,
+          "max_heart_rate": 160.0,
+          "avg_speed_mph": 5.831703,
+          "pace_per_mile": 10.287872,
+          "avg_cadence": 148.0625,
+          "avg_power": 299.0,
+          "calories": 356.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 268.01,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1472.965,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 19.134,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
     {
       "activity_id": 21089008771,
       "date": "2025-11-25T12:28:02",
@@ -28605,6 +28659,10 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2025-12-02T00:00:00",
+      "vo2_max": 50.3
+    },
+    {
       "date": "2025-11-23T00:00:00",
       "vo2_max": 50.6
     },
@@ -34454,13 +34512,13 @@
   "training_readiness": [
     {
       "date": "2025-12-02",
-      "score": 63,
-      "level": "MODERATE",
-      "recovery_time": 1,
+      "score": 45,
+      "level": "LOW",
+      "recovery_time": 1511,
       "sleep_score": 64,
       "hrv_feedback": "GOOD",
       "stress_feedback": "GOOD",
-      "acute_load": 49
+      "acute_load": 122
     },
     {
       "date": "2025-12-01",
@@ -44341,21 +44399,21 @@
   ],
   "race_predictions": {
     "date": "2025-12-02",
-    "time_5k": 1461,
-    "time_10k": 3066,
-    "time_half_marathon": 6848,
-    "time_marathon": 14919
+    "time_5k": 1459,
+    "time_10k": 3060,
+    "time_half_marathon": 6838,
+    "time_marathon": 14903
   },
   "training_status": {
     "date": "2025-12-02",
     "vo2_max": {
-      "date": "2025-11-23",
-      "value": 51.0,
-      "precise_value": 50.6
+      "date": "2025-12-02",
+      "value": 50.0,
+      "precise_value": 50.3
     },
     "training_load": {
       "date": "2025-12-02",
-      "aerobic_low": 512.0213,
+      "aerobic_low": 568.9587,
       "aerobic_high": 747.9109,
       "anaerobic": 0.0,
       "feedback": "ANAEROBIC_SHORTAGE"
@@ -44405,12 +44463,12 @@
     },
     {
       "scheduled_date": "2025-12-02",
-      "scheduled_datetime": null,
+      "scheduled_datetime": "2025-12-02T16:06:58",
       "name": "Run: 2-3 x 20-30 min easy runs this week",
       "description": "Workout: Run",
-      "duration_seconds": null,
+      "duration_seconds": 3600,
       "location": null,
-      "all_day": true,
+      "all_day": false,
       "source": "ics_calendar"
     },
     {
@@ -44502,8 +44560,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 491494.13885498047,
-      "total_activities": 55,
+      "total_distance_meters": 496205.5690307617,
+      "total_activities": 56,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -44714,7 +44772,7 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-11-29",
+    "start_date": "2025-12-01",
     "end_date": "2025-12-02",
     "acute_training_load": null,
     "chronic_training_load": null,

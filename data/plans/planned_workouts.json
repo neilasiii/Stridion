@@ -6,7 +6,7 @@
     "plan_start_date": "2025-11-30",
     "plan_end_date": "2026-02-22",
     "created_date": "2025-12-02T09:33:18.732385",
-    "last_modified": "2025-12-02T09:34:02.729412",
+    "last_modified": "2025-12-02T11:41:11.365039",
     "athlete": "Neil Stagner",
     "version": "1.0"
   },
@@ -67,8 +67,16 @@
         "description": "**Mobility:** 10 min post-run routine (foam roll calves, hamstrings, glutes)",
         "duration_minutes": 10
       },
-      "status": "planned",
-      "actual_performance": null,
+      "status": "completed",
+      "actual_performance": {
+        "date_completed": "2025-12-02",
+        "garmin_activity_id": 21150342875,
+        "duration_minutes": 30,
+        "distance_miles": 2.93,
+        "avg_pace": "10:17/mile",
+        "avg_hr": 147,
+        "notes": "30 min Easy (FinalSurge workout - overrides baseline plan). Some soreness in legs, calves, shins - expected for first run back post-marathon. HR slightly elevated (147 vs target <145) due to heat/humidity (76F, 77%). Good execution overall."
+      },
       "adjustments": []
     },
     {
