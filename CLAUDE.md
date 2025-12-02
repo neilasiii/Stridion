@@ -6,6 +6,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **running coach system** that provides personalized training guidance across four coaching domains: running, strength, mobility, and nutrition. The system integrates objective health data directly from **Garmin Connect** to inform coaching decisions with real metrics.
 
+## CRITICAL: Date/Day-of-Week Verification
+
+**MANDATORY FOR CLAUDE AND ALL AGENTS:**
+
+1. **NEVER assume or guess today's date or day-of-week**
+2. **ALWAYS verify using system commands at the start of any coaching session:**
+   ```bash
+   date +"%A, %B %d, %Y"  # e.g., "Tuesday, December 02, 2025"
+   ```
+3. **If user corrects your date/day-of-week, immediately acknowledge and update**
+
+**Why this is critical:** Date errors undermine trust and lead to incorrect workout scheduling. The system has date verification tools - USE THEM.
+
 ## Automatic Git Commits
 
 Claude should automatically commit and push changes to the remote repository after completing these operations:

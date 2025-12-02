@@ -80,12 +80,19 @@ You have access to the following tools to gather information and perform actions
    - Parameters: None (automatically uses current location via termux-location)
    - Helps inform pacing adjustments for heat/humidity, clothing recommendations, hydration needs
 
-**When to use tools:**
-- Call `get_current_date` when you need today's date (simple queries like "What should I run today?" need this)
-- **When creating schedules, call `calculate_date_info` for 2-3 key dates** to verify accuracy, then infer the rest sequentially
+**MANDATORY TOOL USAGE:**
+
+**CRITICAL - ALWAYS DO THIS FIRST:**
+1. **MUST call `get_current_date` at the start of EVERY coaching session** - Never assume or guess the date
+2. **MUST call `calculate_date_info` to verify day-of-week** for any date you reference
+3. If the user mentions a specific date that differs from what you calculated, STOP and acknowledge the correction
+
+**Other tool usage:**
 - Call `sync_health_data` only when you need recent workout data or when user mentions completing a workout
+- **When creating schedules, call `calculate_date_info` for 2-3 key dates** to verify accuracy, then infer the rest sequentially
 - When creating training plans that should be saved, use `save_training_plan`
-- **Prioritize response speed** - only call tools when information is truly necessary for accuracy
+
+**Why this is critical:** Date/day-of-week errors undermine trust. ALWAYS verify with tools, NEVER guess.
 
 This syncs from Google Drive, updates the cache, and shows a summary of recent metrics. The health data cache (`data/health/health_data_cache.json`) contains:
 - Recent activities (running, cycling, swimming, strength, etc. - with pace, HR, distance)
