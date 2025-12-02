@@ -50,69 +50,18 @@ HEALTH_SUMMARY=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$
     exit 1
 }
 
-# 4. Generate AI-powered recommendations using Claude Code (headless mode)
-echo "Generating AI recommendations..." >> "$LOG_FILE"
+# 4. Generate weather-aware recommendations (using Python - no Claude dependency)
+echo "Generating recommendations..." >> "$LOG_FILE"
 
-# Create the prompt for Claude with pre-extracted health data and weather
-PROMPT="Based on the following health summary and weather conditions, provide training recommendations in TWO formats.
-
-HEALTH SUMMARY:
-$HEALTH_SUMMARY
-
-CURRENT WEATHER:
-$WEATHER
-
-ATHLETE PROFILE (from data/athlete/goals.md):
-- Marathon goal: 4:00:00 (9:10/mi pace)
-- Currently in base building phase
-- Works Mon-Thu 0700-1730 (returns Jan 6, 2026 - currently on parental leave)
-
-DIETARY REQUIREMENTS:
-- Gluten-free
-- Dairy-free
-
-TRAINING PREFERENCES:
-- Early morning workouts preferred on workdays
-- Saturday long runs
-- Sunday mobility/recovery
-
-**CRITICAL: Provide TWO versions separated by '---DETAILED---' marker:**
-
-**BRIEF VERSION (under 250 chars, for notification):**
-Recovery: [2-3 words max]
-Today: [workout + duration]
-Weather: [time window + temp]
-Note: [1 brief insight]
-
----DETAILED---
-
-**DETAILED VERSION (for HTML report):**
-Provide a comprehensive analysis including:
-- Recovery status assessment with specific metrics (RHR, sleep, days since last hard effort)
-- Detailed workout recommendation with rationale (why this workout today)
-- Weather impact on training (specific timing, heat/cold considerations)
-- Training context (where you are in training cycle, what's coming next)
-- Any adjustments or alternatives based on how you feel
-
-Weather timing guidelines:
-- Over 80F or over 70pct humidity: early AM/evening or treadmill
-- Under 40F: mid-day
-- UV over 7: avoid midday"
-
-# Run Claude Code in headless mode with running coach agent
-AI_RESPONSE=$(claude -p "$PROMPT" @vdot-running-coach \
-    --output-format text \
-    --permission-mode acceptEdits \
-    --max-turns 5 \
-    2>> "$LOG_FILE") || {
-    echo "Claude Code failed" >> "$LOG_FILE"
-    # Fall back to basic report if AI generation fails
-    AI_RESPONSE="$HEALTH_SUMMARY"
+# Generate enhanced report with weather-aware recommendations
+ENHANCED_REPORT=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE") || {
+    echo "Enhanced report generation failed, using basic report" >> "$LOG_FILE"
+    ENHANCED_REPORT="$HEALTH_SUMMARY"
 }
 
 # Split response into BRIEF and DETAILED versions
-REPORT_BRIEF=$(echo "$AI_RESPONSE" | sed -n '1,/---DETAILED---/p' | grep -E "^(Recovery:|Today:|Weather:|Note:)" || echo "$AI_RESPONSE" | grep -E "^(Recovery:|Today:|Weather:|Note:)")
-REPORT_DETAILED=$(echo "$AI_RESPONSE" | sed -n '/---DETAILED---/,$p' | sed '1d' || echo "$AI_RESPONSE")
+REPORT_BRIEF=$(echo "$ENHANCED_REPORT" | sed -n '1,/---DETAILED---/p' || echo "$ENHANCED_REPORT")
+REPORT_DETAILED=$(echo "$ENHANCED_REPORT" | sed -n '/---DETAILED---/,$p' | sed '1d' || echo "$ENHANCED_REPORT")
 
 # Use brief version for notification
 REPORT="$REPORT_BRIEF"
