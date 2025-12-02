@@ -50,21 +50,19 @@ HEALTH_SUMMARY=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$
     exit 1
 }
 
-# 4. Generate intelligent recommendations
-echo "Generating recommendations..." >> "$LOG_FILE"
+# 4. Generate AI-powered recommendations using Anthropic API
+echo "Generating AI recommendations..." >> "$LOG_FILE"
 
-# NOTE: Claude Code invocation from within cron doesn't work reliably due to
-# recursive invocation issues. Use the Python-based intelligent report generator
-# which provides context-aware recommendations based on training plan, recovery
-# metrics, scheduled workouts, and weather conditions.
-#
-# For full AI-powered analysis, you can manually run:
-#   claude -p "Review my morning metrics and provide training guidance" @vdot-running-coach
-#
-AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE") || {
-    echo "Enhanced report generation failed, using basic report" >> "$LOG_FILE"
-    AI_RESPONSE="$HEALTH_SUMMARY"
-}
+# Try AI-powered generation via Anthropic API (bypasses Claude Code recursion issues)
+if [ -n "$ANTHROPIC_API_KEY" ]; then
+    AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_ai_coaching.py" "$HEALTH_SUMMARY" "$WEATHER" 2>> "$LOG_FILE") || {
+        echo "API generation failed, using fallback" >> "$LOG_FILE"
+        AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE")
+    }
+else
+    echo "ANTHROPIC_API_KEY not set, using intelligent fallback" >> "$LOG_FILE"
+    AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE")
+fi
 
 # Split response into BRIEF and DETAILED versions
 REPORT_BRIEF=$(echo "$AI_RESPONSE" | sed -n '1,/---DETAILED---/p' || echo "$AI_RESPONSE" | head -10)
