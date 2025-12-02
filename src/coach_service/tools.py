@@ -6,6 +6,7 @@ Provides a safe, sandboxed way for AI agents to execute predefined commands.
 
 import subprocess
 import json
+import sys
 from pathlib import Path
 from typing import Dict, Any, List, Callable
 from datetime import datetime
@@ -147,6 +148,33 @@ class ToolExecutor:
                     "required": ["date"]
                 },
                 "function": self._calculate_date_info
+            },
+            "calculate_vdot": {
+                "description": "Calculate VDOT from race performance using Jack Daniels' official formula. Also returns training paces for all zones (Easy, Marathon, Threshold, Interval, Repetition). Use this when athlete reports a race result or asks about their training paces.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "distance": {
+                            "type": "string",
+                            "description": "Race distance: '5K', '10K', 'half', or 'marathon'",
+                            "enum": ["5K", "10K", "half", "marathon"]
+                        },
+                        "hours": {
+                            "type": "integer",
+                            "description": "Hours component of finish time"
+                        },
+                        "minutes": {
+                            "type": "integer",
+                            "description": "Minutes component of finish time"
+                        },
+                        "seconds": {
+                            "type": "integer",
+                            "description": "Seconds component of finish time"
+                        }
+                    },
+                    "required": ["distance", "hours", "minutes", "seconds"]
+                },
+                "function": self._calculate_vdot
             }
         }
 
@@ -362,3 +390,56 @@ class ToolExecutor:
             return f"{day_name}, {month_name} {day_num}, {year}"
         except ValueError as e:
             return f"Error parsing date '{date_str}': {str(e)}. Please use YYYY-MM-DD format."
+
+    def _calculate_vdot(self, params: Dict[str, Any]) -> str:
+        """Calculate VDOT and training paces from race performance."""
+        distance = params.get("distance", "")
+        hours = params.get("hours", 0)
+        minutes = params.get("minutes", 0)
+        seconds = params.get("seconds", 0)
+
+        if not distance:
+            return "Error: distance parameter is required"
+
+        try:
+            # Add src directory to path to import vdot_calculator
+            src_path = self.project_root / "src"
+            if str(src_path) not in sys.path:
+                sys.path.insert(0, str(src_path))
+
+            from vdot_calculator import calculate_vdot_from_race, format_pace
+
+            # Calculate VDOT and paces
+            vdot, paces = calculate_vdot_from_race(distance, hours, minutes, seconds)
+
+            # Format output
+            result = f"Race Time: {hours}:{minutes:02d}:{seconds:02d} ({distance})\n"
+            result += f"VDOT: {vdot:.1f}\n\n"
+            result += "Training Paces (per mile):\n"
+            result += "-" * 40 + "\n"
+
+            zone_names = {
+                'E': 'Easy',
+                'M': 'Marathon',
+                'T': 'Threshold',
+                'I': 'Interval',
+                'R': 'Repetition'
+            }
+
+            for zone in ['E', 'M', 'T', 'I', 'R']:
+                name = zone_names[zone]
+                if zone in ['E', 'I', 'R']:
+                    # Range paces
+                    pace_str = f"{format_pace(paces[zone]['min'])}-{format_pace(paces[zone]['max'])}"
+                else:
+                    # Single pace
+                    pace_str = format_pace(paces[zone]['min'])
+
+                result += f"{name:12} ({zone}): {pace_str}\n"
+
+            return result
+
+        except ValueError as e:
+            return f"Error: {str(e)}"
+        except Exception as e:
+            return f"Error calculating VDOT: {str(e)}"

@@ -20,6 +20,7 @@ Designed to work with [Claude Code](https://docs.claude.com/en/docs/claude-code)
 The system uses objective metrics from your Garmin device to inform coaching decisions:
 
 - **Direct Garmin Connect Sync** - Automatic import of activities, sleep, HR, VO2 max, and biometric data
+- **VDOT Calculator** - Official Jack Daniels formulas for accurate training pace calculations from race performances
 - **Garmin-Provided Analytics** - Leverages Garmin's HR zone analysis, lactate threshold detection, HRV, and training readiness scores
 - **Calendar Integration** - Import scheduled workouts from FinalSurge, TrainingPeaks, or any ICS calendar
 - **Data-Informed Coaching** - AI coaches interpret Garmin metrics to adjust training intensity, volume, and recovery
@@ -97,6 +98,33 @@ bash bin/sync_garmin_data.sh --days 60
 # Preview what would be synced without updating
 bash bin/sync_garmin_data.sh --check-only
 ```
+
+### Calculate VDOT & Training Paces
+
+Calculate VDOT and training paces from race performances using Jack Daniels' official formulas:
+
+```bash
+# Run standalone calculator
+python3 src/vdot_calculator.py
+
+# Or import in Python
+from src.vdot_calculator import calculate_vdot_from_race, format_pace
+
+# Example: Half marathon in 1:55:04
+vdot, paces = calculate_vdot_from_race('half', 1, 55, 4)
+# Returns: VDOT 38.3 with all training paces (E, M, T, I, R)
+```
+
+**Features:**
+- Accurate calculations using Jack Daniels' Percent Max and VO2 formulas
+- Training paces for all zones: Easy, Marathon, Threshold, Interval, Repetition
+- Supports 5K, 10K, half marathon, and marathon distances
+- Verified accuracy: Half marathon 1:55:04 correctly calculates to VDOT 38.3
+
+**Coaching agents use this tool to:**
+- Calculate training paces from race results
+- Adjust workout prescriptions to current fitness level
+- Validate pace recommendations against VDOT system
 
 ### Check Weather Conditions
 

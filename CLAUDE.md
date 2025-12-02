@@ -48,6 +48,30 @@ Claude should automatically commit and push changes to the remote repository aft
 
 ### Health Data Management
 
+**VDOT Calculator**
+```bash
+# Calculate VDOT from race performance (uses Jack Daniels' official formulas)
+python3 src/vdot_calculator.py
+
+# Or import in Python
+from src.vdot_calculator import calculate_vdot_from_race, format_pace
+
+# Half marathon: 1:55:04 → VDOT 38.3
+vdot, paces = calculate_vdot_from_race('half', 1, 55, 4)
+
+# Marathon: 4:35:49 → VDOT 31.9
+vdot, paces = calculate_vdot_from_race('marathon', 4, 35, 49)
+
+# Returns training paces for all zones (E, M, T, I, R)
+```
+
+The VDOT calculator uses the exact formulas from Jack Daniels' Running Formula:
+- Percent Max formula (accounts for race duration)
+- Oxygen cost formula (accounts for velocity)
+- Training pace calculations (percentages of velocity at VO2max)
+
+**Verified accuracy:** Half marathon 1:55:04 correctly calculates to VDOT 38.3.
+
 **Garmin Connect Sync**
 ```bash
 # Sync from Garmin Connect + show summary (recommended)

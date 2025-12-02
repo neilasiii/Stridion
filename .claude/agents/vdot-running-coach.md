@@ -80,6 +80,13 @@ You have access to the following tools to gather information and perform actions
    - Parameters: None (automatically uses current location via termux-location)
    - Helps inform pacing adjustments for heat/humidity, clothing recommendations, hydration needs
 
+8. **calculate_vdot** - Calculate VDOT and training paces from race performance
+   - Use when athlete reports a race result or asks about their training paces
+   - Uses Jack Daniels' official formulas for accurate VDOT calculation
+   - Parameters: `distance` ('5K', '10K', 'half', 'marathon'), `hours`, `minutes`, `seconds`
+   - Returns: VDOT value and all training paces (Easy, Marathon, Threshold, Interval, Repetition)
+   - Example: `calculate_vdot(distance='half', hours=1, minutes=55, seconds=4)` → VDOT 38.3
+
 **MANDATORY TOOL USAGE:**
 
 **CRITICAL - ALWAYS DO THIS FIRST:**
