@@ -527,18 +527,22 @@ def fetch_vo2_max(client: Garmin, start_date: date, end_date: date, quiet: bool 
         training_status = client.get_training_status(end_date.isoformat())
 
         if training_status and 'mostRecentVO2Max' in training_status:
-            vo2_data = training_status['mostRecentVO2Max'].get('generic', {})
+            vo2_max_data = training_status['mostRecentVO2Max']
 
-            vo2_value = vo2_data.get('vo2MaxValue')
-            vo2_precise = vo2_data.get('vo2MaxPreciseValue')
-            vo2_date = vo2_data.get('calendarDate')
+            # Check if vo2_max_data is not None before trying to access it
+            if vo2_max_data:
+                vo2_data = vo2_max_data.get('generic', {})
 
-            # Use precise value if available, otherwise use standard value
-            if vo2_precise or vo2_value:
-                vo2_max_readings.append({
-                    'date': f"{vo2_date}T00:00:00" if vo2_date else f"{end_date.isoformat()}T00:00:00",
-                    'vo2_max': float(vo2_precise if vo2_precise else vo2_value)
-                })
+                vo2_value = vo2_data.get('vo2MaxValue')
+                vo2_precise = vo2_data.get('vo2MaxPreciseValue')
+                vo2_date = vo2_data.get('calendarDate')
+
+                # Use precise value if available, otherwise use standard value
+                if vo2_precise or vo2_value:
+                    vo2_max_readings.append({
+                        'date': f"{vo2_date}T00:00:00" if vo2_date else f"{end_date.isoformat()}T00:00:00",
+                        'vo2_max': float(vo2_precise if vo2_precise else vo2_value)
+                    })
 
         if not quiet:
             print(f"  Found {len(vo2_max_readings)} VO2 max readings")
@@ -1171,7 +1175,7 @@ def fetch_gear_stats(client: Garmin, quiet: bool = False) -> List[Dict[str, Any]
     try:
         # Get user profile number first
         user_profile = client.get_user_profile()
-        profile_id = user_profile.get('profileId')
+        profile_id = user_profile.get('profileId') or user_profile.get('id')
 
         if not profile_id:
             if not quiet:
@@ -1248,27 +1252,20 @@ def fetch_daily_steps(client: Garmin, start_date: date, end_date: date, quiet: b
         print(f"Fetching daily steps from {start_date} to {end_date}...")
 
     try:
-        current_date = start_date
-        while current_date <= end_date:
-            try:
-                steps = client.get_steps_data(current_date.isoformat())
+        # Use get_daily_steps which returns daily summaries as a list
+        steps_list = client.get_daily_steps(start_date.isoformat(), end_date.isoformat())
 
-                if steps:
-                    # Extract daily step count
-                    total_steps = steps.get('totalSteps', 0)
-                    goal_steps = steps.get('dailyStepGoal', 0)
+        if steps_list:
+            for day_data in steps_list:
+                total_steps = day_data.get('totalSteps') or 0
+                goal_steps = day_data.get('stepGoal') or 0
 
-                    steps_data.append({
-                        'date': current_date.isoformat(),
-                        'total_steps': total_steps,
-                        'goal_steps': goal_steps,
-                        'goal_met': total_steps >= goal_steps if goal_steps > 0 else None
-                    })
-            except Exception as e:
-                if not quiet:
-                    print(f"  Warning: Could not fetch steps for {current_date}: {e}", file=sys.stderr)
-
-            current_date += timedelta(days=1)
+                steps_data.append({
+                    'date': day_data.get('calendarDate'),
+                    'total_steps': total_steps,
+                    'goal_steps': goal_steps,
+                    'goal_met': total_steps >= goal_steps if goal_steps and goal_steps > 0 else None
+                })
 
         if not quiet:
             print(f"  Found {len(steps_data)} days of step data")

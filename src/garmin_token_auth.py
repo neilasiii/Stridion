@@ -81,6 +81,15 @@ def load_tokens() -> Optional[Garmin]:
         # Load tokens using garth's built-in load method
         client.garth.load(str(TOKEN_DIR))
 
+        # Set display_name and username from garth profile (required for some API calls)
+        try:
+            profile = client.garth.profile
+            client.display_name = profile.get('displayName')
+            client.username = profile.get('userName')
+        except Exception:
+            # If we can't get profile, continue anyway - some API calls may still work
+            pass
+
         # Verify tokens are valid by making a test API call
         try:
             client.get_full_name()
