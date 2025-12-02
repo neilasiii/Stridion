@@ -1,6 +1,6 @@
 {
-  "last_updated": "2025-11-30T21:48:02.487957+00:00",
-  "last_sync_date": "2025-11-30",
+  "last_updated": "2025-12-02T07:46:03.349572+00:00",
+  "last_sync_date": "2025-12-02",
   "activities": [
     {
       "activity_id": 21089008771,
@@ -24823,6 +24823,16 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-12-01",
+      "total_duration_minutes": 422.0,
+      "light_sleep_minutes": 290.0,
+      "deep_sleep_minutes": 84.0,
+      "rem_sleep_minutes": 48.0,
+      "awake_minutes": 119.0,
+      "sleep_score": 57,
+      "deep_sleep_percentage": 19.91
+    },
+    {
       "date": "2025-11-30",
       "total_duration_minutes": 405.0,
       "light_sleep_minutes": 323.0,
@@ -29109,6 +29119,38 @@
   ],
   "resting_hr_readings": [
     [
+      "2025-12-02T12:00:00",
+      49
+    ],
+    [
+      "2025-12-01T12:00:00",
+      47
+    ],
+    [
+      "2025-11-30T12:00:00",
+      49
+    ],
+    [
+      "2025-11-29T12:00:00",
+      49
+    ],
+    [
+      "2025-11-28T12:00:00",
+      47
+    ],
+    [
+      "2025-11-27T12:00:00",
+      44
+    ],
+    [
+      "2025-11-26T12:00:00",
+      46
+    ],
+    [
+      "2025-11-25T12:00:00",
+      49
+    ],
+    [
       "2025-11-19T12:00:00",
       45
     ],
@@ -30578,6 +30620,16 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-12-01",
+      "weekly_avg": 63,
+      "last_night_avg": 61,
+      "last_night_5min_high": 86,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 75
+    },
     {
       "date": "2025-11-30",
       "weekly_avg": 61,
@@ -34361,6 +34413,26 @@
   ],
   "training_readiness": [
     {
+      "date": "2025-12-02",
+      "score": 70,
+      "level": "MODERATE",
+      "recovery_time": 0,
+      "sleep_score": null,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "MODERATE",
+      "acute_load": 97
+    },
+    {
+      "date": "2025-12-01",
+      "score": 46,
+      "level": "LOW",
+      "recovery_time": 44,
+      "sleep_score": 57,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "MODERATE",
+      "acute_load": 97
+    },
+    {
       "date": "2025-11-30",
       "score": 35,
       "level": "LOW",
@@ -38143,9 +38215,19 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-12-02",
+      "avg_stress": 10,
+      "max_stress": 51
+    },
+    {
+      "date": "2025-12-01",
+      "avg_stress": 19,
+      "max_stress": 93
+    },
+    {
       "date": "2025-11-30",
-      "avg_stress": 29,
-      "max_stress": 92
+      "avg_stress": 36,
+      "max_stress": 98
     },
     {
       "date": "2025-11-29",
@@ -40035,9 +40117,21 @@
   ],
   "spo2_readings": [
     {
+      "date": "2025-12-02",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 91,
+      "avg_sleep_spo2": null
+    },
+    {
+      "date": "2025-12-01",
+      "avg_spo2": 93.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 94.0
+    },
+    {
       "date": "2025-11-30",
       "avg_spo2": 94.0,
-      "lowest_spo2": 87,
+      "lowest_spo2": 86,
       "avg_sleep_spo2": 95.0
     },
     {
@@ -42305,9 +42399,19 @@
   ],
   "body_battery": [
     {
+      "date": "2025-12-02",
+      "charged": 6,
+      "drained": 0
+    },
+    {
+      "date": "2025-12-01",
+      "charged": 80,
+      "drained": 51
+    },
+    {
       "date": "2025-11-30",
-      "charged": 55,
-      "drained": 50
+      "charged": 61,
+      "drained": 70
     },
     {
       "date": "2025-11-29",
@@ -44196,29 +44300,29 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-11-30",
-    "time_5k": 1453,
-    "time_10k": 3049,
-    "time_half_marathon": 6810,
-    "time_marathon": 14843
+    "date": "2025-12-02",
+    "time_5k": 1461,
+    "time_10k": 3066,
+    "time_half_marathon": 6848,
+    "time_marathon": 14919
   },
   "training_status": {
-    "date": "2025-11-30",
-    "vo2_max": {
-      "date": "2025-11-23",
-      "value": 51.0,
-      "precise_value": 50.6
-    },
-    "training_load": {
-      "date": "2025-11-30",
-      "aerobic_low": 602.48804,
-      "aerobic_high": 747.9109,
-      "anaerobic": 0.0,
-      "feedback": "ANAEROBIC_SHORTAGE"
-    },
+    "date": "2025-12-02",
+    "vo2_max": null,
+    "training_load": {},
     "training_status": {}
   },
   "scheduled_workouts": [
+    {
+      "scheduled_date": "2025-12-06",
+      "scheduled_datetime": null,
+      "name": "Run: 2-3 x 20-30 min easy runs this week",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
     {
       "scheduled_date": "2025-12-05",
       "scheduled_datetime": null,
@@ -44230,7 +44334,27 @@
       "source": "ics_calendar"
     },
     {
+      "scheduled_date": "2025-12-04",
+      "scheduled_datetime": null,
+      "name": "Run: 2-3 x 20-30 min easy runs this week",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
       "scheduled_date": "2025-12-03",
+      "scheduled_datetime": null,
+      "name": "Run: 2-3 x 20-30 min easy runs this week",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-02",
       "scheduled_datetime": null,
       "name": "Run: 2-3 x 20-30 min easy runs this week",
       "description": "Workout: Run",
@@ -44259,11 +44383,151 @@
     "power_to_weight_ratio": 4.938047591891752,
     "weight_kg": 77.156
   },
-  "gear_stats": [],
-  "daily_steps": [],
+  "gear_stats": [
+    {
+      "uuid": "faa94eb9fbd94d6ea2984b4c60faa586",
+      "display_name": "Danny Phantoms",
+      "model_name": "Brooks Ghost Max 2",
+      "gear_type": "Shoes",
+      "date_begun": null,
+      "date_retired": null,
+      "is_active": true,
+      "total_distance_meters": 431315.3163141211,
+      "total_activities": 54,
+      "max_distance_single_activity": null,
+      "notification_distance_meters": null,
+      "created_date": "2025-07-03T14:23:12.0",
+      "updated_date": "2025-07-03T14:23:12.0"
+    },
+    {
+      "uuid": "f89d8911f1fc4be681eded21c31172d3",
+      "display_name": "white racer",
+      "model_name": "On CloudMonster ",
+      "gear_type": "Shoes",
+      "date_begun": null,
+      "date_retired": null,
+      "is_active": true,
+      "total_distance_meters": 480532.43017578125,
+      "total_activities": 83,
+      "max_distance_single_activity": null,
+      "notification_distance_meters": null,
+      "created_date": "2024-10-03T14:14:35.0",
+      "updated_date": "2025-02-03T18:25:55.0"
+    },
+    {
+      "uuid": "87b1bad76fce400a99109b08d136d605",
+      "display_name": null,
+      "model_name": "Altra Torin 7",
+      "gear_type": "Shoes",
+      "date_begun": null,
+      "date_retired": null,
+      "is_active": true,
+      "total_distance_meters": 413646.81036376953,
+      "total_activities": 56,
+      "max_distance_single_activity": null,
+      "notification_distance_meters": null,
+      "created_date": "2025-04-09T12:54:06.0",
+      "updated_date": "2025-11-01T18:13:11.0"
+    },
+    {
+      "uuid": "3a8a99361a6b462a87abf3cc078e50e5",
+      "display_name": null,
+      "model_name": "New Balance Fuelcell Rebel v4",
+      "gear_type": "Shoes",
+      "date_begun": null,
+      "date_retired": null,
+      "is_active": true,
+      "total_distance_meters": 11292.3203125,
+      "total_activities": 1,
+      "max_distance_single_activity": null,
+      "notification_distance_meters": null,
+      "created_date": "2025-11-05T18:49:41.0",
+      "updated_date": "2025-11-05T18:49:41.0"
+    },
+    {
+      "uuid": "09ff90121f424714adcd6d373c3eaa02",
+      "display_name": null,
+      "model_name": "Brooks Adrenaline GTS",
+      "gear_type": "Shoes",
+      "date_begun": null,
+      "date_retired": null,
+      "is_active": true,
+      "total_distance_meters": 491494.13885498047,
+      "total_activities": 55,
+      "max_distance_single_activity": null,
+      "notification_distance_meters": null,
+      "created_date": "2025-09-13T13:41:08.0",
+      "updated_date": "2025-09-13T13:41:08.0"
+    },
+    {
+      "uuid": "0436c0037247472c80144dfce3481f19",
+      "display_name": "Blue Monster",
+      "model_name": "On CloudMonster 2",
+      "gear_type": "Shoes",
+      "date_begun": null,
+      "date_retired": null,
+      "is_active": true,
+      "total_distance_meters": 439183.2495574951,
+      "total_activities": 61,
+      "max_distance_single_activity": null,
+      "notification_distance_meters": null,
+      "created_date": "2025-01-24T18:24:54.0",
+      "updated_date": "2025-06-14T19:46:01.0"
+    }
+  ],
+  "daily_steps": [
+    {
+      "date": "2025-12-02",
+      "total_steps": 0,
+      "goal_steps": 13150,
+      "goal_met": false
+    },
+    {
+      "date": "2025-12-01",
+      "total_steps": 10341,
+      "goal_steps": 13460,
+      "goal_met": false
+    },
+    {
+      "date": "2025-11-30",
+      "total_steps": 16121,
+      "goal_steps": 12790,
+      "goal_met": true
+    },
+    {
+      "date": "2025-11-29",
+      "total_steps": 19295,
+      "goal_steps": 11160,
+      "goal_met": true
+    },
+    {
+      "date": "2025-11-28",
+      "total_steps": 12246,
+      "goal_steps": 11030,
+      "goal_met": true
+    },
+    {
+      "date": "2025-11-27",
+      "total_steps": 10108,
+      "goal_steps": 11260,
+      "goal_met": false
+    },
+    {
+      "date": "2025-11-26",
+      "total_steps": 11252,
+      "goal_steps": 11260,
+      "goal_met": false
+    },
+    {
+      "date": "2025-11-25",
+      "total_steps": 8867,
+      "goal_steps": 11850,
+      "goal_met": false
+    }
+  ],
   "progress_summary": {
-    "start_date": "2025-10-31",
-    "end_date": "2025-11-30",
+    "start_date": "2025-11-25",
+    "end_date": "2025-12-02",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,
