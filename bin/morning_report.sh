@@ -50,18 +50,25 @@ HEALTH_SUMMARY=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$
     exit 1
 }
 
-# 4. Generate weather-aware recommendations (using Python - no Claude dependency)
+# 4. Generate intelligent recommendations
 echo "Generating recommendations..." >> "$LOG_FILE"
 
-# Generate enhanced report with weather-aware recommendations
-ENHANCED_REPORT=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE") || {
+# NOTE: Claude Code invocation from within cron doesn't work reliably due to
+# recursive invocation issues. Use the Python-based intelligent report generator
+# which provides context-aware recommendations based on training plan, recovery
+# metrics, scheduled workouts, and weather conditions.
+#
+# For full AI-powered analysis, you can manually run:
+#   claude -p "Review my morning metrics and provide training guidance" @vdot-running-coach
+#
+AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE") || {
     echo "Enhanced report generation failed, using basic report" >> "$LOG_FILE"
-    ENHANCED_REPORT="$HEALTH_SUMMARY"
+    AI_RESPONSE="$HEALTH_SUMMARY"
 }
 
 # Split response into BRIEF and DETAILED versions
-REPORT_BRIEF=$(echo "$ENHANCED_REPORT" | sed -n '1,/---DETAILED---/p' || echo "$ENHANCED_REPORT")
-REPORT_DETAILED=$(echo "$ENHANCED_REPORT" | sed -n '/---DETAILED---/,$p' | sed '1d' || echo "$ENHANCED_REPORT")
+REPORT_BRIEF=$(echo "$AI_RESPONSE" | sed -n '1,/---DETAILED---/p' || echo "$AI_RESPONSE" | head -10)
+REPORT_DETAILED=$(echo "$AI_RESPONSE" | sed -n '/---DETAILED---/,$p' | sed '1d' || echo "$AI_RESPONSE")
 
 # Use brief version for notification
 REPORT="$REPORT_BRIEF"

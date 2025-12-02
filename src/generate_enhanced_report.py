@@ -372,6 +372,10 @@ def generate_enhanced_report(weather_data=None):
     lines.append("\n🏃 TODAY'S WORKOUT")
     lines.append("─" * 60)
 
+    # Calculate days since marathon for recovery recommendations
+    marathon_date = datetime(2025, 11, 24).date()
+    days_since_marathon = (datetime.now().date() - marathon_date).days
+
     scheduled = cache.get('scheduled_workouts', [])
     today = datetime.now().date().isoformat()
     today_workout = None
@@ -414,7 +418,72 @@ def generate_enhanced_report(weather_data=None):
                 if timing and "flexible" not in timing.lower():
                     lines.append(f"  Timing: {timing}")
     else:
-        lines.append("No workout scheduled")
+        # No scheduled workout - check training plan for guidance
+        lines.append(f"No workout scheduled")
+
+        # Load training plan context
+        project_root = Path(__file__).parent.parent
+        plans_dir = project_root / 'data' / 'plans'
+
+        try:
+            # Get most recent plan file
+            plan_files = sorted(plans_dir.glob('*.md'), key=lambda p: p.stat().st_mtime, reverse=True)
+
+            if plan_files and days_since_marathon <= 14:
+                # Post-marathon recovery period
+                lines.append("")
+                lines.append("POST-MARATHON RECOVERY (per training plan):")
+
+                if days_since_marathon <= 7:
+                    lines.append(f"  Day {days_since_marathon}/14: Rest or easy 20-30min walk")
+                    lines.append("  Rationale: First week post-marathon - muscle repair phase")
+                elif days_since_marathon <= 10:
+                    lines.append(f"  Day {days_since_marathon}/14: Optional 20-30min easy walk")
+                    lines.append("  Rationale: Second week - gradual return to movement")
+                elif days_since_marathon <= 14:
+                    lines.append(f"  Day {days_since_marathon}/14: Optional easy 20-40min run")
+                    lines.append("  Rationale: Final recovery week - very easy running (RPE 1-2, HR <140)")
+
+            elif plan_files:
+                # Normal training - extract today's guidance from plan
+                with open(plan_files[0], 'r') as f:
+                    plan_content = f.read()
+
+                    # Look for today's day of week
+                    today_day = datetime.now().strftime('%A')
+
+                    lines.append("")
+                    lines.append(f"TRAINING PLAN GUIDANCE (from {plan_files[0].name}):")
+                    lines.append(f"  Based on typical {today_day} workout structure:")
+                    lines.append("  → Check your training plan for today's specific workout")
+                    lines.append(f"  → Plan file: data/plans/{plan_files[0].name}")
+            else:
+                lines.append("")
+                lines.append("No training plan found - consider creating one")
+
+        except Exception as e:
+            lines.append(f"")
+            lines.append(f"Could not load training plan: {e}")
+
+        # Check recovery indicators
+        rhr_readings = cache.get('resting_hr_readings', [])
+        sleep_sessions = cache.get('sleep_sessions', [])
+
+        recovery_concerns = []
+        if len(rhr_readings) >= 3:
+            recent_rhr = sum(r[1] for r in rhr_readings[:3]) / 3
+            baseline_rhr = sum(r[1] for r in rhr_readings[:30]) / min(30, len(rhr_readings))
+            elevation = round(recent_rhr - baseline_rhr, 1)
+            if elevation >= 3:
+                recovery_concerns.append(f"RHR still elevated (+{elevation} bpm)")
+
+        if sleep_sessions and sleep_sessions[0].get('total_duration_minutes', 0) / 60 < 6.5:
+            recovery_concerns.append("Sleep below 6.5h")
+
+        if recovery_concerns:
+            lines.append("")
+            lines.append("  ⚠️  Recovery concerns: " + ", ".join(recovery_concerns))
+            lines.append("     → Consider modifying workout to easier effort or rest")
 
     # 5. WEATHER
     if weather_data:
@@ -475,8 +544,10 @@ def generate_brief_notification(cache, weather_data):
     if not workout:
         if days_since_marathon <= 7:
             workout = "Rest or 20-30min easy walk"
+        elif days_since_marathon <= 10:
+            workout = "Optional 20-30min easy walk"
         elif days_since_marathon <= 14:
-            workout = "Optional easy 20-40min run"
+            workout = "Optional easy 20-40min run (RPE 1-2)"
         else:
             workout = "No workout scheduled"
 
@@ -512,6 +583,10 @@ def generate_brief_notification(cache, weather_data):
     # Key note
     if days_since_marathon <= 7:
         note = "Prioritize rest and recovery"
+    elif days_since_marathon <= 10:
+        note = "Continue recovery, walk only"
+    elif days_since_marathon <= 14:
+        note = "Final recovery week, ease back in"
     elif sleep_sessions and sleep_sessions[0].get('total_duration_minutes', 0) / 60 < 6.5:
         note = "Sleep low - keep effort easy"
     elif len(rhr_readings) >= 3:
