@@ -50,17 +50,17 @@ HEALTH_SUMMARY=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$
     exit 1
 }
 
-# 4. Generate AI-powered recommendations using Anthropic API
+# 4. Generate AI-powered recommendations
 echo "Generating AI recommendations..." >> "$LOG_FILE"
 
-# Try AI-powered generation via Anthropic API (bypasses Claude Code recursion issues)
-if [ -n "$ANTHROPIC_API_KEY" ]; then
+# Try AI-powered generation (Gemini free tier or Anthropic)
+if [ -n "$GEMINI_API_KEY" ] || [ -n "$ANTHROPIC_API_KEY" ]; then
     AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_ai_coaching.py" "$HEALTH_SUMMARY" "$WEATHER" 2>> "$LOG_FILE") || {
-        echo "API generation failed, using fallback" >> "$LOG_FILE"
+        echo "AI generation failed, using intelligent fallback" >> "$LOG_FILE"
         AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE")
     }
 else
-    echo "ANTHROPIC_API_KEY not set, using intelligent fallback" >> "$LOG_FILE"
+    echo "No API key set (GEMINI_API_KEY or ANTHROPIC_API_KEY), using intelligent fallback" >> "$LOG_FILE"
     AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE")
 fi
 
