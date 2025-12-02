@@ -90,9 +90,9 @@ This plan integrates three coaching domains:
 | Phase | Weeks | Dates | Focus | Running Volume | Strength | Mobility |
 |-------|-------|-------|-------|----------------|----------|----------|
 | **Recovery** | 1-2 | Nov 30 - Dec 13 | Post-marathon recovery | 3-4 easy runs, 12-18 mi/wk | NO STRENGTH | Gentle recovery |
-| **Base Building** | 3-5 | Dec 14 - Jan 3 | Aerobic foundation | 4-5 runs, 18-26 mi/wk | 2x/week foundation | Pattern building |
-| **Early Quality** | 6-8 | Jan 4-24 | Tempo introduction | 5 runs, 22-30 mi/wk | 2x/week strength-endurance | Load management |
-| **Race-Specific** | 9-11 | Jan 25 - Feb 14 | HM pace + intervals | 5 runs, 28-32 mi/wk (PEAK) | Reduced volume | Recovery-focused |
+| **Base Building** | 3-5 | Dec 14 - Jan 3 | Aerobic foundation | 4-5 runs, 20-28 mi/wk | 2x/week foundation | Pattern building |
+| **Early Quality** | 6-8 | Jan 4-24 | Tempo introduction | 5 runs, 25-32 mi/wk | 2x/week strength-endurance | Load management |
+| **Race-Specific** | 9-11 | Jan 25 - Feb 14 | HM pace + intervals | 5 runs, 32-38 mi/wk (PEAK) | Reduced volume | Recovery-focused |
 | **Taper** | 12-13 | Feb 15-22 | Sharpening | 3-4 runs, 12-18 mi/wk | NO STRENGTH | Minimal maintenance |
 
 ---
@@ -280,10 +280,10 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min evening mobility
 
 #### Saturday, Dec 27
-- **Running:** 45 min Easy long run (E pace, longest run so far)
+- **Running:** 50 min Easy long run (E pace, ~4.7 miles)
 - **Mobility:** 15 min post-long-run recovery
 
-**Week 4 Totals:** ~4.5-5 hrs running, 80 min strength, 110 min mobility
+**Week 4 Totals:** ~5 hrs running, 80 min strength, 110 min mobility
 
 ---
 
@@ -333,10 +333,10 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min evening mobility
 
 #### Saturday, Jan 3
-- **Running:** 50 min Easy long run (E pace, longest run yet - building aerobic base)
+- **Running:** 60 min Easy long run (E pace, ~5.7 miles - building aerobic base)
 - **Mobility:** 15 min post-long-run recovery
 
-**Week 5 Totals:** ~5 hrs running, 80 min strength, 110 min mobility
+**Week 5 Totals:** ~5.5 hrs running, 80 min strength, 110 min mobility
 
 ---
 
@@ -393,10 +393,10 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min evening mobility
 
 #### Saturday, Jan 10
-- **Running:** 55 min Easy long run (E pace, steady aerobic effort)
+- **Running:** 70 min Easy long run (E pace, ~6.6 miles - steady aerobic effort)
 - **Mobility:** 15 min post-long-run recovery
 
-**Week 6 Totals:** ~5.5 hrs running, 80 min strength, 115 min mobility
+**Week 6 Totals:** ~6 hrs running, 80 min strength, 115 min mobility
 
 ---
 
@@ -451,10 +451,10 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min evening mobility
 
 #### Saturday, Jan 17
-- **Running:** 60 min Easy long run (E pace, steady build)
+- **Running:** 80 min Easy long run (E pace, ~7.5 miles - steady build)
 - **Mobility:** 15 min post-long-run recovery
 
-**Week 7 Totals:** ~5.5 hrs running (first tempo!), 80 min strength, 122 min mobility
+**Week 7 Totals:** ~6.5 hrs running (first tempo!), 80 min strength, 122 min mobility
 
 ---
 
@@ -509,10 +509,10 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min evening mobility
 
 #### Saturday, Jan 24
-- **Running:** 65 min Easy long run (E pace, building endurance)
-- **Mobility:** 15 min post-long-run recovery
+- **Running:** 90 min Easy long run (E pace, ~8.5 miles - building endurance)
+- **Mobility:** 20 min post-long-run recovery (extended for longer run)
 
-**Week 8 Totals:** ~6 hrs running, 80 min strength, 122 min mobility
+**Week 8 Totals:** ~7 hrs running, 80 min strength, 127 min mobility
 
 ---
 
@@ -568,10 +568,13 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min evening mobility
 
 #### Saturday, Jan 31
-- **Running:** 70 min Easy long run (LONGEST RUN - E pace, stay comfortable)
+- **Running:** 100 min Easy long run (~9.5 miles - E pace, stay comfortable)
+  - **Critical:** Maintain E pace (10:20-10:40/mile range) throughout
+  - Should finish feeling like you could continue
+  - Take walk breaks if needed
 - **Mobility:** 20 min post-long-run recovery (extended time for peak volume)
 
-**Week 9 Totals:** ~6.5 hrs running (PEAK VOLUME), 60 min strength, 134 min mobility
+**Week 9 Totals:** ~7.5 hrs running, 60 min strength, 134 min mobility
 
 ---
 
@@ -626,10 +629,14 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min evening mobility
 
 #### Saturday, Feb 7
-- **Running:** 65 min Easy long run (E pace, controlled effort)
+- **Running:** 110 min Easy long run (~10.5 miles - PEAK LONG RUN)
+  - **Strategy:** First 80-90 min at comfortable E pace (10:20-10:40/mile)
+  - **Optional:** Final 20-30 min can progress to M pace (9:10/mile) as race simulation
+  - This is 2 weeks before race - perfect timing for peak long run
+  - Stay controlled, finish strong but not exhausted
 - **Mobility:** 20 min post-long-run recovery
 
-**Week 10 Totals:** ~6.5 hrs running (PEAK WEEK), 60 min strength, 134 min mobility
+**Week 10 Totals:** ~8 hrs running (PEAK WEEK), 60 min strength, 134 min mobility
 
 ---
 
@@ -684,10 +691,13 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min evening mobility
 
 #### Saturday, Feb 14
-- **Running:** 50 min Easy long run (E pace, begin taper - reduced volume)
-- **Mobility:** 15 min post-long-run recovery
+- **Running:** 90 min Easy long run (~8.5 miles - cutback week before taper)
+  - E pace (10:20-10:40/mile), stay relaxed
+  - This cutback allows recovery from last week's peak while maintaining fitness
+  - 1 week before race - perfect for final long effort
+- **Mobility:** 20 min post-long-run recovery
 
-**Week 11 Totals:** ~5.5 hrs running (begin taper), 60 min strength, 129 min mobility
+**Week 11 Totals:** ~7 hrs running (cutback before taper), 60 min strength, 134 min mobility
 
 ---
 
