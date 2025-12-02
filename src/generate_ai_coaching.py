@@ -1,15 +1,27 @@
 #!/usr/bin/env python3
 """
-Generate AI-powered coaching recommendations using Anthropic API directly.
+Generate AI-powered coaching recommendations using Gemini API (free tier).
 
 This bypasses Claude Code CLI to avoid recursion issues when running from cron.
+Uses Google's Gemini API with generous free tier (1500 requests/day).
 """
 
 import json
 import os
 import sys
 from pathlib import Path
-from anthropic import Anthropic
+
+try:
+    import google.generativeai as genai
+    HAS_GEMINI = True
+except ImportError:
+    HAS_GEMINI = False
+
+try:
+    from anthropic import Anthropic
+    HAS_ANTHROPIC = True
+except ImportError:
+    HAS_ANTHROPIC = False
 
 def load_health_data():
     """Load health data cache."""
@@ -122,10 +134,41 @@ Be specific and actionable. Consider the FULL context, not just one factor."""
 
     return prompt
 
-def call_anthropic_api(prompt):
-    """Call Anthropic API for coaching recommendations."""
-    api_key = os.environ.get('ANTHROPIC_API_KEY')
+def call_gemini_api(prompt):
+    """Call Gemini API for coaching recommendations (free tier)."""
+    if not HAS_GEMINI:
+        return None, "google-generativeai package not installed"
 
+    api_key = os.environ.get('GEMINI_API_KEY')
+    if not api_key:
+        return None, "GEMINI_API_KEY environment variable not set"
+
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(
+            'gemini-2.0-flash-exp',  # Latest flash model, free tier
+            system_instruction="You are an expert VDOT-method running coach providing personalized training guidance based on objective health data, training plans, and recovery metrics."
+        )
+
+        response = model.generate_content(
+            prompt,
+            generation_config=genai.GenerationConfig(
+                temperature=0.7,
+                max_output_tokens=2000,
+            )
+        )
+
+        return response.text, None
+
+    except Exception as e:
+        return None, f"Gemini API call failed: {e}"
+
+def call_anthropic_api(prompt):
+    """Call Anthropic API for coaching recommendations (fallback)."""
+    if not HAS_ANTHROPIC:
+        return None, "anthropic package not installed"
+
+    api_key = os.environ.get('ANTHROPIC_API_KEY')
     if not api_key:
         return None, "ANTHROPIC_API_KEY environment variable not set"
 
@@ -133,7 +176,7 @@ def call_anthropic_api(prompt):
         client = Anthropic(api_key=api_key)
 
         message = client.messages.create(
-            model="claude-sonnet-4-20250514",  # Latest Sonnet
+            model="claude-sonnet-4-20250514",
             max_tokens=2000,
             temperature=0.7,
             system="You are an expert VDOT-method running coach providing personalized training guidance based on objective health data, training plans, and recovery metrics.",
@@ -145,7 +188,7 @@ def call_anthropic_api(prompt):
         return message.content[0].text, None
 
     except Exception as e:
-        return None, f"API call failed: {e}"
+        return None, f"Anthropic API call failed: {e}"
 
 def main():
     """Main execution."""
@@ -159,8 +202,12 @@ def main():
     # Create prompt
     prompt = create_coaching_prompt(health_summary, weather_data)
 
-    # Call API
-    response, error = call_anthropic_api(prompt)
+    # Try Gemini first (free tier), then Anthropic as fallback
+    response, error = call_gemini_api(prompt)
+
+    if error:
+        print(f"Gemini failed ({error}), trying Anthropic...", file=sys.stderr)
+        response, error = call_anthropic_api(prompt)
 
     if error:
         print(f"Error: {error}", file=sys.stderr)
