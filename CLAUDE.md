@@ -327,6 +327,35 @@ Coaches must prioritize workouts in this order:
 - If no FinalSurge workout → check `planned_workouts.json` for baseline plan
 - Document deviations when FinalSurge differs from baseline plan
 
+**CRITICAL: FinalSurge Lookahead Rule (ALL AGENTS)**
+
+When recommending ANY workout that's not from FinalSurge (baseline plan or custom suggestion), agents MUST:
+1. Check upcoming FinalSurge workouts (next 7-14 days)
+2. Ensure recommendation doesn't interfere with the running coach's planned schedule
+3. Adjust to support, not compromise, FinalSurge quality workouts
+
+**Domain-specific lookahead rules:**
+
+**Running Coach:**
+- Easy runs: Can fill gaps between FinalSurge workouts
+- Quality work: Only if no FinalSurge workout scheduled
+- Volume additions: Must not compromise upcoming FinalSurge quality
+
+**Strength Coach:**
+- Heavy lower body: 48+ hours before FinalSurge quality running
+- Light maintenance: 24+ hours before FinalSurge quality running
+- FinalSurge workouts are IMMOVABLE - strength works around them
+
+**Mobility Coach:**
+- Light mobility (10-20 min): Any time - supports all training
+- Intensive mobility (40+ min): Avoid day before FinalSurge quality (may cause stiffness)
+- Post-run mobility: Always encouraged after any running
+
+**Nutrition Coach:**
+- Day before FinalSurge quality: Adequate carbs, familiar foods, good hydration
+- Morning of FinalSurge quality: Pre-run fueling 2-3 hrs before
+- Easy days: Opportunity to experiment with race-day nutrition strategies
+
 **View Scheduled Workouts**
 ```bash
 # Today's workouts

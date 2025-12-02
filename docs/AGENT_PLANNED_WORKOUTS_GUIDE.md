@@ -24,6 +24,38 @@ The Planned Workouts system stores the athlete's scheduled training plan workout
 - Baseline plan is static reference created at plan start
 - FinalSurge reflects reality, baseline plan reflects original intent
 
+## CRITICAL: FinalSurge Lookahead Rule (ALL AGENTS)
+
+**Before recommending ANY workout from baseline plan or making custom suggestions, agents MUST:**
+
+1. **Check upcoming FinalSurge workouts** (next 7-14 days)
+2. **Ensure recommendation doesn't interfere** with the running coach's planned schedule
+3. **Adjust to support, not compromise** FinalSurge quality workouts
+
+**Why lookahead is critical:**
+- FinalSurge represents the running coach's plan - it's IMMOVABLE
+- All other training (strength, mobility, nutrition, baseline running) must work around it
+- A poorly timed recommendation can compromise key running workouts
+- Quality running sessions are the athlete's highest training priority
+
+**Conflict examples by domain:**
+
+**Strength:**
+- ❌ Heavy squats day before FinalSurge threshold run
+- ✅ Heavy squats 48+ hours before FinalSurge quality work
+
+**Mobility:**
+- ❌ Deep 60-min stretching session day before FinalSurge intervals (may cause stiffness)
+- ✅ Light 15-min mobility any time
+
+**Nutrition:**
+- ❌ Suggesting new foods day before FinalSurge long run
+- ✅ Pre-run fueling 2-3 hrs before FinalSurge quality workout
+
+**Running:**
+- ❌ Adding easy mileage that compromises recovery before FinalSurge quality
+- ✅ Easy runs that fill gaps between FinalSurge workouts
+
 ## Key Concepts
 
 **Planned Workout**: A scheduled workout extracted from the baseline training plan
@@ -64,9 +96,48 @@ else:
 ```
 
 **Workflow:**
-1. Check FinalSurge scheduled workouts (above script)
-2. If FinalSurge workout exists → use it, provide guidance based on it
-3. If no FinalSurge workout → fall back to baseline plan (see below)
+1. Check FinalSurge scheduled workouts for TODAY (above script)
+2. If FinalSurge workout exists TODAY → use it, provide guidance based on it
+3. If no FinalSurge workout TODAY:
+   a. Check upcoming FinalSurge workouts (next 7-14 days) - see below
+   b. Fall back to baseline plan OR make custom recommendation
+   c. Verify recommendation doesn't interfere with upcoming FinalSurge schedule
+   d. Adjust timing/intensity to support FinalSurge quality workouts
+
+**Check upcoming FinalSurge workouts (lookahead):**
+
+```bash
+# View FinalSurge scheduled workouts for next 14 days
+python3 -c "
+import json
+from datetime import date, timedelta
+
+with open('data/health/health_data_cache.json') as f:
+    cache = json.load(f)
+
+today = date.today()
+end_date = today + timedelta(days=14)
+
+scheduled = cache.get('scheduled_workouts', [])
+
+# Filter for upcoming workouts
+upcoming = [w for w in scheduled
+            if today.isoformat() <= w.get('scheduled_date', '') <= end_date.isoformat()]
+
+if upcoming:
+    print(f'Upcoming FinalSurge workouts (next 14 days):')
+    for workout in sorted(upcoming, key=lambda x: x['scheduled_date']):
+        print(f\"  {workout['scheduled_date']}: {workout['name']}\")
+else:
+    print('No FinalSurge workouts scheduled in next 14 days')
+"
+```
+
+**Use this lookahead to:**
+- Identify quality running days (threshold, tempo, intervals, long runs)
+- Schedule strength/mobility around those quality days
+- Plan nutrition timing for key workouts
+- Avoid recommending anything that would compromise FinalSurge quality
 
 ## Common Agent Use Cases
 
@@ -217,17 +288,30 @@ else:
     print('No FinalSurge workout - check baseline plan')
 "
 
-# 2. ONLY if no FinalSurge workout: Check baseline plan (Priority 2)
+# 2. ONLY if no FinalSurge workout: Check upcoming FinalSurge (lookahead)
+python3 -c "
+import json
+from datetime import date, timedelta
+cache = json.load(open('data/health/health_data_cache.json'))
+today = date.today()
+upcoming = [w for w in cache.get('scheduled_workouts', [])
+            if today.isoformat() <= w['scheduled_date'] <= (today + timedelta(days=14)).isoformat()]
+for w in sorted(upcoming, key=lambda x: x['scheduled_date'])[:7]:
+    print(f\"{w['scheduled_date']}: {w['name']}\")
+"
+
+# 3. Check baseline plan (Priority 2)
 bash bin/planned_workouts.sh list --today -v
 
-# 3. Check week progress
+# 4. Check week progress
 bash bin/planned_workouts.sh summary --week 1
 
-# 4. Check upcoming workouts
+# 5. Check upcoming baseline workouts
 bash bin/planned_workouts.sh list --upcoming 3 -v
 
-# 5. Provide guidance based on:
+# 6. Provide guidance based on:
 #    - FinalSurge workout (if exists) OR baseline plan workout (if no FinalSurge)
+#    - Upcoming FinalSurge schedule (ensure recommendation doesn't interfere)
 #    - Recent completion rate
 #    - Recovery metrics
 ```

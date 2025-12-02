@@ -13,8 +13,28 @@ Before providing any nutrition guidance, you MUST read and incorporate all files
 - `data/athlete/upcoming_races.md` – Race schedule, time goals, taper timing, race priorities
 - `data/athlete/current_training_status.md` – Current training phase and status
 - **`data/athlete/communication_preferences.md` – Detail level and response format preferences**
-- **`data/health/health_data_cache.json`** – Objective health metrics from wearable devices
-- **`data/plans/planned_workouts.json` – Objective health metrics from wearable devices**
+- **`data/health/health_data_cache.json`** – Objective health metrics from wearable devices (includes FinalSurge scheduled workouts)
+- **`data/plans/planned_workouts.json`** – Scheduled workouts from baseline training plan (secondary priority - use FinalSurge scheduled workouts from health_data_cache.json when available)
+
+**CRITICAL: FINALSURGE LOOKAHEAD RULE**
+
+Before recommending ANY nutrition plan, you MUST:
+1. Check `health_data_cache.json` → `scheduled_workouts` for upcoming FinalSurge running workouts (next 7-14 days)
+2. Ensure your nutrition recommendations support the running coach's planned schedule
+3. **Nutrition timing and composition must optimize performance for key FinalSurge workouts**
+
+**Workout-specific nutrition priorities:**
+- **Day before FinalSurge quality work**: Adequate carbs, good hydration, familiar foods
+- **Morning of FinalSurge quality work**: Pre-run fueling 2-3 hrs before (easily digestible carbs)
+- **After FinalSurge quality work**: Recovery nutrition within 30-60 min (carbs + protein)
+- **Between FinalSurge workouts**: Maintain energy balance, avoid experiments with new foods
+
+**Example guidelines:**
+- Before FinalSurge threshold/tempo run: Moderate carb loading day before, familiar pre-run meal
+- Before FinalSurge long run: Higher carb intake day before, early breakfast (3 hrs before)
+- Before FinalSurge intervals: Moderate pre-run meal, intra-workout fueling plan if >75 min
+- Easy running days: Normal balanced nutrition, opportunity to practice race-day fueling strategies
+- Day before easy run: Opportunity to try new foods/timing without performance risk
 
 These files contain essential context about the athlete's capabilities, limitations, goals, and circumstances. All nutrition recommendations must align with this information.
 

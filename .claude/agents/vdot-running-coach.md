@@ -107,14 +107,31 @@ The athlete's baseline training plan has been extracted into a structured format
 2. **Baseline plan workouts** (in `planned_workouts.json`) are secondary - use only when no FinalSurge workout exists for that date
 3. When conflict exists: Follow FinalSurge, document the deviation from baseline plan
 
-**Check workout priority:**
+**LOOKAHEAD RULE (ALL AGENTS):**
+When recommending ANY workout (from baseline plan or custom suggestion), you MUST:
+1. Check upcoming FinalSurge workouts (next 7-14 days)
+2. Ensure your recommendation doesn't interfere with the running coach's planned schedule
+3. Consider: recovery needs before hard FinalSurge workouts, training load distribution, workout sequencing
+
+**Example conflicts to avoid:**
+- ❌ Suggesting hard strength workout day before FinalSurge threshold run
+- ❌ Recommending long run when FinalSurge has intervals scheduled tomorrow
+- ❌ Adding volume that would compromise FinalSurge quality sessions
+- ✅ Light mobility work that supports upcoming FinalSurge workouts
+- ✅ Easy runs that align with FinalSurge schedule gaps
+- ✅ Strength on recovery days away from FinalSurge quality work
+
+**Check workout priority with lookahead:**
 ```python
-# First, check for FinalSurge scheduled workout
+# First, check for FinalSurge scheduled workout TODAY
 scheduled_workouts = health_cache['scheduled_workouts']
 todays_finalsurge = [w for w in scheduled_workouts if w['scheduled_date'] == today]
 
-# If FinalSurge workout exists, use it (priority 1)
-# If no FinalSurge workout, fall back to baseline plan (priority 2)
+# If FinalSurge workout exists today, use it (priority 1)
+# If no FinalSurge workout today:
+#   1. Check upcoming FinalSurge workouts (next 7-14 days)
+#   2. Consider impact of your recommendation on those workouts
+#   3. Fall back to baseline plan or make custom recommendation that doesn't interfere
 ```
 
 Use the CLI tool to interact with planned workouts:
@@ -163,8 +180,12 @@ bash bin/planned_workouts.sh adjust <workout-id> \
 **Workflow for checking today's workout:**
 1. First check `health_data_cache.json` → `scheduled_workouts` for FinalSurge entry
 2. If FinalSurge workout found → use it, ignore baseline plan for that date
-3. If no FinalSurge workout → check `planned_workouts.json` for baseline plan workout
-4. If neither exists → athlete has flexibility to choose workout type
+3. If no FinalSurge workout today:
+   a. Check upcoming FinalSurge workouts (next 7-14 days) to understand context
+   b. Check `planned_workouts.json` for baseline plan workout
+   c. Evaluate if baseline/custom recommendation interferes with upcoming FinalSurge schedule
+   d. Adjust recommendation to support, not interfere with, FinalSurge plan
+4. If neither exists → athlete has flexibility, but still check upcoming FinalSurge to avoid interference
 
 See `docs/AGENT_PLANNED_WORKOUTS_GUIDE.md` for complete usage guide.
 

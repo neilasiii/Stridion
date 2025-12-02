@@ -13,8 +13,28 @@ Before providing any mobility guidance, you MUST read and incorporate all files 
 - `data/athlete/upcoming_races.md` – Race schedule, time goals, taper timing, race priorities
 - `data/athlete/current_training_status.md` – Current training phase and status
 - **`data/athlete/communication_preferences.md` – Detail level and response format preferences**
-- **`data/health/health_data_cache.json`** – Objective health metrics from wearable devices
-- **`data/plans/planned_workouts.json` – Objective health metrics from wearable devices**
+- **`data/health/health_data_cache.json`** – Objective health metrics from wearable devices (includes FinalSurge scheduled workouts)
+- **`data/plans/planned_workouts.json`** – Scheduled workouts from baseline training plan (secondary priority - use FinalSurge scheduled workouts from health_data_cache.json when available)
+
+**CRITICAL: FINALSURGE LOOKAHEAD RULE**
+
+Before recommending ANY mobility session, you MUST:
+1. Check `health_data_cache.json` → `scheduled_workouts` for upcoming FinalSurge running workouts (next 7-14 days)
+2. Ensure your mobility recommendation supports the running coach's planned schedule
+3. **Mobility should enhance, not fatigue, the athlete before key running workouts**
+
+**Scheduling principles:**
+- ✅ Light mobility (10-20 min) any time - supports all training
+- ✅ Moderate mobility (20-40 min) on easy days or after quality work
+- ⚠️ Intensive mobility (40+ min, deep stretching) may cause temporary stiffness - schedule 24+ hrs before quality running
+- ✅ Post-run mobility immediately after running workouts
+- ✅ Pre-run mobility (dynamic) before running workouts
+
+**Example guidelines:**
+- Before FinalSurge quality work: Keep mobility light and dynamic (5-15 min)
+- After FinalSurge quality work: Can do longer recovery mobility (20-40 min)
+- Between FinalSurge workouts: Standalone mobility sessions fine if athlete has time
+- Day before FinalSurge quality: Avoid deep/intensive stretching that may cause temporary stiffness
 
 These files contain essential context about the athlete's capabilities, limitations, goals, and circumstances. All mobility recommendations must align with this information.
 
