@@ -1,8 +1,8 @@
 # Gasparilla Half Marathon - Complete Baseline Training Plan
 
 **Race Date:** Sunday, February 22, 2026
-**Plan Start:** Tuesday, December 2, 2025
-**Duration:** 12 weeks (82 days)
+**Plan Start:** Sunday, November 30, 2025
+**Duration:** 12 full weeks + race day (84 days)
 **Athlete:** Neil Stagner
 **Created:** December 1, 2025
 
@@ -89,31 +89,42 @@ This plan integrates three coaching domains:
 
 | Phase | Weeks | Dates | Focus | Running Volume | Strength | Mobility |
 |-------|-------|-------|-------|----------------|----------|----------|
-| **Recovery** | 1-2 | Dec 2-15 | Post-marathon recovery | 3-4 easy runs, 12-18 mi/wk | NO STRENGTH | Gentle recovery |
-| **Base Building** | 3-5 | Dec 16 - Jan 5 | Aerobic foundation | 4-5 runs, 18-26 mi/wk | 2x/week foundation | Pattern building |
-| **Early Quality** | 6-8 | Jan 6-26 | Tempo introduction | 5 runs, 22-30 mi/wk | 2x/week strength-endurance | Load management |
-| **Race-Specific** | 9-10 | Jan 27 - Feb 9 | HM pace + intervals | 5 runs, 28-32 mi/wk (PEAK) | Reduced volume | Recovery-focused |
-| **Taper** | 11-12 | Feb 10-22 | Sharpening | 3-4 runs, 12-18 mi/wk | NO STRENGTH | Minimal maintenance |
+| **Recovery** | 1-2 | Nov 30 - Dec 13 | Post-marathon recovery | 3-4 easy runs, 12-18 mi/wk | NO STRENGTH | Gentle recovery |
+| **Base Building** | 3-5 | Dec 14 - Jan 3 | Aerobic foundation | 4-5 runs, 18-26 mi/wk | 2x/week foundation | Pattern building |
+| **Early Quality** | 6-8 | Jan 4-24 | Tempo introduction | 5 runs, 22-30 mi/wk | 2x/week strength-endurance | Load management |
+| **Race-Specific** | 9-11 | Jan 25 - Feb 14 | HM pace + intervals | 5 runs, 28-32 mi/wk (PEAK) | Reduced volume | Recovery-focused |
+| **Taper** | 12-13 | Feb 15-22 | Sharpening | 3-4 runs, 12-18 mi/wk | NO STRENGTH | Minimal maintenance |
 
 ---
 
 ## PHASE 1: RECOVERY (WEEKS 1-2)
-**Dec 2-15, 2025 | Focus: Post-Marathon Recovery**
+**Nov 30 - Dec 13, 2025 | Focus: Post-Marathon Recovery**
 
-### Week 1: Dec 2-8, 2025
+### Week 1: Nov 30 - Dec 6, 2025
+
+#### Sunday, Nov 30
+- **Running:** 25 min Easy (E pace 10:20-10:40/mile, conversational)
+- **Mobility:** 30 min gentle comprehensive session
+  - 10 min light foam rolling (calves, hamstrings, glutes)
+  - 15 min gentle stretching (focus: recovery)
+  - 5 min PTT drills (towel scrunches, toe yoga)
+
+#### Monday, Dec 1
+- **Running:** REST or 20 min easy walk
+- **Mobility:** 10 min PTT exercises (ankle inversions, arch doming)
 
 #### Tuesday, Dec 2
-- **Running:** 25 min Easy (E pace 10:20-10:40/mile, conversational)
+- **Running:** 25 min Easy (E pace, keep HR <140 bpm)
 - **Strength:** REST - no strength this week
-- **Mobility:** 10 min PTT exercises (towel scrunches, toe yoga, ankle inversions)
+- **Mobility:** 10 min post-run routine (foam roll calves, hamstrings, glutes)
 
 #### Wednesday, Dec 3
 - **Running:** REST or 20 min easy walk
-- **Mobility:** 10 min post-walk routine (standing calf stretch, hip flexor stretch)
+- **Mobility:** 10 min gentle mobility (standing calf stretch, hip flexor stretch)
 
 #### Thursday, Dec 4
-- **Running:** 25 min Easy (E pace, keep HR <140 bpm)
-- **Mobility:** 10 min post-run routine (foam roll calves, hamstrings, glutes)
+- **Running:** 25 min Easy (E pace, conversational)
+- **Mobility:** 10 min post-run routine (foam rolling + stretching)
 
 #### Friday, Dec 5
 - **Running:** REST or 20 min easy walk
@@ -124,6 +135,12 @@ This plan integrates three coaching domains:
 - **Running:** 30 min Easy (E pace, include 4 x 20 sec pickups if feeling good)
 - **Mobility:** 15 min post-run recovery (foam rolling + stretching sequence)
 
+**Week 1 Totals:** ~3.5 hrs running, 0 strength, 100 min mobility
+
+---
+
+### Week 2: Dec 7-13, 2025
+
 #### Sunday, Dec 7
 - **Running:** REST (mobility day)
 - **Mobility:** 40 min comprehensive session
@@ -132,17 +149,11 @@ This plan integrates three coaching domains:
   - 5 min PTT-specific work (heel raises, arch doming)
 
 #### Monday, Dec 8
-- **Running:** REST or 20 min easy walk
+- **Running:** 25 min Easy (E pace 10:04-10:30/mile)
 - **Mobility:** 10 min PTT exercises
 
-**Week 1 Totals:** ~3.5 hrs running, 0 strength, 110 min mobility
-
----
-
-### Week 2: Dec 9-15, 2025
-
 #### Tuesday, Dec 9
-- **Running:** 25 min Easy (E pace 10:04-10:30/mile)
+- **Running:** 25 min Easy (E pace, relaxed)
 - **Strength:** REST - no strength this week
 - **Mobility:** 12 min PTT-focused session (banded inversions, toe yoga, heel raises)
 
@@ -163,6 +174,15 @@ This plan integrates three coaching domains:
 - **Running:** 35 min Easy long run (E pace, comfortable effort)
 - **Mobility:** 15 min post-long-run recovery (foam rolling + static stretching)
 
+**Week 2 Totals:** ~4 hrs running, 0 strength, 107 min mobility
+
+---
+
+## PHASE 2: BASE BUILDING (WEEKS 3-5)
+**Dec 14 - Jan 3, 2026 | Focus: Aerobic Foundation**
+
+### Week 3: Dec 14-20, 2025
+
 #### Sunday, Dec 14
 - **Running:** REST (mobility day)
 - **Mobility:** 45 min comprehensive session
@@ -171,17 +191,8 @@ This plan integrates three coaching domains:
   - 5 min PTT drills
 
 #### Monday, Dec 15
-- **Running:** 20 min Easy recovery jog
+- **Running:** 25 min Easy recovery jog
 - **Mobility:** 10 min PTT exercises
-
-**Week 2 Totals:** ~4 hrs running, 0 strength, 112 min mobility
-
----
-
-## PHASE 2: BASE BUILDING (WEEKS 3-5)
-**Dec 16 - Jan 5, 2026 | Focus: Aerobic Foundation**
-
-### Week 3: Dec 16-22, 2025
 
 #### Tuesday, Dec 16
 - **Running:** REST (strength day)
@@ -219,6 +230,12 @@ This plan integrates three coaching domains:
 - **Running:** 40 min Easy long run (E pace, build aerobic base)
 - **Mobility:** 15 min post-long-run recovery (foam rolling + stretching)
 
+**Week 3 Totals:** ~4.5 hrs running, 80 min strength, 110 min mobility
+
+---
+
+### Week 4: Dec 21-27, 2025
+
 #### Sunday, Dec 21
 - **Running:** REST (mobility day)
 - **Mobility:** 50 min comprehensive session
@@ -229,12 +246,6 @@ This plan integrates three coaching domains:
 #### Monday, Dec 22
 - **Running:** 25 min Easy recovery
 - **Mobility:** 10 min PTT exercises
-
-**Week 3 Totals:** ~4.5 hrs running, 80 min strength, 115 min mobility
-
----
-
-### Week 4: Dec 23-29, 2025
 
 #### Tuesday, Dec 23
 - **Running:** REST (strength day)
@@ -272,6 +283,12 @@ This plan integrates three coaching domains:
 - **Running:** 45 min Easy long run (E pace, longest run so far)
 - **Mobility:** 15 min post-long-run recovery
 
+**Week 4 Totals:** ~4.5-5 hrs running, 80 min strength, 110 min mobility
+
+---
+
+### Week 5: Dec 28 - Jan 3, 2026
+
 #### Sunday, Dec 28
 - **Running:** REST (mobility day)
 - **Mobility:** 50 min comprehensive session
@@ -282,12 +299,6 @@ This plan integrates three coaching domains:
 #### Monday, Dec 29
 - **Running:** 25 min Easy recovery
 - **Mobility:** 10 min PTT exercises
-
-**Week 4 Totals:** ~4.5-5 hrs running, 80 min strength, 115 min mobility
-
----
-
-### Week 5: Dec 30 - Jan 5, 2026
 
 #### Tuesday, Dec 30
 - **Running:** REST (strength day)
@@ -325,6 +336,15 @@ This plan integrates three coaching domains:
 - **Running:** 50 min Easy long run (E pace, longest run yet - building aerobic base)
 - **Mobility:** 15 min post-long-run recovery
 
+**Week 5 Totals:** ~5 hrs running, 80 min strength, 110 min mobility
+
+---
+
+## PHASE 3: EARLY QUALITY (WEEKS 6-8)
+**Jan 4-24, 2026 | Focus: Tempo Introduction | Return to Work Jan 6**
+
+### Week 6: Jan 4-10, 2026
+
 #### Sunday, Jan 4
 - **Running:** REST (mobility day)
 - **Mobility:** 50 min comprehensive session
@@ -335,15 +355,6 @@ This plan integrates three coaching domains:
 #### Monday, Jan 5 - LAST DAY OF PARENTAL LEAVE
 - **Running:** 25 min Easy recovery
 - **Mobility:** 10 min PTT exercises
-
-**Week 5 Totals:** ~5 hrs running, 80 min strength, 115 min mobility
-
----
-
-## PHASE 3: EARLY QUALITY (WEEKS 6-8)
-**Jan 6-26, 2026 | Focus: Tempo Introduction | Return to Work Jan 6**
-
-### Week 6: Jan 6-12, 2026
 
 #### Tuesday, Jan 6 - RETURN TO WORK
 - **Running:** REST (strength day)
@@ -385,6 +396,12 @@ This plan integrates three coaching domains:
 - **Running:** 55 min Easy long run (E pace, steady aerobic effort)
 - **Mobility:** 15 min post-long-run recovery
 
+**Week 6 Totals:** ~5.5 hrs running, 80 min strength, 115 min mobility
+
+---
+
+### Week 7: Jan 11-17, 2026
+
 #### Sunday, Jan 11
 - **Running:** REST (mobility day)
 - **Mobility:** 55 min comprehensive session
@@ -395,12 +412,6 @@ This plan integrates three coaching domains:
 #### Monday, Jan 12
 - **Running:** 30 min Easy recovery AM (before work)
 - **Mobility:** 10 min PTT exercises
-
-**Week 6 Totals:** ~5.5 hrs running, 80 min strength, 120 min mobility
-
----
-
-### Week 7: Jan 13-19, 2026
 
 #### Tuesday, Jan 13
 - **Running:** REST (strength day)
@@ -443,6 +454,12 @@ This plan integrates three coaching domains:
 - **Running:** 60 min Easy long run (E pace, steady build)
 - **Mobility:** 15 min post-long-run recovery
 
+**Week 7 Totals:** ~5.5 hrs running (first tempo!), 80 min strength, 122 min mobility
+
+---
+
+### Week 8: Jan 18-24, 2026
+
 #### Sunday, Jan 18
 - **Running:** REST (mobility day)
 - **Mobility:** 55 min comprehensive session
@@ -453,12 +470,6 @@ This plan integrates three coaching domains:
 #### Monday, Jan 19
 - **Running:** 30 min Easy recovery AM
 - **Mobility:** 10 min PTT exercises
-
-**Week 7 Totals:** ~5.5 hrs running (first tempo!), 80 min strength, 122 min mobility
-
----
-
-### Week 8: Jan 20-26, 2026
 
 #### Tuesday, Jan 20
 - **Running:** REST (strength day)
@@ -501,25 +512,25 @@ This plan integrates three coaching domains:
 - **Running:** 65 min Easy long run (E pace, building endurance)
 - **Mobility:** 15 min post-long-run recovery
 
+**Week 8 Totals:** ~6 hrs running, 80 min strength, 122 min mobility
+
+---
+
+## PHASE 4: RACE-SPECIFIC (WEEKS 9-11)
+**Jan 25 - Feb 14, 2026 | Focus: Half Marathon Pace + Intervals | PEAK VOLUME**
+
+### Week 9: Jan 25-31, 2026
+
 #### Sunday, Jan 25
 - **Running:** REST (mobility day)
-- **Mobility:** 55 min comprehensive session
-  - 20 min foam rolling
-  - 30 min stretching/yoga
+- **Mobility:** 60 min comprehensive session (extra recovery for peak phase)
+  - 20 min foam rolling (thorough full body)
+  - 35 min stretching/yoga (emphasis: recovery)
   - 5 min PTT drills
 
 #### Monday, Jan 26
 - **Running:** 30 min Easy recovery AM
 - **Mobility:** 10 min PTT exercises
-
-**Week 8 Totals:** ~6 hrs running, 80 min strength, 122 min mobility
-
----
-
-## PHASE 4: RACE-SPECIFIC (WEEKS 9-10)
-**Jan 27 - Feb 9, 2026 | Focus: Half Marathon Pace + Intervals | PEAK VOLUME**
-
-### Week 9: Jan 27 - Feb 2, 2026
 
 #### Tuesday, Jan 27
 - **Running:** REST (strength day - REDUCED VOLUME)
@@ -560,22 +571,22 @@ This plan integrates three coaching domains:
 - **Running:** 70 min Easy long run (LONGEST RUN - E pace, stay comfortable)
 - **Mobility:** 20 min post-long-run recovery (extended time for peak volume)
 
+**Week 9 Totals:** ~6.5 hrs running (PEAK VOLUME), 60 min strength, 134 min mobility
+
+---
+
+### Week 10: Feb 1-7, 2026
+
 #### Sunday, Feb 1
 - **Running:** REST (mobility day)
-- **Mobility:** 60 min comprehensive session (extra recovery for peak week)
-  - 20 min foam rolling (thorough full body)
-  - 35 min stretching/yoga (emphasis: recovery)
+- **Mobility:** 60 min comprehensive session
+  - 20 min foam rolling
+  - 35 min stretching/yoga (prepare for HM pace work)
   - 5 min PTT drills
 
 #### Monday, Feb 2
 - **Running:** 30 min Easy recovery AM
 - **Mobility:** 10 min PTT exercises
-
-**Week 9 Totals:** ~6.5 hrs running (PEAK VOLUME), 60 min strength, 134 min mobility
-
----
-
-### Week 10: Feb 3-9, 2026
 
 #### Tuesday, Feb 3
 - **Running:** REST (strength day)
@@ -618,53 +629,72 @@ This plan integrates three coaching domains:
 - **Running:** 65 min Easy long run (E pace, controlled effort)
 - **Mobility:** 20 min post-long-run recovery
 
+**Week 10 Totals:** ~6.5 hrs running (PEAK WEEK), 60 min strength, 134 min mobility
+
+---
+
+### Week 11: Feb 8-14, 2026
+
 #### Sunday, Feb 8
 - **Running:** REST (mobility day)
 - **Mobility:** 60 min comprehensive session
   - 20 min foam rolling
-  - 35 min stretching/yoga (prepare for taper next week)
+  - 35 min stretching/yoga (begin preparing for taper)
   - 5 min PTT drills
 
 #### Monday, Feb 9
 - **Running:** 30 min Easy recovery AM
 - **Mobility:** 10 min PTT exercises
 
-**Week 10 Totals:** ~6.5 hrs running (PEAK WEEK), 60 min strength, 134 min mobility
-
----
-
-## PHASE 5: TAPER (WEEKS 11-12)
-**Feb 10-22, 2026 | Focus: Sharpening & Race Preparation**
-
-### Week 11: Feb 10-16, 2026
-
 #### Tuesday, Feb 10
-- **Running:** REST (no strength - taper begins)
-- **Strength:** NO STRENGTH - allow full recovery for race week
-- **Mobility:** 15 min gentle PTT session + light stretching
+- **Running:** REST (strength day - REDUCED VOLUME)
+- **Strength:** PRIMARY Session #9 - Maintenance (35-40 min)
+  - Warmup: 8 min
+  - A1. Goblet Squat: 3 × 8 reps
+  - A2. Single-Leg RDL: 3 × 8 per leg
+  - B1. Bulgarian Split Squat: 2 × 8 per leg
+  - B2. Forearm Plank: 2 × 40 sec
+  - C1. Pallof Press: 2 × 10 per side
+  - C2. Single-Leg Calf: 2 × 10 per leg
+- **Mobility:** 12 min evening PTT session
 
 #### Wednesday, Feb 11
 - **Running:** 30 min Easy AM (E pace, relaxed)
 - **Mobility:** 10 min post-run routine
 
 #### Thursday, Feb 12
-- **Running:** SHARPENING WORKOUT (work fitness time)
+- **Running:** INTERVAL WORKOUT (work fitness time)
   - 10 min Easy warmup
-  - 6 × 2 min at I pace (7:55/mile, HR 170-180)
+  - 6 × 3 min at I pace (7:55/mile, HR 170-180)
   - 2 min Easy recovery jog between reps
   - 10 min Easy cooldown
-  - **Total:** 40 min
-  - **Purpose:** Maintain sharpness, practice speed feel
-- **Mobility:** 12 min post-run routine (gentle)
+  - **Total:** 44 min
+  - **Purpose:** Sharpen speed, VO2 max stimulus
+- **Mobility:** 12 min post-run routine
 
 #### Friday, Feb 13
-- **Running:** REST (full recovery day)
-- **Strength:** NO STRENGTH
-- **Mobility:** 15 min gentle mobility (light stretching, PTT drills)
+- **Running:** 25 min Easy recovery (light effort)
+- **Strength:** LIGHT Session #9 - Minimal (20-25 min)
+  - Warmup: 5 min
+  - A1. Bent-Over Row: 2 × 10 reps
+  - A2. Goblet Squat: 2 × 8 reps
+  - B1. Dead Bug: 2 × 10 per side
+  - B2. Glute Bridge: 2 × 12 reps
+  - C1. Calf Raise: 2 × 15 reps
+- **Mobility:** 10 min evening mobility
 
 #### Saturday, Feb 14
-- **Running:** 40 min Easy run (E pace, keep relaxed and comfortable)
-- **Mobility:** 15 min post-run recovery
+- **Running:** 50 min Easy long run (E pace, begin taper - reduced volume)
+- **Mobility:** 15 min post-long-run recovery
+
+**Week 11 Totals:** ~5.5 hrs running (begin taper), 60 min strength, 129 min mobility
+
+---
+
+## PHASE 5: TAPER (WEEKS 12-13)
+**Feb 15-22, 2026 | Focus: Sharpening & Race Preparation**
+
+### Week 12: Feb 15-21, 2026
 
 #### Sunday, Feb 15
 - **Running:** REST (mobility day)
@@ -677,15 +707,9 @@ This plan integrates three coaching domains:
 - **Running:** 25 min Easy recovery AM (very light, keep legs fresh)
 - **Mobility:** 10 min PTT exercises
 
-**Week 11 Totals:** ~4 hrs running, 0 strength, 122 min mobility
-
----
-
-### Week 12: Feb 17-22, 2026 - RACE WEEK
-
 #### Tuesday, Feb 17
 - **Running:** 25 min Easy (E pace, relaxed)
-- **Strength:** NO STRENGTH
+- **Strength:** NO STRENGTH - allow full recovery for race week
 - **Mobility:** 15 min gentle mobility + PTT drills
 
 #### Wednesday, Feb 18
@@ -693,7 +717,7 @@ This plan integrates three coaching domains:
 - **Mobility:** 10 min light stretching
 
 #### Thursday, Feb 19
-- **Running:** RACE PREP WORKOUT
+- **Running:** RACE PREP WORKOUT (work fitness time)
   - 10 min Easy warmup
   - 6 × 30 sec at I pace (7:55/mile) with 90 sec jog recovery
   - 10 min Easy cooldown
@@ -712,6 +736,12 @@ This plan integrates three coaching domains:
   - Keep HR below 140 bpm
 - **Mobility:** 10 min gentle mobility (hip circles, leg swings, light stretches)
 
+**Week 12 Totals:** ~3 hrs running, 0 strength, 85 min mobility
+
+---
+
+### Week 13: Feb 22, 2026 - RACE WEEK
+
 #### Sunday, Feb 22 - RACE DAY
 - **RACE:** Publix Gasparilla Distance Classic Half Marathon
   - **Target:** B-goal 1:52:00 (8:33/mile pace)
@@ -722,8 +752,6 @@ This plan integrates three coaching domains:
   - **Fueling:** Light breakfast 2-3 hrs before, water at aid stations
   - **Pacing:** 8:24 (A), 8:33 (B), 8:42 (C) - aim for B, push for A if feeling great
 - **Post-Race Mobility:** 20 min gentle walking + light stretching (celebrate your achievement!)
-
-**Week 12 Totals:** ~3 hrs running + RACE, 0 strength, 80 min mobility
 
 ---
 
