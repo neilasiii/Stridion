@@ -428,6 +428,109 @@ def generate_enhanced_report(weather_data=None):
 
     return "\n".join(lines)
 
+def generate_brief_notification(cache, weather_data):
+    """
+    Generate brief notification format (<300 chars) for morning report.
+
+    Format:
+    Recovery: [status]
+    Today: [workout]
+    Weather: [timing window]
+    Note: [key insight]
+    """
+    lines = []
+
+    # Calculate days since marathon (Nov 24, 2025)
+    marathon_date = datetime(2025, 11, 24).date()
+    days_since_marathon = (datetime.now().date() - marathon_date).days
+
+    # Recovery status
+    rhr_readings = cache.get('resting_hr_readings', [])
+    sleep_sessions = cache.get('sleep_sessions', [])
+
+    if days_since_marathon <= 14:
+        recovery = f"Day {days_since_marathon} post-marathon"
+    elif len(rhr_readings) >= 3:
+        recent_rhr = sum(r[1] for r in rhr_readings[:3]) / 3
+        baseline_rhr = sum(r[1] for r in rhr_readings[:30]) / min(30, len(rhr_readings))
+        elevation = round(recent_rhr - baseline_rhr, 1)
+        if elevation >= 3:
+            recovery = f"RHR elevated +{elevation} bpm"
+        else:
+            recovery = "Recovered"
+    else:
+        recovery = "Good"
+
+    lines.append(f"Recovery: {recovery}")
+
+    # Today's workout
+    scheduled = cache.get('scheduled_workouts', [])
+    today = datetime.now().date().isoformat()
+    workout = None
+    for w in scheduled:
+        if w.get('date') == today:
+            workout = w.get('workout_name', 'Workout scheduled')
+            break
+
+    if not workout:
+        if days_since_marathon <= 7:
+            workout = "Rest or 20-30min easy walk"
+        elif days_since_marathon <= 14:
+            workout = "Optional easy 20-40min run"
+        else:
+            workout = "No workout scheduled"
+
+    lines.append(f"Today: {workout}")
+
+    # Weather timing
+    if weather_data and "unavailable" not in weather_data.lower():
+        try:
+            # Parse temp from first line
+            temp = None
+            for part in weather_data.split('\n')[0].split(','):
+                if '°F' in part:
+                    temp = int(part.split('°F')[0].split()[-1])
+                    break
+
+            if temp:
+                if temp > 80:
+                    timing = "Early AM (before 7AM)"
+                elif temp < 40:
+                    timing = "Mid-day recommended"
+                else:
+                    # Get next 6 hours forecast
+                    timing = f"Now-8AM, {temp}°F ideal"
+            else:
+                timing = "Check weather app"
+        except:
+            timing = "Check weather app"
+    else:
+        timing = "Weather data unavailable"
+
+    lines.append(f"Weather: {timing}")
+
+    # Key note
+    if days_since_marathon <= 7:
+        note = "Prioritize rest and recovery"
+    elif sleep_sessions and sleep_sessions[0].get('total_duration_minutes', 0) / 60 < 6.5:
+        note = "Sleep low - keep effort easy"
+    elif len(rhr_readings) >= 3:
+        recent_rhr = sum(r[1] for r in rhr_readings[:3]) / 3
+        baseline_rhr = sum(r[1] for r in rhr_readings[:30]) / min(30, len(rhr_readings))
+        elevation = round(recent_rhr - baseline_rhr, 1)
+        if elevation >= 5:
+            note = "RHR elevated significantly"
+        elif elevation >= 3:
+            note = f"RHR still elevated, monitor effort"
+        else:
+            note = "Ready to train"
+    else:
+        note = "Ready to train"
+
+    lines.append(f"Note: {note}")
+
+    return "\n".join(lines)
+
 if __name__ == '__main__':
     # Check if weather data passed as argument
     weather_data = None
@@ -435,8 +538,16 @@ if __name__ == '__main__':
         weather_data = sys.argv[1]
 
     try:
-        report = generate_enhanced_report(weather_data)
-        print(report)
+        cache = load_health_data()
+
+        # Generate both formats
+        brief = generate_brief_notification(cache, weather_data)
+        detailed = generate_enhanced_report(weather_data)
+
+        # Output with separator
+        print(brief)
+        print("\n---DETAILED---\n")
+        print(detailed)
     except Exception as e:
         print(f"Error generating enhanced report: {e}", file=sys.stderr)
         import traceback
