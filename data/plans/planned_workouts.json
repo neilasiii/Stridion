@@ -6,13 +6,13 @@
     "plan_start_date": "2025-11-30",
     "plan_end_date": "2026-02-22",
     "created_date": "2025-12-02T09:33:18.732385",
-    "last_modified": "2025-12-03T09:17:29.013370",
+    "last_modified": "2025-12-03T09:29:50.630379",
     "athlete": "Neil Stagner",
     "version": "1.0"
   },
   "planned_workouts": [
     {
-      "id": "dbe7e9bc-02cf-4ea2-8ba9-0efeff4e4039",
+      "id": "c725cc37-c2fc-45d9-8619-a556d5b5ecc9",
       "date": "2025-11-30",
       "week_number": 1,
       "phase": "recovery",
@@ -29,14 +29,14 @@
       "adjustments": []
     },
     {
-      "id": "4063e7ca-bcd4-45b3-9258-a36363a2d25f",
+      "id": "09292822-1bfa-4d98-bb54-c7e1af5589f9",
       "date": "2025-11-30",
       "week_number": 1,
       "phase": "recovery",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "30 min gentle comprehensive session 10 min light foam rolling (calves, hamstrings, glutes) 15 min gentle stretching (focus: recovery) 5 min PTT drills (towel scrunches, toe yoga)",
+        "type": "comprehensive",
+        "description": "30 min gentle comprehensive session 10 min light foam rolling (calves, hamstrings, glutes) 15 min gentle stretching (focus: recovery) 5 min ankle/foot mobility (ankle circles, calf raises)",
         "duration_minutes": 30
       },
       "status": "planned",
@@ -44,7 +44,7 @@
       "adjustments": []
     },
     {
-      "id": "eedbf5ab-9b0b-4b39-9f7a-1a443c617016",
+      "id": "0d6c5644-9562-45c7-87b9-3de039c04887",
       "date": "2025-12-01",
       "week_number": 1,
       "phase": "recovery",
@@ -60,14 +60,14 @@
       "adjustments": []
     },
     {
-      "id": "32cffdae-f05d-426c-8070-51df39f70e58",
+      "id": "99cc9b71-f6c1-44ca-94e0-366309e74514",
       "date": "2025-12-01",
       "week_number": 1,
       "phase": "recovery",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises (ankle inversions, arch doming)",
+        "type": "stretching",
+        "description": "10 min lower leg mobility (calf stretches, ankle circles)",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -75,7 +75,7 @@
       "adjustments": []
     },
     {
-      "id": "57761f38-e335-4b7a-af0b-ddbb7f257ced",
+      "id": "3a34292a-fe7e-43f1-b6f0-3ab4ac102155",
       "date": "2025-12-02",
       "week_number": 1,
       "phase": "recovery",
@@ -92,7 +92,7 @@
       "adjustments": []
     },
     {
-      "id": "638c2882-5e58-4b72-a603-85ad5c03a9d7",
+      "id": "79ca26cd-82fb-4ec3-8fd6-65e5cfc0602c",
       "date": "2025-12-02",
       "week_number": 1,
       "phase": "recovery",
@@ -106,7 +106,7 @@
       "adjustments": []
     },
     {
-      "id": "5c746f2f-279e-43cd-9604-7bda0804d009",
+      "id": "5308d7d0-2e58-43bf-80be-dd76dddd256d",
       "date": "2025-12-02",
       "week_number": 1,
       "phase": "recovery",
@@ -121,7 +121,7 @@
       "adjustments": []
     },
     {
-      "id": "02d62b48-d4fa-4177-81e1-ef7895bc8c1e",
+      "id": "52465e6e-30b3-41a5-963e-24a87c85818a",
       "date": "2025-12-03",
       "week_number": 1,
       "phase": "recovery",
@@ -137,7 +137,7 @@
       "adjustments": []
     },
     {
-      "id": "fef9d0ae-0854-4b07-96cd-15961878eb80",
+      "id": "358315ce-5e95-4aef-a6ce-10eebcd10558",
       "date": "2025-12-03",
       "week_number": 1,
       "phase": "recovery",
@@ -152,7 +152,7 @@
       "adjustments": []
     },
     {
-      "id": "2a8ec7df-1c18-4a2e-88b8-ea55a72b10b6",
+      "id": "961a30bb-0846-48d4-8f7e-610b61fd73a9",
       "date": "2025-12-04",
       "week_number": 1,
       "phase": "recovery",
@@ -168,7 +168,7 @@
       "adjustments": []
     },
     {
-      "id": "20d4e1ae-cbe8-4b47-9fc0-cead61300735",
+      "id": "bd94447b-5971-48d1-aec8-efa8077c35bb",
       "date": "2025-12-04",
       "week_number": 1,
       "phase": "recovery",
@@ -183,7 +183,7 @@
       "adjustments": []
     },
     {
-      "id": "1800bbf7-6c66-4924-a4e9-eb420c50e092",
+      "id": "37fe69a9-95cc-4692-b9be-6d0498f862a3",
       "date": "2025-12-05",
       "week_number": 1,
       "phase": "recovery",
@@ -199,7 +199,7 @@
       "adjustments": []
     },
     {
-      "id": "1a235149-b0e1-467c-88d6-e47ba9258b2b",
+      "id": "ffd44e1c-36c1-4f81-8887-d65d428a2512",
       "date": "2025-12-05",
       "week_number": 1,
       "phase": "recovery",
@@ -213,14 +213,14 @@
       "adjustments": []
     },
     {
-      "id": "76df972d-4e77-45af-9772-c40ea367f1bd",
+      "id": "5a54fc1c-109a-4d65-b634-64bed60c6ec0",
       "date": "2025-12-05",
       "week_number": 1,
       "phase": "recovery",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "15 min evening mobility (PTT drills + gentle stretching)",
+        "type": "stretching",
+        "description": "15 min evening mobility (lower leg + general stretching)",
         "duration_minutes": 15
       },
       "status": "planned",
@@ -228,7 +228,7 @@
       "adjustments": []
     },
     {
-      "id": "c574322b-f046-4186-93d4-4058ef20f485",
+      "id": "21fcf7e5-da5f-479f-9aa1-8477b3a05023",
       "date": "2025-12-06",
       "week_number": 1,
       "phase": "recovery",
@@ -244,7 +244,7 @@
       "adjustments": []
     },
     {
-      "id": "7b293dbb-2f8d-430b-82f7-dbfde1449a12",
+      "id": "609d1cef-d406-438e-b4aa-8ed2d98d1c5e",
       "date": "2025-12-06",
       "week_number": 1,
       "phase": "recovery",
@@ -259,7 +259,7 @@
       "adjustments": []
     },
     {
-      "id": "a4c9050f-0aa3-4629-9237-bbc4171115c8",
+      "id": "fc0f089a-8822-4118-a101-42a0c4a9a4bb",
       "date": "2025-12-07",
       "week_number": 2,
       "phase": "recovery",
@@ -274,14 +274,14 @@
       "adjustments": []
     },
     {
-      "id": "b7faebb5-3b75-494d-a9c3-f35266e721d7",
+      "id": "3cf3c186-e27e-46cb-a567-3b817df0aa88",
       "date": "2025-12-07",
       "week_number": 2,
       "phase": "recovery",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "40 min comprehensive session 15 min foam rolling (full body sequence) 20 min static stretching (calves, hip flexors, hamstrings, glutes, piriformis) 5 min PTT-specific work (heel raises, arch doming)",
+        "type": "comprehensive",
+        "description": "40 min comprehensive session 15 min foam rolling (full body sequence) 20 min static stretching (calves, hip flexors, hamstrings, glutes, piriformis) 5 min ankle/calf work (calf raises, ankle mobility)",
         "duration_minutes": 40
       },
       "status": "planned",
@@ -289,7 +289,7 @@
       "adjustments": []
     },
     {
-      "id": "09170715-0955-4643-9a32-c3839ce12da7",
+      "id": "1c02c898-4cee-4475-8fb1-91b028d27654",
       "date": "2025-12-08",
       "week_number": 2,
       "phase": "recovery",
@@ -306,14 +306,14 @@
       "adjustments": []
     },
     {
-      "id": "34639f36-7e59-4912-8d01-5354cf5f5b01",
+      "id": "877dea82-b265-4952-9d8a-bfdd40032e96",
       "date": "2025-12-08",
       "week_number": 2,
       "phase": "recovery",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -321,7 +321,7 @@
       "adjustments": []
     },
     {
-      "id": "0466bf9a-f2c4-4aed-814e-4a4907ee482f",
+      "id": "df42c5af-5058-4c6c-85ba-37d2f18b05cd",
       "date": "2025-12-09",
       "week_number": 2,
       "phase": "recovery",
@@ -337,7 +337,7 @@
       "adjustments": []
     },
     {
-      "id": "6c4fbc9b-8837-4a5b-9424-5f78ff051784",
+      "id": "291a6d5e-ba23-4dff-b880-7f56205a3488",
       "date": "2025-12-09",
       "week_number": 2,
       "phase": "recovery",
@@ -351,14 +351,14 @@
       "adjustments": []
     },
     {
-      "id": "ef6e5ec7-592d-47ac-a272-4f05ddd3dc1e",
+      "id": "a951a497-7114-41bc-a50e-47c11b5a9cf1",
       "date": "2025-12-09",
       "week_number": 2,
       "phase": "recovery",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "12 min PTT-focused session (banded inversions, toe yoga, heel raises)",
+        "type": "stretching",
+        "description": "12 min lower leg session (calf stretches, ankle mobility, light strengthening)",
         "duration_minutes": 12
       },
       "status": "planned",
@@ -366,7 +366,7 @@
       "adjustments": []
     },
     {
-      "id": "c9b94e4a-77c9-43d9-8550-650e5159e089",
+      "id": "9604c869-e4a5-428e-b8b1-bfbb70807e7a",
       "date": "2025-12-10",
       "week_number": 2,
       "phase": "recovery",
@@ -382,7 +382,7 @@
       "adjustments": []
     },
     {
-      "id": "484ea301-3655-4746-8a3e-4d0c8357e257",
+      "id": "f630db8b-70ed-403e-b496-0ba195bd8d43",
       "date": "2025-12-10",
       "week_number": 2,
       "phase": "recovery",
@@ -397,7 +397,7 @@
       "adjustments": []
     },
     {
-      "id": "bdf702cf-adcb-46e3-aa88-f964e9117cb6",
+      "id": "6aed19ce-ef35-4a02-9a24-8ebf1167d08a",
       "date": "2025-12-11",
       "week_number": 2,
       "phase": "recovery",
@@ -413,7 +413,7 @@
       "adjustments": []
     },
     {
-      "id": "1d4fd8e7-c91e-42a8-b889-bd20384ee1e8",
+      "id": "09d44843-2197-46c5-b8fe-3059bdbfb50e",
       "date": "2025-12-11",
       "week_number": 2,
       "phase": "recovery",
@@ -428,7 +428,7 @@
       "adjustments": []
     },
     {
-      "id": "772f9f77-cc0a-4d20-814d-053ce1dfccd8",
+      "id": "df92e6a2-82ad-41df-b2a5-f85a6e3a0d1e",
       "date": "2025-12-12",
       "week_number": 2,
       "phase": "recovery",
@@ -444,7 +444,7 @@
       "adjustments": []
     },
     {
-      "id": "dbdfd6f2-bbeb-43c8-91f9-6bbf70d13bb0",
+      "id": "3759876d-bb67-4467-8f3e-906dcc10b0bc",
       "date": "2025-12-12",
       "week_number": 2,
       "phase": "recovery",
@@ -458,7 +458,7 @@
       "adjustments": []
     },
     {
-      "id": "69ebfae5-af9b-4ac3-867e-6dd0bd3947a7",
+      "id": "79bf1d44-175f-4bb6-817f-4f6cbaff79fd",
       "date": "2025-12-12",
       "week_number": 2,
       "phase": "recovery",
@@ -473,7 +473,7 @@
       "adjustments": []
     },
     {
-      "id": "1288066a-ead0-4d6f-bc6a-88141d3ad796",
+      "id": "86df8a26-569b-43c3-9fdf-322ae755e9b6",
       "date": "2025-12-13",
       "week_number": 2,
       "phase": "recovery",
@@ -489,7 +489,7 @@
       "adjustments": []
     },
     {
-      "id": "a3005b43-1d50-47f3-b3ae-472f106caa1d",
+      "id": "27bc0b45-44d4-4360-a1a8-524541176698",
       "date": "2025-12-13",
       "week_number": 2,
       "phase": "recovery",
@@ -504,7 +504,7 @@
       "adjustments": []
     },
     {
-      "id": "3ffc20b0-26c3-4b1e-9286-b5bd04cbb49d",
+      "id": "0d36e211-ab91-40db-9915-2c880b74e626",
       "date": "2025-12-14",
       "week_number": 3,
       "phase": "base_building",
@@ -519,14 +519,14 @@
       "adjustments": []
     },
     {
-      "id": "6bac3a6e-7324-4aca-8ac5-88ab270750ce",
+      "id": "e577f41f-3a39-48ee-acda-87367e4dc42c",
       "date": "2025-12-14",
       "week_number": 3,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "45 min comprehensive session 15 min foam rolling (comprehensive sequence) 25 min static stretching (full lower body + thoracic spine) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "45 min comprehensive session 15 min foam rolling (comprehensive sequence) 25 min static stretching (full lower body + thoracic spine) 5 min ankle/foot mobility",
         "duration_minutes": 45
       },
       "status": "planned",
@@ -534,7 +534,7 @@
       "adjustments": []
     },
     {
-      "id": "2aaef71e-0056-477a-948c-ff6bc2b34368",
+      "id": "8061675f-8c91-43dd-9c72-de4f9242ae9b",
       "date": "2025-12-15",
       "week_number": 3,
       "phase": "base_building",
@@ -550,14 +550,14 @@
       "adjustments": []
     },
     {
-      "id": "74b2d54a-0e76-4f40-889f-d1b99798f00a",
+      "id": "5e9384e7-8090-4518-942f-2ac13b55b7b1",
       "date": "2025-12-15",
       "week_number": 3,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -565,7 +565,7 @@
       "adjustments": []
     },
     {
-      "id": "6cc55c91-4aa2-462f-9dfa-3363e0848aa8",
+      "id": "723963ef-fa6a-495e-8004-e91a238ebdfa",
       "date": "2025-12-16",
       "week_number": 3,
       "phase": "base_building",
@@ -580,7 +580,7 @@
       "adjustments": []
     },
     {
-      "id": "de806b6a-8aeb-4cf4-a608-999649150c2c",
+      "id": "7bac7ca5-bacc-41fc-b8fe-f0b3dbbf9f2b",
       "date": "2025-12-16",
       "week_number": 3,
       "phase": "base_building",
@@ -595,14 +595,14 @@
       "adjustments": []
     },
     {
-      "id": "cab7923e-c95c-40c4-b5f7-d997ce6fb83a",
+      "id": "4c8054c9-53ee-4b30-8741-5c74713fcab2",
       "date": "2025-12-16",
       "week_number": 3,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min evening PTT session",
+        "type": "recovery",
+        "description": "10 min evening lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -610,7 +610,7 @@
       "adjustments": []
     },
     {
-      "id": "dac11e40-930f-4f4f-bc96-65bc9ed8494c",
+      "id": "9066fa92-62bf-4985-b615-13bb76e1dbb1",
       "date": "2025-12-17",
       "week_number": 3,
       "phase": "base_building",
@@ -627,7 +627,7 @@
       "adjustments": []
     },
     {
-      "id": "f3ff61c7-0496-467e-aee2-1c48e7bc7c3b",
+      "id": "c0f95c0c-4646-49c2-961f-48db3d6f5aad",
       "date": "2025-12-17",
       "week_number": 3,
       "phase": "base_building",
@@ -642,7 +642,7 @@
       "adjustments": []
     },
     {
-      "id": "2c62ca97-dbc6-4b48-9d32-d525a570c7bc",
+      "id": "734b4c68-80e0-4d3a-9415-fd03d2702541",
       "date": "2025-12-18",
       "week_number": 3,
       "phase": "base_building",
@@ -658,7 +658,7 @@
       "adjustments": []
     },
     {
-      "id": "15c559ba-920c-45a7-86b4-fba95da0f47b",
+      "id": "fbacb7c8-4dfd-4459-a4df-4ccf44224f41",
       "date": "2025-12-18",
       "week_number": 3,
       "phase": "base_building",
@@ -673,7 +673,7 @@
       "adjustments": []
     },
     {
-      "id": "850f84e5-ae88-4cc2-9200-60171c12b9db",
+      "id": "0b012ad9-6073-47d5-9373-1401f655c7bd",
       "date": "2025-12-19",
       "week_number": 3,
       "phase": "base_building",
@@ -688,7 +688,7 @@
       "adjustments": []
     },
     {
-      "id": "24e3bc58-f150-4792-8a36-9b907056aca3",
+      "id": "b10a50ca-584b-473a-98ef-5200d009094a",
       "date": "2025-12-19",
       "week_number": 3,
       "phase": "base_building",
@@ -703,7 +703,7 @@
       "adjustments": []
     },
     {
-      "id": "a586a211-0325-4ea5-b5e3-479bbe1c9560",
+      "id": "bc9e3a57-9c1b-44ca-b70d-d5c3106cae38",
       "date": "2025-12-19",
       "week_number": 3,
       "phase": "base_building",
@@ -718,7 +718,7 @@
       "adjustments": []
     },
     {
-      "id": "0a2c6d64-64cd-41fd-ae9b-bc787e5cf3a2",
+      "id": "178d4dfd-04d0-4cad-b565-284cc685bde7",
       "date": "2025-12-20",
       "week_number": 3,
       "phase": "base_building",
@@ -734,7 +734,7 @@
       "adjustments": []
     },
     {
-      "id": "3ea1409b-4b73-46cd-aac0-c2c31cec7b04",
+      "id": "4c13edea-afb1-4849-a18b-f7457abc4540",
       "date": "2025-12-20",
       "week_number": 3,
       "phase": "base_building",
@@ -749,7 +749,7 @@
       "adjustments": []
     },
     {
-      "id": "10b9b2f2-3d46-484f-8235-983ca6f013e4",
+      "id": "eca3f569-fffa-42f3-80ca-515da1a3c1c3",
       "date": "2025-12-21",
       "week_number": 4,
       "phase": "base_building",
@@ -764,14 +764,14 @@
       "adjustments": []
     },
     {
-      "id": "e757a65d-3e87-4b00-8942-f096c5f28d0e",
+      "id": "bd96f5ea-61fe-4913-864f-fe1910296aeb",
       "date": "2025-12-21",
       "week_number": 4,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "50 min comprehensive session 15 min foam rolling (full body) 30 min static stretching + yoga (emphasis: hips, hamstrings, calves) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "50 min comprehensive session 15 min foam rolling (full body) 30 min static stretching + yoga (emphasis: hips, hamstrings, calves) 5 min ankle/foot mobility",
         "duration_minutes": 50
       },
       "status": "planned",
@@ -779,7 +779,7 @@
       "adjustments": []
     },
     {
-      "id": "bd4e840e-fe63-4a23-acb0-231b40459880",
+      "id": "a7e5bf27-a0a1-41cb-9f5a-3c37a624f408",
       "date": "2025-12-22",
       "week_number": 4,
       "phase": "base_building",
@@ -795,14 +795,14 @@
       "adjustments": []
     },
     {
-      "id": "1e7543b3-37d2-4da3-85b9-3581bf06f10c",
+      "id": "6bc83083-6036-4d10-863c-d386b57c2117",
       "date": "2025-12-22",
       "week_number": 4,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -810,7 +810,7 @@
       "adjustments": []
     },
     {
-      "id": "afc43b8f-0203-479f-b365-f0bbae524d38",
+      "id": "1b4cc234-892b-4dfa-9b6f-c8813ab1b2dc",
       "date": "2025-12-23",
       "week_number": 4,
       "phase": "base_building",
@@ -825,7 +825,7 @@
       "adjustments": []
     },
     {
-      "id": "2f8ab8a4-d75d-46e1-933a-25fb57a7dcb7",
+      "id": "9aa362b3-2180-427c-b488-d3e6f5041b5b",
       "date": "2025-12-23",
       "week_number": 4,
       "phase": "base_building",
@@ -840,14 +840,14 @@
       "adjustments": []
     },
     {
-      "id": "57cce7f2-a7a8-4936-9e74-091d9ac7102e",
+      "id": "f35e6e40-d823-4d94-8e66-8800276f82b1",
       "date": "2025-12-23",
       "week_number": 4,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min evening PTT session",
+        "type": "recovery",
+        "description": "10 min evening lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -855,7 +855,7 @@
       "adjustments": []
     },
     {
-      "id": "4066fec1-0c08-43e9-88c3-b8322553f76c",
+      "id": "7535ffe8-6905-4371-8f99-a4916171637d",
       "date": "2025-12-24",
       "week_number": 4,
       "phase": "base_building",
@@ -871,7 +871,7 @@
       "adjustments": []
     },
     {
-      "id": "1f491df9-5618-4e06-b01a-b605c25c7028",
+      "id": "9eed7cb0-5793-4500-a00b-31b870a3d50d",
       "date": "2025-12-24",
       "week_number": 4,
       "phase": "base_building",
@@ -886,7 +886,7 @@
       "adjustments": []
     },
     {
-      "id": "20e4d1db-7d43-4eed-a00e-74896ac3c7f3",
+      "id": "937896f9-2fa5-4500-8914-a462804b508f",
       "date": "2025-12-25",
       "week_number": 4,
       "phase": "base_building",
@@ -902,7 +902,7 @@
       "adjustments": []
     },
     {
-      "id": "a4d5a7ce-0c80-4a78-991d-1213ca8785fd",
+      "id": "f2d5eca5-9e7d-417e-9289-72db2dee7850",
       "date": "2025-12-25",
       "week_number": 4,
       "phase": "base_building",
@@ -917,7 +917,7 @@
       "adjustments": []
     },
     {
-      "id": "282ecf81-02f7-4c0f-bf0b-d0cf1489091d",
+      "id": "302bd1a8-b45b-4ed3-a20b-c0ca53e76a86",
       "date": "2025-12-26",
       "week_number": 4,
       "phase": "base_building",
@@ -932,7 +932,7 @@
       "adjustments": []
     },
     {
-      "id": "12b31684-7a91-46bd-9a52-27a4f077e387",
+      "id": "af89b108-3718-4025-97d7-bedfcbd52ff9",
       "date": "2025-12-26",
       "week_number": 4,
       "phase": "base_building",
@@ -947,7 +947,7 @@
       "adjustments": []
     },
     {
-      "id": "9cd499a9-a3d8-4e50-bb1d-939a154fe70d",
+      "id": "9032f232-0453-4ce8-b253-b3e84d4f9326",
       "date": "2025-12-26",
       "week_number": 4,
       "phase": "base_building",
@@ -962,7 +962,7 @@
       "adjustments": []
     },
     {
-      "id": "fca97f5e-d78d-47a5-a519-95aa18a08a92",
+      "id": "07952d42-9e5b-4182-a070-de43dca72854",
       "date": "2025-12-27",
       "week_number": 4,
       "phase": "base_building",
@@ -978,7 +978,7 @@
       "adjustments": []
     },
     {
-      "id": "6d9de8f2-f2c7-4b17-ba79-6732dfdcc4d7",
+      "id": "2d0abed5-249a-45af-81e8-dea5abeb941e",
       "date": "2025-12-27",
       "week_number": 4,
       "phase": "base_building",
@@ -993,7 +993,7 @@
       "adjustments": []
     },
     {
-      "id": "28dccd6d-1820-494b-a37c-ca270e345ce2",
+      "id": "5e23dce5-0aa3-42b6-8d34-5490f4c534a4",
       "date": "2025-12-28",
       "week_number": 5,
       "phase": "base_building",
@@ -1008,14 +1008,14 @@
       "adjustments": []
     },
     {
-      "id": "4a6cb400-dd2d-42b3-be8a-31192a601d6a",
+      "id": "a7b826cd-927b-406c-b6e7-1ff58745686c",
       "date": "2025-12-28",
       "week_number": 5,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "50 min comprehensive session 15 min foam rolling 30 min stretching/yoga (emphasis: recovery from long run) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "50 min comprehensive session 15 min foam rolling 30 min stretching/yoga (emphasis: recovery from long run) 5 min ankle/foot mobility",
         "duration_minutes": 50
       },
       "status": "planned",
@@ -1023,7 +1023,7 @@
       "adjustments": []
     },
     {
-      "id": "a9ccccba-cf02-4a58-a00a-23dceea429d7",
+      "id": "53c708be-ac83-4250-b26d-ce4c9b46cd72",
       "date": "2025-12-29",
       "week_number": 5,
       "phase": "base_building",
@@ -1039,14 +1039,14 @@
       "adjustments": []
     },
     {
-      "id": "bf20f720-e648-4691-828e-301e4729f09c",
+      "id": "09dee0f9-03ba-4b32-a8b9-0441d4996f31",
       "date": "2025-12-29",
       "week_number": 5,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -1054,7 +1054,7 @@
       "adjustments": []
     },
     {
-      "id": "88b6377e-d068-4425-868c-819ca309bc86",
+      "id": "acd44b32-4d3d-4f96-9180-84acbb60d553",
       "date": "2025-12-30",
       "week_number": 5,
       "phase": "base_building",
@@ -1069,7 +1069,7 @@
       "adjustments": []
     },
     {
-      "id": "473ad59b-62bf-4105-9280-ba053be2ac9c",
+      "id": "e2aaeb14-a0fb-4575-9da4-fc49b86e99e4",
       "date": "2025-12-30",
       "week_number": 5,
       "phase": "base_building",
@@ -1084,14 +1084,14 @@
       "adjustments": []
     },
     {
-      "id": "7f23f0c0-f511-46c3-bdaf-26e4974c46e0",
+      "id": "911c331b-1694-4ce1-994e-2f2d6525425b",
       "date": "2025-12-30",
       "week_number": 5,
       "phase": "base_building",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min evening PTT session",
+        "type": "recovery",
+        "description": "10 min evening lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -1099,7 +1099,7 @@
       "adjustments": []
     },
     {
-      "id": "5b8c2907-c394-4e80-8e9b-0579633ce1d9",
+      "id": "1f87d85c-d1b9-4fb3-ad33-3b8b944515c3",
       "date": "2025-12-31",
       "week_number": 5,
       "phase": "base_building",
@@ -1115,7 +1115,7 @@
       "adjustments": []
     },
     {
-      "id": "9b5c6456-871a-4945-bcdd-671535d8c619",
+      "id": "0e82dec9-866d-40a1-8693-0ba51eac0093",
       "date": "2025-12-31",
       "week_number": 5,
       "phase": "base_building",
@@ -1130,7 +1130,7 @@
       "adjustments": []
     },
     {
-      "id": "27618042-eaf3-40dc-8cc6-b1521f145ce3",
+      "id": "cf4fc81d-ffdf-430d-998c-bff23d729833",
       "date": "2026-01-01",
       "week_number": 5,
       "phase": "base_building",
@@ -1146,7 +1146,7 @@
       "adjustments": []
     },
     {
-      "id": "de8085bb-2735-41a6-9912-13cc8b8bdcbf",
+      "id": "108c3ae6-8cba-4ead-9794-e55e6aea674c",
       "date": "2026-01-01",
       "week_number": 5,
       "phase": "base_building",
@@ -1161,7 +1161,7 @@
       "adjustments": []
     },
     {
-      "id": "c3c9fe0d-af00-4d99-9048-c1fb57161323",
+      "id": "0214cd96-2572-4ba1-8b9c-85243c3d3c73",
       "date": "2026-01-02",
       "week_number": 5,
       "phase": "base_building",
@@ -1176,7 +1176,7 @@
       "adjustments": []
     },
     {
-      "id": "700a189e-e69b-40e6-a608-738abfe9a513",
+      "id": "cea65368-bd41-4497-bb92-6eab76a47465",
       "date": "2026-01-02",
       "week_number": 5,
       "phase": "base_building",
@@ -1191,7 +1191,7 @@
       "adjustments": []
     },
     {
-      "id": "45940cf0-d2ca-41eb-944f-c16625280cfe",
+      "id": "2cdb622c-790a-49a1-a7e3-8e45cad67b9a",
       "date": "2026-01-02",
       "week_number": 5,
       "phase": "base_building",
@@ -1206,7 +1206,7 @@
       "adjustments": []
     },
     {
-      "id": "4f1bc558-9e01-4341-b4b4-ae50e2aeb65a",
+      "id": "67c30857-b707-4169-8091-46cd6f737513",
       "date": "2026-01-03",
       "week_number": 5,
       "phase": "base_building",
@@ -1222,7 +1222,7 @@
       "adjustments": []
     },
     {
-      "id": "95237483-b3f4-4f38-a5c3-ae16158a9034",
+      "id": "7ba71907-21fd-44d4-a037-1515efc56c08",
       "date": "2026-01-03",
       "week_number": 5,
       "phase": "base_building",
@@ -1237,7 +1237,7 @@
       "adjustments": []
     },
     {
-      "id": "ec8e548f-fbb4-4c74-8e64-5e801078d86a",
+      "id": "2de1c5d1-b280-4929-a223-1c9865ad331d",
       "date": "2026-01-04",
       "week_number": 6,
       "phase": "early_quality",
@@ -1252,14 +1252,14 @@
       "adjustments": []
     },
     {
-      "id": "69170121-4c3c-40e5-b309-c1ae750e22b8",
+      "id": "47c03a80-62e6-4463-b2ce-303c60091692",
       "date": "2026-01-04",
       "week_number": 6,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "50 min comprehensive session 15 min foam rolling 30 min stretching/yoga 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "50 min comprehensive session 15 min foam rolling 30 min stretching/yoga 5 min ankle/foot mobility",
         "duration_minutes": 50
       },
       "status": "planned",
@@ -1267,7 +1267,7 @@
       "adjustments": []
     },
     {
-      "id": "275ee745-487b-40db-855d-89ea53ba7ec6",
+      "id": "6d4de823-2527-4768-b815-fa2fa05bc2b9",
       "date": "2026-01-05",
       "week_number": 6,
       "phase": "early_quality",
@@ -1283,14 +1283,14 @@
       "adjustments": []
     },
     {
-      "id": "b878b0fb-96df-4dd6-92ed-ac08ae158141",
+      "id": "9f7dada5-c2b8-45c7-b1d3-aab78856a901",
       "date": "2026-01-05",
       "week_number": 6,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -1298,7 +1298,7 @@
       "adjustments": []
     },
     {
-      "id": "d05e457f-e297-42fb-a5c3-aee68d540c5a",
+      "id": "5ad636a7-558e-4781-8591-435bcfd1ccea",
       "date": "2026-01-06",
       "week_number": 6,
       "phase": "early_quality",
@@ -1313,7 +1313,7 @@
       "adjustments": []
     },
     {
-      "id": "116ea5d5-c4d1-4296-875e-fbcfe4471f09",
+      "id": "d25c48a1-d20a-44fa-8253-65b78c4e938e",
       "date": "2026-01-06",
       "week_number": 6,
       "phase": "early_quality",
@@ -1328,14 +1328,14 @@
       "adjustments": []
     },
     {
-      "id": "5567eff7-617f-4eb9-9e2f-b9d0af338fba",
+      "id": "cefa385f-9f95-4bb9-99e2-96887e8c57a9",
       "date": "2026-01-06",
       "week_number": 6,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min evening PTT session",
+        "type": "recovery",
+        "description": "10 min evening lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -1343,7 +1343,7 @@
       "adjustments": []
     },
     {
-      "id": "32e665bf-e918-44e0-87de-0d90dcf2c4c8",
+      "id": "7b78afe9-758a-4eff-a6f5-1e5da4c91db1",
       "date": "2026-01-07",
       "week_number": 6,
       "phase": "early_quality",
@@ -1360,7 +1360,7 @@
       "adjustments": []
     },
     {
-      "id": "e04d3dc7-8404-4d1d-8710-bcb85b8803a2",
+      "id": "a6b40473-a11b-4a79-9686-1da7ca655256",
       "date": "2026-01-07",
       "week_number": 6,
       "phase": "early_quality",
@@ -1375,7 +1375,7 @@
       "adjustments": []
     },
     {
-      "id": "bcd8d64c-d2f7-47c1-81c1-167e2a78d7ea",
+      "id": "1012fd1e-34dc-4f23-be4b-ec1e1f962046",
       "date": "2026-01-08",
       "week_number": 6,
       "phase": "early_quality",
@@ -1391,7 +1391,7 @@
       "adjustments": []
     },
     {
-      "id": "fa0e7b24-edb3-4833-8922-2f1f8c698b17",
+      "id": "bceef823-025d-4c34-8c4f-9719601120c4",
       "date": "2026-01-08",
       "week_number": 6,
       "phase": "early_quality",
@@ -1406,7 +1406,7 @@
       "adjustments": []
     },
     {
-      "id": "f3a977c3-6a55-47d0-97b0-d6460bbefc53",
+      "id": "f9faf161-628a-4139-899b-07bb75ef9081",
       "date": "2026-01-09",
       "week_number": 6,
       "phase": "early_quality",
@@ -1421,7 +1421,7 @@
       "adjustments": []
     },
     {
-      "id": "247a9a8b-d038-46c6-89a4-38a404b97a28",
+      "id": "f802cda2-da61-447e-9c77-4261d672bd4e",
       "date": "2026-01-09",
       "week_number": 6,
       "phase": "early_quality",
@@ -1436,7 +1436,7 @@
       "adjustments": []
     },
     {
-      "id": "63341934-5809-4ac1-9d3f-35d9ad6ec812",
+      "id": "faf4e8d4-ae2c-4518-bf92-db68dff91b71",
       "date": "2026-01-09",
       "week_number": 6,
       "phase": "early_quality",
@@ -1451,7 +1451,7 @@
       "adjustments": []
     },
     {
-      "id": "81ba389a-261a-49a1-b38b-4eaf5749380a",
+      "id": "8dec5f32-22ba-4983-9c7b-198802ad84b0",
       "date": "2026-01-10",
       "week_number": 6,
       "phase": "early_quality",
@@ -1467,7 +1467,7 @@
       "adjustments": []
     },
     {
-      "id": "dd24ec5f-589a-45fa-ad8d-e37879ab74c7",
+      "id": "0d620410-c4c5-46e7-9124-63480d678c1d",
       "date": "2026-01-10",
       "week_number": 6,
       "phase": "early_quality",
@@ -1482,7 +1482,7 @@
       "adjustments": []
     },
     {
-      "id": "1c1156d2-78f5-47aa-b424-f6aec6ce784d",
+      "id": "7ef8b001-afe2-402a-b624-85b541c1fc69",
       "date": "2026-01-11",
       "week_number": 7,
       "phase": "early_quality",
@@ -1497,14 +1497,14 @@
       "adjustments": []
     },
     {
-      "id": "4be0c5e6-c639-46ae-9528-634be79f4546",
+      "id": "f76f23ce-2687-4c52-878d-e36e010dfe72",
       "date": "2026-01-11",
       "week_number": 7,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "55 min comprehensive session 20 min foam rolling (comprehensive sequence) 30 min stretching/yoga (recovery-focused) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "55 min comprehensive session 20 min foam rolling (comprehensive sequence) 30 min stretching/yoga (recovery-focused) 5 min ankle/foot mobility",
         "duration_minutes": 55
       },
       "status": "planned",
@@ -1512,7 +1512,7 @@
       "adjustments": []
     },
     {
-      "id": "dc4c434e-12ec-47b9-b157-12e4fbbae461",
+      "id": "bf6305b1-31c2-4c3b-92d5-3728758e95a3",
       "date": "2026-01-12",
       "week_number": 7,
       "phase": "early_quality",
@@ -1528,14 +1528,14 @@
       "adjustments": []
     },
     {
-      "id": "0c1f5f57-e15e-41ad-b62c-531d2a577a5a",
+      "id": "770f96ee-c63a-43bd-aaa4-a9ff116838b0",
       "date": "2026-01-12",
       "week_number": 7,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -1543,7 +1543,7 @@
       "adjustments": []
     },
     {
-      "id": "6147bb85-28b8-4aff-a7b4-15226e41eeb5",
+      "id": "d53c28ba-b24c-4af7-ad94-83c97fab7626",
       "date": "2026-01-13",
       "week_number": 7,
       "phase": "early_quality",
@@ -1558,7 +1558,7 @@
       "adjustments": []
     },
     {
-      "id": "311a80d1-bb38-47b4-9f6e-237c086760c3",
+      "id": "22258464-7660-4d2a-946f-c4000cd2f4e1",
       "date": "2026-01-13",
       "week_number": 7,
       "phase": "early_quality",
@@ -1573,14 +1573,14 @@
       "adjustments": []
     },
     {
-      "id": "0dac572e-1645-46f4-bcd6-20054e0bdc47",
+      "id": "8ebaa725-9ee7-4624-b8fa-2b81ffe55cc8",
       "date": "2026-01-13",
       "week_number": 7,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min evening PTT session",
+        "type": "recovery",
+        "description": "10 min evening lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -1588,7 +1588,7 @@
       "adjustments": []
     },
     {
-      "id": "3c0c035f-2c5f-4f67-ae91-9bea6f6bda5f",
+      "id": "d9991106-cf7c-4a8f-89b5-34774d67f765",
       "date": "2026-01-14",
       "week_number": 7,
       "phase": "early_quality",
@@ -1604,7 +1604,7 @@
       "adjustments": []
     },
     {
-      "id": "c80f6a03-bad8-42be-b881-806d03ffbe00",
+      "id": "7f882ec2-dbc7-4ea7-90f4-4380f82adfdd",
       "date": "2026-01-14",
       "week_number": 7,
       "phase": "early_quality",
@@ -1619,7 +1619,7 @@
       "adjustments": []
     },
     {
-      "id": "472bc5ee-adbd-49b7-b2e0-a1a8cc932663",
+      "id": "7e0c665c-48bd-4fdb-861f-abff53790f9b",
       "date": "2026-01-15",
       "week_number": 7,
       "phase": "early_quality",
@@ -1636,7 +1636,7 @@
       "adjustments": []
     },
     {
-      "id": "4cd582ed-1383-4a4c-810b-80d0160e72fb",
+      "id": "78233277-76b8-48e2-ab4a-bac297813745",
       "date": "2026-01-15",
       "week_number": 7,
       "phase": "early_quality",
@@ -1651,7 +1651,7 @@
       "adjustments": []
     },
     {
-      "id": "57dc87da-c14f-4d53-9f03-887bd124dd7f",
+      "id": "3bfca5af-3aaf-443d-baac-fb4c094734eb",
       "date": "2026-01-16",
       "week_number": 7,
       "phase": "early_quality",
@@ -1666,7 +1666,7 @@
       "adjustments": []
     },
     {
-      "id": "7532aa1c-f8be-4f69-9d97-777f031aaeb8",
+      "id": "ace1a588-22c2-4619-a2d6-03232914a9b8",
       "date": "2026-01-16",
       "week_number": 7,
       "phase": "early_quality",
@@ -1681,7 +1681,7 @@
       "adjustments": []
     },
     {
-      "id": "c0eac647-46a3-49c9-92a7-bed4efb06c03",
+      "id": "fd5f040b-248b-47c2-b2ee-177ce9b9c7f7",
       "date": "2026-01-16",
       "week_number": 7,
       "phase": "early_quality",
@@ -1696,7 +1696,7 @@
       "adjustments": []
     },
     {
-      "id": "45e318ec-60a2-4c4d-8679-60e12b750ef5",
+      "id": "bfec907a-3fb9-4d9a-9f27-4e582fac6d6d",
       "date": "2026-01-17",
       "week_number": 7,
       "phase": "early_quality",
@@ -1712,7 +1712,7 @@
       "adjustments": []
     },
     {
-      "id": "b030a46d-a8ea-4064-babd-75c1d81101c6",
+      "id": "3465f0b8-8979-4a83-a2ba-1451bd6b8962",
       "date": "2026-01-17",
       "week_number": 7,
       "phase": "early_quality",
@@ -1727,7 +1727,7 @@
       "adjustments": []
     },
     {
-      "id": "43ea3fa6-3f3a-45ec-ac2a-8a24eb479a47",
+      "id": "41b4f9e1-8199-4343-af05-907775fd8dea",
       "date": "2026-01-18",
       "week_number": 8,
       "phase": "early_quality",
@@ -1742,14 +1742,14 @@
       "adjustments": []
     },
     {
-      "id": "774e34c2-e814-4eae-98c0-48ba03262674",
+      "id": "9fa3281c-0b2c-4218-a6b4-cb27faa71e23",
       "date": "2026-01-18",
       "week_number": 8,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "55 min comprehensive session 20 min foam rolling 30 min stretching/yoga (recovery emphasis after tempo week) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "55 min comprehensive session 20 min foam rolling 30 min stretching/yoga (recovery emphasis after tempo week) 5 min ankle/foot mobility",
         "duration_minutes": 55
       },
       "status": "planned",
@@ -1757,7 +1757,7 @@
       "adjustments": []
     },
     {
-      "id": "7f886287-1fc8-4643-a855-25ed8a89458f",
+      "id": "b5035a00-259c-4693-9755-0226aba5f98c",
       "date": "2026-01-19",
       "week_number": 8,
       "phase": "early_quality",
@@ -1773,14 +1773,14 @@
       "adjustments": []
     },
     {
-      "id": "2aff4c68-8fa6-44a0-be0f-c952d2977b02",
+      "id": "068b05e8-ef7c-4183-8fc0-5ac739c5e938",
       "date": "2026-01-19",
       "week_number": 8,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -1788,7 +1788,7 @@
       "adjustments": []
     },
     {
-      "id": "d3790ed9-bc4a-4899-880f-38bf1d6dbca8",
+      "id": "1747090a-fe47-45a4-a2c8-30c585e28232",
       "date": "2026-01-20",
       "week_number": 8,
       "phase": "early_quality",
@@ -1803,7 +1803,7 @@
       "adjustments": []
     },
     {
-      "id": "2eead53a-ba5a-4155-8090-b51e45860731",
+      "id": "5930d6e3-32fa-4d99-acbb-389c7a92475d",
       "date": "2026-01-20",
       "week_number": 8,
       "phase": "early_quality",
@@ -1818,14 +1818,14 @@
       "adjustments": []
     },
     {
-      "id": "57e820be-7f4b-4d5d-8b69-6fd62ba6f864",
+      "id": "41a7c037-342b-48b7-9b41-a81024df83c2",
       "date": "2026-01-20",
       "week_number": 8,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min evening PTT session",
+        "type": "recovery",
+        "description": "10 min evening lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -1833,7 +1833,7 @@
       "adjustments": []
     },
     {
-      "id": "8206aca6-d820-4430-9c2f-0134861161f2",
+      "id": "ccae71fd-a172-4c0d-a018-2a1d0e983201",
       "date": "2026-01-21",
       "week_number": 8,
       "phase": "early_quality",
@@ -1849,7 +1849,7 @@
       "adjustments": []
     },
     {
-      "id": "20df36c8-a401-4923-ab0a-1e2ba989b829",
+      "id": "1cb3f920-448f-41d0-92b8-3ca048fbca4a",
       "date": "2026-01-21",
       "week_number": 8,
       "phase": "early_quality",
@@ -1864,7 +1864,7 @@
       "adjustments": []
     },
     {
-      "id": "4c36cf31-7f43-47f1-8230-37c86fa4904f",
+      "id": "0ad14cbd-602b-48df-a5fc-829dc94c1bb9",
       "date": "2026-01-22",
       "week_number": 8,
       "phase": "early_quality",
@@ -1880,7 +1880,7 @@
       "adjustments": []
     },
     {
-      "id": "c42f4911-ef2b-4906-b5c8-0252d8cea682",
+      "id": "ddf88c34-abb6-49df-ad24-613b26aaf91d",
       "date": "2026-01-22",
       "week_number": 8,
       "phase": "early_quality",
@@ -1895,7 +1895,7 @@
       "adjustments": []
     },
     {
-      "id": "3f1dbf3e-150a-4633-a9e4-170e8df804f5",
+      "id": "b107b729-b441-49a0-8c99-181cd800a148",
       "date": "2026-01-23",
       "week_number": 8,
       "phase": "early_quality",
@@ -1910,7 +1910,7 @@
       "adjustments": []
     },
     {
-      "id": "54c7e299-7ee5-4956-9db6-127a1305f944",
+      "id": "a14c25be-b900-4b03-9e77-4d0b014b9174",
       "date": "2026-01-23",
       "week_number": 8,
       "phase": "early_quality",
@@ -1925,7 +1925,7 @@
       "adjustments": []
     },
     {
-      "id": "0275507b-523c-4c8d-9d7f-83029e8a7779",
+      "id": "71d548fe-7d40-4805-8174-8191dd0bea96",
       "date": "2026-01-23",
       "week_number": 8,
       "phase": "early_quality",
@@ -1940,7 +1940,7 @@
       "adjustments": []
     },
     {
-      "id": "44acda45-6654-49f7-91ab-94e88556efd2",
+      "id": "60d4c391-6993-488c-bdcf-85cf6b8d7a91",
       "date": "2026-01-24",
       "week_number": 8,
       "phase": "early_quality",
@@ -1956,7 +1956,7 @@
       "adjustments": []
     },
     {
-      "id": "bce80777-84e3-46f3-b637-78f34747b10d",
+      "id": "c2ae625e-3757-48a6-b0fc-6f2804a439c9",
       "date": "2026-01-24",
       "week_number": 8,
       "phase": "early_quality",
@@ -1971,7 +1971,7 @@
       "adjustments": []
     },
     {
-      "id": "2fceb175-7bea-470c-aeff-b952ee2ae09a",
+      "id": "0d896eaa-3c16-4b0b-a66d-41ae7ae6d43f",
       "date": "2026-01-25",
       "week_number": 9,
       "phase": "early_quality",
@@ -1986,14 +1986,14 @@
       "adjustments": []
     },
     {
-      "id": "76b63444-8251-4ddd-b903-9596022e1b5b",
+      "id": "6a94dc98-6793-49bf-9e82-825e35072288",
       "date": "2026-01-25",
       "week_number": 9,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "60 min comprehensive session (extra recovery for peak phase) 20 min foam rolling (thorough full body) 35 min stretching/yoga (emphasis: recovery) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "60 min comprehensive session (extra recovery for peak phase) 20 min foam rolling (thorough full body) 35 min stretching/yoga (emphasis: recovery) 5 min ankle/foot mobility",
         "duration_minutes": 60
       },
       "status": "planned",
@@ -2001,7 +2001,7 @@
       "adjustments": []
     },
     {
-      "id": "70f80f58-0e43-4aad-9b4f-39196d9e17da",
+      "id": "1dab19cb-34a2-40a5-8c03-801d9aebb090",
       "date": "2026-01-26",
       "week_number": 9,
       "phase": "early_quality",
@@ -2017,14 +2017,14 @@
       "adjustments": []
     },
     {
-      "id": "13067038-9524-4421-b85a-bc67e63bc206",
+      "id": "8f5fd450-31ef-4ec1-892c-59198d8d9b15",
       "date": "2026-01-26",
       "week_number": 9,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -2032,7 +2032,7 @@
       "adjustments": []
     },
     {
-      "id": "2152670a-1638-4d32-ac24-3512398e3cf4",
+      "id": "a563ded8-6b5f-4a6e-9851-5db32284c023",
       "date": "2026-01-27",
       "week_number": 9,
       "phase": "early_quality",
@@ -2047,7 +2047,7 @@
       "adjustments": []
     },
     {
-      "id": "6884a8e5-04d1-4322-96f5-c336b91e399f",
+      "id": "17eda384-67c8-4605-ba72-2e0c78397934",
       "date": "2026-01-27",
       "week_number": 9,
       "phase": "early_quality",
@@ -2062,7 +2062,7 @@
       "adjustments": []
     },
     {
-      "id": "06810ecc-938e-4474-991c-ac690c7276a9",
+      "id": "66b5edcb-dea9-4126-8530-f034861d04e4",
       "date": "2026-01-27",
       "week_number": 9,
       "phase": "early_quality",
@@ -2077,7 +2077,7 @@
       "adjustments": []
     },
     {
-      "id": "04c2ec92-66fb-4aa8-bf99-81bc12baa9ca",
+      "id": "3a956bdc-e180-400a-9914-69a3705a898d",
       "date": "2026-01-28",
       "week_number": 9,
       "phase": "early_quality",
@@ -2093,7 +2093,7 @@
       "adjustments": []
     },
     {
-      "id": "9877cfee-3103-4d27-a620-6cd1fa04fdae",
+      "id": "0803c50a-967d-4bb5-b051-61007b2015a7",
       "date": "2026-01-28",
       "week_number": 9,
       "phase": "early_quality",
@@ -2108,7 +2108,7 @@
       "adjustments": []
     },
     {
-      "id": "8b665580-dcf2-46bd-a066-7d9ecb92bda3",
+      "id": "6dca1166-f1e2-4f3d-a333-a6cb50c1c0e8",
       "date": "2026-01-29",
       "week_number": 9,
       "phase": "early_quality",
@@ -2124,7 +2124,7 @@
       "adjustments": []
     },
     {
-      "id": "26c39598-a35e-439c-8124-6109c5ee30c6",
+      "id": "a3265de4-3bf1-4326-ad56-f85621ad33f2",
       "date": "2026-01-29",
       "week_number": 9,
       "phase": "early_quality",
@@ -2139,7 +2139,7 @@
       "adjustments": []
     },
     {
-      "id": "7426a03e-42ca-4690-a8f6-06468d28a8ca",
+      "id": "18a826f8-8f2b-4a24-8078-323ebb9d71be",
       "date": "2026-01-30",
       "week_number": 9,
       "phase": "early_quality",
@@ -2155,7 +2155,7 @@
       "adjustments": []
     },
     {
-      "id": "c3215389-ec46-4c9b-920d-d46cc7fb3915",
+      "id": "bb37afa5-cbd4-4839-b842-48d29d5829e1",
       "date": "2026-01-30",
       "week_number": 9,
       "phase": "early_quality",
@@ -2170,7 +2170,7 @@
       "adjustments": []
     },
     {
-      "id": "f5337f45-15a3-4784-8e3a-d9c3c64a7455",
+      "id": "2aa309ed-d221-4689-9f83-705706bb8bea",
       "date": "2026-01-30",
       "week_number": 9,
       "phase": "early_quality",
@@ -2185,7 +2185,7 @@
       "adjustments": []
     },
     {
-      "id": "0fe5cac2-435e-49ee-81b7-8c997766430c",
+      "id": "9972b193-836a-4670-8bcf-79e5986243c5",
       "date": "2026-01-31",
       "week_number": 9,
       "phase": "early_quality",
@@ -2201,7 +2201,7 @@
       "adjustments": []
     },
     {
-      "id": "1d7e5b25-26aa-4da6-90a5-20f1a42d477d",
+      "id": "c766ba03-cc0c-4246-9373-891df8ca537c",
       "date": "2026-01-31",
       "week_number": 9,
       "phase": "early_quality",
@@ -2216,7 +2216,7 @@
       "adjustments": []
     },
     {
-      "id": "b8f03de5-188f-45b1-a9d5-201feebd7bae",
+      "id": "b7d72c76-6bb5-424c-a8a1-ee8c398bc3af",
       "date": "2026-02-01",
       "week_number": 10,
       "phase": "early_quality",
@@ -2231,14 +2231,14 @@
       "adjustments": []
     },
     {
-      "id": "c0736f06-34c9-480f-a8b2-bbdfe30414dc",
+      "id": "df90c0d9-4d56-4428-80b9-93ab230186dd",
       "date": "2026-02-01",
       "week_number": 10,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "60 min comprehensive session 20 min foam rolling 35 min stretching/yoga (prepare for HM pace work) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "60 min comprehensive session 20 min foam rolling 35 min stretching/yoga (prepare for HM pace work) 5 min ankle/foot mobility",
         "duration_minutes": 60
       },
       "status": "planned",
@@ -2246,7 +2246,7 @@
       "adjustments": []
     },
     {
-      "id": "25c4514d-d6ba-4a8a-9792-c11df4f45178",
+      "id": "1ea60f5c-c535-4a7a-8c44-add21d0f55bb",
       "date": "2026-02-02",
       "week_number": 10,
       "phase": "early_quality",
@@ -2262,14 +2262,14 @@
       "adjustments": []
     },
     {
-      "id": "12733617-32b3-4abb-9703-f7f8cd2b9097",
+      "id": "41434c98-1aa5-4f50-8ced-b15165bf778f",
       "date": "2026-02-02",
       "week_number": 10,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -2277,7 +2277,7 @@
       "adjustments": []
     },
     {
-      "id": "5081502e-b506-43f0-994d-6eba1b58ef86",
+      "id": "838e35c4-8a42-41fd-bda8-fc9e246510fd",
       "date": "2026-02-03",
       "week_number": 10,
       "phase": "early_quality",
@@ -2292,7 +2292,7 @@
       "adjustments": []
     },
     {
-      "id": "ab610765-3097-4573-91a7-0c298e319612",
+      "id": "22bd7a3b-e29a-4287-8425-da00d740b3f2",
       "date": "2026-02-03",
       "week_number": 10,
       "phase": "early_quality",
@@ -2307,7 +2307,7 @@
       "adjustments": []
     },
     {
-      "id": "7b12f6b5-197a-4262-94d3-7f88cf295ea6",
+      "id": "b5fb6921-b726-4dbe-a3dd-d5f4b3cb5f95",
       "date": "2026-02-03",
       "week_number": 10,
       "phase": "early_quality",
@@ -2322,7 +2322,7 @@
       "adjustments": []
     },
     {
-      "id": "6811ae14-8a36-4394-9738-ae1278d9f06a",
+      "id": "0fac344b-bf79-44f7-849e-1453697bd64c",
       "date": "2026-02-04",
       "week_number": 10,
       "phase": "early_quality",
@@ -2338,7 +2338,7 @@
       "adjustments": []
     },
     {
-      "id": "2c15f199-cc2a-44da-9b1b-926411b56628",
+      "id": "1e1c94b8-7e29-4783-b27c-47ab69051a85",
       "date": "2026-02-04",
       "week_number": 10,
       "phase": "early_quality",
@@ -2353,7 +2353,7 @@
       "adjustments": []
     },
     {
-      "id": "0c2e7c1f-67e0-43dc-84bf-a5644bff2346",
+      "id": "25abaf3a-fa3c-4e50-a504-a5d27a387930",
       "date": "2026-02-05",
       "week_number": 10,
       "phase": "early_quality",
@@ -2369,7 +2369,7 @@
       "adjustments": []
     },
     {
-      "id": "d34824f0-4bcc-4261-a90d-422263f4a40c",
+      "id": "279fa78f-be06-4b87-8494-538de5d22602",
       "date": "2026-02-05",
       "week_number": 10,
       "phase": "early_quality",
@@ -2384,7 +2384,7 @@
       "adjustments": []
     },
     {
-      "id": "dcc43a57-3115-47dd-9a33-19d4bd208e22",
+      "id": "56bab2c7-bbaa-478a-8118-ddab12d55dba",
       "date": "2026-02-06",
       "week_number": 10,
       "phase": "early_quality",
@@ -2400,7 +2400,7 @@
       "adjustments": []
     },
     {
-      "id": "0650ad86-b91c-40bb-a100-bfffd5f00894",
+      "id": "b9c29f57-a8a2-4e1c-ad20-48e850e46044",
       "date": "2026-02-06",
       "week_number": 10,
       "phase": "early_quality",
@@ -2415,7 +2415,7 @@
       "adjustments": []
     },
     {
-      "id": "6739960b-273b-448a-83a2-e2847b403591",
+      "id": "7643661c-17d4-431b-905c-67004b36c609",
       "date": "2026-02-06",
       "week_number": 10,
       "phase": "early_quality",
@@ -2430,7 +2430,7 @@
       "adjustments": []
     },
     {
-      "id": "e5438c5e-23bc-43d4-bab6-29c7d9573852",
+      "id": "f39e690f-9e11-4c0b-876c-b74ef53d98a1",
       "date": "2026-02-07",
       "week_number": 10,
       "phase": "early_quality",
@@ -2446,7 +2446,7 @@
       "adjustments": []
     },
     {
-      "id": "4507937e-6929-4f93-8fa3-1ca68063ee56",
+      "id": "b70af7a2-091e-4e6f-a703-59a8aef40088",
       "date": "2026-02-07",
       "week_number": 10,
       "phase": "early_quality",
@@ -2461,7 +2461,7 @@
       "adjustments": []
     },
     {
-      "id": "2ccf064d-8bac-47e9-9415-df65ad9a2283",
+      "id": "331b779e-171f-4b61-b38a-e93fb8b27985",
       "date": "2026-02-08",
       "week_number": 11,
       "phase": "early_quality",
@@ -2476,14 +2476,14 @@
       "adjustments": []
     },
     {
-      "id": "d18e4f15-ced9-41fa-806d-1cacb3a0d696",
+      "id": "31c6ba1d-4b4c-4512-aad4-379c1518690e",
       "date": "2026-02-08",
       "week_number": 11,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "60 min comprehensive session 20 min foam rolling 35 min stretching/yoga (begin preparing for taper) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "60 min comprehensive session 20 min foam rolling 35 min stretching/yoga (begin preparing for taper) 5 min ankle/foot mobility",
         "duration_minutes": 60
       },
       "status": "planned",
@@ -2491,7 +2491,7 @@
       "adjustments": []
     },
     {
-      "id": "0abb1271-9b33-46fc-8e19-2636be396de9",
+      "id": "82616d22-1cd2-41c6-a0fc-5339b6bdaf55",
       "date": "2026-02-09",
       "week_number": 11,
       "phase": "early_quality",
@@ -2507,14 +2507,14 @@
       "adjustments": []
     },
     {
-      "id": "5f65fabe-1793-48ea-af86-fdb132e57a57",
+      "id": "25856e0d-d910-4dd3-bb43-e6cf41355362",
       "date": "2026-02-09",
       "week_number": 11,
       "phase": "early_quality",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -2522,7 +2522,7 @@
       "adjustments": []
     },
     {
-      "id": "c27fe989-75e4-4f89-add0-fbbc92a2ad67",
+      "id": "d8344507-3a3a-40d2-9f5b-03ff43971af3",
       "date": "2026-02-10",
       "week_number": 11,
       "phase": "early_quality",
@@ -2537,7 +2537,7 @@
       "adjustments": []
     },
     {
-      "id": "1612b1f8-e0b0-4f80-b107-03e618ee5d2e",
+      "id": "5054e6f1-d7f7-446b-b600-a57f4cac0860",
       "date": "2026-02-10",
       "week_number": 11,
       "phase": "early_quality",
@@ -2552,7 +2552,7 @@
       "adjustments": []
     },
     {
-      "id": "1c7b4f7b-b997-42ec-af83-a15ad2bf5d2a",
+      "id": "8b5d0dee-858d-445b-89da-5ff2105c4c54",
       "date": "2026-02-10",
       "week_number": 11,
       "phase": "early_quality",
@@ -2567,7 +2567,7 @@
       "adjustments": []
     },
     {
-      "id": "5236aa3c-bbd2-491b-b49d-e5256c7a5472",
+      "id": "6a8c80f7-da99-433a-a211-08e955254b87",
       "date": "2026-02-11",
       "week_number": 11,
       "phase": "early_quality",
@@ -2583,7 +2583,7 @@
       "adjustments": []
     },
     {
-      "id": "2f4bc2ab-ede9-4883-9d59-dfbbd2a5db52",
+      "id": "85362a1c-0998-4942-ac0f-6fdd18ab1630",
       "date": "2026-02-11",
       "week_number": 11,
       "phase": "early_quality",
@@ -2598,7 +2598,7 @@
       "adjustments": []
     },
     {
-      "id": "b5c624d7-94f1-496b-8f73-fdf61edcbab1",
+      "id": "2fd4966c-19aa-4bd5-b685-2b3de6d0dc12",
       "date": "2026-02-12",
       "week_number": 11,
       "phase": "early_quality",
@@ -2614,7 +2614,7 @@
       "adjustments": []
     },
     {
-      "id": "e9fbca66-37d3-47ca-9498-1464e929b855",
+      "id": "53410a3e-5966-49ff-b49f-ac5712c77adf",
       "date": "2026-02-12",
       "week_number": 11,
       "phase": "early_quality",
@@ -2629,7 +2629,7 @@
       "adjustments": []
     },
     {
-      "id": "d2513624-d9b9-4701-912e-2aac7808ec16",
+      "id": "1c2c17ad-f78d-41ba-82f1-c6833b5195f8",
       "date": "2026-02-13",
       "week_number": 11,
       "phase": "early_quality",
@@ -2645,7 +2645,7 @@
       "adjustments": []
     },
     {
-      "id": "4159e21f-9c0c-4c15-aebf-d59e2baa76d8",
+      "id": "76d52b57-397a-4265-8199-b59657edbf6f",
       "date": "2026-02-13",
       "week_number": 11,
       "phase": "early_quality",
@@ -2660,7 +2660,7 @@
       "adjustments": []
     },
     {
-      "id": "eba569fa-3634-43c8-bfef-64954311d030",
+      "id": "b660ec8e-fbe4-4f23-b7b9-5120724514f0",
       "date": "2026-02-13",
       "week_number": 11,
       "phase": "early_quality",
@@ -2675,7 +2675,7 @@
       "adjustments": []
     },
     {
-      "id": "ad10ac6e-6870-4456-a1ec-7e1fba75adfe",
+      "id": "4f472365-f1ba-40f8-9b59-bd0aea770af3",
       "date": "2026-02-14",
       "week_number": 11,
       "phase": "early_quality",
@@ -2691,7 +2691,7 @@
       "adjustments": []
     },
     {
-      "id": "07c999c7-8cbe-44a3-a0df-444decd5345f",
+      "id": "bcdc2b73-87f8-405e-ba91-c0d3da08548c",
       "date": "2026-02-14",
       "week_number": 11,
       "phase": "early_quality",
@@ -2706,7 +2706,7 @@
       "adjustments": []
     },
     {
-      "id": "97e49339-4eeb-4e91-82f3-eb31fb7f6b6b",
+      "id": "ba3a8ad4-8ebc-41cc-a1ef-54a33bf9d81a",
       "date": "2026-02-15",
       "week_number": 12,
       "phase": "taper",
@@ -2721,14 +2721,14 @@
       "adjustments": []
     },
     {
-      "id": "13c4a865-2284-4110-a2e4-e982c828281a",
+      "id": "875c8b72-c642-4b8b-b255-60e3e44860ad",
       "date": "2026-02-15",
       "week_number": 12,
       "phase": "taper",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "45 min comprehensive session (final major mobility before race) 15 min foam rolling (gentle, no deep work) 25 min stretching/yoga (focus: relaxation, flexibility) 5 min PTT drills",
+        "type": "comprehensive",
+        "description": "45 min comprehensive session (final major mobility before race) 15 min foam rolling (gentle, no deep work) 25 min stretching/yoga (focus: relaxation, flexibility) 5 min ankle/foot mobility",
         "duration_minutes": 45
       },
       "status": "planned",
@@ -2736,7 +2736,7 @@
       "adjustments": []
     },
     {
-      "id": "eda814fa-1574-400c-b5a3-ee24a9cf01b5",
+      "id": "f7f3f8e8-d4c0-4670-8d57-1f5f1d3d7f86",
       "date": "2026-02-16",
       "week_number": 12,
       "phase": "taper",
@@ -2752,14 +2752,14 @@
       "adjustments": []
     },
     {
-      "id": "5a929f09-7a8e-4d1f-9f34-4584f34ffa5c",
+      "id": "5435c4f3-8964-4c6a-80fc-cdb294be2de7",
       "date": "2026-02-16",
       "week_number": 12,
       "phase": "taper",
       "domain": "mobility",
       "workout": {
-        "type": "ptt_exercises",
-        "description": "10 min PTT exercises",
+        "type": "recovery",
+        "description": "10 min lower leg mobility",
         "duration_minutes": 10
       },
       "status": "planned",
@@ -2767,7 +2767,7 @@
       "adjustments": []
     },
     {
-      "id": "ea697380-6e9c-4538-83d3-620c4dd2d12f",
+      "id": "2711595e-f761-4bb6-84d5-7fe5e1eabbf1",
       "date": "2026-02-17",
       "week_number": 12,
       "phase": "taper",
@@ -2783,7 +2783,7 @@
       "adjustments": []
     },
     {
-      "id": "848d207d-b1d1-413c-b972-1fab00605f59",
+      "id": "32dac747-bf58-44c2-9cf4-96caa85c1dce",
       "date": "2026-02-17",
       "week_number": 12,
       "phase": "taper",
@@ -2797,7 +2797,7 @@
       "adjustments": []
     },
     {
-      "id": "61db67e5-0fcc-4d4d-bf76-5d8171b4be56",
+      "id": "03a5e644-0e32-4781-8725-27b90391e028",
       "date": "2026-02-17",
       "week_number": 12,
       "phase": "taper",
@@ -2812,7 +2812,7 @@
       "adjustments": []
     },
     {
-      "id": "f29b7c4a-f3c1-4d69-b056-ea0c74a6889a",
+      "id": "4cce2201-8e4b-469b-bb29-9d6faf859843",
       "date": "2026-02-18",
       "week_number": 12,
       "phase": "taper",
@@ -2828,7 +2828,7 @@
       "adjustments": []
     },
     {
-      "id": "24e81a58-963c-4ffa-b18e-3850dd83e0e6",
+      "id": "38596551-7a9b-4650-8da2-35643d5ffa17",
       "date": "2026-02-18",
       "week_number": 12,
       "phase": "taper",
@@ -2843,7 +2843,7 @@
       "adjustments": []
     },
     {
-      "id": "c74a037e-4429-4f36-992b-e917156537c6",
+      "id": "f84351ca-161b-4e9e-83a7-755bfdeee3fe",
       "date": "2026-02-19",
       "week_number": 12,
       "phase": "taper",
@@ -2859,7 +2859,7 @@
       "adjustments": []
     },
     {
-      "id": "96dc5225-829c-4328-81f2-69d3ecbc438f",
+      "id": "6b88355b-d1cd-4db9-8b5f-b4097d224420",
       "date": "2026-02-19",
       "week_number": 12,
       "phase": "taper",
@@ -2874,7 +2874,7 @@
       "adjustments": []
     },
     {
-      "id": "441ac333-1fe9-4bed-8624-40a49044459c",
+      "id": "00a8cb04-afcf-4832-b58e-b141ec9296e0",
       "date": "2026-02-20",
       "week_number": 12,
       "phase": "taper",
@@ -2889,7 +2889,7 @@
       "adjustments": []
     },
     {
-      "id": "70ce7d17-0d8c-4cb5-84ae-527407c27448",
+      "id": "3f9ba35e-0416-411f-8151-e3275973cdc2",
       "date": "2026-02-20",
       "week_number": 12,
       "phase": "taper",
@@ -2903,7 +2903,7 @@
       "adjustments": []
     },
     {
-      "id": "c5e81989-58fa-4cee-8d52-c07b08cc53fd",
+      "id": "9cf3cbd3-b97c-4a21-952f-19bbe636ff7b",
       "date": "2026-02-20",
       "week_number": 12,
       "phase": "taper",
@@ -2918,7 +2918,7 @@
       "adjustments": []
     },
     {
-      "id": "a7ce03ee-e7cb-4e24-9fba-53d6e89cc247",
+      "id": "57a4b4ca-b885-4481-80b9-411a184c7cfd",
       "date": "2026-02-21",
       "week_number": 12,
       "phase": "taper",
@@ -2934,7 +2934,7 @@
       "adjustments": []
     },
     {
-      "id": "816520c2-eb7b-4747-8d96-575c27808de9",
+      "id": "584f507e-a03c-4840-b6cc-8e2bedea4aaa",
       "date": "2026-02-21",
       "week_number": 12,
       "phase": "taper",
