@@ -34,7 +34,7 @@
 - **Sleep:** 6.9 hrs/night avg, quality score 56/100
 
 **Health Considerations:**
-- Posterior tibialis tendinopathy (manageable, needs daily attention)
+- Posterior tibialis tendinopathy (RESOLVED as of Dec 2025 - no active symptoms)
 - Right wrist post-surgery (NO wrist pressure exercises)
 - Sleep quality variable due to newborn care
 - On parental leave through Jan 5, 2026 (flexible scheduling)
@@ -73,9 +73,10 @@ This plan integrates three coaching domains:
 - Supports running without creating interference
 
 **3. Mobility & Recovery:**
-- Daily PTT management (10-15 min)
+- Daily general mobility (10-15 min) - focus on hips, hamstrings, calves, thoracic spine
 - Sunday comprehensive sessions (45-60 min)
 - Post-run recovery routines (5-10 min)
+- Optional PTT maintenance exercises as needed (no longer required)
 
 **Coordination Principles:**
 - Strength on easy/rest days (Tue/Fri) - never before hard running days
@@ -107,11 +108,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 30 min gentle comprehensive session
   - 10 min light foam rolling (calves, hamstrings, glutes)
   - 15 min gentle stretching (focus: recovery)
-  - 5 min PTT drills (towel scrunches, toe yoga)
+  - 5 min ankle/foot mobility (ankle circles, calf raises)
 
 #### Monday, Dec 1
 - **Running:** REST or 20 min easy walk
-- **Mobility:** 10 min PTT exercises (ankle inversions, arch doming)
+- **Mobility:** 10 min lower leg mobility (calf stretches, ankle circles)
 
 #### Tuesday, Dec 2
 - **Running:** 25 min Easy (E pace, keep HR <140 bpm)
@@ -129,7 +130,7 @@ This plan integrates three coaching domains:
 #### Friday, Dec 5
 - **Running:** REST or 20 min easy walk
 - **Strength:** REST - no strength this week
-- **Mobility:** 15 min evening mobility (PTT drills + gentle stretching)
+- **Mobility:** 15 min evening mobility (lower leg + general stretching)
 
 #### Saturday, Dec 6
 - **Running:** 30 min Easy (E pace, include 4 x 20 sec pickups if feeling good)
@@ -146,16 +147,16 @@ This plan integrates three coaching domains:
 - **Mobility:** 40 min comprehensive session
   - 15 min foam rolling (full body sequence)
   - 20 min static stretching (calves, hip flexors, hamstrings, glutes, piriformis)
-  - 5 min PTT-specific work (heel raises, arch doming)
+  - 5 min ankle/calf work (calf raises, ankle mobility)
 
 #### Monday, Dec 8
 - **Running:** 25 min Easy (E pace 10:04-10:30/mile)
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Dec 9
 - **Running:** 25 min Easy (E pace, relaxed)
 - **Strength:** REST - no strength this week
-- **Mobility:** 12 min PTT-focused session (banded inversions, toe yoga, heel raises)
+- **Mobility:** 12 min lower leg session (calf stretches, ankle mobility, light strengthening)
 
 #### Wednesday, Dec 10
 - **Running:** 30 min Easy (E pace, keep conversational)
@@ -188,11 +189,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 45 min comprehensive session
   - 15 min foam rolling (comprehensive sequence)
   - 25 min static stretching (full lower body + thoracic spine)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Dec 15
 - **Running:** 25 min Easy recovery jog
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Dec 16
 - **Running:** REST (strength day)
@@ -204,7 +205,7 @@ This plan integrates three coaching domains:
   - B2. Forearm Plank: 3 × 30-45 sec
   - C1. Pallof Press: 3 × 12-15 per side
   - C2. Single-Leg Calf Raise: 3 × 15-20 per leg
-- **Mobility:** 10 min evening PTT session
+- **Mobility:** 10 min evening lower leg mobility
 
 #### Wednesday, Dec 17
 - **Running:** 30 min Easy (E pace 10:04-10:30/mile)
@@ -241,11 +242,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 50 min comprehensive session
   - 15 min foam rolling (full body)
   - 30 min static stretching + yoga (emphasis: hips, hamstrings, calves)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Dec 22
 - **Running:** 25 min Easy recovery
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Dec 23
 - **Running:** REST (strength day)
@@ -257,7 +258,7 @@ This plan integrates three coaching domains:
   - B2. Side Plank (forearms): 3 × 30 sec per side
   - C1. Pallof Press: 3 × 12-15 per side
   - C2. Eccentric Calf Raise: 3 × 8-10 per leg (3 sec lower)
-- **Mobility:** 10 min evening PTT session
+- **Mobility:** 10 min evening lower leg mobility
 
 #### Wednesday, Dec 24
 - **Running:** 30 min Easy (keep very easy, holiday schedule)
@@ -294,11 +295,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 50 min comprehensive session
   - 15 min foam rolling
   - 30 min stretching/yoga (emphasis: recovery from long run)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Dec 29
 - **Running:** 25 min Easy recovery
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Dec 30
 - **Running:** REST (strength day)
@@ -310,7 +311,7 @@ This plan integrates three coaching domains:
   - B2. Forearm Plank (with hip extension): 3 × 40 sec
   - C1. Pallof Press (with step): 3 × 12 per side
   - C2. Single-Leg Eccentric Calf: 3 × 10 per leg
-- **Mobility:** 10 min evening PTT session
+- **Mobility:** 10 min evening lower leg mobility
 
 #### Wednesday, Dec 31 - NEW YEAR'S EVE
 - **Running:** 35 min Easy (E pace)
@@ -350,11 +351,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 50 min comprehensive session
   - 15 min foam rolling
   - 30 min stretching/yoga
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Jan 5 - LAST DAY OF PARENTAL LEAVE
 - **Running:** 25 min Easy recovery
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Jan 6 - RETURN TO WORK
 - **Running:** REST (strength day)
@@ -367,7 +368,7 @@ This plan integrates three coaching domains:
   - B2. Side Plank with Leg Raise: 3 × 25 sec per side
   - C1. Pallof Press (with rotation): 3 × 10 per side
   - C2. Single-Leg Eccentric Calf: 3 × 10 per leg
-- **Mobility:** 10 min evening PTT session
+- **Mobility:** 10 min evening lower leg mobility
 
 #### Wednesday, Jan 7
 - **Running:** 30 min Easy AM (before work, E pace 10:04-10:30/mile)
@@ -407,11 +408,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 55 min comprehensive session
   - 20 min foam rolling (comprehensive sequence)
   - 30 min stretching/yoga (recovery-focused)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Jan 12
 - **Running:** 30 min Easy recovery AM (before work)
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Jan 13
 - **Running:** REST (strength day)
@@ -423,7 +424,7 @@ This plan integrates three coaching domains:
   - B2. Forearm Plank (with alternating leg lift): 3 × 40 sec
   - C1. Pallof Press (with step): 3 × 10 per side
   - C2. Eccentric Calf Raise: 3 × 10 per leg
-- **Mobility:** 10 min evening PTT session
+- **Mobility:** 10 min evening lower leg mobility
 
 #### Wednesday, Jan 14
 - **Running:** 30 min Easy AM (E pace)
@@ -465,11 +466,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 55 min comprehensive session
   - 20 min foam rolling
   - 30 min stretching/yoga (recovery emphasis after tempo week)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Jan 19
 - **Running:** 30 min Easy recovery AM
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Jan 20
 - **Running:** REST (strength day)
@@ -481,7 +482,7 @@ This plan integrates three coaching domains:
   - B2. Side Plank (weighted): 3 × 30 sec per side
   - C1. Pallof Press (with rotation): 3 × 10 per side
   - C2. Single-Leg Eccentric Calf: 3 × 10 per leg
-- **Mobility:** 10 min evening PTT session
+- **Mobility:** 10 min evening lower leg mobility
 
 #### Wednesday, Jan 21
 - **Running:** 35 min Easy AM (E pace)
@@ -526,11 +527,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 60 min comprehensive session (extra recovery for peak phase)
   - 20 min foam rolling (thorough full body)
   - 35 min stretching/yoga (emphasis: recovery)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Jan 26
 - **Running:** 30 min Easy recovery AM
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Jan 27
 - **Running:** REST (strength day - REDUCED VOLUME)
@@ -585,11 +586,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 60 min comprehensive session
   - 20 min foam rolling
   - 35 min stretching/yoga (prepare for HM pace work)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Feb 2
 - **Running:** 30 min Easy recovery AM
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Feb 3
 - **Running:** REST (strength day)
@@ -647,11 +648,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 60 min comprehensive session
   - 20 min foam rolling
   - 35 min stretching/yoga (begin preparing for taper)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Feb 9
 - **Running:** 30 min Easy recovery AM
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Feb 10
 - **Running:** REST (strength day - REDUCED VOLUME)
@@ -711,11 +712,11 @@ This plan integrates three coaching domains:
 - **Mobility:** 45 min comprehensive session (final major mobility before race)
   - 15 min foam rolling (gentle, no deep work)
   - 25 min stretching/yoga (focus: relaxation, flexibility)
-  - 5 min PTT drills
+  - 5 min ankle/foot mobility
 
 #### Monday, Feb 16
 - **Running:** 25 min Easy recovery AM (very light, keep legs fresh)
-- **Mobility:** 10 min PTT exercises
+- **Mobility:** 10 min lower leg mobility
 
 #### Tuesday, Feb 17
 - **Running:** 25 min Easy (E pace, relaxed)
