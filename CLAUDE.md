@@ -96,6 +96,42 @@ python3 src/garmin_sync.py --quiet
 python3 src/garmin_sync.py --days 30 --summary
 ```
 
+**Smart Sync (Intelligent Cache-Aware Sync)**
+
+The smart sync script automatically checks cache age before syncing to reduce redundant API calls and improve response times:
+
+```bash
+# Smart sync - checks cache age first (recommended for agents)
+bash bin/smart_sync.sh
+
+# Uses cached data if <30 min old, syncs if older
+# Example output: "Cache is fresh (5 minutes old). Using cached data."
+
+# Custom max age (e.g., 60 minutes)
+bash bin/smart_sync.sh --max-age-minutes 60
+
+# Force sync regardless of cache age
+bash bin/smart_sync.sh --force
+```
+
+**How it works:**
+- Checks `last_updated` timestamp in `health_data_cache.json`
+- If cache age < max age (default: 30 min) → Uses cached data (no API call)
+- If cache age > max age → Runs full sync from Garmin Connect
+- Force flag bypasses age check and always syncs
+
+**When to use:**
+- **Coaching agents:** Use `smart_sync` at session start to minimize latency
+- **Multiple agents in one session:** First agent syncs, others use cache automatically
+- **User reports new workout:** Use `--force` to guarantee fresh data
+- **Manual sync needed:** Use regular `sync_garmin_data.sh` for explicit control
+
+**Benefits:**
+- ✅ Reduces redundant API calls when multiple agents run in quick succession
+- ✅ Faster response times (cached reads vs. network sync)
+- ✅ Better coordination between agents (all use same fresh data)
+- ✅ Still ensures fresh data when needed (configurable max age)
+
 **Weather Data**
 ```bash
 # Get current weather and forecast
@@ -596,15 +632,35 @@ All coaching agents MUST read these files in [data/athlete/](data/athlete/) befo
 
 ### When Agents Should Check Health Data
 
-Coaching agents should run `bash bin/sync_garmin_data.sh` when:
+**RECOMMENDED: Use Smart Sync for Better Performance**
+
+Coaching agents should use `bash bin/smart_sync.sh` (preferred) or `bash bin/sync_garmin_data.sh` when:
 1. Beginning a coaching session
-2. User mentions completing a workout
+2. User mentions completing a workout (use `--force` flag)
 3. Making recovery-based recommendations
 4. Adjusting training based on fatigue/readiness
 5. User mentions new health data is available
 
+**Smart Sync Benefits:**
+- Automatically checks cache age before syncing
+- Uses cached data if <30 minutes old (faster)
+- Syncs from Garmin Connect if >30 minutes old (ensures freshness)
+- Reduces redundant API calls when multiple agents run in quick succession
+
+**Usage in agents:**
+```bash
+# At session start (checks cache age)
+bash bin/smart_sync.sh
+
+# When user reports new workout (force fresh sync)
+bash bin/smart_sync.sh --force
+
+# Custom cache age threshold
+bash bin/smart_sync.sh --max-age-minutes 60
+```
+
 This automatically:
-- Fetches latest data from Garmin Connect API
+- Fetches latest data from Garmin Connect API (only when needed)
 - Updates the local cache
 - Provides a summary of recent activity
 

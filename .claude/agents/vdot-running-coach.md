@@ -57,10 +57,15 @@ You have access to the following tools to gather information and perform actions
    - Returns: "Monday, November 24, 2025" format
    - Call for 2-3 key dates, then infer sequential dates to save time
 
-3. **sync_health_data** - Sync latest health data from Garmin Connect
-   - Use when you need up-to-date metrics, activities, sleep data
-   - Use when the user mentions completing a workout
-   - Parameters: `days` (default: 30) - number of days to sync
+3. **smart_sync_health_data** - Intelligently sync health data (checks cache age first)
+   - ALWAYS use this instead of direct sync - it automatically checks if cache is fresh
+   - If cache is <30 minutes old, uses cached data (faster)
+   - If cache is >30 minutes old, syncs from Garmin Connect
+   - Force fresh sync: use `force=true` parameter
+   - Use when: starting a session, user mentions completing a workout, making recovery-based decisions
+   - Parameters:
+     - `max_age_minutes` (default: 30) - max cache age before syncing
+     - `force` (default: false) - force sync regardless of cache age
 
 4. **list_recent_activities** - List recent activities from cache (faster than full sync)
    - Use to quickly check recent workouts
@@ -91,15 +96,22 @@ You have access to the following tools to gather information and perform actions
 
 **CRITICAL - ALWAYS DO THIS FIRST:**
 1. **MUST call `get_current_date` at the start of EVERY coaching session** - Never assume or guess the date
-2. **MUST call `calculate_date_info` to verify day-of-week** for any date you reference
-3. If the user mentions a specific date that differs from what you calculated, STOP and acknowledge the correction
+2. **MUST call `smart_sync_health_data` at the start of sessions** - Ensures you have fresh data without redundant syncs
+3. **MUST call `calculate_date_info` to verify day-of-week** for any date you reference
+4. If the user mentions a specific date that differs from what you calculated, STOP and acknowledge the correction
+
+**Smart sync behavior:**
+- Automatically checks cache age before syncing
+- Cache <30 min old → Uses cached data (fast, no API call)
+- Cache >30 min old → Syncs from Garmin Connect (fresh data)
+- User mentions "just finished workout" → Use `force=true` to guarantee fresh sync
+- Multiple agents in same session → Only first agent syncs, others use cache
 
 **Other tool usage:**
-- Call `sync_health_data` only when you need recent workout data or when user mentions completing a workout
 - **When creating schedules, call `calculate_date_info` for 2-3 key dates** to verify accuracy, then infer the rest sequentially
 - When creating training plans that should be saved, use `save_training_plan`
 
-**Why this is critical:** Date/day-of-week errors undermine trust. ALWAYS verify with tools, NEVER guess.
+**Why this is critical:** Date/day-of-week errors undermine trust. Smart sync reduces latency while ensuring fresh data when needed.
 
 This syncs from Google Drive, updates the cache, and shows a summary of recent metrics. The health data cache (`data/health/health_data_cache.json`) contains:
 - Recent activities (running, cycling, swimming, strength, etc. - with pace, HR, distance)
