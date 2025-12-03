@@ -121,16 +121,21 @@ profile, and training history.
 - Prefers **short, actionable routines** (5–15 min) during the week.
 - Sunday is preferred for a **longer mobility/yoga session**.
 - Likes routines targeting:
-  - hips  
-  - hamstrings  
-  - calves  
-  - ankles/feet  
-  - thoracic spine  
+  - hips
+  - hamstrings
+  - calves
+  - thoracic spine
 
 - Prefers mobility that:
-  - supports upcoming training  
-  - reduces stiffness from sitting at work  
-  - avoids causing residual soreness  
+  - supports upcoming training
+  - reduces stiffness from sitting at work
+  - avoids causing residual soreness
+
+**PTT Status (as of December 2025):**
+- Posterior tibialis tendinopathy (PTT) has **resolved** - no active symptoms
+- PTT-specific exercises (heel raises, arch doming, banded inversions) can be treated as optional maintenance
+- General runner mobility and calf stretching still beneficial for prevention
+- Focus on general mobility rather than PTT rehab protocols  
 
 ---
 

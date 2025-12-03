@@ -54,7 +54,7 @@ This pattern has been consistent across multiple training blocks.
 
 ## 4. Injury & Health History (Training-Relevant)
 
-### Posterior Tibialis Tendinopathy (Left Side)
+### Posterior Tibialis Tendinopathy (Left Side) - RESOLVED
 - Experienced **Posterior Tibialis Tendinopathy (PTT)** during **June–July 2025**.
 - Symptom pattern:
   - Pain along the medial ankle and arch during/after runs.
@@ -62,17 +62,15 @@ This pattern has been consistent across multiple training blocks.
 - Management:
   - Worked with a **physical therapist**.
   - Completed prescribed exercises targeting:
-    - posterior tibialis strengthening  
-    - calf/soleus loading  
-    - foot intrinsic activation  
-    - controlled mobility  
+    - posterior tibialis strengthening
+    - calf/soleus loading
+    - foot intrinsic activation
+    - controlled mobility
   - Successfully reduced symptoms and returned to normal training.
-- Current status:
-  - **Occasionally flares up**, especially during periods of:
-    - higher volume  
-    - fatigue  
-    - long runs with significant loading  
-  - Generally manageable through early symptom monitoring, exercise adherence, and load adjustment.
+- Current status (as of December 2025):
+  - **No active symptoms or concerns**
+  - PTT-specific exercises can be treated as optional maintenance rather than required rehab
+  - General runner mobility and calf stretching still beneficial for prevention
 
 ### Right Wrist Injury
 - Scaphoid surgery with internal fixation and bone graft on **June 25, 2024**.
@@ -156,5 +154,4 @@ This pattern has been consistent across multiple training blocks.
 - Fueling consistency dramatically improves long-run quality.
 - Sensitive to heavy fatigue or poor sleep due to newborn.
 - Strength training focused on hips, core, calves, and posterior chain has been beneficial.
-- **PTT flare-ups correlate with higher training load or fatigue.**
 - Heat/humidity significantly influence pace and recovery.
