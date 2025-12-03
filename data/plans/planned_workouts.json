@@ -6,13 +6,13 @@
     "plan_start_date": "2025-11-30",
     "plan_end_date": "2026-02-22",
     "created_date": "2025-12-02T09:33:18.732385",
-    "last_modified": "2025-12-03T15:17:21.062068",
+    "last_modified": "2025-12-03T15:26:57.599222",
     "athlete": "Neil Stagner",
     "version": "1.0"
   },
   "planned_workouts": [
     {
-      "id": "c725cc37-c2fc-45d9-8619-a556d5b5ecc9",
+      "id": "b0c26f85-89c9-453f-a175-e31294b284ec",
       "date": "2025-11-30",
       "week_number": 1,
       "phase": "recovery",
@@ -29,7 +29,7 @@
       "adjustments": []
     },
     {
-      "id": "09292822-1bfa-4d98-bb54-c7e1af5589f9",
+      "id": "727ea2fa-2c01-44b9-870f-e7510ac91477",
       "date": "2025-11-30",
       "week_number": 1,
       "phase": "recovery",
@@ -44,23 +44,23 @@
       "adjustments": []
     },
     {
-      "id": "0d6c5644-9562-45c7-87b9-3de039c04887",
+      "id": "dad8f949-a469-40b9-a857-8e74f6ccb1a8",
       "date": "2025-12-01",
       "week_number": 1,
       "phase": "recovery",
       "domain": "running",
       "workout": {
-        "type": "easy_run",
+        "type": "rest_or_walk",
         "description": "REST or 20 min easy walk",
         "duration_minutes": 20,
-        "intensity": "easy"
+        "intensity": "recovery"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "99cc9b71-f6c1-44ca-94e0-366309e74514",
+      "id": "26a6cd94-b85d-4e14-a493-891afd66b768",
       "date": "2025-12-01",
       "week_number": 1,
       "phase": "recovery",
@@ -75,7 +75,7 @@
       "adjustments": []
     },
     {
-      "id": "3a34292a-fe7e-43f1-b6f0-3ab4ac102155",
+      "id": "2c93b9d8-662e-4288-ab35-c0c0a4b1ff21",
       "date": "2025-12-02",
       "week_number": 1,
       "phase": "recovery",
@@ -92,7 +92,7 @@
       "adjustments": []
     },
     {
-      "id": "79ca26cd-82fb-4ec3-8fd6-65e5cfc0602c",
+      "id": "94991aa6-436f-44bc-9404-1a96a45e6372",
       "date": "2025-12-02",
       "week_number": 1,
       "phase": "recovery",
@@ -106,7 +106,7 @@
       "adjustments": []
     },
     {
-      "id": "5308d7d0-2e58-43bf-80be-dd76dddd256d",
+      "id": "e5156642-a7aa-4d03-8fbd-baa3fe5c85ec",
       "date": "2025-12-02",
       "week_number": 1,
       "phase": "recovery",
@@ -121,23 +121,23 @@
       "adjustments": []
     },
     {
-      "id": "52465e6e-30b3-41a5-963e-24a87c85818a",
+      "id": "39f81254-12a5-4312-a891-d038a659beaf",
       "date": "2025-12-03",
       "week_number": 1,
       "phase": "recovery",
       "domain": "running",
       "workout": {
-        "type": "easy_run",
+        "type": "rest_or_walk",
         "description": "REST or 20 min easy walk",
         "duration_minutes": 20,
-        "intensity": "easy"
+        "intensity": "recovery"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "358315ce-5e95-4aef-a6ce-10eebcd10558",
+      "id": "dec48b84-76e6-4004-a4bd-be70753fd1f4",
       "date": "2025-12-03",
       "week_number": 1,
       "phase": "recovery",
@@ -147,17 +147,12 @@
         "description": "10 min gentle mobility (standing calf stretch, hip flexor stretch)",
         "duration_minutes": 10
       },
-      "status": "completed",
-      "actual_performance": {
-        "date_completed": "2025-12-03",
-        "garmin_activity_id": 21161917537,
-        "duration_minutes": 11,
-        "notes": "10 min gentle mobility - standing calf stretch, hip flexor stretch. Felt good, recovery-focused."
-      },
+      "status": "planned",
+      "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "961a30bb-0846-48d4-8f7e-610b61fd73a9",
+      "id": "88d06600-bee5-4bbf-8fef-fc75c3943189",
       "date": "2025-12-04",
       "week_number": 1,
       "phase": "recovery",
@@ -173,7 +168,7 @@
       "adjustments": []
     },
     {
-      "id": "bd94447b-5971-48d1-aec8-efa8077c35bb",
+      "id": "80f7e9a0-8293-4b6c-8fd1-54ffa4913d95",
       "date": "2025-12-04",
       "week_number": 1,
       "phase": "recovery",
@@ -188,23 +183,23 @@
       "adjustments": []
     },
     {
-      "id": "37fe69a9-95cc-4692-b9be-6d0498f862a3",
+      "id": "a7882ecf-bde1-4bc9-91ab-d435a303ccd7",
       "date": "2025-12-05",
       "week_number": 1,
       "phase": "recovery",
       "domain": "running",
       "workout": {
-        "type": "easy_run",
+        "type": "rest_or_walk",
         "description": "REST or 20 min easy walk",
         "duration_minutes": 20,
-        "intensity": "easy"
+        "intensity": "recovery"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "ffd44e1c-36c1-4f81-8887-d65d428a2512",
+      "id": "09ae099e-fae3-4671-865f-b8754b51e3e2",
       "date": "2025-12-05",
       "week_number": 1,
       "phase": "recovery",
@@ -218,7 +213,7 @@
       "adjustments": []
     },
     {
-      "id": "5a54fc1c-109a-4d65-b634-64bed60c6ec0",
+      "id": "5ea39b2d-3f45-4c11-9686-9a6b2559b2cc",
       "date": "2025-12-05",
       "week_number": 1,
       "phase": "recovery",
@@ -233,7 +228,7 @@
       "adjustments": []
     },
     {
-      "id": "21fcf7e5-da5f-479f-9aa1-8477b3a05023",
+      "id": "9b89877c-eccd-4fd0-a0c9-8ab8c125ad61",
       "date": "2025-12-06",
       "week_number": 1,
       "phase": "recovery",
@@ -249,7 +244,7 @@
       "adjustments": []
     },
     {
-      "id": "609d1cef-d406-438e-b4aa-8ed2d98d1c5e",
+      "id": "8d453bdb-8398-4e10-aba0-ef772ab0dc4b",
       "date": "2025-12-06",
       "week_number": 1,
       "phase": "recovery",
@@ -264,22 +259,21 @@
       "adjustments": []
     },
     {
-      "id": "fc0f089a-8822-4118-a101-42a0c4a9a4bb",
+      "id": "ce356d9a-9d4b-490c-85a0-233bbe5a0dc2",
       "date": "2025-12-07",
       "week_number": 2,
       "phase": "recovery",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "3cf3c186-e27e-46cb-a567-3b817df0aa88",
+      "id": "4d5bb3d4-6077-45a0-a6ba-546fa9752cfb",
       "date": "2025-12-07",
       "week_number": 2,
       "phase": "recovery",
@@ -294,7 +288,7 @@
       "adjustments": []
     },
     {
-      "id": "1c02c898-4cee-4475-8fb1-91b028d27654",
+      "id": "aaf659bd-cd14-410a-9681-b8ae54c13cc8",
       "date": "2025-12-08",
       "week_number": 2,
       "phase": "recovery",
@@ -311,7 +305,7 @@
       "adjustments": []
     },
     {
-      "id": "877dea82-b265-4952-9d8a-bfdd40032e96",
+      "id": "cb14206a-520e-4630-95fd-4ee1ae424cdc",
       "date": "2025-12-08",
       "week_number": 2,
       "phase": "recovery",
@@ -326,7 +320,7 @@
       "adjustments": []
     },
     {
-      "id": "df42c5af-5058-4c6c-85ba-37d2f18b05cd",
+      "id": "3b88d6cc-98eb-4338-9244-10fd74ba988c",
       "date": "2025-12-09",
       "week_number": 2,
       "phase": "recovery",
@@ -342,7 +336,7 @@
       "adjustments": []
     },
     {
-      "id": "291a6d5e-ba23-4dff-b880-7f56205a3488",
+      "id": "908c6f1b-2e67-48d2-8762-01451a263809",
       "date": "2025-12-09",
       "week_number": 2,
       "phase": "recovery",
@@ -356,7 +350,7 @@
       "adjustments": []
     },
     {
-      "id": "a951a497-7114-41bc-a50e-47c11b5a9cf1",
+      "id": "c84fde89-e43b-4467-9b0b-5c3e81684f4f",
       "date": "2025-12-09",
       "week_number": 2,
       "phase": "recovery",
@@ -371,7 +365,7 @@
       "adjustments": []
     },
     {
-      "id": "9604c869-e4a5-428e-b8b1-bfbb70807e7a",
+      "id": "adf31345-0577-413b-9e5f-90233ce0bebc",
       "date": "2025-12-10",
       "week_number": 2,
       "phase": "recovery",
@@ -387,7 +381,7 @@
       "adjustments": []
     },
     {
-      "id": "f630db8b-70ed-403e-b496-0ba195bd8d43",
+      "id": "a2f53684-e9df-4fe5-817a-09360da7652a",
       "date": "2025-12-10",
       "week_number": 2,
       "phase": "recovery",
@@ -402,23 +396,23 @@
       "adjustments": []
     },
     {
-      "id": "6aed19ce-ef35-4a02-9a24-8ebf1167d08a",
+      "id": "b1322b39-31a5-44f5-a9a7-7172798f31e8",
       "date": "2025-12-11",
       "week_number": 2,
       "phase": "recovery",
       "domain": "running",
       "workout": {
-        "type": "easy_run",
+        "type": "rest_or_walk",
         "description": "REST or 20 min easy walk",
         "duration_minutes": 20,
-        "intensity": "easy"
+        "intensity": "recovery"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "09d44843-2197-46c5-b8fe-3059bdbfb50e",
+      "id": "7b752f10-cb41-46c2-80fe-04a3deb4e82c",
       "date": "2025-12-11",
       "week_number": 2,
       "phase": "recovery",
@@ -433,7 +427,7 @@
       "adjustments": []
     },
     {
-      "id": "df92e6a2-82ad-41df-b2a5-f85a6e3a0d1e",
+      "id": "06f10b19-9ffc-4d58-a54b-3b7ec104828f",
       "date": "2025-12-12",
       "week_number": 2,
       "phase": "recovery",
@@ -449,7 +443,7 @@
       "adjustments": []
     },
     {
-      "id": "3759876d-bb67-4467-8f3e-906dcc10b0bc",
+      "id": "a85e25f3-4bb2-404f-89d2-3a70927fdb9e",
       "date": "2025-12-12",
       "week_number": 2,
       "phase": "recovery",
@@ -463,7 +457,7 @@
       "adjustments": []
     },
     {
-      "id": "79bf1d44-175f-4bb6-817f-4f6cbaff79fd",
+      "id": "615a0eb6-aef0-4072-8bdc-bc430b0a6c23",
       "date": "2025-12-12",
       "week_number": 2,
       "phase": "recovery",
@@ -478,7 +472,7 @@
       "adjustments": []
     },
     {
-      "id": "86df8a26-569b-43c3-9fdf-322ae755e9b6",
+      "id": "d87044e7-78ea-486a-b5fc-3ebabc4b5fc0",
       "date": "2025-12-13",
       "week_number": 2,
       "phase": "recovery",
@@ -494,7 +488,7 @@
       "adjustments": []
     },
     {
-      "id": "27bc0b45-44d4-4360-a1a8-524541176698",
+      "id": "84873120-5356-456a-83b6-f88c36b3cdf7",
       "date": "2025-12-13",
       "week_number": 2,
       "phase": "recovery",
@@ -509,22 +503,21 @@
       "adjustments": []
     },
     {
-      "id": "0d36e211-ab91-40db-9915-2c880b74e626",
+      "id": "8f4f680c-4ec6-4f61-ac30-f7d6884338f8",
       "date": "2025-12-14",
       "week_number": 3,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "e577f41f-3a39-48ee-acda-87367e4dc42c",
+      "id": "9a0c080e-4852-4dae-9b39-1a72332061dc",
       "date": "2025-12-14",
       "week_number": 3,
       "phase": "base_building",
@@ -539,7 +532,7 @@
       "adjustments": []
     },
     {
-      "id": "8061675f-8c91-43dd-9c72-de4f9242ae9b",
+      "id": "aee2b1d2-5065-4660-8193-3e63bffe504c",
       "date": "2025-12-15",
       "week_number": 3,
       "phase": "base_building",
@@ -555,7 +548,7 @@
       "adjustments": []
     },
     {
-      "id": "5e9384e7-8090-4518-942f-2ac13b55b7b1",
+      "id": "47ad4c85-086a-4588-ab3b-8502a122dc8c",
       "date": "2025-12-15",
       "week_number": 3,
       "phase": "base_building",
@@ -570,22 +563,21 @@
       "adjustments": []
     },
     {
-      "id": "723963ef-fa6a-495e-8004-e91a238ebdfa",
+      "id": "f6b6833d-221f-4cfa-9b59-55d7b34da716",
       "date": "2025-12-16",
       "week_number": 3,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "7bac7ca5-bacc-41fc-b8fe-f0b3dbbf9f2b",
+      "id": "bb7b0aff-688c-400c-ad12-25369b2e741e",
       "date": "2025-12-16",
       "week_number": 3,
       "phase": "base_building",
@@ -600,7 +592,7 @@
       "adjustments": []
     },
     {
-      "id": "4c8054c9-53ee-4b30-8741-5c74713fcab2",
+      "id": "944ace3e-810f-4ff4-8659-04c14a8ab5f3",
       "date": "2025-12-16",
       "week_number": 3,
       "phase": "base_building",
@@ -615,7 +607,7 @@
       "adjustments": []
     },
     {
-      "id": "9066fa92-62bf-4985-b615-13bb76e1dbb1",
+      "id": "6a40642e-7fd5-45bc-ae9b-dbb0f502dca8",
       "date": "2025-12-17",
       "week_number": 3,
       "phase": "base_building",
@@ -632,7 +624,7 @@
       "adjustments": []
     },
     {
-      "id": "c0f95c0c-4646-49c2-961f-48db3d6f5aad",
+      "id": "874759f3-880c-42ff-931e-b7b6acb2759e",
       "date": "2025-12-17",
       "week_number": 3,
       "phase": "base_building",
@@ -647,7 +639,7 @@
       "adjustments": []
     },
     {
-      "id": "734b4c68-80e0-4d3a-9415-fd03d2702541",
+      "id": "eacac2fe-35c4-4b4f-8eb6-8c18f60911d9",
       "date": "2025-12-18",
       "week_number": 3,
       "phase": "base_building",
@@ -663,7 +655,7 @@
       "adjustments": []
     },
     {
-      "id": "fbacb7c8-4dfd-4459-a4df-4ccf44224f41",
+      "id": "54b83b97-c9bb-4a9d-aa6e-3e6443870d9d",
       "date": "2025-12-18",
       "week_number": 3,
       "phase": "base_building",
@@ -678,22 +670,21 @@
       "adjustments": []
     },
     {
-      "id": "0b012ad9-6073-47d5-9373-1401f655c7bd",
+      "id": "a86de7d7-01b2-418c-aab1-a024cd8abb12",
       "date": "2025-12-19",
       "week_number": 3,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (light strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (light strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "b10a50ca-584b-473a-98ef-5200d009094a",
+      "id": "4854095c-5d60-4941-9f08-14d49a449d78",
       "date": "2025-12-19",
       "week_number": 3,
       "phase": "base_building",
@@ -708,7 +699,7 @@
       "adjustments": []
     },
     {
-      "id": "bc9e3a57-9c1b-44ca-b70d-d5c3106cae38",
+      "id": "ea2068cf-fe42-4b71-a40c-4b6c61fcbf99",
       "date": "2025-12-19",
       "week_number": 3,
       "phase": "base_building",
@@ -723,7 +714,7 @@
       "adjustments": []
     },
     {
-      "id": "178d4dfd-04d0-4cad-b565-284cc685bde7",
+      "id": "b8008af8-499c-430a-8052-b570520bac23",
       "date": "2025-12-20",
       "week_number": 3,
       "phase": "base_building",
@@ -739,7 +730,7 @@
       "adjustments": []
     },
     {
-      "id": "4c13edea-afb1-4849-a18b-f7457abc4540",
+      "id": "98fc6fcf-2beb-4cd9-a93f-e60ba0d09969",
       "date": "2025-12-20",
       "week_number": 3,
       "phase": "base_building",
@@ -754,22 +745,21 @@
       "adjustments": []
     },
     {
-      "id": "eca3f569-fffa-42f3-80ca-515da1a3c1c3",
+      "id": "6d063908-84fd-46d0-b2c5-efcac377109e",
       "date": "2025-12-21",
       "week_number": 4,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "bd96f5ea-61fe-4913-864f-fe1910296aeb",
+      "id": "8fb58881-04b1-4758-ac5b-732d355f06aa",
       "date": "2025-12-21",
       "week_number": 4,
       "phase": "base_building",
@@ -784,7 +774,7 @@
       "adjustments": []
     },
     {
-      "id": "a7e5bf27-a0a1-41cb-9f5a-3c37a624f408",
+      "id": "8bd37bc2-51fe-4d77-992f-3e458aff05ed",
       "date": "2025-12-22",
       "week_number": 4,
       "phase": "base_building",
@@ -800,7 +790,7 @@
       "adjustments": []
     },
     {
-      "id": "6bc83083-6036-4d10-863c-d386b57c2117",
+      "id": "93a0972e-d5e6-4bba-9a3d-6ed36f7512d0",
       "date": "2025-12-22",
       "week_number": 4,
       "phase": "base_building",
@@ -815,22 +805,21 @@
       "adjustments": []
     },
     {
-      "id": "1b4cc234-892b-4dfa-9b6f-c8813ab1b2dc",
+      "id": "f79bf8af-3a8f-4821-8350-17c435b65ef9",
       "date": "2025-12-23",
       "week_number": 4,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "9aa362b3-2180-427c-b488-d3e6f5041b5b",
+      "id": "0023aada-ce11-4592-a66b-7c3d06406a0d",
       "date": "2025-12-23",
       "week_number": 4,
       "phase": "base_building",
@@ -845,7 +834,7 @@
       "adjustments": []
     },
     {
-      "id": "f35e6e40-d823-4d94-8e66-8800276f82b1",
+      "id": "85de8483-afb2-45fc-8b7c-d05b60baddfd",
       "date": "2025-12-23",
       "week_number": 4,
       "phase": "base_building",
@@ -860,7 +849,7 @@
       "adjustments": []
     },
     {
-      "id": "7535ffe8-6905-4371-8f99-a4916171637d",
+      "id": "a0511969-7b5e-48e2-b958-1e28f468aa67",
       "date": "2025-12-24",
       "week_number": 4,
       "phase": "base_building",
@@ -876,7 +865,7 @@
       "adjustments": []
     },
     {
-      "id": "9eed7cb0-5793-4500-a00b-31b870a3d50d",
+      "id": "33c8495f-cb13-49c9-97a6-f87ef0ae8666",
       "date": "2025-12-24",
       "week_number": 4,
       "phase": "base_building",
@@ -891,23 +880,23 @@
       "adjustments": []
     },
     {
-      "id": "937896f9-2fa5-4500-8914-a462804b508f",
+      "id": "894c3aad-08da-4b6c-a99b-3ff8510ed0ec",
       "date": "2025-12-25",
       "week_number": 4,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "easy_run",
+        "type": "rest_or_walk",
         "description": "REST or 20-30 min easy social run",
         "duration_minutes": 30,
-        "intensity": "easy"
+        "intensity": "recovery"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "f2d5eca5-9e7d-417e-9289-72db2dee7850",
+      "id": "2d97204c-bf26-4c50-aceb-891aa4ad819b",
       "date": "2025-12-25",
       "week_number": 4,
       "phase": "base_building",
@@ -922,22 +911,21 @@
       "adjustments": []
     },
     {
-      "id": "302bd1a8-b45b-4ed3-a20b-c0ca53e76a86",
+      "id": "7c18284f-9128-412a-97e1-69ac92dbda75",
       "date": "2025-12-26",
       "week_number": 4,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (light strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (light strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "af89b108-3718-4025-97d7-bedfcbd52ff9",
+      "id": "32fb6add-dfc8-4416-9f33-bd9b569c89e0",
       "date": "2025-12-26",
       "week_number": 4,
       "phase": "base_building",
@@ -952,7 +940,7 @@
       "adjustments": []
     },
     {
-      "id": "9032f232-0453-4ce8-b253-b3e84d4f9326",
+      "id": "1850105c-2ea8-47e4-a6d2-05c60fe0367c",
       "date": "2025-12-26",
       "week_number": 4,
       "phase": "base_building",
@@ -967,7 +955,7 @@
       "adjustments": []
     },
     {
-      "id": "07952d42-9e5b-4182-a070-de43dca72854",
+      "id": "a15dc839-f9aa-468e-9f5e-d0dcde09c12f",
       "date": "2025-12-27",
       "week_number": 4,
       "phase": "base_building",
@@ -983,7 +971,7 @@
       "adjustments": []
     },
     {
-      "id": "2d0abed5-249a-45af-81e8-dea5abeb941e",
+      "id": "eb7187f5-1ab1-4bd7-97d8-e5708ecd7955",
       "date": "2025-12-27",
       "week_number": 4,
       "phase": "base_building",
@@ -998,22 +986,21 @@
       "adjustments": []
     },
     {
-      "id": "5e23dce5-0aa3-42b6-8d34-5490f4c534a4",
+      "id": "0bcc55a8-d2fe-4437-8610-2324315a9176",
       "date": "2025-12-28",
       "week_number": 5,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "a7b826cd-927b-406c-b6e7-1ff58745686c",
+      "id": "23f7641c-6de7-4287-9f1e-beecbfcafd4a",
       "date": "2025-12-28",
       "week_number": 5,
       "phase": "base_building",
@@ -1028,7 +1015,7 @@
       "adjustments": []
     },
     {
-      "id": "53c708be-ac83-4250-b26d-ce4c9b46cd72",
+      "id": "19ae4975-7197-45c4-b688-460227b0416a",
       "date": "2025-12-29",
       "week_number": 5,
       "phase": "base_building",
@@ -1044,7 +1031,7 @@
       "adjustments": []
     },
     {
-      "id": "09dee0f9-03ba-4b32-a8b9-0441d4996f31",
+      "id": "93ad5ed8-eacf-49fd-a94c-6182a504d535",
       "date": "2025-12-29",
       "week_number": 5,
       "phase": "base_building",
@@ -1059,22 +1046,21 @@
       "adjustments": []
     },
     {
-      "id": "acd44b32-4d3d-4f96-9180-84acbb60d553",
+      "id": "a35c91ce-4158-43bc-8a7c-8ca4c9569e93",
       "date": "2025-12-30",
       "week_number": 5,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "e2aaeb14-a0fb-4575-9da4-fc49b86e99e4",
+      "id": "7fcef31d-e0b8-4a31-bf53-27f5af9c11f5",
       "date": "2025-12-30",
       "week_number": 5,
       "phase": "base_building",
@@ -1089,7 +1075,7 @@
       "adjustments": []
     },
     {
-      "id": "911c331b-1694-4ce1-994e-2f2d6525425b",
+      "id": "02c88f76-8a82-454f-ac38-b0fb21345231",
       "date": "2025-12-30",
       "week_number": 5,
       "phase": "base_building",
@@ -1104,7 +1090,7 @@
       "adjustments": []
     },
     {
-      "id": "1f87d85c-d1b9-4fb3-ad33-3b8b944515c3",
+      "id": "1e396065-392c-467a-be3d-edd4f173e114",
       "date": "2025-12-31",
       "week_number": 5,
       "phase": "base_building",
@@ -1120,7 +1106,7 @@
       "adjustments": []
     },
     {
-      "id": "0e82dec9-866d-40a1-8693-0ba51eac0093",
+      "id": "4c426ce1-3462-4096-aecb-8700d80698b8",
       "date": "2025-12-31",
       "week_number": 5,
       "phase": "base_building",
@@ -1135,23 +1121,23 @@
       "adjustments": []
     },
     {
-      "id": "cf4fc81d-ffdf-430d-998c-bff23d729833",
+      "id": "292af183-a41d-4521-ab4a-214afbaa71ac",
       "date": "2026-01-01",
       "week_number": 5,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "easy_run",
+        "type": "rest_or_walk",
         "description": "REST or 30 min easy celebration run",
         "duration_minutes": 30,
-        "intensity": "easy"
+        "intensity": "recovery"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "108c3ae6-8cba-4ead-9794-e55e6aea674c",
+      "id": "5849bd36-f84c-4aa0-b958-c7e115204bb5",
       "date": "2026-01-01",
       "week_number": 5,
       "phase": "base_building",
@@ -1166,22 +1152,21 @@
       "adjustments": []
     },
     {
-      "id": "0214cd96-2572-4ba1-8b9c-85243c3d3c73",
+      "id": "1e1d7864-fd16-4a2e-888d-0c5c47b953c4",
       "date": "2026-01-02",
       "week_number": 5,
       "phase": "base_building",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (light strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (light strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "cea65368-bd41-4497-bb92-6eab76a47465",
+      "id": "2e77318a-bb10-4ca0-95e7-49945775e846",
       "date": "2026-01-02",
       "week_number": 5,
       "phase": "base_building",
@@ -1196,7 +1181,7 @@
       "adjustments": []
     },
     {
-      "id": "2cdb622c-790a-49a1-a7e3-8e45cad67b9a",
+      "id": "bb37d43b-c46f-41a5-b20b-65de21f353f4",
       "date": "2026-01-02",
       "week_number": 5,
       "phase": "base_building",
@@ -1211,7 +1196,7 @@
       "adjustments": []
     },
     {
-      "id": "67c30857-b707-4169-8091-46cd6f737513",
+      "id": "a2037ed8-9301-4c58-a579-48b89d2e3dd1",
       "date": "2026-01-03",
       "week_number": 5,
       "phase": "base_building",
@@ -1227,7 +1212,7 @@
       "adjustments": []
     },
     {
-      "id": "7ba71907-21fd-44d4-a037-1515efc56c08",
+      "id": "e44c6081-ff59-41bd-b4ff-9fab3e8681eb",
       "date": "2026-01-03",
       "week_number": 5,
       "phase": "base_building",
@@ -1242,22 +1227,21 @@
       "adjustments": []
     },
     {
-      "id": "2de1c5d1-b280-4929-a223-1c9865ad331d",
+      "id": "c133fc31-895a-4c55-a49f-6ab098c001ee",
       "date": "2026-01-04",
       "week_number": 6,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "47c03a80-62e6-4463-b2ce-303c60091692",
+      "id": "afe05235-1d28-4812-97c7-81a3018868b2",
       "date": "2026-01-04",
       "week_number": 6,
       "phase": "early_quality",
@@ -1272,7 +1256,7 @@
       "adjustments": []
     },
     {
-      "id": "6d4de823-2527-4768-b815-fa2fa05bc2b9",
+      "id": "595d9711-6aaf-49ed-9ed8-001cd2ae4c27",
       "date": "2026-01-05",
       "week_number": 6,
       "phase": "early_quality",
@@ -1288,7 +1272,7 @@
       "adjustments": []
     },
     {
-      "id": "9f7dada5-c2b8-45c7-b1d3-aab78856a901",
+      "id": "528f2eee-cf1e-4e59-9c3b-b3f606b43281",
       "date": "2026-01-05",
       "week_number": 6,
       "phase": "early_quality",
@@ -1303,22 +1287,21 @@
       "adjustments": []
     },
     {
-      "id": "5ad636a7-558e-4781-8591-435bcfd1ccea",
+      "id": "64f4708a-c439-46ee-ab7f-5da9683eab4a",
       "date": "2026-01-06",
       "week_number": 6,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "d25c48a1-d20a-44fa-8253-65b78c4e938e",
+      "id": "6c530008-2613-4462-a83a-0d436e79be0c",
       "date": "2026-01-06",
       "week_number": 6,
       "phase": "early_quality",
@@ -1333,7 +1316,7 @@
       "adjustments": []
     },
     {
-      "id": "cefa385f-9f95-4bb9-99e2-96887e8c57a9",
+      "id": "50fc1d91-e088-4806-be32-a1c187996e55",
       "date": "2026-01-06",
       "week_number": 6,
       "phase": "early_quality",
@@ -1348,7 +1331,7 @@
       "adjustments": []
     },
     {
-      "id": "7b78afe9-758a-4eff-a6f5-1e5da4c91db1",
+      "id": "d62ebeae-e04d-43dc-ad10-e45ec50f059f",
       "date": "2026-01-07",
       "week_number": 6,
       "phase": "early_quality",
@@ -1365,7 +1348,7 @@
       "adjustments": []
     },
     {
-      "id": "a6b40473-a11b-4a79-9686-1da7ca655256",
+      "id": "a46fc8c1-f4e2-4e52-9487-122701f2ee90",
       "date": "2026-01-07",
       "week_number": 6,
       "phase": "early_quality",
@@ -1380,7 +1363,7 @@
       "adjustments": []
     },
     {
-      "id": "1012fd1e-34dc-4f23-be4b-ec1e1f962046",
+      "id": "e01f7ade-396f-433b-973f-b7295bd28b3e",
       "date": "2026-01-08",
       "week_number": 6,
       "phase": "early_quality",
@@ -1396,7 +1379,7 @@
       "adjustments": []
     },
     {
-      "id": "bceef823-025d-4c34-8c4f-9719601120c4",
+      "id": "764d5a0d-1b70-404e-8bc2-86f7fb3fd1f8",
       "date": "2026-01-08",
       "week_number": 6,
       "phase": "early_quality",
@@ -1411,22 +1394,21 @@
       "adjustments": []
     },
     {
-      "id": "f9faf161-628a-4139-899b-07bb75ef9081",
+      "id": "47b2ae5b-c8d0-4529-b4f1-5cddea5cea45",
       "date": "2026-01-09",
       "week_number": 6,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (light strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (light strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "f802cda2-da61-447e-9c77-4261d672bd4e",
+      "id": "8b165a8b-2881-4a94-bf91-8d78fc77ae71",
       "date": "2026-01-09",
       "week_number": 6,
       "phase": "early_quality",
@@ -1441,7 +1423,7 @@
       "adjustments": []
     },
     {
-      "id": "faf4e8d4-ae2c-4518-bf92-db68dff91b71",
+      "id": "e8f7cf2a-ac4e-48a1-a7e4-4267b195c39f",
       "date": "2026-01-09",
       "week_number": 6,
       "phase": "early_quality",
@@ -1456,7 +1438,7 @@
       "adjustments": []
     },
     {
-      "id": "8dec5f32-22ba-4983-9c7b-198802ad84b0",
+      "id": "6ed98d56-4aff-4d56-a335-3cb9cdaf906e",
       "date": "2026-01-10",
       "week_number": 6,
       "phase": "early_quality",
@@ -1472,7 +1454,7 @@
       "adjustments": []
     },
     {
-      "id": "0d620410-c4c5-46e7-9124-63480d678c1d",
+      "id": "fc6c4c9a-e0fd-447e-a0b2-ac7d2c02d487",
       "date": "2026-01-10",
       "week_number": 6,
       "phase": "early_quality",
@@ -1487,22 +1469,21 @@
       "adjustments": []
     },
     {
-      "id": "7ef8b001-afe2-402a-b624-85b541c1fc69",
+      "id": "4886c93f-6f89-4e4e-b302-44648a9d418b",
       "date": "2026-01-11",
       "week_number": 7,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "f76f23ce-2687-4c52-878d-e36e010dfe72",
+      "id": "11a897bf-caea-46f7-925a-d288307e5021",
       "date": "2026-01-11",
       "week_number": 7,
       "phase": "early_quality",
@@ -1517,7 +1498,7 @@
       "adjustments": []
     },
     {
-      "id": "bf6305b1-31c2-4c3b-92d5-3728758e95a3",
+      "id": "a1ebf81c-1b1a-4c15-9ef9-4845c3f46f8f",
       "date": "2026-01-12",
       "week_number": 7,
       "phase": "early_quality",
@@ -1533,7 +1514,7 @@
       "adjustments": []
     },
     {
-      "id": "770f96ee-c63a-43bd-aaa4-a9ff116838b0",
+      "id": "dde3e9c6-355a-47f0-88d4-8a1fb73af0c4",
       "date": "2026-01-12",
       "week_number": 7,
       "phase": "early_quality",
@@ -1548,22 +1529,21 @@
       "adjustments": []
     },
     {
-      "id": "d53c28ba-b24c-4af7-ad94-83c97fab7626",
+      "id": "3f4503eb-dbbf-47e4-a8f6-654fa6f023e4",
       "date": "2026-01-13",
       "week_number": 7,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "22258464-7660-4d2a-946f-c4000cd2f4e1",
+      "id": "c91b5989-cd45-44d7-bdaa-d1f29d029bcd",
       "date": "2026-01-13",
       "week_number": 7,
       "phase": "early_quality",
@@ -1578,7 +1558,7 @@
       "adjustments": []
     },
     {
-      "id": "8ebaa725-9ee7-4624-b8fa-2b81ffe55cc8",
+      "id": "8fbd3ed9-966b-48c0-b055-da73bee33f5e",
       "date": "2026-01-13",
       "week_number": 7,
       "phase": "early_quality",
@@ -1593,7 +1573,7 @@
       "adjustments": []
     },
     {
-      "id": "d9991106-cf7c-4a8f-89b5-34774d67f765",
+      "id": "d1a6302e-f1c6-4820-81bc-4475b0ef4527",
       "date": "2026-01-14",
       "week_number": 7,
       "phase": "early_quality",
@@ -1609,7 +1589,7 @@
       "adjustments": []
     },
     {
-      "id": "7f882ec2-dbc7-4ea7-90f4-4380f82adfdd",
+      "id": "671536c0-700a-4f47-8948-c97719ba4127",
       "date": "2026-01-14",
       "week_number": 7,
       "phase": "early_quality",
@@ -1624,7 +1604,7 @@
       "adjustments": []
     },
     {
-      "id": "7e0c665c-48bd-4fdb-861f-abff53790f9b",
+      "id": "9d861186-7ae8-4854-9917-096016851576",
       "date": "2026-01-15",
       "week_number": 7,
       "phase": "early_quality",
@@ -1641,7 +1621,7 @@
       "adjustments": []
     },
     {
-      "id": "78233277-76b8-48e2-ab4a-bac297813745",
+      "id": "a8be6f65-d4ac-4b45-8dff-ce05d00a9f18",
       "date": "2026-01-15",
       "week_number": 7,
       "phase": "early_quality",
@@ -1656,22 +1636,21 @@
       "adjustments": []
     },
     {
-      "id": "3bfca5af-3aaf-443d-baac-fb4c094734eb",
+      "id": "ff4fbfcc-767e-4a03-9175-7ffac8ab877f",
       "date": "2026-01-16",
       "week_number": 7,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (light strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (light strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "ace1a588-22c2-4619-a2d6-03232914a9b8",
+      "id": "2b6ff99e-0c85-46e9-a45d-bd5e003a1de0",
       "date": "2026-01-16",
       "week_number": 7,
       "phase": "early_quality",
@@ -1686,7 +1665,7 @@
       "adjustments": []
     },
     {
-      "id": "fd5f040b-248b-47c2-b2ee-177ce9b9c7f7",
+      "id": "2bea34cd-3090-498d-aed4-eba121653c64",
       "date": "2026-01-16",
       "week_number": 7,
       "phase": "early_quality",
@@ -1701,7 +1680,7 @@
       "adjustments": []
     },
     {
-      "id": "bfec907a-3fb9-4d9a-9f27-4e582fac6d6d",
+      "id": "95f2ccd0-03d9-4fb9-9ee0-d671dcff6081",
       "date": "2026-01-17",
       "week_number": 7,
       "phase": "early_quality",
@@ -1717,7 +1696,7 @@
       "adjustments": []
     },
     {
-      "id": "3465f0b8-8979-4a83-a2ba-1451bd6b8962",
+      "id": "4c9a4eca-eace-4f0e-a1d3-f6df8a426c26",
       "date": "2026-01-17",
       "week_number": 7,
       "phase": "early_quality",
@@ -1732,22 +1711,21 @@
       "adjustments": []
     },
     {
-      "id": "41b4f9e1-8199-4343-af05-907775fd8dea",
+      "id": "2867173c-df4a-4fad-83c3-16ea658248cb",
       "date": "2026-01-18",
       "week_number": 8,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "9fa3281c-0b2c-4218-a6b4-cb27faa71e23",
+      "id": "c748a2ae-b2f8-49eb-8dd8-30c50c6d4850",
       "date": "2026-01-18",
       "week_number": 8,
       "phase": "early_quality",
@@ -1762,7 +1740,7 @@
       "adjustments": []
     },
     {
-      "id": "b5035a00-259c-4693-9755-0226aba5f98c",
+      "id": "0c6f4175-3710-458c-9433-2f72412e4567",
       "date": "2026-01-19",
       "week_number": 8,
       "phase": "early_quality",
@@ -1778,7 +1756,7 @@
       "adjustments": []
     },
     {
-      "id": "068b05e8-ef7c-4183-8fc0-5ac739c5e938",
+      "id": "91aefdfd-456a-4a78-a988-d35c12230994",
       "date": "2026-01-19",
       "week_number": 8,
       "phase": "early_quality",
@@ -1793,22 +1771,21 @@
       "adjustments": []
     },
     {
-      "id": "1747090a-fe47-45a4-a2c8-30c585e28232",
+      "id": "e612e474-4ed2-4756-a284-54766e987209",
       "date": "2026-01-20",
       "week_number": 8,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "5930d6e3-32fa-4d99-acbb-389c7a92475d",
+      "id": "2d352ee7-b9fc-4699-8092-176595a2eae2",
       "date": "2026-01-20",
       "week_number": 8,
       "phase": "early_quality",
@@ -1823,7 +1800,7 @@
       "adjustments": []
     },
     {
-      "id": "41a7c037-342b-48b7-9b41-a81024df83c2",
+      "id": "d81e9196-45ff-46dd-ac98-28488f5516d7",
       "date": "2026-01-20",
       "week_number": 8,
       "phase": "early_quality",
@@ -1838,7 +1815,7 @@
       "adjustments": []
     },
     {
-      "id": "ccae71fd-a172-4c0d-a018-2a1d0e983201",
+      "id": "b4e83173-f2b5-45a9-9295-10908d07db05",
       "date": "2026-01-21",
       "week_number": 8,
       "phase": "early_quality",
@@ -1854,7 +1831,7 @@
       "adjustments": []
     },
     {
-      "id": "1cb3f920-448f-41d0-92b8-3ca048fbca4a",
+      "id": "be4fc806-cd21-4b82-8b29-3b985103e866",
       "date": "2026-01-21",
       "week_number": 8,
       "phase": "early_quality",
@@ -1869,7 +1846,7 @@
       "adjustments": []
     },
     {
-      "id": "0ad14cbd-602b-48df-a5fc-829dc94c1bb9",
+      "id": "b7aeaae5-3fc8-49c1-a0d6-c8f4f3455fc5",
       "date": "2026-01-22",
       "week_number": 8,
       "phase": "early_quality",
@@ -1885,7 +1862,7 @@
       "adjustments": []
     },
     {
-      "id": "ddf88c34-abb6-49df-ad24-613b26aaf91d",
+      "id": "3d76816d-dbd9-4f7d-b7b5-3e3bf3292f36",
       "date": "2026-01-22",
       "week_number": 8,
       "phase": "early_quality",
@@ -1900,22 +1877,21 @@
       "adjustments": []
     },
     {
-      "id": "b107b729-b441-49a0-8c99-181cd800a148",
+      "id": "beafd8a3-3879-4c55-a230-805540238db6",
       "date": "2026-01-23",
       "week_number": 8,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (light strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (light strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "a14c25be-b900-4b03-9e77-4d0b014b9174",
+      "id": "f4ee5e7c-922d-4b32-8364-9c7588d09c3e",
       "date": "2026-01-23",
       "week_number": 8,
       "phase": "early_quality",
@@ -1930,7 +1906,7 @@
       "adjustments": []
     },
     {
-      "id": "71d548fe-7d40-4805-8174-8191dd0bea96",
+      "id": "d1ced485-5fad-4b69-bf44-05fdd0033793",
       "date": "2026-01-23",
       "week_number": 8,
       "phase": "early_quality",
@@ -1945,7 +1921,7 @@
       "adjustments": []
     },
     {
-      "id": "60d4c391-6993-488c-bdcf-85cf6b8d7a91",
+      "id": "9044c5a7-202a-45d3-9c30-ce63aba9b765",
       "date": "2026-01-24",
       "week_number": 8,
       "phase": "early_quality",
@@ -1961,7 +1937,7 @@
       "adjustments": []
     },
     {
-      "id": "c2ae625e-3757-48a6-b0fc-6f2804a439c9",
+      "id": "44a317dc-135c-4a0e-8479-17fa22a1ae3e",
       "date": "2026-01-24",
       "week_number": 8,
       "phase": "early_quality",
@@ -1976,22 +1952,21 @@
       "adjustments": []
     },
     {
-      "id": "0d896eaa-3c16-4b0b-a66d-41ae7ae6d43f",
+      "id": "15404fcc-3362-4ab5-8771-900ecac9714f",
       "date": "2026-01-25",
       "week_number": 9,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "6a94dc98-6793-49bf-9e82-825e35072288",
+      "id": "a4b1ff61-ca81-41fd-a648-3108ce768382",
       "date": "2026-01-25",
       "week_number": 9,
       "phase": "early_quality",
@@ -2006,7 +1981,7 @@
       "adjustments": []
     },
     {
-      "id": "1dab19cb-34a2-40a5-8c03-801d9aebb090",
+      "id": "1b08edbc-0c11-467a-ae71-bda0f3181120",
       "date": "2026-01-26",
       "week_number": 9,
       "phase": "early_quality",
@@ -2022,7 +1997,7 @@
       "adjustments": []
     },
     {
-      "id": "8f5fd450-31ef-4ec1-892c-59198d8d9b15",
+      "id": "3d20615e-a9ff-4287-b712-86cc22538917",
       "date": "2026-01-26",
       "week_number": 9,
       "phase": "early_quality",
@@ -2037,22 +2012,21 @@
       "adjustments": []
     },
     {
-      "id": "a563ded8-6b5f-4a6e-9851-5db32284c023",
+      "id": "bae610cc-5579-435e-b33a-1e97a46cc9cd",
       "date": "2026-01-27",
       "week_number": 9,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day - REDUCED VOLUME)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day - REDUCED VOLUME)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "17eda384-67c8-4605-ba72-2e0c78397934",
+      "id": "b5e0d314-f144-4112-8172-e3fa27c4d781",
       "date": "2026-01-27",
       "week_number": 9,
       "phase": "early_quality",
@@ -2067,7 +2041,7 @@
       "adjustments": []
     },
     {
-      "id": "66b5edcb-dea9-4126-8530-f034861d04e4",
+      "id": "d72dcf6d-2dd0-4472-b93a-40776800f54f",
       "date": "2026-01-27",
       "week_number": 9,
       "phase": "early_quality",
@@ -2082,7 +2056,7 @@
       "adjustments": []
     },
     {
-      "id": "3a956bdc-e180-400a-9914-69a3705a898d",
+      "id": "341e2973-0cc4-4f91-a998-e984d6da0deb",
       "date": "2026-01-28",
       "week_number": 9,
       "phase": "early_quality",
@@ -2098,7 +2072,7 @@
       "adjustments": []
     },
     {
-      "id": "0803c50a-967d-4bb5-b051-61007b2015a7",
+      "id": "a9448765-d332-46bc-9788-bc45192a0b30",
       "date": "2026-01-28",
       "week_number": 9,
       "phase": "early_quality",
@@ -2113,7 +2087,7 @@
       "adjustments": []
     },
     {
-      "id": "6dca1166-f1e2-4f3d-a333-a6cb50c1c0e8",
+      "id": "2d624713-1fde-40a1-8e8c-2e859b4eb854",
       "date": "2026-01-29",
       "week_number": 9,
       "phase": "early_quality",
@@ -2129,7 +2103,7 @@
       "adjustments": []
     },
     {
-      "id": "a3265de4-3bf1-4326-ad56-f85621ad33f2",
+      "id": "a3519b79-ff8f-45d0-b02d-ecb00f2f8a87",
       "date": "2026-01-29",
       "week_number": 9,
       "phase": "early_quality",
@@ -2144,7 +2118,7 @@
       "adjustments": []
     },
     {
-      "id": "18a826f8-8f2b-4a24-8078-323ebb9d71be",
+      "id": "afa7ba18-ef53-42af-b714-5022e88b675c",
       "date": "2026-01-30",
       "week_number": 9,
       "phase": "early_quality",
@@ -2160,7 +2134,7 @@
       "adjustments": []
     },
     {
-      "id": "bb37afa5-cbd4-4839-b842-48d29d5829e1",
+      "id": "0fea0955-60f7-4365-8b87-e6a0f2a8bae0",
       "date": "2026-01-30",
       "week_number": 9,
       "phase": "early_quality",
@@ -2175,7 +2149,7 @@
       "adjustments": []
     },
     {
-      "id": "2aa309ed-d221-4689-9f83-705706bb8bea",
+      "id": "b2b9045c-5c13-4c2b-b325-12c986967bd9",
       "date": "2026-01-30",
       "week_number": 9,
       "phase": "early_quality",
@@ -2190,7 +2164,7 @@
       "adjustments": []
     },
     {
-      "id": "9972b193-836a-4670-8bcf-79e5986243c5",
+      "id": "b5af387c-ff84-4068-851b-be36af031532",
       "date": "2026-01-31",
       "week_number": 9,
       "phase": "early_quality",
@@ -2206,7 +2180,7 @@
       "adjustments": []
     },
     {
-      "id": "c766ba03-cc0c-4246-9373-891df8ca537c",
+      "id": "0c810dbc-b5d2-4fd2-9995-548ff786d5d4",
       "date": "2026-01-31",
       "week_number": 9,
       "phase": "early_quality",
@@ -2221,22 +2195,21 @@
       "adjustments": []
     },
     {
-      "id": "b7d72c76-6bb5-424c-a8a1-ee8c398bc3af",
+      "id": "6435394f-44a7-4731-b2cb-fe7b9acbc27c",
       "date": "2026-02-01",
       "week_number": 10,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "df90c0d9-4d56-4428-80b9-93ab230186dd",
+      "id": "cfc8676e-afba-4b0e-a885-b6d1cac21fcf",
       "date": "2026-02-01",
       "week_number": 10,
       "phase": "early_quality",
@@ -2251,7 +2224,7 @@
       "adjustments": []
     },
     {
-      "id": "1ea60f5c-c535-4a7a-8c44-add21d0f55bb",
+      "id": "27a9ac6d-5d88-49e0-beb1-1a9c253749cc",
       "date": "2026-02-02",
       "week_number": 10,
       "phase": "early_quality",
@@ -2267,7 +2240,7 @@
       "adjustments": []
     },
     {
-      "id": "41434c98-1aa5-4f50-8ced-b15165bf778f",
+      "id": "300f9346-d3ea-442d-a6e8-aaa46a1d8c77",
       "date": "2026-02-02",
       "week_number": 10,
       "phase": "early_quality",
@@ -2282,22 +2255,21 @@
       "adjustments": []
     },
     {
-      "id": "838e35c4-8a42-41fd-bda8-fc9e246510fd",
+      "id": "2ae0d382-0ea9-41d9-be49-d28ae673ee29",
       "date": "2026-02-03",
       "week_number": 10,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "22bd7a3b-e29a-4287-8425-da00d740b3f2",
+      "id": "63e5d8ee-84d4-4107-85d5-13ee9fdb85ed",
       "date": "2026-02-03",
       "week_number": 10,
       "phase": "early_quality",
@@ -2312,7 +2284,7 @@
       "adjustments": []
     },
     {
-      "id": "b5fb6921-b726-4dbe-a3dd-d5f4b3cb5f95",
+      "id": "16de4b66-6a2d-4d5d-b077-2bcc90fe40d2",
       "date": "2026-02-03",
       "week_number": 10,
       "phase": "early_quality",
@@ -2327,7 +2299,7 @@
       "adjustments": []
     },
     {
-      "id": "0fac344b-bf79-44f7-849e-1453697bd64c",
+      "id": "d9bfd5d3-8e86-4d9c-ba86-28421080329b",
       "date": "2026-02-04",
       "week_number": 10,
       "phase": "early_quality",
@@ -2343,7 +2315,7 @@
       "adjustments": []
     },
     {
-      "id": "1e1c94b8-7e29-4783-b27c-47ab69051a85",
+      "id": "7bb3a845-4828-4d48-b1ce-40f3e91ca541",
       "date": "2026-02-04",
       "week_number": 10,
       "phase": "early_quality",
@@ -2358,7 +2330,7 @@
       "adjustments": []
     },
     {
-      "id": "25abaf3a-fa3c-4e50-a504-a5d27a387930",
+      "id": "76db48bc-4f76-43be-9bf0-7a3aca5f61c4",
       "date": "2026-02-05",
       "week_number": 10,
       "phase": "early_quality",
@@ -2374,7 +2346,7 @@
       "adjustments": []
     },
     {
-      "id": "279fa78f-be06-4b87-8494-538de5d22602",
+      "id": "fd8b740f-59ba-458d-a9fe-ef1b2a096b48",
       "date": "2026-02-05",
       "week_number": 10,
       "phase": "early_quality",
@@ -2389,7 +2361,7 @@
       "adjustments": []
     },
     {
-      "id": "56bab2c7-bbaa-478a-8118-ddab12d55dba",
+      "id": "9fba649b-b0b7-4b1d-994f-65712e1aab0b",
       "date": "2026-02-06",
       "week_number": 10,
       "phase": "early_quality",
@@ -2405,7 +2377,7 @@
       "adjustments": []
     },
     {
-      "id": "b9c29f57-a8a2-4e1c-ad20-48e850e46044",
+      "id": "92704ae5-76f9-4f5e-8716-c617f38ba478",
       "date": "2026-02-06",
       "week_number": 10,
       "phase": "early_quality",
@@ -2420,7 +2392,7 @@
       "adjustments": []
     },
     {
-      "id": "7643661c-17d4-431b-905c-67004b36c609",
+      "id": "a18cfae4-9bb5-4cfc-9596-d26723c222bc",
       "date": "2026-02-06",
       "week_number": 10,
       "phase": "early_quality",
@@ -2435,7 +2407,7 @@
       "adjustments": []
     },
     {
-      "id": "f39e690f-9e11-4c0b-876c-b74ef53d98a1",
+      "id": "f3d299dc-6c64-44fe-a786-4195c8744287",
       "date": "2026-02-07",
       "week_number": 10,
       "phase": "early_quality",
@@ -2451,7 +2423,7 @@
       "adjustments": []
     },
     {
-      "id": "b70af7a2-091e-4e6f-a703-59a8aef40088",
+      "id": "b7f78d19-9df5-437d-9713-e785efe686cd",
       "date": "2026-02-07",
       "week_number": 10,
       "phase": "early_quality",
@@ -2466,22 +2438,21 @@
       "adjustments": []
     },
     {
-      "id": "331b779e-171f-4b61-b38a-e93fb8b27985",
+      "id": "200cabd3-3d10-498a-a6bf-2bb3bf478c5a",
       "date": "2026-02-08",
       "week_number": 11,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "31c6ba1d-4b4c-4512-aad4-379c1518690e",
+      "id": "fc63893d-90d4-4739-a73a-e7ed2c8ec46f",
       "date": "2026-02-08",
       "week_number": 11,
       "phase": "early_quality",
@@ -2496,7 +2467,7 @@
       "adjustments": []
     },
     {
-      "id": "82616d22-1cd2-41c6-a0fc-5339b6bdaf55",
+      "id": "4220dc56-1cc3-4e2f-bb05-a9c876e02f26",
       "date": "2026-02-09",
       "week_number": 11,
       "phase": "early_quality",
@@ -2512,7 +2483,7 @@
       "adjustments": []
     },
     {
-      "id": "25856e0d-d910-4dd3-bb43-e6cf41355362",
+      "id": "a63de0a8-c898-4b02-9751-4320d870588f",
       "date": "2026-02-09",
       "week_number": 11,
       "phase": "early_quality",
@@ -2527,22 +2498,21 @@
       "adjustments": []
     },
     {
-      "id": "d8344507-3a3a-40d2-9f5b-03ff43971af3",
+      "id": "a2f17a99-ba85-45e8-b414-1700680f63fb",
       "date": "2026-02-10",
       "week_number": 11,
       "phase": "early_quality",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (strength day - REDUCED VOLUME)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (strength day - REDUCED VOLUME)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "5054e6f1-d7f7-446b-b600-a57f4cac0860",
+      "id": "1adc6ea7-8e86-4a15-9e11-d9665de39859",
       "date": "2026-02-10",
       "week_number": 11,
       "phase": "early_quality",
@@ -2557,7 +2527,7 @@
       "adjustments": []
     },
     {
-      "id": "8b5d0dee-858d-445b-89da-5ff2105c4c54",
+      "id": "ef97a5b0-aad7-4511-a4c2-5e2d23e33447",
       "date": "2026-02-10",
       "week_number": 11,
       "phase": "early_quality",
@@ -2572,7 +2542,7 @@
       "adjustments": []
     },
     {
-      "id": "6a8c80f7-da99-433a-a211-08e955254b87",
+      "id": "8391c1db-b6a0-4e14-8ef5-d122b4b44dda",
       "date": "2026-02-11",
       "week_number": 11,
       "phase": "early_quality",
@@ -2588,7 +2558,7 @@
       "adjustments": []
     },
     {
-      "id": "85362a1c-0998-4942-ac0f-6fdd18ab1630",
+      "id": "f292c505-9619-444d-a85c-1754c7d13616",
       "date": "2026-02-11",
       "week_number": 11,
       "phase": "early_quality",
@@ -2603,7 +2573,7 @@
       "adjustments": []
     },
     {
-      "id": "2fd4966c-19aa-4bd5-b685-2b3de6d0dc12",
+      "id": "4386cc1c-56de-4315-9e68-74c0171933e4",
       "date": "2026-02-12",
       "week_number": 11,
       "phase": "early_quality",
@@ -2619,7 +2589,7 @@
       "adjustments": []
     },
     {
-      "id": "53410a3e-5966-49ff-b49f-ac5712c77adf",
+      "id": "d4e0d419-bd08-4059-b5d5-127f04087306",
       "date": "2026-02-12",
       "week_number": 11,
       "phase": "early_quality",
@@ -2634,7 +2604,7 @@
       "adjustments": []
     },
     {
-      "id": "1c2c17ad-f78d-41ba-82f1-c6833b5195f8",
+      "id": "faf48c71-c801-4912-baf9-471862c902c8",
       "date": "2026-02-13",
       "week_number": 11,
       "phase": "early_quality",
@@ -2650,7 +2620,7 @@
       "adjustments": []
     },
     {
-      "id": "76d52b57-397a-4265-8199-b59657edbf6f",
+      "id": "08eac3e9-9b79-4a63-828b-817037ba0746",
       "date": "2026-02-13",
       "week_number": 11,
       "phase": "early_quality",
@@ -2665,7 +2635,7 @@
       "adjustments": []
     },
     {
-      "id": "b660ec8e-fbe4-4f23-b7b9-5120724514f0",
+      "id": "bf573f60-4bed-4d33-b29b-b14a9ee96105",
       "date": "2026-02-13",
       "week_number": 11,
       "phase": "early_quality",
@@ -2680,7 +2650,7 @@
       "adjustments": []
     },
     {
-      "id": "4f472365-f1ba-40f8-9b59-bd0aea770af3",
+      "id": "9e430669-95af-4ae4-8732-9044da69cf9a",
       "date": "2026-02-14",
       "week_number": 11,
       "phase": "early_quality",
@@ -2696,7 +2666,7 @@
       "adjustments": []
     },
     {
-      "id": "bcdc2b73-87f8-405e-ba91-c0d3da08548c",
+      "id": "88d9f614-8777-48a8-94d6-13334f6dcfe6",
       "date": "2026-02-14",
       "week_number": 11,
       "phase": "early_quality",
@@ -2711,22 +2681,21 @@
       "adjustments": []
     },
     {
-      "id": "ba3a8ad4-8ebc-41cc-a1ef-54a33bf9d81a",
+      "id": "c12813a9-a398-4a29-ba0e-27475a27c915",
       "date": "2026-02-15",
       "week_number": 12,
       "phase": "taper",
       "domain": "running",
       "workout": {
-        "type": "rest_or_walk",
-        "description": "REST (mobility day)",
-        "intensity": "recovery"
+        "type": "running",
+        "description": "REST (mobility day)"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "875c8b72-c642-4b8b-b255-60e3e44860ad",
+      "id": "c101d582-49ec-4e20-ba54-44ff0fe0cbd9",
       "date": "2026-02-15",
       "week_number": 12,
       "phase": "taper",
@@ -2741,7 +2710,7 @@
       "adjustments": []
     },
     {
-      "id": "f7f3f8e8-d4c0-4670-8d57-1f5f1d3d7f86",
+      "id": "e1432745-93cd-4533-afd1-8d54335d8a94",
       "date": "2026-02-16",
       "week_number": 12,
       "phase": "taper",
@@ -2757,7 +2726,7 @@
       "adjustments": []
     },
     {
-      "id": "5435c4f3-8964-4c6a-80fc-cdb294be2de7",
+      "id": "b4264d2c-3baa-4967-906b-68ff237c5d7e",
       "date": "2026-02-16",
       "week_number": 12,
       "phase": "taper",
@@ -2772,7 +2741,7 @@
       "adjustments": []
     },
     {
-      "id": "2711595e-f761-4bb6-84d5-7fe5e1eabbf1",
+      "id": "5ad68c25-de8f-4fda-a0e5-5f36e08d7986",
       "date": "2026-02-17",
       "week_number": 12,
       "phase": "taper",
@@ -2788,7 +2757,7 @@
       "adjustments": []
     },
     {
-      "id": "32dac747-bf58-44c2-9cf4-96caa85c1dce",
+      "id": "039492cd-3231-44a8-8181-fb1b6267677e",
       "date": "2026-02-17",
       "week_number": 12,
       "phase": "taper",
@@ -2802,7 +2771,7 @@
       "adjustments": []
     },
     {
-      "id": "03a5e644-0e32-4781-8725-27b90391e028",
+      "id": "8f2de8cc-3918-4dec-85de-aad894b44cdd",
       "date": "2026-02-17",
       "week_number": 12,
       "phase": "taper",
@@ -2817,23 +2786,23 @@
       "adjustments": []
     },
     {
-      "id": "4cce2201-8e4b-469b-bb29-9d6faf859843",
+      "id": "8c2ad125-3d85-4ce6-9fcc-c0e0c7075eb7",
       "date": "2026-02-18",
       "week_number": 12,
       "phase": "taper",
       "domain": "running",
       "workout": {
-        "type": "easy_run",
+        "type": "rest_or_walk",
         "description": "REST or 20 min very easy jog (optional)",
         "duration_minutes": 20,
-        "intensity": "easy"
+        "intensity": "recovery"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "38596551-7a9b-4650-8da2-35643d5ffa17",
+      "id": "7170e50e-4797-4f6c-8d3e-b760a4338ad4",
       "date": "2026-02-18",
       "week_number": 12,
       "phase": "taper",
@@ -2848,7 +2817,7 @@
       "adjustments": []
     },
     {
-      "id": "f84351ca-161b-4e9e-83a7-755bfdeee3fe",
+      "id": "995d636f-0777-4d8f-8aa0-358d449135a6",
       "date": "2026-02-19",
       "week_number": 12,
       "phase": "taper",
@@ -2864,7 +2833,7 @@
       "adjustments": []
     },
     {
-      "id": "6b88355b-d1cd-4db9-8b5f-b4097d224420",
+      "id": "5fd54187-dc28-44c4-9be2-83949473303c",
       "date": "2026-02-19",
       "week_number": 12,
       "phase": "taper",
@@ -2879,22 +2848,22 @@
       "adjustments": []
     },
     {
-      "id": "00a8cb04-afcf-4832-b58e-b141ec9296e0",
+      "id": "4244f191-d4ab-48cd-af49-6a6002fe59b3",
       "date": "2026-02-20",
       "week_number": 12,
       "phase": "taper",
       "domain": "running",
       "workout": {
-        "type": "race_pace",
+        "type": "rest_or_walk",
         "description": "REST (full rest 2 days before race)",
-        "intensity": "hard"
+        "intensity": "recovery"
       },
       "status": "planned",
       "actual_performance": null,
       "adjustments": []
     },
     {
-      "id": "3f9ba35e-0416-411f-8151-e3275973cdc2",
+      "id": "7423ecec-96a9-4a46-afe1-359c822c6547",
       "date": "2026-02-20",
       "week_number": 12,
       "phase": "taper",
@@ -2908,7 +2877,7 @@
       "adjustments": []
     },
     {
-      "id": "9cf3cbd3-b97c-4a21-952f-19bbe636ff7b",
+      "id": "8c1b8afd-a868-446d-8b98-705b6057530b",
       "date": "2026-02-20",
       "week_number": 12,
       "phase": "taper",
@@ -2923,7 +2892,7 @@
       "adjustments": []
     },
     {
-      "id": "57a4b4ca-b885-4481-80b9-411a184c7cfd",
+      "id": "448f5f82-f674-4c07-a24d-638824bf1627",
       "date": "2026-02-21",
       "week_number": 12,
       "phase": "taper",
@@ -2939,7 +2908,7 @@
       "adjustments": []
     },
     {
-      "id": "584f507e-a03c-4840-b6cc-8e2bedea4aaa",
+      "id": "09b23bca-1132-4359-b8ff-8e9f662336eb",
       "date": "2026-02-21",
       "week_number": 12,
       "phase": "taper",

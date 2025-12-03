@@ -56,8 +56,12 @@ def extract_running_workout(text):
         workout["hr_target"] = hr_match.group(0)
 
     # Determine workout type
+    # Check for REST/walk first (before checking for "easy" in text)
     text_lower = text.lower()
-    if 'easy' in text_lower or 'e pace' in text_lower:
+    if ('rest' in text_lower and 'or' in text_lower) or (text_lower.startswith('rest') and 'walk' in text_lower):
+        workout["type"] = "rest_or_walk"
+        workout["intensity"] = "recovery"
+    elif 'easy' in text_lower or 'e pace' in text_lower:
         workout["type"] = "easy_run"
         workout["intensity"] = "easy"
     elif 'tempo' in text_lower or 't pace' in text_lower or 'threshold' in text_lower:
@@ -72,8 +76,8 @@ def extract_running_workout(text):
     elif 'race' in text_lower:
         workout["type"] = "race_pace"
         workout["intensity"] = "hard"
-    elif 'rest' in text_lower or 'walk' in text_lower:
-        workout["type"] = "rest_or_walk"
+    elif 'walk' in text_lower:
+        workout["type"] = "walk"
         workout["intensity"] = "recovery"
 
     return workout
