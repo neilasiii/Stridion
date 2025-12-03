@@ -1,7 +1,48 @@
 {
-  "last_updated": "2025-12-03T14:08:09.882919+00:00",
+  "last_updated": "2025-12-03T20:16:55.340967+00:00",
   "last_sync_date": "2025-12-03",
   "activities": [
+    {
+      "activity_id": 21161917537,
+      "date": "2025-12-03T15:02:12",
+      "activity_name": "Stretch",
+      "activity_type": "OTHER",
+      "duration_seconds": 683.8400268554688,
+      "distance_miles": 0.0,
+      "calories": 24.0,
+      "avg_heart_rate": 73.0,
+      "max_heart_rate": 90.0,
+      "avg_speed": 0.0,
+      "pace_per_mile": 0,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 161
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 181
+        }
+      ]
+    },
     {
       "activity_id": 21150342875,
       "date": "2025-12-02T11:06:58",
@@ -34542,9 +34583,9 @@
   "training_readiness": [
     {
       "date": "2025-12-03",
-      "score": 44,
+      "score": 48,
       "level": "LOW",
-      "recovery_time": 442,
+      "recovery_time": 19,
       "sleep_score": 51,
       "hrv_feedback": "GOOD",
       "stress_feedback": "GOOD",
@@ -38354,8 +38395,8 @@
   "stress_readings": [
     {
       "date": "2025-12-03",
-      "avg_stress": 15,
-      "max_stress": 65
+      "avg_stress": 20,
+      "max_stress": 87
     },
     {
       "date": "2025-12-02",
@@ -42550,7 +42591,7 @@
     {
       "date": "2025-12-03",
       "charged": 50,
-      "drained": 4
+      "drained": 32
     },
     {
       "date": "2025-12-02",
@@ -44557,7 +44598,7 @@
       "date_retired": null,
       "is_active": true,
       "total_distance_meters": 431315.3163141211,
-      "total_activities": 54,
+      "total_activities": 55,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-07-03T14:23:12.0",
@@ -44642,7 +44683,7 @@
   "daily_steps": [
     {
       "date": "2025-12-03",
-      "total_steps": 397,
+      "total_steps": 3668,
       "goal_steps": 12920,
       "goal_met": false
     },

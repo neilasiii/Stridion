@@ -6,7 +6,7 @@
     "plan_start_date": "2025-11-30",
     "plan_end_date": "2026-02-22",
     "created_date": "2025-12-02T09:33:18.732385",
-    "last_modified": "2025-12-03T09:29:50.630379",
+    "last_modified": "2025-12-03T15:17:21.062068",
     "athlete": "Neil Stagner",
     "version": "1.0"
   },
@@ -147,8 +147,13 @@
         "description": "10 min gentle mobility (standing calf stretch, hip flexor stretch)",
         "duration_minutes": 10
       },
-      "status": "planned",
-      "actual_performance": null,
+      "status": "completed",
+      "actual_performance": {
+        "date_completed": "2025-12-03",
+        "garmin_activity_id": 21161917537,
+        "duration_minutes": 11,
+        "notes": "10 min gentle mobility - standing calf stretch, hip flexor stretch. Felt good, recovery-focused."
+      },
       "adjustments": []
     },
     {
