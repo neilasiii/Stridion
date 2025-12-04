@@ -22,7 +22,7 @@ profile, and training history.
 
 ### Work Schedule
 - Works **four days per week**: **Monday–Thursday**, **0700–1730** in-office.
-- **Currently on paid parental leave** through **January 5, 2026**
+- **Currently on paid parental leave** through **January 4, 2026**
   - Full scheduling flexibility during this period (no work constraints)
   - Returns to normal work schedule January 6, 2026
 - Commute, family responsibilities, and work hours limit training flexibility on regular workdays.
@@ -52,8 +52,8 @@ profile, and training history.
 - Sunday is ideal for a longer mobility/yoga block.
 
 ### Agent Guidance Expectations
-- **Through January 5, 2026:** Full flexibility - can schedule workouts any day/time
-- **Starting January 6, 2026:** Return to standard work schedule guidance below
+- **Through January 4, 2026:** Full flexibility - can schedule workout any day/time
+- **Starting January 5, 2026:** Return to standard work schedule guidance below
 - Favor **morning workouts** for workdays (when working).
 - Avoid long/intense weekday evenings (when working).
 - Keep weekday sessions **time-efficient** (when working).
@@ -105,9 +105,10 @@ profile, and training history.
   - Core, glutes, calves, hamstrings  
   - Stability and single-leg work  
   - Low soreness before key runs  
+  - full body coverage to include upper body work
 
 - Does **not** prefer:
-  - High-DOMS sessions close to quality runs  
+  - High-DOMS sessions close to quality or long runs  
   - Sudden introduction of unfamiliar movements  
 
 - Ideal structure:
