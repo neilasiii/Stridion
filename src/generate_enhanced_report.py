@@ -380,14 +380,15 @@ def generate_enhanced_report(weather_data=None):
     today = datetime.now().date().isoformat()
     today_workout = None
 
+    # CRITICAL: Check FinalSurge workouts first (use 'scheduled_date' field)
     for workout in scheduled:
-        if workout.get('date') == today:
+        if workout.get('scheduled_date') == today:
             today_workout = workout
             break
 
     if today_workout:
-        workout_name = today_workout.get('workout_name', 'Workout scheduled')
-        lines.append(f"Scheduled: {workout_name}")
+        workout_name = today_workout.get('name', 'Workout scheduled')
+        lines.append(f"Scheduled (FinalSurge): {workout_name}")
 
         # If we have weather data and a running workout, show adjusted pacing
         if weather_data and 'run' in workout_name.lower():
@@ -532,13 +533,13 @@ def generate_brief_notification(cache, weather_data):
 
     lines.append(f"Recovery: {recovery}")
 
-    # Today's workout
+    # Today's workout - CRITICAL: Check FinalSurge first (use 'scheduled_date')
     scheduled = cache.get('scheduled_workouts', [])
     today = datetime.now().date().isoformat()
     workout = None
     for w in scheduled:
-        if w.get('date') == today:
-            workout = w.get('workout_name', 'Workout scheduled')
+        if w.get('scheduled_date') == today:
+            workout = w.get('name', 'Workout scheduled')
             break
 
     if not workout:
@@ -580,8 +581,16 @@ def generate_brief_notification(cache, weather_data):
 
     lines.append(f"Weather: {timing}")
 
-    # Key note
-    if days_since_marathon <= 7:
+    # Key note - prioritize FinalSurge guidance if available
+    if workout and workout != "No workout scheduled":
+        # FinalSurge workout scheduled - give appropriate guidance
+        if 'run' in workout.lower():
+            note = "Easy effort, keep HR <145"
+        elif 'walk' in workout.lower():
+            note = "Easy movement for recovery"
+        else:
+            note = "Follow FinalSurge workout"
+    elif days_since_marathon <= 7:
         note = "Prioritize rest and recovery"
     elif days_since_marathon <= 10:
         note = "Continue recovery, walk only"
