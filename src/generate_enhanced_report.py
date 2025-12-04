@@ -368,8 +368,8 @@ def generate_enhanced_report(weather_data=None):
         for alert in gear_alerts:
             lines.append(alert)
 
-    # 4. TODAY'S WORKOUT
-    lines.append("\n🏃 TODAY'S WORKOUT")
+    # 4. TODAY'S WORKOUTS (ALL DOMAINS)
+    lines.append("\n🏃 TODAY'S WORKOUTS")
     lines.append("─" * 60)
 
     # Calculate days since marathon for recovery recommendations
@@ -378,17 +378,68 @@ def generate_enhanced_report(weather_data=None):
 
     scheduled = cache.get('scheduled_workouts', [])
     today = datetime.now().date().isoformat()
-    today_workout = None
 
-    # CRITICAL: Check FinalSurge workouts first (use 'scheduled_date' field)
-    for workout in scheduled:
-        if workout.get('scheduled_date') == today:
-            today_workout = workout
-            break
+    # CRITICAL: Get ALL workouts for today (not just first one)
+    today_workouts = [w for w in scheduled if w.get('scheduled_date') == today]
 
-    if today_workout:
-        workout_name = today_workout.get('name', 'Workout scheduled')
-        lines.append(f"Scheduled (FinalSurge): {workout_name}")
+    if today_workouts:
+        # Group workouts by domain for better organization
+        running_workouts = []
+        strength_workouts = []
+        mobility_workouts = []
+        nutrition_workouts = []
+        other_workouts = []
+
+        for workout in today_workouts:
+            workout_name = workout.get('name', 'Workout scheduled')
+            description = workout.get('description', '')
+
+            # Categorize by domain
+            name_lower = workout_name.lower()
+            desc_lower = description.lower()
+
+            if 'run' in name_lower or 'run' in desc_lower:
+                running_workouts.append(workout)
+            elif 'strength' in name_lower or 'strength' in desc_lower or 'lift' in name_lower:
+                strength_workouts.append(workout)
+            elif 'mobility' in name_lower or 'stretch' in name_lower or 'yoga' in name_lower or 'mobility' in desc_lower:
+                mobility_workouts.append(workout)
+            elif 'nutrition' in name_lower or 'meal' in name_lower or 'nutrition' in desc_lower:
+                nutrition_workouts.append(workout)
+            else:
+                other_workouts.append(workout)
+
+        # Display workouts by domain
+        if running_workouts:
+            lines.append("🏃 RUNNING:")
+            for w in running_workouts:
+                lines.append(f"  • {w.get('name', 'Workout scheduled')} (FinalSurge)")
+
+        if strength_workouts:
+            lines.append("💪 STRENGTH:")
+            for w in strength_workouts:
+                lines.append(f"  • {w.get('name', 'Workout scheduled')} (FinalSurge)")
+
+        if mobility_workouts:
+            lines.append("🧘 MOBILITY:")
+            for w in mobility_workouts:
+                lines.append(f"  • {w.get('name', 'Workout scheduled')} (FinalSurge)")
+
+        if nutrition_workouts:
+            lines.append("🥗 NUTRITION:")
+            for w in nutrition_workouts:
+                lines.append(f"  • {w.get('name', 'Workout scheduled')} (FinalSurge)")
+
+        if other_workouts:
+            lines.append("📋 OTHER:")
+            for w in other_workouts:
+                lines.append(f"  • {w.get('name', 'Workout scheduled')} (FinalSurge)")
+
+        # Get first running workout for weather-adjusted pacing
+        today_workout = running_workouts[0] if running_workouts else None
+        if today_workout:
+            workout_name = today_workout.get('name', 'Workout scheduled')
+            lines.append("")  # Blank line before pacing section
 
         # If we have weather data and a running workout, show adjusted pacing
         if weather_data and 'run' in workout_name.lower():
@@ -533,14 +584,31 @@ def generate_brief_notification(cache, weather_data):
 
     lines.append(f"Recovery: {recovery}")
 
-    # Today's workout - CRITICAL: Check FinalSurge first (use 'scheduled_date')
+    # Today's workouts - CRITICAL: Check FinalSurge first (use 'scheduled_date')
     scheduled = cache.get('scheduled_workouts', [])
     today = datetime.now().date().isoformat()
+    today_workouts = [w for w in scheduled if w.get('scheduled_date') == today]
+
+    # Format all workouts concisely
     workout = None
-    for w in scheduled:
-        if w.get('scheduled_date') == today:
-            workout = w.get('name', 'Workout scheduled')
-            break
+    if today_workouts:
+        if len(today_workouts) == 1:
+            workout = today_workouts[0].get('name', 'Workout scheduled')
+        else:
+            # Multiple workouts - list them concisely
+            workout_names = []
+            for w in today_workouts:
+                name = w.get('name', 'Workout')
+                # Shorten if needed
+                if 'run' in name.lower():
+                    workout_names.append('Run')
+                elif 'strength' in name.lower():
+                    workout_names.append('Strength')
+                elif 'mobility' in name.lower() or 'stretch' in name.lower():
+                    workout_names.append('Mobility')
+                else:
+                    workout_names.append(name[:20])  # Truncate long names
+            workout = " + ".join(workout_names)
 
     if not workout:
         if days_since_marathon <= 7:
