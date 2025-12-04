@@ -67,12 +67,12 @@ This file should be updated regularly as fitness evolves and new VDOT calculatio
 - Sleep quality improving but still suboptimal (54/100 score)
 - Early post-marathon recovery period (Day 7)
 - Managing newborn care with training
-- Schedule: See training_preferences.md for current parental leave status and work schedule
+- Schedule: See training_preferences.md
 
 ### Health Status:
 - Body weight: 170.1 lbs (stable, maintaining well during training)
 - Recovery trending positive: sleep duration improving, RHR stable at 45 bpm
-- Injury history: See training_history.md for PTT and wrist surgery details
+- Injury history: See training_history.md
 
 ---
 
@@ -98,7 +98,7 @@ This file should be updated regularly as fitness evolves and new VDOT calculatio
 
 ## Schedule Coordination
 
-See `training_preferences.md` for complete schedule constraints. Current training plan accommodates parental leave flexibility through Jan 5, then returns to standard Mon-Thu work schedule.
+See training_preferences.md for schedule constraints and parental leave status.
 
 ---
 

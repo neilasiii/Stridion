@@ -1,7 +1,143 @@
 {
-  "last_updated": "2025-12-03T20:16:55.340967+00:00",
-  "last_sync_date": "2025-12-03",
+  "last_updated": "2025-12-04T16:39:49.596392+00:00",
+  "last_sync_date": "2025-12-04",
   "activities": [
+    {
+      "activity_id": 21168556034,
+      "date": "2025-12-04T11:08:46",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 258.66900634765625,
+      "distance_miles": 0.265003,
+      "calories": 28.0,
+      "avg_heart_rate": 118.0,
+      "max_heart_rate": 134.0,
+      "avg_speed": 3.688714,
+      "pace_per_mile": 16.268304,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 142.379,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 161
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 181
+        }
+      ]
+    },
+    {
+      "activity_id": 21168518698,
+      "date": "2025-12-04T10:37:57",
+      "activity_name": "Altamonte Springs - 30 min E",
+      "activity_type": "RUNNING",
+      "duration_seconds": 1808.4759521484375,
+      "distance_miles": 2.968782,
+      "calories": 356.0,
+      "avg_heart_rate": 146.0,
+      "max_heart_rate": 157.0,
+      "avg_speed": 5.909995,
+      "pace_per_mile": 10.152738,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 2.968652,
+          "duration_seconds": 1808.476,
+          "avg_heart_rate": 146.0,
+          "max_heart_rate": 157.0,
+          "avg_speed_mph": 5.909995,
+          "pace_per_mile": 10.153184,
+          "avg_cadence": 148.859375,
+          "avg_power": 294.0,
+          "calories": 356.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 251.999,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1507.811,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 173
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 183
+        }
+      ]
+    },
+    {
+      "activity_id": 21162843402,
+      "date": "2025-12-03T17:05:57",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 1061.0419921875,
+      "distance_miles": 0.786639,
+      "calories": 77.0,
+      "avg_heart_rate": 78.0,
+      "max_heart_rate": 89.0,
+      "avg_speed": 2.668669,
+      "pace_per_mile": 22.480487,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 161
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 181
+        }
+      ]
+    },
     {
       "activity_id": 21161917537,
       "date": "2025-12-03T15:02:12",
@@ -24918,6 +25054,16 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-12-04",
+      "total_duration_minutes": 510.0,
+      "light_sleep_minutes": 361.0,
+      "deep_sleep_minutes": 61.0,
+      "rem_sleep_minutes": 88.0,
+      "awake_minutes": 122.0,
+      "sleep_score": 53,
+      "deep_sleep_percentage": 11.96
+    },
+    {
       "date": "2025-12-03",
       "total_duration_minutes": 522.0,
       "light_sleep_minutes": 408.0,
@@ -28710,6 +28856,10 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2025-12-04T00:00:00",
+      "vo2_max": 50.2
+    },
+    {
       "date": "2025-12-02T00:00:00",
       "vo2_max": 50.3
     },
@@ -29243,6 +29393,10 @@
     }
   ],
   "resting_hr_readings": [
+    [
+      "2025-12-04T12:00:00",
+      46
+    ],
     [
       "2025-12-03T12:00:00",
       48
@@ -30769,6 +30923,16 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-12-04",
+      "weekly_avg": 64,
+      "last_night_avg": 68,
+      "last_night_5min_high": 98,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
     {
       "date": "2025-12-03",
       "weekly_avg": 64,
@@ -34582,14 +34746,24 @@
   ],
   "training_readiness": [
     {
+      "date": "2025-12-04",
+      "score": 35,
+      "level": "LOW",
+      "recovery_time": 1375,
+      "sleep_score": 53,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 144
+    },
+    {
       "date": "2025-12-03",
       "score": 48,
       "level": "LOW",
-      "recovery_time": 19,
+      "recovery_time": 1,
       "sleep_score": 51,
       "hrv_feedback": "GOOD",
       "stress_feedback": "GOOD",
-      "acute_load": 66
+      "acute_load": 70
     },
     {
       "date": "2025-12-02",
@@ -38394,9 +38568,14 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-12-04",
+      "avg_stress": 14,
+      "max_stress": 69
+    },
+    {
       "date": "2025-12-03",
-      "avg_stress": 20,
-      "max_stress": 87
+      "avg_stress": 21,
+      "max_stress": 93
     },
     {
       "date": "2025-12-02",
@@ -40300,6 +40479,12 @@
     }
   ],
   "spo2_readings": [
+    {
+      "date": "2025-12-04",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
     {
       "date": "2025-12-03",
       "avg_spo2": 94.0,
@@ -42589,9 +42774,14 @@
   ],
   "body_battery": [
     {
+      "date": "2025-12-04",
+      "charged": 48,
+      "drained": 4
+    },
+    {
       "date": "2025-12-03",
-      "charged": 50,
-      "drained": 32
+      "charged": 67,
+      "drained": 54
     },
     {
       "date": "2025-12-02",
@@ -44495,22 +44685,22 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-12-03",
+    "date": "2025-12-04",
     "time_5k": 1466,
-    "time_10k": 3074,
-    "time_half_marathon": 6867,
-    "time_marathon": 14968
+    "time_10k": 3075,
+    "time_half_marathon": 6869,
+    "time_marathon": 14977
   },
   "training_status": {
-    "date": "2025-12-03",
+    "date": "2025-12-04",
     "vo2_max": {
-      "date": "2025-12-02",
+      "date": "2025-12-04",
       "value": 50.0,
-      "precise_value": 50.3
+      "precise_value": 50.2
     },
     "training_load": {
-      "date": "2025-12-03",
-      "aerobic_low": 459.3027,
+      "date": "2025-12-04",
+      "aerobic_low": 440.6304,
       "aerobic_high": 747.9109,
       "anaerobic": 0.0,
       "feedback": "ANAEROBIC_SHORTAGE"
@@ -44540,12 +44730,12 @@
     },
     {
       "scheduled_date": "2025-12-04",
-      "scheduled_datetime": null,
-      "name": "Run: 2-3 x 20-30 min easy runs this week",
-      "description": "Workout: Run",
-      "duration_seconds": null,
+      "scheduled_datetime": "2025-12-04T16:08:46",
+      "name": "Walk",
+      "description": "Workout: Walk",
+      "duration_seconds": 3600,
       "location": null,
-      "all_day": true,
+      "all_day": false,
       "source": "ics_calendar"
     },
     {
@@ -44580,12 +44770,12 @@
     }
   ],
   "lactate_threshold": {
-    "date": "2025-09-15T08:46:37.263",
-    "threshold_heart_rate_bpm": 177,
-    "threshold_speed_mps": 0.34166571,
-    "threshold_speed_mph": 0.7642856933274,
-    "functional_threshold_power": 381,
-    "power_to_weight_ratio": 4.955581858148095,
+    "date": "2025-12-04T11:08:31.604",
+    "threshold_heart_rate_bpm": 178,
+    "threshold_speed_mps": 0.33611017,
+    "threshold_speed_mph": 0.7518582836798,
+    "functional_threshold_power": 361,
+    "power_to_weight_ratio": 4.695446327536647,
     "weight_kg": 76.883
   },
   "gear_stats": [
@@ -44657,8 +44847,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 496205.5690307617,
-      "total_activities": 56,
+      "total_distance_meters": 502675.7987976074,
+      "total_activities": 59,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -44682,8 +44872,14 @@
   ],
   "daily_steps": [
     {
+      "date": "2025-12-04",
+      "total_steps": 480,
+      "goal_steps": 11780,
+      "goal_met": false
+    },
+    {
       "date": "2025-12-03",
-      "total_steps": 3668,
+      "total_steps": 7186,
       "goal_steps": 12920,
       "goal_met": false
     },
@@ -44875,8 +45071,8 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-11-03",
-    "end_date": "2025-12-03",
+    "start_date": "2025-11-04",
+    "end_date": "2025-12-04",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,

@@ -1,0 +1,57 @@
+# .claudeignore - Files and directories to exclude from Claude Code context
+
+# Archives
+data/plans/archived_plans_2025.tar.gz
+data/plans/*.original.json
+
+# Deprecated files
+*.deprecated
+
+# Calendar files (large, frequently changing)
+*.ics
+data/calendar/*.ics
+
+# Logs and temporary files
+*.log
+data/sync_log.txt
+data/morning_report.log
+data/morning_report_detailed.html
+
+# Large binary archives
+*.tar.gz
+*.zip
+
+# Git files
+.git/
+.gitignore
+
+# Environment and secrets
+.env
+config/calendar_sources.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation images (not needed in code context)
+docs/images/
+
+# Backup files
+*.bak
+*.backup

@@ -58,30 +58,14 @@
 
 ---
 
-## Training Philosophy & Integration
+## Training Approach
 
-This plan integrates three coaching domains:
+This plan integrates running (VDOT methodology), strength training (runner-specific, no wrist pressure), and daily mobility/recovery. See [docs/TRAINING_PHILOSOPHY.md](docs/TRAINING_PHILOSOPHY.md) for complete integration principles, strength alternatives, and coordination strategies.
 
-**1. Running (VDOT Methodology):**
-- Progressive volume and intensity through 5 phases
-- Time-based workouts, not distance-based
-- Quality over quantity with built-in recovery
-
-**2. Strength Training (Runner-Specific):**
-- Full-body sessions 2x/week (Tuesday primary, Friday lighter)
-- NO wrist pressure - all alternatives use forearms, goblet holds, or pulling movements
-- Supports running without creating interference
-
-**3. Mobility & Recovery:**
-- Daily general mobility (10-15 min) - focus on hips, hamstrings, calves, thoracic spine
-- Sunday comprehensive sessions (45-60 min)
-- Post-run recovery routines (5-10 min)
-- Optional PTT maintenance exercises as needed (no longer required)
-
-**Coordination Principles:**
-- Strength on easy/rest days (Tue/Fri) - never before hard running days
-- Quality runs on Thu/Sat with adequate recovery between
-- Mobility every day, scaled to training load
+**Key Points:**
+- Strength on Tue/Fri (easy/rest days only)
+- Quality runs on Thu/Sat with adequate recovery
+- Daily mobility (10-15 min), intensive Sunday sessions (45-60 min)
 - Conservative adjustments if sleep <6 hrs or recovery metrics poor
 
 ---

@@ -1935,3 +1935,24 @@ Note: Continue recovery, walk only
 
 ---DETAILED---
 
+=== Morning Report (AI): Thu Dec  4 09:00:00 EST 2025 ===
+Syncing latest Garmin data...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+Fetching weather...
+Location request timed out
+Unable to get location. Make sure termux-api is installed:
+  pkg install termux-api
+Weather fetch failed, continuing without weather data...
+Extracting health summary...
+Generating AI recommendations...
+No API key set (GEMINI_API_KEY or ANTHROPIC_API_KEY), using intelligent fallback
+Generating HTML report...
+Sending notification...
+Report sent successfully
+Recovery: Day 10 post-marathon
+Today: Optional 20-30min easy walk
+Weather: Weather data unavailable
+Note: Continue recovery, walk only
+
+---DETAILED---
+
