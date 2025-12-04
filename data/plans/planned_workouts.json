@@ -6,7 +6,7 @@
     "plan_start_date": "2025-11-30",
     "plan_end_date": "2026-02-22",
     "created_date": "2025-12-02T09:33:18.732385",
-    "last_modified": "2025-12-03T15:26:57.599222",
+    "last_modified": "2025-12-04T11:40:17.944929",
     "athlete": "Neil Stagner",
     "version": "1.0"
   },
@@ -163,8 +163,15 @@
         "duration_minutes": 25,
         "intensity": "easy"
       },
-      "status": "planned",
-      "actual_performance": null,
+      "status": "completed",
+      "actual_performance": {
+        "date_completed": "2025-12-04",
+        "duration_minutes": 30,
+        "distance_miles": 2.97,
+        "avg_pace": "10:09/mile",
+        "avg_hr": 146,
+        "notes": "Completed as scheduled - felt good"
+      },
       "adjustments": []
     },
     {
