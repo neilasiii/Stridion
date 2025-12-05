@@ -184,16 +184,33 @@ def call_claude_code_headless(prompt):
     import subprocess
 
     try:
-        # Call claude with prompt via stdin and headless flag
-        result = subprocess.run(
-            ['claude', '--dangerously-skip-permissions'],
-            input=prompt,
-            capture_output=True,
-            text=True,
-            timeout=120,  # Allow up to 2 minutes for complex prompts
-            cwd=str(Path(__file__).parent.parent),
-            env={**os.environ}  # Pass through environment including API keys
-        )
+        # Simplify prompt to avoid triggering tool usage
+        # Claude Code may hang if it tries to use Read/Grep tools on large prompts
+        simplified_prompt = f"""You are a running coach. Respond ONLY with text, no tool usage.
+
+{prompt}
+
+CRITICAL: Output ONLY the coaching text. Do not use any tools. Do not read any files."""
+
+        # Write prompt to temp file for -p flag
+        import tempfile
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+            f.write(simplified_prompt)
+            prompt_file = f.name
+
+        try:
+            # Call claude with -p flag and headless permissions
+            result = subprocess.run(
+                ['claude', '-p', prompt_file, '--dangerously-skip-permissions'],
+                capture_output=True,
+                text=True,
+                timeout=60,  # Shorter timeout for simplified prompt
+                cwd=str(Path(__file__).parent.parent),
+                env={**os.environ}  # Pass through environment including API keys
+            )
+        finally:
+            # Clean up temp file
+            os.unlink(prompt_file)
 
         if result.returncode == 0 and result.stdout.strip():
             return result.stdout.strip(), None
@@ -204,7 +221,7 @@ def call_claude_code_headless(prompt):
     except FileNotFoundError:
         return None, "claude command not found (Claude Code not installed)"
     except subprocess.TimeoutExpired:
-        return None, "Claude Code timed out after 120 seconds"
+        return None, "Claude Code timed out after 60 seconds"
     except Exception as e:
         return None, f"Claude Code execution failed: {e}"
 
