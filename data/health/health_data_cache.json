@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-05T15:58:05.824349+00:00",
+  "last_updated": "2025-12-05T16:26:26.328854+00:00",
   "last_sync_date": "2025-12-05",
   "activities": [
     {
@@ -44758,6 +44758,46 @@
     "training_status": {}
   },
   "scheduled_workouts": [
+    {
+      "scheduled_date": "2025-12-14",
+      "scheduled_datetime": null,
+      "name": "Run: 45 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-12",
+      "scheduled_datetime": null,
+      "name": "Run: 40 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-10",
+      "scheduled_datetime": null,
+      "name": "Run: 35 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-08",
+      "scheduled_datetime": null,
+      "name": "Run: 30 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
     {
       "scheduled_date": "2025-12-06",
       "scheduled_datetime": null,
