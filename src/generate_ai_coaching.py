@@ -179,6 +179,35 @@ User: {prompt}"""
     except Exception as e:
         return None, f"Gemini API call failed: {e}"
 
+def call_claude_code_headless(prompt):
+    """Call Claude Code in headless mode (best option - no API costs)."""
+    import subprocess
+
+    try:
+        # Call claude with prompt via stdin and headless flag
+        result = subprocess.run(
+            ['claude', '--dangerously-skip-permissions'],
+            input=prompt,
+            capture_output=True,
+            text=True,
+            timeout=120,  # Allow up to 2 minutes for complex prompts
+            cwd=str(Path(__file__).parent.parent),
+            env={**os.environ}  # Pass through environment including API keys
+        )
+
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip(), None
+        else:
+            stderr_preview = result.stderr[:300] if result.stderr else "No error output"
+            return None, f"Claude Code failed (exit {result.returncode}): {stderr_preview}"
+
+    except FileNotFoundError:
+        return None, "claude command not found (Claude Code not installed)"
+    except subprocess.TimeoutExpired:
+        return None, "Claude Code timed out after 120 seconds"
+    except Exception as e:
+        return None, f"Claude Code execution failed: {e}"
+
 def call_anthropic_api(prompt):
     """Call Anthropic API for coaching recommendations (fallback)."""
     if not HAS_ANTHROPIC:
@@ -218,8 +247,12 @@ def main():
     # Create prompt
     prompt = create_coaching_prompt(health_summary, weather_data)
 
-    # Try Gemini first (free tier), then Anthropic as fallback
-    response, error = call_gemini_api(prompt)
+    # Priority order: Claude Code (free, local) > Gemini (free API) > Anthropic (paid API)
+    response, error = call_claude_code_headless(prompt)
+
+    if error:
+        print(f"Claude Code failed ({error}), trying Gemini...", file=sys.stderr)
+        response, error = call_gemini_api(prompt)
 
     if error:
         print(f"Gemini failed ({error}), trying Anthropic...", file=sys.stderr)
