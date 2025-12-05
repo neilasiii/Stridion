@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-05T19:05:23.901671+00:00",
+  "last_updated": "2025-12-05T19:21:54.779948+00:00",
   "last_sync_date": "2025-12-05",
   "activities": [
     {
@@ -42821,7 +42821,7 @@
     {
       "date": "2025-12-05",
       "charged": 45,
-      "drained": 12
+      "drained": 22
     },
     {
       "date": "2025-12-04",
@@ -44943,7 +44943,7 @@
   "daily_steps": [
     {
       "date": "2025-12-05",
-      "total_steps": 2103,
+      "total_steps": 4325,
       "goal_steps": 12120,
       "goal_met": false
     },
@@ -45147,7 +45147,7 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-11-28",
+    "start_date": "2025-11-05",
     "end_date": "2025-12-05",
     "acute_training_load": null,
     "chronic_training_load": null,

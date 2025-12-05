@@ -91,6 +91,38 @@ def create_coaching_prompt(health_summary, weather_data):
             scheduled_workout = workout.get('workout_name')
             break
 
+    # Extract detailed recovery metrics
+    recovery_details = ""
+
+    # Training Readiness
+    readiness_data = cache.get('training_readiness', [])
+    if readiness_data:
+        recent = readiness_data[0]
+        score = recent.get('score', 'N/A')
+        recovery_details += f"Training Readiness: {score}/100\n"
+
+    # HRV
+    hrv_data = cache.get('hrv_readings', [])
+    if hrv_data:
+        recent = hrv_data[0]
+        hrv_last_night = recent.get('last_night_avg', 'N/A')
+        hrv_status = recent.get('status', 'N/A')
+        recovery_details += f"HRV: {hrv_last_night}ms (status: {hrv_status})\n"
+
+    # Body Battery
+    battery_data = cache.get('body_battery', [])
+    if battery_data:
+        recent = battery_data[0]
+        level = recent.get('charged', recent.get('level', 'N/A'))
+        recovery_details += f"Body Battery: {level}/100\n"
+
+    # Stress
+    stress_data = cache.get('stress_readings', [])
+    if stress_data:
+        recent = stress_data[0]
+        avg_stress = recent.get('avg_stress', 'N/A')
+        recovery_details += f"Avg Stress: {avg_stress}/100\n"
+
     prompt = f"""You are the VDOT Running Coach. Provide today's morning training report with intelligent, personalized recommendations.
 
 **REQUIRED OUTPUT FORMAT:**
@@ -105,6 +137,9 @@ Note: [1 key insight, <50 chars]
 
 ===== HEALTH METRICS =====
 {health_summary}
+
+===== RECOVERY METRICS =====
+{recovery_details if recovery_details else "No detailed recovery metrics available"}
 
 ===== SCHEDULED WORKOUT =====
 {scheduled_workout if scheduled_workout else "No workout scheduled today"}
