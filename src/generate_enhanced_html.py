@@ -193,9 +193,15 @@ Include:
 BE CONSERVATIVE - prioritize recovery over training. Coordinate across all training domains (running, strength, mobility)."""
 
     try:
-        # Call Claude Code with the appropriate agent
+        # Call Claude Code in headless mode (no tools, no agents to avoid max turns error)
+        # Simplified prompt that doesn't require agent context
         result = subprocess.run(
-            ['claude', '-p', prompt, f'@{agent}', '--output-format', 'text', '--max-turns', '5'],
+            [
+                'claude', '-p',
+                '--dangerously-skip-permissions',
+                '--allowedTools', ''  # Disable tools to avoid max turns error
+            ],
+            input=prompt,
             capture_output=True,
             text=True,
             timeout=60
@@ -298,21 +304,24 @@ def generate_html_report(weather_data=None):
         sign = "+" if diff > 0 else ""
         rhr_data = f"{recent} bpm ({sign}{diff} vs baseline)"
 
-    # Today's workout
+    # Today's workouts (all domains: running, strength, mobility, etc.)
     scheduled = cache.get('scheduled_workouts', [])
     today = datetime.now().date().isoformat()
-    workout_html = "<p>No workout scheduled</p>"
+    today_workouts = [w for w in scheduled if w.get('scheduled_date') == today]
 
-    for workout in scheduled:
-        if workout.get('date') == today:
-            workout_name = workout.get('workout_name', 'Workout')
-            workout_html = f"<h3>{workout_name}</h3>"
+    if today_workouts:
+        workout_html = ""
+        for workout in today_workouts:
+            workout_name = workout.get('name', 'Workout')
+            workout_html += f"<div style='margin-bottom: 15px;'><h3>{workout_name}</h3>"
 
             # Add description if available
             desc = workout.get('description', '')
             if desc:
                 workout_html += f"<p>{desc}</p>"
-            break
+            workout_html += "</div>"
+    else:
+        workout_html = "<p>No workout scheduled</p>"
 
     # Weather HTML
     weather_html = "<p>Weather data unavailable</p>"
