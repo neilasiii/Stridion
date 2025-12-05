@@ -17,11 +17,12 @@ def get_location():
     """Get current location using termux-location."""
     try:
         # Get location from termux-location (requires termux-api package)
+        # Network provider can take 10+ seconds, allow 20 seconds
         result = subprocess.run(
             ['termux-location', '-p', 'network'],
             capture_output=True,
             text=True,
-            timeout=10
+            timeout=20
         )
 
         if result.returncode != 0:
@@ -63,10 +64,10 @@ def fetch_weather(lat, lon):
         )
 
         result = subprocess.run(
-            ['curl', '-s', '--max-time', '15', url],
+            ['curl', '-s', '--max-time', '20', url],
             capture_output=True,
             text=True,
-            timeout=20
+            timeout=25
         )
 
         if result.returncode != 0:
