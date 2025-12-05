@@ -26,6 +26,17 @@ def load_health_data():
         print(f"Error loading health data: {e}", file=sys.stderr)
         sys.exit(1)
 
+def load_planned_workouts():
+    """Load baseline planned workouts."""
+    project_root = Path(__file__).parent.parent
+    plan_file = project_root / 'data' / 'plans' / 'planned_workouts.json'
+
+    try:
+        with open(plan_file, 'r') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {'workouts': []}
+
 def get_weekly_activities(cache):
     """Get activities from last 7 days for chart."""
     activities = cache.get('activities', [])
@@ -305,20 +316,48 @@ def generate_html_report(weather_data=None):
         rhr_data = f"{recent} bpm ({sign}{diff} vs baseline)"
 
     # Today's workouts (all domains: running, strength, mobility, etc.)
+    # Priority 1: FinalSurge scheduled workouts
     scheduled = cache.get('scheduled_workouts', [])
     today = datetime.now().date().isoformat()
-    today_workouts = [w for w in scheduled if w.get('scheduled_date') == today]
+    finalsurge_workouts = [w for w in scheduled if w.get('scheduled_date') == today]
+
+    # Priority 2: Baseline planned workouts (only if not overridden by FinalSurge)
+    planned_data = load_planned_workouts()
+    baseline_workouts = [w for w in planned_data.get('workouts', []) if w.get('date') == today]
+
+    # Merge workouts: Use FinalSurge for running if present, otherwise use all baseline
+    today_workouts = []
+    finalsurge_domains = set()
+
+    # Add FinalSurge workouts first
+    for workout in finalsurge_workouts:
+        name = workout.get('name', 'Workout')
+        # Infer domain from workout name
+        domain = 'running' if 'run' in name.lower() else 'other'
+        finalsurge_domains.add(domain)
+        today_workouts.append({
+            'name': name,
+            'description': workout.get('description', ''),
+            'source': 'FinalSurge'
+        })
+
+    # Add baseline workouts for domains NOT in FinalSurge
+    for workout in baseline_workouts:
+        domain = workout.get('domain', '')
+        if domain not in finalsurge_domains:
+            desc = workout.get('workout', {}).get('desc', '')
+            today_workouts.append({
+                'name': f"{domain.title()}: {desc}",
+                'description': f"From baseline plan",
+                'source': 'Baseline'
+            })
 
     if today_workouts:
         workout_html = ""
         for workout in today_workouts:
-            workout_name = workout.get('name', 'Workout')
-            workout_html += f"<div style='margin-bottom: 15px;'><h3>{workout_name}</h3>"
-
-            # Add description if available
-            desc = workout.get('description', '')
-            if desc:
-                workout_html += f"<p>{desc}</p>"
+            workout_html += f"<div style='margin-bottom: 15px;'><h3>{workout['name']}</h3>"
+            if workout['description']:
+                workout_html += f"<p>{workout['description']}</p>"
             workout_html += "</div>"
     else:
         workout_html = "<p>No workout scheduled</p>"
