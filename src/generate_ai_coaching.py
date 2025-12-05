@@ -13,9 +13,13 @@ from pathlib import Path
 
 try:
     import google.generativeai as genai
-    HAS_GEMINI = True
+    HAS_GEMINI_SDK = True
 except ImportError:
-    HAS_GEMINI = False
+    HAS_GEMINI_SDK = False
+
+# Always use direct HTTP approach (more compatible with Termux)
+import requests
+HAS_GEMINI = True
 
 try:
     from anthropic import Anthropic
@@ -135,30 +139,42 @@ Be specific and actionable. Consider the FULL context, not just one factor."""
     return prompt
 
 def call_gemini_api(prompt):
-    """Call Gemini API for coaching recommendations (free tier)."""
+    """Call Gemini API for coaching recommendations using direct HTTP (free tier)."""
     if not HAS_GEMINI:
-        return None, "google-generativeai package not installed"
+        return None, "requests package not available"
 
     api_key = os.environ.get('GEMINI_API_KEY')
     if not api_key:
         return None, "GEMINI_API_KEY environment variable not set"
 
     try:
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel(
-            'gemini-2.0-flash-exp',  # Latest flash model, free tier
-            system_instruction="You are an expert VDOT-method running coach providing personalized training guidance based on objective health data, training plans, and recovery metrics."
-        )
+        # Use direct REST API (works without grpc)
+        url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={api_key}"
 
-        response = model.generate_content(
-            prompt,
-            generation_config=genai.GenerationConfig(
-                temperature=0.7,
-                max_output_tokens=2000,
-            )
-        )
+        headers = {"Content-Type": "application/json"}
+        data = {
+            "contents": [{
+                "parts": [{
+                    "text": f"""System: You are an expert VDOT-method running coach providing personalized training guidance based on objective health data, training plans, and recovery metrics.
 
-        return response.text, None
+User: {prompt}"""
+                }]
+            }],
+            "generationConfig": {
+                "temperature": 0.7,
+                "maxOutputTokens": 2000,
+            }
+        }
+
+        response = requests.post(url, headers=headers, json=data, timeout=30)
+        response.raise_for_status()
+
+        result = response.json()
+        if 'candidates' in result and len(result['candidates']) > 0:
+            text = result['candidates'][0]['content']['parts'][0]['text']
+            return text, None
+        else:
+            return None, f"Unexpected API response: {result}"
 
     except Exception as e:
         return None, f"Gemini API call failed: {e}"
