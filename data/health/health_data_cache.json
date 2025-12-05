@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-05T17:05:11.814264+00:00",
+  "last_updated": "2025-12-05T19:05:23.901671+00:00",
   "last_sync_date": "2025-12-05",
   "activities": [
     {
@@ -44819,16 +44819,6 @@
       "source": "ics_calendar"
     },
     {
-      "scheduled_date": "2025-12-04",
-      "scheduled_datetime": "2025-12-04T16:08:46",
-      "name": "Walk",
-      "description": "Workout: Walk",
-      "duration_seconds": 3600,
-      "location": null,
-      "all_day": false,
-      "source": "ics_calendar"
-    },
-    {
       "scheduled_date": "2025-12-03",
       "scheduled_datetime": null,
       "name": "Run: 2-3 x 20-30 min easy runs this week",
@@ -44836,16 +44826,6 @@
       "duration_seconds": null,
       "location": null,
       "all_day": true,
-      "source": "ics_calendar"
-    },
-    {
-      "scheduled_date": "2025-12-02",
-      "scheduled_datetime": "2025-12-02T16:06:58",
-      "name": "Run: 2-3 x 20-30 min easy runs this week",
-      "description": "Workout: Run",
-      "duration_seconds": 3600,
-      "location": null,
-      "all_day": false,
       "source": "ics_calendar"
     },
     {
@@ -45167,7 +45147,7 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-12-04",
+    "start_date": "2025-11-28",
     "end_date": "2025-12-05",
     "acute_training_load": null,
     "chronic_training_load": null,

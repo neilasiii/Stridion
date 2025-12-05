@@ -1782,10 +1782,16 @@ def main():
         cache['stress_readings'] = merge_data(cache['stress_readings'], new_stress, 'date')
         cache['spo2_readings'] = merge_data(cache['spo2_readings'], new_spo2, 'date')
         cache['body_battery'] = merge_data(cache['body_battery'], new_battery, 'date')
-        # Merge scheduled workouts - use 'scheduled_date' if available (from ICS), else 'workout_id'
+
+        # Handle scheduled workouts with smart replacement for ICS calendar
+        # ICS calendar workouts should REPLACE (not merge) to handle moves/deletions
         if new_scheduled_workouts and 'scheduled_date' in new_scheduled_workouts[0]:
-            cache['scheduled_workouts'] = merge_data(cache['scheduled_workouts'], new_scheduled_workouts, 'scheduled_date')
+            # These are ICS calendar workouts - remove old ICS workouts and replace with new
+            existing_non_ics = [w for w in cache['scheduled_workouts']
+                               if not w.get('source', '').startswith('ics_calendar')]
+            cache['scheduled_workouts'] = existing_non_ics + new_scheduled_workouts
         else:
+            # These are Garmin template workouts - use normal merge
             cache['scheduled_workouts'] = merge_data(cache['scheduled_workouts'], new_scheduled_workouts, 'workout_id')
 
         # Merge new data types
