@@ -2822,3 +2822,585 @@ Last updated: 2025-12-02T07:48:38.258268+00:00
 
 ✓ Sync complete!
 ---
+[2025-12-05 03:13:13] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-05: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-11-28 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-11-28 to 2025-12-05...
+  Found 5 activities
+Fetching sleep data from 2025-11-28 to 2025-12-05...
+  Found 7 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 1 weight readings
+Fetching resting heart rate data...
+  Found 8 resting HR readings
+Fetching HRV data...
+  Found 7 HRV readings
+Fetching training readiness data...
+  Found 8 readiness readings
+Fetching stress data...
+  Found 8 stress readings
+Fetching SpO2 data...
+  Found 8 SpO2 readings
+Fetching body battery data...
+  Found 8 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-11-28 to 2025-12-05...
+  Found 8 days of step data
+Fetching progress summary from 2025-11-28 to 2025-12-05...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 1 total events, 1 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 4 calendar events with Garmin workout templates...
+  Created 4 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 5 records
+  ✓ Sleep: 7 records
+  ⚠ VO2 Max: 0 records
+  ✓ Weight: 1 records
+  ✓ Resting HR: 8 records
+  ✓ HRV: 7 records
+  ✓ Training Readiness: 8 records
+  ✓ Stress: 8 records
+  ✓ SpO2: 8 records
+  ✓ Body Battery: 8 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 4 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 8 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 3.3 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 55/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 52 bpm (most recent), 48 bpm avg
+
+============================================================
+Last updated: 2025-12-05T08:13:13.295980+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-05 03:14:06] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-05: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-11-28 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-11-28 to 2025-12-05...
+  Found 5 activities
+Fetching sleep data from 2025-11-28 to 2025-12-05...
+  Found 7 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 1 weight readings
+Fetching resting heart rate data...
+  Found 8 resting HR readings
+Fetching HRV data...
+  Found 7 HRV readings
+Fetching training readiness data...
+  Found 8 readiness readings
+Fetching stress data...
+  Found 8 stress readings
+Fetching SpO2 data...
+  Found 8 SpO2 readings
+Fetching body battery data...
+  Found 8 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-11-28 to 2025-12-05...
+  Found 8 days of step data
+Fetching progress summary from 2025-11-28 to 2025-12-05...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 1 total events, 1 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 4 calendar events with Garmin workout templates...
+  Created 4 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 5 records
+  ✓ Sleep: 7 records
+  ⚠ VO2 Max: 0 records
+  ✓ Weight: 1 records
+  ✓ Resting HR: 8 records
+  ✓ HRV: 7 records
+  ✓ Training Readiness: 8 records
+  ✓ Stress: 8 records
+  ✓ SpO2: 8 records
+  ✓ Body Battery: 8 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 4 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 8 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 3.3 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 55/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 52 bpm (most recent), 48 bpm avg
+
+============================================================
+Last updated: 2025-12-05T08:14:05.953140+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-05 04:05:09] Sync attempt (exit code: 0)
+API call failed for path '/activitylist-service/activities/search/activities': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch activities: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/wellness-service/wellness/dailySleepData/None': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching sleep for 2025-12-04: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailySleepData/None': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching sleep for 2025-12-05: GarminConnectConnectionError
+API call failed for path '/metrics-service/metrics/trainingstatus/aggregated/2025-12-05': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch VO2 max data: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/weight-service/weight/range/2025-12-04/2025-12-05': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch weight data: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching RHR for 2025-12-04: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyHeartRate/None': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching RHR for 2025-12-05: GarminConnectConnectionError
+API call failed for path '/hrv-service/hrv/2025-12-04': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching HRV for 2025-12-04: GarminConnectConnectionError
+API call failed for path '/hrv-service/hrv/2025-12-05': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching HRV for 2025-12-05: GarminConnectConnectionError
+API call failed for path '/metrics-service/metrics/trainingreadiness/2025-12-04': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching readiness for 2025-12-04: GarminConnectConnectionError
+API call failed for path '/metrics-service/metrics/trainingreadiness/2025-12-05': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching readiness for 2025-12-05: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyStress/2025-12-04': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching stress for 2025-12-04: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/dailyStress/2025-12-05': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching stress for 2025-12-05: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/daily/spo2/2025-12-04': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching SpO2 for 2025-12-04: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/daily/spo2/2025-12-05': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching SpO2 for 2025-12-05: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/bodyBattery/reports/daily': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching body battery for 2025-12-04: GarminConnectConnectionError
+API call failed for path '/wellness-service/wellness/bodyBattery/reports/daily': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+  Warning: Error fetching body battery for 2025-12-05: GarminConnectConnectionError
+API call failed for path '/metrics-service/metrics/racepredictions/latest/None': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch race predictions: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/biometric-service/biometric/powerToWeight/latest/2025-12-05?sport=Running': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch lactate threshold: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/metrics-service/metrics/trainingstatus/aggregated/2025-12-05': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch training status: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/workout-service/workouts': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch scheduled workouts: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/userprofile-service/userprofile/user-settings': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch gear stats: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/usersummary-service/stats/steps/daily/2025-12-04/2025-12-05': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch daily steps: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+API call failed for path '/fitnessstats-service/activity': 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0 (status=500)
+Warning: Failed to fetch progress summary: HTTP error: 500 Server Error: Internal Server Error for url: https://connectapi.garmin.com/oauth-service/oauth/exchange/user/2.0
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-04 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-04 to 2025-12-05...
+Fetching sleep data from 2025-12-04 to 2025-12-05...
+  Found 0 sleep sessions
+Fetching VO2 max data...
+Fetching weight data...
+Fetching resting heart rate data...
+  Found 0 resting HR readings
+Fetching HRV data...
+  Found 0 HRV readings
+Fetching training readiness data...
+  Found 0 readiness readings
+Fetching stress data...
+  Found 0 stress readings
+Fetching SpO2 data...
+  Found 0 SpO2 readings
+Fetching body battery data...
+  Found 0 body battery readings
+Fetching race predictions...
+Fetching lactate threshold data...
+Fetching training status...
+Fetching scheduled workouts...
+Fetching gear stats...
+Fetching daily steps from 2025-12-04 to 2025-12-05...
+Fetching progress summary from 2025-12-04 to 2025-12-05...
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 1 total events, 1 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 4 calendar events with Garmin workout templates...
+  Created 4 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ⚠ Activities: 0 records
+  ⚠ Sleep: 0 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ⚠ Resting HR: 0 records
+  ⚠ HRV: 0 records
+  ⚠ Training Readiness: 0 records
+  ⚠ Stress: 0 records
+  ⚠ SpO2: 0 records
+  ⚠ Body Battery: 0 records
+  ⚠ Race Predictions: No
+  ⚠ Lactate Threshold: No
+  ⚠ Training Status: No
+  ✓ Scheduled Workouts: 4 workouts
+  ⚠ Gear Stats: 0 gear items
+  ⚠ Daily Steps: 0 days
+  ⚠ Progress Summary: No
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 7 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 3 walks, 2.1 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 55/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 52 bpm (most recent), 48 bpm avg
+
+============================================================
+Last updated: 2025-12-05T09:05:08.783518+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-05 06:05:14] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-05: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-04 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-04 to 2025-12-05...
+  Found 2 activities
+Fetching sleep data from 2025-12-04 to 2025-12-05...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 2 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-04 to 2025-12-05...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-04 to 2025-12-05...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 1 total events, 1 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 4 calendar events with Garmin workout templates...
+  Created 4 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 2 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 2 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 4 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 7 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 3 walks, 2.1 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 55/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 52 bpm (most recent), 48 bpm avg
+
+============================================================
+Last updated: 2025-12-05T11:05:14.424596+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-05 08:05:12] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-05: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-04 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-04 to 2025-12-05...
+  Found 2 activities
+Fetching sleep data from 2025-12-04 to 2025-12-05...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 2 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-04 to 2025-12-05...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-04 to 2025-12-05...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 1 total events, 1 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 4 calendar events with Garmin workout templates...
+  Created 4 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 2 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 2 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 4 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 7 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 3 walks, 2.1 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 55/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 52 bpm (most recent), 48 bpm avg
+
+============================================================
+Last updated: 2025-12-05T13:05:11.996814+00:00
+============================================================
+
+✓ Sync complete!
+---
