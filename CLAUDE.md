@@ -107,6 +107,17 @@ python3 src/garmin_token_auth.py --test
 
 See [docs/GARMIN_TOKEN_AUTH.md](docs/GARMIN_TOKEN_AUTH.md) for complete authentication guide.
 
+**Workout Upload to Garmin**
+```bash
+# Upload structured workout to Garmin Connect calendar
+bash bin/upload_workout.sh path/to/workout.json
+
+# Or use Python directly
+python3 src/workout_uploader.py path/to/workout.json
+```
+
+Uploads workouts in Garmin JSON format to your Garmin Connect calendar. See [docs/GARMIN_WORKOUT_FORMAT.md](docs/GARMIN_WORKOUT_FORMAT.md) for complete format specification.
+
 **Weather Data**
 ```bash
 python3 src/get_weather.py  # Current conditions + 6-hour forecast
