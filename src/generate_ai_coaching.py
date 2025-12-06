@@ -9,6 +9,7 @@ Uses Google's Gemini API with generous free tier (1500 requests/day).
 import json
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 try:
@@ -123,8 +124,34 @@ def create_coaching_prompt(health_summary, weather_data):
         avg_stress = recent.get('avg_stress', 'N/A')
         recovery_details += f"Avg Stress: {avg_stress}/100\n"
 
+    # Add data freshness warning
+    from datetime import datetime
+    data_age_warning = ""
+    if 'last_updated' in cache:
+        try:
+            last_updated = datetime.fromisoformat(cache['last_updated'].replace('Z', '+00:00'))
+            age_hours = (datetime.now() - last_updated.replace(tzinfo=None)).total_seconds() / 3600
+            if age_hours > 24:
+                data_age_warning = f"\n⚠️ WARNING: Health data is {age_hours:.1f} hours old\n"
+        except:
+            pass
+
     prompt = f"""You are the VDOT Running Coach. Provide today's morning training report with intelligent, personalized recommendations.
 
+**CRITICAL: DATA INTEGRITY RULES**
+- If a metric is unavailable/missing, you MUST state "unavailable" or "no data"
+- NEVER estimate, interpolate, or guess health metrics (RHR, HRV, sleep, etc.)
+- NEVER fill data gaps with typical/average values
+- If uncertain about data, err on the side of saying "I don't have that data"
+- Only cite metrics that are explicitly provided in the data below
+- When citing metrics, use the EXACT values provided (no rounding beyond 1 decimal)
+
+**CONFIDENCE LEVELS (include in detailed section):**
+- HIGH confidence: Based on direct data from Garmin (e.g., "RHR shows...")
+- MEDIUM confidence: Based on inference from multiple metrics
+- LOW confidence: General guidance without specific data support
+
+{data_age_warning}
 **REQUIRED OUTPUT FORMAT:**
 Recovery: [2-4 word status]
 Today: [specific workout recommendation]
@@ -134,6 +161,8 @@ Note: [1 key insight, <50 chars]
 ---DETAILED---
 
 [Comprehensive analysis with full rationale]
+
+**Confidence Level:** [HIGH/MEDIUM/LOW] - [brief explanation]
 
 ===== HEALTH METRICS =====
 {health_summary}
@@ -161,15 +190,19 @@ Preferences: {athlete_context.get('training_preferences.md', 'Not available')[:5
 Analyze ALL the data above and provide:
 
 1. **Recovery Assessment**: Review sleep, RHR, readiness, days since marathon (Nov 24, 2025)
+   - ONLY use metrics that are explicitly provided above
+   - If a metric is missing, acknowledge it's unavailable
 2. **Training Context**: Consider where athlete is in training plan and recent workload
 3. **Today's Recommendation**:
    - If workout scheduled: Should they do it as-is, modify it, or skip it? Why?
    - If no workout: What should they do based on training plan + recovery?
 4. **Weather Impact**: Timing, pacing adjustments, safety considerations
 5. **Rationale**: Explain WHY this recommendation today (the "why" is critical)
+6. **Confidence Assessment**: State your confidence level and what data supports it
 
 Output the BRIEF format (4 lines), then ---DETAILED---, then your full analysis.
-Be specific and actionable. Consider the FULL context, not just one factor."""
+Be specific and actionable. Consider the FULL context, not just one factor.
+REMEMBER: Never fabricate or estimate metrics - only use what's provided."""
 
     return prompt
 
@@ -291,6 +324,9 @@ def main():
     health_summary = sys.argv[1]
     weather_data = sys.argv[2]
 
+    # Load health data for validation
+    health_data = load_health_data()
+
     # Create prompt
     prompt = create_coaching_prompt(health_summary, weather_data)
 
@@ -308,6 +344,33 @@ def main():
     if error:
         print(f"Error: {error}", file=sys.stderr)
         sys.exit(1)
+
+    # Validate AI response
+    try:
+        from ai_validation import validate_ai_response, format_validation_report
+
+        warnings, summary = validate_ai_response(response, health_data)
+
+        # Log validation results
+        print(f"AI Validation: {summary['confidence']} confidence ({summary['total_warnings']} warnings)", file=sys.stderr)
+
+        # If critical warnings, log them
+        if summary['warnings_by_severity']['critical'] > 0:
+            print("⚠️ CRITICAL VALIDATION WARNINGS:", file=sys.stderr)
+            for w in warnings:
+                if w.severity == 'CRITICAL':
+                    print(f"  - {w.message}", file=sys.stderr)
+
+        # Log full report to separate file
+        project_root = Path(__file__).parent.parent
+        validation_log = project_root / 'data' / 'ai_validation.log'
+        with open(validation_log, 'a') as f:
+            f.write(f"\n=== Validation: {datetime.now().isoformat()} ===\n")
+            f.write(format_validation_report(warnings, summary))
+            f.write("\n")
+
+    except Exception as e:
+        print(f"Warning: Validation failed: {e}", file=sys.stderr)
 
     print(response)
 
