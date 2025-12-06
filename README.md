@@ -18,9 +18,11 @@ Designed to work with [Claude Code](https://docs.claude.com/en/docs/claude-code)
 ### 📊 Health Data Integration
 
 - **Direct Garmin Connect Sync** - Automatic import of activities, sleep, HR, VO2 max, and biometric data
+- **Extended Metrics** - Endurance score, respiration data, GPS track details for route analysis
 - **VDOT Calculator** - Official Jack Daniels formulas for training pace calculations
 - **Garmin-Provided Analytics** - HR zone analysis, lactate threshold, HRV, training readiness scores
 - **Calendar Integration** - Import/export workouts from FinalSurge, TrainingPeaks, or any ICS calendar
+- **Workout Upload** - Push structured workouts directly to Garmin Connect calendar
 
 ### 📚 Workout Library
 
@@ -83,6 +85,9 @@ bash bin/workout_library.sh search --domain running --type tempo
 
 # View scheduled workouts
 bash bin/planned_workouts.sh list --upcoming 7 -v
+
+# Upload workout to Garmin Connect
+bash bin/upload_workout.sh path/to/workout.json
 
 # Export workouts to calendar
 bash bin/export_calendar.sh --days 14

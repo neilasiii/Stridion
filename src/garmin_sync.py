@@ -82,6 +82,51 @@ class GarminSyncError(Exception):
     pass
 
 
+def simplify_activity(activity: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Return only essential activity fields for AI analysis.
+
+    Reduces activity data from ~1000 tokens to ~200 tokens per activity
+    by keeping only the most important fields for coaching decisions.
+
+    This is useful for:
+    - Reducing JSON cache size
+    - Faster agent reads
+    - Lower token usage in AI analysis
+
+    Args:
+        activity: Full activity dictionary
+
+    Returns:
+        Simplified activity with essential fields only
+    """
+    essential_fields = [
+        'activity_id',
+        'date',
+        'activity_name',
+        'activity_type',
+        'duration_seconds',
+        'distance_miles',
+        'calories',
+        'avg_heart_rate',
+        'max_heart_rate',
+        'avg_speed',
+        'pace_per_mile'
+    ]
+
+    simplified = {k: v for k, v in activity.items() if k in essential_fields}
+
+    # Optionally keep split count but not full split data
+    if 'splits' in activity and activity['splits']:
+        simplified['split_count'] = len(activity['splits'])
+
+    # Optionally keep HR zone summary but not full zone data
+    if 'hr_zones' in activity and activity['hr_zones']:
+        simplified['hr_zone_count'] = len(activity['hr_zones'])
+
+    return simplified
+
+
 def retry_with_backoff(func: Callable, *args, max_retries: int = 3, quiet: bool = False, **kwargs):
     """
     Retry a function with exponential backoff on failure.
@@ -1332,6 +1377,115 @@ def fetch_progress_summary(client: Garmin, start_date: date, end_date: date, qui
 
     except Exception as e:
         print(f"Warning: Failed to fetch progress summary: {e}", file=sys.stderr)
+        return {}
+
+
+def fetch_endurance_score(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> Dict[str, Any]:
+    """
+    Fetch endurance score from Garmin Connect.
+
+    Endurance score measures long-term aerobic capacity based on heart rate
+    and activity patterns over time.
+
+    Args:
+        client: Authenticated Garmin client
+        start_date: Start date for endurance score query
+        end_date: End date for endurance score query
+        quiet: Suppress output
+
+    Returns:
+        Dictionary with endurance score data
+    """
+    if not quiet:
+        print(f"Fetching endurance score from {start_date} to {end_date}...")
+
+    try:
+        score_data = retry_with_backoff(
+            client.get_endurance_score,
+            start_date.isoformat(),
+            end_date.isoformat(),
+            quiet=quiet
+        )
+
+        if score_data and not quiet:
+            print(f"  Found endurance score data")
+
+        return score_data if score_data else {}
+
+    except Exception as e:
+        if not quiet:
+            print(f"Warning: Failed to fetch endurance score: {e}", file=sys.stderr)
+        return {}
+
+
+def fetch_respiration_data(client: Garmin, target_date: date, quiet: bool = False) -> Dict[str, Any]:
+    """
+    Fetch respiration (breathing rate) data from Garmin Connect.
+
+    Provides breathing rate data during sleep and activities, useful for
+    recovery and stress monitoring.
+
+    Args:
+        client: Authenticated Garmin client
+        target_date: Date for respiration data
+        quiet: Suppress output
+
+    Returns:
+        Dictionary with respiration data
+    """
+    if not quiet:
+        print(f"Fetching respiration data for {target_date}...")
+
+    try:
+        resp_data = retry_with_backoff(
+            client.get_respiration_data,
+            target_date.isoformat(),
+            quiet=quiet
+        )
+
+        if resp_data and not quiet:
+            print(f"  Found respiration data")
+
+        return resp_data if resp_data else {}
+
+    except Exception as e:
+        if not quiet:
+            print(f"Warning: Failed to fetch respiration data: {e}", file=sys.stderr)
+        return {}
+
+
+def fetch_activity_gps_details(client: Garmin, activity_id: str, quiet: bool = False) -> Dict[str, Any]:
+    """
+    Fetch detailed GPS track data for a specific activity.
+
+    Provides comprehensive activity details including GPS coordinates,
+    elevation profile, heart rate zones, and performance metrics.
+
+    Args:
+        client: Authenticated Garmin client
+        activity_id: Garmin activity ID
+        quiet: Suppress output
+
+    Returns:
+        Dictionary with detailed activity data including GPS track
+    """
+    if not quiet:
+        print(f"  Fetching GPS details for activity {activity_id}...")
+
+    try:
+        details = retry_with_backoff(
+            client.get_activity_details,
+            activity_id,
+            maxChartSize=2000,
+            maxPolylineSize=4000,
+            quiet=quiet
+        )
+
+        return details if details else {}
+
+    except Exception as e:
+        if not quiet:
+            print(f"  Warning: Could not fetch GPS details for activity {activity_id}: {e}", file=sys.stderr)
         return {}
 
 
