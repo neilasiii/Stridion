@@ -1,0 +1,55 @@
+{
+  "workoutName": "2025-12-12 - Easy Run 40min",
+  "sportType": {
+    "sportTypeId": 1,
+    "sportTypeKey": "running",
+    "displayOrder": 1
+  },
+  "estimatedDurationInSecs": 2400,
+  "workoutSegments": [
+    {
+      "segmentOrder": 1,
+      "sportType": {
+        "sportTypeId": 1,
+        "sportTypeKey": "running",
+        "displayOrder": 1
+      },
+      "workoutSteps": [
+        {
+          "type": "ExecutableStepDTO",
+          "stepOrder": 1,
+          "stepType": {
+            "stepTypeId": 1,
+            "stepTypeKey": "warmup",
+            "displayOrder": 1
+          },
+          "endCondition": {
+            "conditionTypeId": 2,
+            "conditionTypeKey": "time",
+            "displayOrder": 2,
+            "displayable": true
+          },
+          "endConditionValue": 2400,
+          "targetType": {
+            "workoutTargetTypeId": 6,
+            "workoutTargetTypeKey": "pace.zone",
+            "displayOrder": 6
+          },
+          "targetValueOne": 2.3529411764705883,
+          "targetValueTwo": 2.73972602739726,
+          "strokeType": {
+            "strokeTypeId": 0,
+            "displayOrder": 0
+          },
+          "equipmentType": {
+            "equipmentTypeId": 0,
+            "displayOrder": 0
+          },
+          "numberOfIterations": 1,
+          "workoutSteps": [],
+          "smartRepeat": false
+        }
+      ]
+    }
+  ]
+}
