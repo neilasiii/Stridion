@@ -39,6 +39,7 @@ This fetches latest Garmin Connect data, updates the cache, and provides a summa
 - `lactate_threshold{}` - Auto-detected threshold HR and pace
 - `race_predictions{}` - 5K, 10K, half marathon, marathon time predictions
 - `training_status{}` - Training load balance, VO2 max trends
+- **NEW:** `endurance_score` - Long-term aerobic capacity metric (fetch on-demand)
 
 **Recovery & Readiness:**
 - `training_readiness[]` - Daily readiness score (0-100) with contributing factors
@@ -46,12 +47,19 @@ This fetches latest Garmin Connect data, updates the cache, and provides a summa
 - `body_battery[]` - Energy charged/drained throughout day
 - `resting_hr_readings[]` - Daily resting heart rate
 - `sleep_sessions[]` - Sleep duration, stages, quality score
+- **NEW:** Respiration data - Breathing rate during sleep/activities (fetch on-demand)
 
 **Health Monitoring:**
 - `stress_readings[]` - All-day stress levels
 - `spo2_readings[]` - Blood oxygen saturation
 - `weight_readings[]` - Body weight and composition
 - `scheduled_workouts[]` - Planned workouts from FinalSurge/TrainingPeaks
+
+**Extended Data (On-Demand):**
+- **GPS Track Details** - Full route coordinates, elevation profile for any activity
+  - Use: `fetch_activity_gps_details(client, activity_id)` from `src/garmin_sync.py`
+  - Returns: Up to 4000 GPS coordinates + elevation data
+  - High token cost - only fetch when needed for route analysis
 
 ### Quick Access Pattern
 
@@ -301,6 +309,176 @@ bash bin/planned_workouts.sh adjust <workout_id> \
 4. **Update status after workouts** - Keep system current
 5. **Link to Garmin activities** - Use `--garmin-id` when marking complete
 6. **Document adjustments** - Clear reasoning for future reference
+
+---
+
+## Workout Upload to Garmin Connect
+
+**NEW CAPABILITY:** Upload structured workouts directly to the athlete's Garmin Connect calendar.
+
+### When to Use
+
+Upload workouts when:
+- Athlete requests a custom workout added to Garmin device
+- Creating interval sessions, tempo runs, or structured workouts
+- Converting planned workouts to Garmin-compatible format
+- Athlete prefers workouts on their watch vs. verbal/written instructions
+
+### Quick Upload
+
+```bash
+# Upload from JSON file
+bash bin/upload_workout.sh path/to/workout.json
+
+# Python direct (with validation)
+python3 src/workout_uploader.py path/to/workout.json
+```
+
+### Workout Format
+
+Workouts must be in **Garmin JSON format**. See `docs/GARMIN_WORKOUT_FORMAT.md` for complete reference.
+
+**Required Structure:**
+```json
+{
+  "workoutName": "2025-01-15 - Tempo Run 40min",
+  "sportType": {
+    "sportTypeId": 1,
+    "sportTypeKey": "running",
+    "displayOrder": 1
+  },
+  "workoutSegments": [{
+    "segmentOrder": 1,
+    "sportType": {"sportTypeId": 1, "sportTypeKey": "running", "displayOrder": 1},
+    "workoutSteps": [...]
+  }]
+}
+```
+
+### Pace Zone Conversion
+
+**CRITICAL:** Garmin requires pace in meters/second (m/s), but athletes think in min/km.
+
+**Conversion formula for pace target (e.g., 5:00/km with ±5s tolerance):**
+```python
+pace_sec = (5 * 60) + 0  # 300 seconds per km
+lower_sec = pace_sec + 5  # 305s (slower)
+upper_sec = pace_sec - 5  # 295s (faster)
+
+# Convert to m/s (faster pace = higher m/s value)
+target_value_one = 1000 / upper_sec  # 3.390 m/s (faster bound)
+target_value_two = 1000 / lower_sec  # 3.279 m/s (slower bound)
+```
+
+**CRITICAL:** `targetValueOne` must be **greater than** `targetValueTwo` (faster = higher m/s)
+
+### Example: Tempo Run Upload
+
+```json
+{
+  "workoutName": "2025-01-15 - Tempo Run 40min",
+  "sportType": {"sportTypeId": 1, "sportTypeKey": "running", "displayOrder": 1},
+  "estimatedDurationInSecs": 3900,
+  "workoutSegments": [{
+    "segmentOrder": 1,
+    "sportType": {"sportTypeId": 1, "sportTypeKey": "running", "displayOrder": 1},
+    "workoutSteps": [
+      {
+        "type": "ExecutableStepDTO",
+        "stepOrder": 1,
+        "stepType": {"stepTypeId": 1, "stepTypeKey": "warmup", "displayOrder": 1},
+        "endCondition": {"conditionTypeId": 2, "conditionTypeKey": "time", "displayOrder": 2, "displayable": true},
+        "endConditionValue": 900,
+        "targetType": {"workoutTargetTypeId": 1, "workoutTargetTypeKey": "no.target", "displayOrder": 1},
+        "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+        "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0},
+        "numberOfIterations": 1,
+        "workoutSteps": [],
+        "smartRepeat": false
+      },
+      {
+        "type": "ExecutableStepDTO",
+        "stepOrder": 2,
+        "stepType": {"stepTypeId": 3, "stepTypeKey": "interval", "displayOrder": 3},
+        "endCondition": {"conditionTypeId": 2, "conditionTypeKey": "time", "displayOrder": 2, "displayable": true},
+        "endConditionValue": 2400,
+        "targetType": {"workoutTargetTypeId": 6, "workoutTargetTypeKey": "pace.zone", "displayOrder": 6},
+        "targetValueOne": 3.390,
+        "targetValueTwo": 3.279,
+        "targetValueUnit": null,
+        "zoneNumber": 1,
+        "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+        "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0},
+        "numberOfIterations": 1,
+        "workoutSteps": [],
+        "smartRepeat": false
+      },
+      {
+        "type": "ExecutableStepDTO",
+        "stepOrder": 3,
+        "stepType": {"stepTypeId": 2, "stepTypeKey": "cooldown", "displayOrder": 2},
+        "endCondition": {"conditionTypeId": 2, "conditionTypeKey": "time", "displayOrder": 2, "displayable": true},
+        "endConditionValue": 600,
+        "targetType": {"workoutTargetTypeId": 1, "workoutTargetTypeKey": "no.target", "displayOrder": 1},
+        "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+        "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0},
+        "numberOfIterations": 1,
+        "workoutSteps": [],
+        "smartRepeat": false
+      }
+    ]
+  }]
+}
+```
+
+### Python API for Programmatic Upload
+
+```python
+from workout_uploader import upload_workout, validate_workout_json
+
+# Validate workout structure
+cleaned = validate_workout_json(workout_dict, auto_clean=True)
+
+# Upload to Garmin (requires authenticated client)
+response = upload_workout(client, workout_dict, auto_clean=True, quiet=False)
+
+# Response includes workoutId
+workout_id = response.get('workoutId')
+```
+
+### Key Notes
+
+- **Auto-cleaning:** Removes generated IDs (workoutId, ownerId, stepId, childStepId) automatically
+- **Validation:** Checks required fields and structure before upload
+- **Pace targets:** Use `pace.zone` (not `speed.zone`) for min/km display on watch
+- **No pace on warmup/cooldown:** Only set pace targets on main work intervals
+- **Complete documentation:** `docs/GARMIN_WORKOUT_FORMAT.md` has 600+ lines of reference
+
+### Troubleshooting
+
+**Common Errors:**
+- Missing required fields → Check `workoutName`, `sportType`, `workoutSegments`
+- Pace not showing correctly → Use `pace.zone` (not `speed.zone`)
+- Upload rejected → Ensure `targetValueOne` > `targetValueTwo` for pace zones
+- Validation errors → Review `docs/GARMIN_WORKOUT_FORMAT.md`
+
+**Testing Upload:**
+```bash
+# Validate without uploading
+python3 -c "
+from workout_uploader import validate_workout_json
+import json
+
+with open('my_workout.json') as f:
+    workout = json.load(f)
+
+try:
+    cleaned = validate_workout_json(workout)
+    print('✓ Validation passed')
+except Exception as e:
+    print(f'✗ Validation failed: {e}')
+"
+```
 
 ---
 

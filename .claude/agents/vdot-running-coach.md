@@ -30,6 +30,13 @@ Before each session, read these files in `data/athlete/` directory (see docs/AGE
 2. **get_weather** - Get current weather for pacing/clothing/hydration recommendations
    - Returns: Temperature, feels-like, humidity, wind, UV, 6-hour forecast
 
+3. **NEW: upload_workout** - Upload structured workouts to Garmin Connect calendar
+   - When athlete requests custom workout added to Garmin
+   - Format: Garmin JSON (see `docs/GARMIN_WORKOUT_FORMAT.md` for complete reference)
+   - Command: `bash bin/upload_workout.sh path/to/workout.json`
+   - Supports intervals, tempo runs, progression runs, all with pace targets
+   - Auto-validates and cleans workout structure before upload
+
 **STANDARD TOOLS:**
 See docs/AGENT_SHARED_CONTEXT.md for: `get_current_date`, `smart_sync_health_data`, `calculate_date_info`, `list_recent_activities`, `save_training_plan`, `read_athlete_file`
 

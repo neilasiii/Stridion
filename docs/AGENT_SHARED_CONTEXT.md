@@ -225,6 +225,7 @@ After calling `smart_sync_health_data`, the cache (`data/health/health_data_cach
 - Recent activities (running, strength, cycling, swimming, etc.)
 - Metrics: date, distance, duration, pace, avg/max HR, calories, splits
 - HR zones (time-in-zone per activity)
+- **NEW:** GPS track details available via `fetch_activity_gps_details(activity_id)` for route analysis
 
 **Recovery Metrics:**
 - Sleep: total duration, light/deep/REM/awake minutes, sleep score (0-100)
@@ -233,18 +234,76 @@ After calling `smart_sync_health_data`, the cache (`data/health/health_data_cach
 - Training Readiness: daily score (0-100) with recovery time and factors
 - Body Battery: energy charged/drained throughout day
 - Stress: all-day stress levels (avg/max)
+- **NEW:** Respiration data: breathing rate during sleep/activities for recovery monitoring
 
 **Performance Indicators:**
 - VO2 Max: Garmin estimates (ml/kg/min)
 - Lactate Threshold: auto-detected threshold HR and pace
 - Training Load: ATL, CTL, TSB (form/fitness/fatigue)
 - Race Predictions: current estimated race times
+- **NEW:** Endurance Score: long-term aerobic capacity metric
 
 **Other Metrics:**
 - Weight: body weight, body fat %, muscle mass
 - Gear Stats: equipment mileage (shoe replacement alerts)
 - Daily Steps: overall activity level
 - Scheduled Workouts: upcoming FinalSurge workouts
+
+**Data Access Note:**
+- Standard metrics in cache: ~1000 tokens per activity (full details)
+- Simplified view: Use `simplify_activity()` to reduce to ~200 tokens (essential fields only)
+- GPS details: Fetch on-demand only when needed (high token cost)
+
+---
+
+## Workout Upload to Garmin Connect
+
+**NEW CAPABILITY:** Agents can now upload structured workouts directly to the athlete's Garmin Connect calendar.
+
+**When to use workout upload:**
+- User requests a custom workout to be added to Garmin
+- Converting a planned workout into Garmin-compatible format
+- Creating interval sessions, tempo runs, or structured workouts
+
+**How to upload workouts:**
+
+```bash
+# Upload from JSON file
+bash bin/upload_workout.sh path/to/workout.json
+
+# Or Python direct
+python3 src/workout_uploader.py path/to/workout.json
+```
+
+**Workout Format Requirements:**
+- Must be valid Garmin JSON format (see `docs/GARMIN_WORKOUT_FORMAT.md`)
+- Required fields: `workoutName`, `sportType`, `workoutSegments`
+- Auto-cleaning removes generated IDs (workoutId, ownerId, stepId)
+- Validation prevents common errors
+
+**Key Documentation:**
+- **Complete format reference:** `docs/GARMIN_WORKOUT_FORMAT.md` (600+ lines)
+- Includes pace conversion formulas (min/km → m/s)
+- Step types (ExecutableStepDTO vs RepeatGroupDTO)
+- Complete working examples
+- Common error prevention guide
+
+**Python API (for programmatic creation):**
+```python
+from workout_uploader import upload_workout, validate_workout_json
+
+# Validate before upload
+cleaned = validate_workout_json(workout_dict, auto_clean=True)
+
+# Upload to Garmin (requires authenticated client)
+response = upload_workout(client, workout_dict, auto_clean=True)
+```
+
+**Important Notes:**
+- Workouts uploaded appear immediately in Garmin Connect calendar
+- Pace targets must use `pace.zone` (not `speed.zone`) for min/km display
+- No pace targets on warmup/cooldown/recovery steps
+- Requires valid Garmin authentication (OAuth tokens or credentials)
 
 ---
 
