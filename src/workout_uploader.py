@@ -81,11 +81,16 @@ def convert_pace_range_to_garmin(slower_pace_str: str, faster_pace_str: str, uni
         - targetValueOne = SLOWER pace (lower m/s)
         - targetValueTwo = FASTER pace (higher m/s)
 
+    Note:
+        Due to floating-point precision and Garmin's internal rounding, the displayed
+        pace may be off by ±1 second. This is normal and within acceptable tolerance.
+        Example: 11:10/mile may display as 11:09/mile in Garmin Connect.
+
     Example:
         >>> # Coach prescribed E pace: 10:00-11:10/mile
         >>> slower, faster = convert_pace_range_to_garmin("11:10", "10:00", unit="mile")
         >>> print(f"{slower:.3f} - {faster:.3f} m/s")
-        2.404 - 2.681 m/s  # Exactly 10:00-11:10/mile
+        2.402 - 2.681 m/s  # Displays as ~10:00-11:09/mile in Garmin
     """
     # Parse slower pace
     slow_parts = slower_pace_str.split(':')
@@ -108,6 +113,8 @@ def convert_pace_range_to_garmin(slower_pace_str: str, faster_pace_str: str, uni
         faster_sec_per_km = faster_total_sec
 
     # Convert to m/s
+    # NOTE: Store full precision (no rounding) to avoid pace display errors
+    # Garmin handles the rounding internally, rounding here causes 1-second errors
     slower_ms = 1000 / slower_sec_per_km
     faster_ms = 1000 / faster_sec_per_km
 
