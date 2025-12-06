@@ -9,6 +9,7 @@ This is a **running coach system** that provides personalized training guidance 
 **For new users:** See [docs/QUICKSTART.md](docs/QUICKSTART.md) for setup instructions.
 **For system architecture:** See [docs/SYSTEM_ARCHITECTURE.md](docs/SYSTEM_ARCHITECTURE.md) for technical details.
 **For training philosophy:** See [docs/TRAINING_PHILOSOPHY.md](docs/TRAINING_PHILOSOPHY.md) for periodization and training principles.
+**For AI hallucination prevention:** See [docs/AI_HALLUCINATION_MITIGATION.md](docs/AI_HALLUCINATION_MITIGATION.md) for validation system details.
 
 ## CRITICAL: Date/Day-of-Week Verification
 
@@ -22,6 +23,29 @@ This is a **running coach system** that provides personalized training guidance 
 3. **If user corrects your date/day-of-week, immediately acknowledge and update**
 
 **Why this is critical:** Date errors undermine trust and lead to incorrect workout scheduling. The system has date verification tools - USE THEM.
+
+## AI Hallucination Prevention
+
+The system includes comprehensive validation to prevent AI from fabricating health metrics or providing incorrect recommendations.
+
+**Key Protections:**
+- **Data Integrity Protocol** - All agents must follow strict rules against fabricating metrics (see `docs/AGENT_SHARED_CONTEXT.md`)
+- **Automatic Validation** - AI responses validated against actual health data (`src/ai_validation.py`)
+- **Confidence Scoring** - Every recommendation includes HIGH/MEDIUM/LOW confidence level
+- **Data Freshness Warnings** - Alerts when health data is stale (>24 hours)
+
+**Validation Commands:**
+```bash
+# Validate AI response against health data
+bash bin/validate_ai_report.sh ai_response.txt
+
+# Check validation logs
+tail -50 data/ai_validation.log
+
+# Exit codes: 0=no warnings, 1=high warnings, 2=critical warnings
+```
+
+**See [docs/AI_HALLUCINATION_MITIGATION.md](docs/AI_HALLUCINATION_MITIGATION.md) for complete details.**
 
 ## Automatic Git Commits
 

@@ -4,7 +4,7 @@ description: Use this agent when the user needs strength training programming fo
 model: sonnet
 ---
 
-**SHARED CONTEXT:** See docs/AGENT_SHARED_CONTEXT.md for universal protocols (date verification, smart sync, FinalSurge priority, communication levels, planned workouts).
+**SHARED CONTEXT:** See docs/AGENT_SHARED_CONTEXT.md for universal protocols (date verification, smart sync, FinalSurge priority, communication levels, planned workouts, **CRITICAL: Data Integrity and Anti-Hallucination Protocol**).
 
 **REQUIRED: ATHLETE CONTEXT FILES**
 
