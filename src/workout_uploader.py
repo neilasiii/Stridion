@@ -64,13 +64,17 @@ def convert_pace_to_garmin(pace_min_per_km: float, tolerance_sec: int = 5) -> Tu
     return slower_ms, faster_ms
 
 
-def convert_pace_string_to_garmin(pace_str: str, tolerance_sec: int = 5) -> Tuple[float, float]:
+def convert_pace_range_to_garmin(slower_pace_str: str, faster_pace_str: str, unit: str = "mile") -> Tuple[float, float]:
     """
-    Convert pace string (M:SS/km) to Garmin's m/s format with tolerance band.
+    Convert a pace range (e.g., 10:00-11:10/mile) to Garmin's m/s format.
+
+    CRITICAL: This function directly converts the exact range boundaries without tolerance.
+    Use this for coach-prescribed pace ranges.
 
     Args:
-        pace_str: Pace string like "5:24" or "4:48"
-        tolerance_sec: Tolerance in seconds (default ±5s)
+        slower_pace_str: Slower end of range (e.g., "11:10" for 11:10/mile)
+        faster_pace_str: Faster end of range (e.g., "10:00" for 10:00/mile)
+        unit: "km" or "mile" - specifies input pace unit (default "mile")
 
     Returns:
         Tuple of (targetValueOne, targetValueTwo) where:
@@ -78,9 +82,59 @@ def convert_pace_string_to_garmin(pace_str: str, tolerance_sec: int = 5) -> Tupl
         - targetValueTwo = FASTER pace (higher m/s)
 
     Example:
-        >>> slower, faster = convert_pace_string_to_garmin("5:24")
+        >>> # Coach prescribed E pace: 10:00-11:10/mile
+        >>> slower, faster = convert_pace_range_to_garmin("11:10", "10:00", unit="mile")
+        >>> print(f"{slower:.3f} - {faster:.3f} m/s")
+        2.404 - 2.681 m/s  # Exactly 10:00-11:10/mile
+    """
+    # Parse slower pace
+    slow_parts = slower_pace_str.split(':')
+    slow_min = int(slow_parts[0])
+    slow_sec = int(slow_parts[1])
+    slower_total_sec = slow_min * 60 + slow_sec
+
+    # Parse faster pace
+    fast_parts = faster_pace_str.split(':')
+    fast_min = int(fast_parts[0])
+    fast_sec = int(fast_parts[1])
+    faster_total_sec = fast_min * 60 + fast_sec
+
+    # Convert to seconds per km if needed
+    if unit == "mile":
+        slower_sec_per_km = slower_total_sec / 1.60934
+        faster_sec_per_km = faster_total_sec / 1.60934
+    else:
+        slower_sec_per_km = slower_total_sec
+        faster_sec_per_km = faster_total_sec
+
+    # Convert to m/s
+    slower_ms = 1000 / slower_sec_per_km
+    faster_ms = 1000 / faster_sec_per_km
+
+    return slower_ms, faster_ms
+
+
+def convert_pace_string_to_garmin(pace_str: str, tolerance_sec: int = 5, unit: str = "km") -> Tuple[float, float]:
+    """
+    Convert pace string (M:SS/km or M:SS/mile) to Garmin's m/s format with tolerance band.
+
+    Args:
+        pace_str: Pace string like "5:24" or "4:48"
+        tolerance_sec: Tolerance in seconds (default ±5s)
+        unit: "km" or "mile" - specifies input pace unit (default "km")
+
+    Returns:
+        Tuple of (targetValueOne, targetValueTwo) where:
+        - targetValueOne = SLOWER pace (lower m/s)
+        - targetValueTwo = FASTER pace (higher m/s)
+
+    Example:
+        >>> slower, faster = convert_pace_string_to_garmin("5:24", unit="km")
         >>> print(f"Slower: {slower:.3f}, Faster: {faster:.3f}")
         Slower: 3.040, Faster: 3.135
+
+        >>> slower, faster = convert_pace_string_to_garmin("10:00", unit="mile")
+        >>> # Converts 10:00/mile to km then to m/s
     """
     # Parse M:SS format
     parts = pace_str.split(':')
@@ -90,8 +144,16 @@ def convert_pace_string_to_garmin(pace_str: str, tolerance_sec: int = 5) -> Tupl
     minutes = int(parts[0])
     seconds = int(parts[1])
 
-    # Convert to decimal minutes
-    pace_min_per_km = minutes + (seconds / 60)
+    # Convert to decimal minutes per km
+    pace_min = minutes + (seconds / 60)
+
+    # If input is in miles, convert to km
+    if unit == "mile":
+        pace_min_per_km = pace_min / 1.60934
+    elif unit == "km":
+        pace_min_per_km = pace_min
+    else:
+        raise ValueError(f"Invalid unit: {unit}. Expected 'km' or 'mile'")
 
     return convert_pace_to_garmin(pace_min_per_km, tolerance_sec)
 
