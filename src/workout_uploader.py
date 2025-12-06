@@ -6,11 +6,17 @@ Uploads structured workouts to Garmin Connect calendar.
 Based on Garmin API format documented in garmin-connect-mcp-client.
 
 See docs/GARMIN_WORKOUT_FORMAT.md for detailed format specifications.
+
+CRITICAL PACE CONVERSION:
+- Garmin uses meters/second (m/s) for pace values
+- targetValueOne = SLOWER pace (lower m/s value)
+- targetValueTwo = FASTER pace (higher m/s value)
+- Do NOT include zoneNumber field for custom paces
 """
 
 import json
 import sys
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 from pathlib import Path
 
 try:
@@ -24,6 +30,70 @@ except ImportError:
 class WorkoutValidationError(Exception):
     """Raised when workout JSON validation fails"""
     pass
+
+
+def convert_pace_to_garmin(pace_min_per_km: float, tolerance_sec: int = 5) -> Tuple[float, float]:
+    """
+    Convert pace (min/km) to Garmin's m/s format with tolerance band.
+
+    Args:
+        pace_min_per_km: Pace in minutes per kilometer (e.g., 5.4 for 5:24/km)
+        tolerance_sec: Tolerance in seconds (default ±5s)
+
+    Returns:
+        Tuple of (targetValueOne, targetValueTwo) where:
+        - targetValueOne = SLOWER pace (lower m/s)
+        - targetValueTwo = FASTER pace (higher m/s)
+
+    Example:
+        >>> slower, faster = convert_pace_to_garmin(5.4)  # 5:24/km
+        >>> print(f"Slower: {slower:.3f}, Faster: {faster:.3f}")
+        Slower: 3.040, Faster: 3.135
+    """
+    # Convert decimal minutes to total seconds
+    pace_sec_per_km = pace_min_per_km * 60
+
+    # Create tolerance band
+    slower_sec = pace_sec_per_km + tolerance_sec
+    faster_sec = pace_sec_per_km - tolerance_sec
+
+    # Convert to m/s (1000 meters per second / pace)
+    slower_ms = 1000 / slower_sec  # Lower m/s value
+    faster_ms = 1000 / faster_sec  # Higher m/s value
+
+    return slower_ms, faster_ms
+
+
+def convert_pace_string_to_garmin(pace_str: str, tolerance_sec: int = 5) -> Tuple[float, float]:
+    """
+    Convert pace string (M:SS/km) to Garmin's m/s format with tolerance band.
+
+    Args:
+        pace_str: Pace string like "5:24" or "4:48"
+        tolerance_sec: Tolerance in seconds (default ±5s)
+
+    Returns:
+        Tuple of (targetValueOne, targetValueTwo) where:
+        - targetValueOne = SLOWER pace (lower m/s)
+        - targetValueTwo = FASTER pace (higher m/s)
+
+    Example:
+        >>> slower, faster = convert_pace_string_to_garmin("5:24")
+        >>> print(f"Slower: {slower:.3f}, Faster: {faster:.3f}")
+        Slower: 3.040, Faster: 3.135
+    """
+    # Parse M:SS format
+    parts = pace_str.split(':')
+    if len(parts) != 2:
+        raise ValueError(f"Invalid pace format: {pace_str}. Expected M:SS")
+
+    minutes = int(parts[0])
+    seconds = int(parts[1])
+
+    # Convert to decimal minutes
+    pace_min_per_km = minutes + (seconds / 60)
+
+    return convert_pace_to_garmin(pace_min_per_km, tolerance_sec)
 
 
 def validate_workout_json(workout: Dict[str, Any], auto_clean: bool = True) -> Dict[str, Any]:

@@ -783,7 +783,125 @@ python3 src/garmin_sync.py --days 30 --summary
 
 ---
 
+## Workout Upload Quick Reference
+
+### Pace Conversion Helper Functions
+
+Use these helper functions from `src/workout_uploader.py` for correct pace conversion:
+
+```python
+from workout_uploader import convert_pace_string_to_garmin
+
+# Convert pace string to Garmin format
+slower_ms, faster_ms = convert_pace_string_to_garmin("5:24")  # 5:24/km
+print(f"targetValueOne: {slower_ms:.3f}")  # 3.040 (SLOWER)
+print(f"targetValueTwo: {faster_ms:.3f}")  # 3.135 (FASTER)
+```
+
+**CRITICAL:**
+- `targetValueOne` = SLOWER pace (lower m/s value)
+- `targetValueTwo` = FASTER pace (higher m/s value)
+- Do NOT include `zoneNumber` field
+- Do NOT include `targetValueUnit` field
+
+### Example Interval Workout
+
+```python
+from workout_uploader import convert_pace_string_to_garmin, upload_workout, get_garmin_client
+
+# Get pace values
+slower, faster = convert_pace_string_to_garmin("4:48")  # Interval pace
+
+workout = {
+    "workoutName": "2025-12-10 - 6x400m Intervals",
+    "sportType": {"sportTypeId": 1, "sportTypeKey": "running", "displayOrder": 1},
+    "estimatedDurationInSecs": 2100,
+    "workoutSegments": [{
+        "segmentOrder": 1,
+        "sportType": {"sportTypeId": 1, "sportTypeKey": "running", "displayOrder": 1},
+        "workoutSteps": [
+            {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {"stepTypeId": 1, "stepTypeKey": "warmup", "displayOrder": 1},
+                "endCondition": {"conditionTypeId": 2, "conditionTypeKey": "time", "displayOrder": 2, "displayable": True},
+                "endConditionValue": 600,
+                "targetType": {"workoutTargetTypeId": 1, "workoutTargetTypeKey": "no.target", "displayOrder": 1},
+                "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+                "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0},
+                "numberOfIterations": 1,
+                "workoutSteps": [],
+                "smartRepeat": False
+            },
+            {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 2,
+                "stepType": {"stepTypeId": 6, "stepTypeKey": "repeat", "displayOrder": 6},
+                "numberOfIterations": 6,
+                "endCondition": {"conditionTypeId": 7, "conditionTypeKey": "iterations", "displayOrder": 7, "displayable": False},
+                "endConditionValue": 6,
+                "targetType": {"workoutTargetTypeId": 1, "workoutTargetTypeKey": "no.target", "displayOrder": 1},
+                "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+                "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0},
+                "smartRepeat": False,
+                "workoutSteps": [
+                    {
+                        "type": "ExecutableStepDTO",
+                        "stepOrder": 1,
+                        "stepType": {"stepTypeId": 3, "stepTypeKey": "interval", "displayOrder": 3},
+                        "endCondition": {"conditionTypeId": 3, "conditionTypeKey": "distance", "displayOrder": 3, "displayable": True},
+                        "endConditionValue": 400,
+                        "targetType": {"workoutTargetTypeId": 6, "workoutTargetTypeKey": "pace.zone", "displayOrder": 6},
+                        "targetValueOne": slower,  # SLOWER (3.413 m/s)
+                        "targetValueTwo": faster,  # FASTER (3.534 m/s)
+                        "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+                        "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0},
+                        "numberOfIterations": 1,
+                        "workoutSteps": [],
+                        "smartRepeat": False
+                    },
+                    {
+                        "type": "ExecutableStepDTO",
+                        "stepOrder": 2,
+                        "stepType": {"stepTypeId": 4, "stepTypeKey": "recovery", "displayOrder": 4},
+                        "endCondition": {"conditionTypeId": 2, "conditionTypeKey": "time", "displayOrder": 2, "displayable": True},
+                        "endConditionValue": 90,
+                        "targetType": {"workoutTargetTypeId": 1, "workoutTargetTypeKey": "no.target", "displayOrder": 1},
+                        "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+                        "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0},
+                        "numberOfIterations": 1,
+                        "workoutSteps": [],
+                        "smartRepeat": False
+                    }
+                ]
+            },
+            {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {"stepTypeId": 2, "stepTypeKey": "cooldown", "displayOrder": 2},
+                "endCondition": {"conditionTypeId": 2, "conditionTypeKey": "time", "displayOrder": 2, "displayable": True},
+                "endConditionValue": 600,
+                "targetType": {"workoutTargetTypeId": 1, "workoutTargetTypeKey": "no.target", "displayOrder": 1},
+                "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+                "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0},
+                "numberOfIterations": 1,
+                "workoutSteps": [],
+                "smartRepeat": False
+            }
+        ]
+    }]
+}
+
+# Upload
+client = get_garmin_client()
+response = upload_workout(client, workout)
+print(f"Uploaded! Workout ID: {response['workoutId']}")
+```
+
+---
+
 For complete technical details:
 - **Health Data System:** `docs/HEALTH_DATA_SYSTEM.md`
+- **Garmin Workout Format:** `docs/GARMIN_WORKOUT_FORMAT.md`
 - **Architecture:** `docs/ARCHITECTURE.md`
 - **Garmin Authentication:** `docs/GARMIN_TOKEN_AUTH.md`
