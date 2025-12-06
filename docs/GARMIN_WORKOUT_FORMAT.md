@@ -207,35 +207,37 @@ For any pace in "m:ss/km" format (e.g., 3:50/km):
 2. **Calculate total seconds:** `paceSec = (minutes × 60) + seconds = 230`
 3. **Validate range:** If `paceSec < 60` or `paceSec > 420`, use `no.target` instead
 4. **Create ±5s tolerance band:**
-   - `lowerSec = paceSec + 5 = 235` (slower pace)
-   - `upperSec = paceSec - 5 = 225` (faster pace)
+   - `slowerSec = paceSec + 5 = 235` (slower pace)
+   - `fasterSec = paceSec - 5 = 225` (faster pace)
 5. **Convert to m/s:**
-   - `lowerMs = 1000 / lowerSec = 1000 / 235 = 4.255` (slower = lower m/s)
-   - `upperMs = 1000 / upperSec = 1000 / 225 = 4.444` (faster = higher m/s)
+   - `slowerMs = 1000 / slowerSec = 1000 / 235 = 4.255` (slower = lower m/s)
+   - `fasterMs = 1000 / fasterSec = 1000 / 225 = 4.444` (faster = higher m/s)
 6. **Apply to workout:**
-   - `targetValueOne = upperMs = 4.444` (faster bound)
-   - `targetValueTwo = lowerMs = 4.255` (slower bound)
+   - `targetValueOne = slowerMs = 4.255` (SLOWER bound - lower m/s)
+   - `targetValueTwo = fasterMs = 4.444` (FASTER bound - higher m/s)
 
-**CRITICAL RULE:** `targetValueOne` > `targetValueTwo` (faster pace = higher m/s value)
+**CRITICAL RULE:** `targetValueOne` < `targetValueTwo` (targetValueOne is SLOWER pace = lower m/s value)
 
 ### Example: 5:00/km pace
 
 ```
 paceSec = 300 seconds
-lowerSec = 305 (5:05/km - slower)
-upperSec = 295 (4:55/km - faster)
-lowerMs = 1000/305 = 3.279 m/s
-upperMs = 1000/295 = 3.390 m/s
+slowerSec = 305 (5:05/km - slower)
+fasterSec = 295 (4:55/km - faster)
+slowerMs = 1000/305 = 3.279 m/s (lower value)
+fasterMs = 1000/295 = 3.390 m/s (higher value)
 
 JSON:
 {
   "targetType": {"workoutTargetTypeId": 6, "workoutTargetTypeKey": "pace.zone", "displayOrder": 6},
-  "targetValueOne": 3.390,
-  "targetValueTwo": 3.279,
-  "targetValueUnit": null,
-  "zoneNumber": 1
+  "targetValueOne": 3.279,  // SLOWER (lower m/s)
+  "targetValueTwo": 3.390,  // FASTER (higher m/s)
+  "strokeType": {"strokeTypeId": 0, "displayOrder": 0},
+  "equipmentType": {"equipmentTypeId": 0, "displayOrder": 0}
 }
 ```
+
+**Note:** Do NOT include `zoneNumber` field - it causes Garmin to use predefined zones instead of custom pace values.
 
 ### Pace Target Rules
 
@@ -243,8 +245,8 @@ JSON:
 - **Never** set pace target on recovery (use `no.target`)
 - **Never** set pace target on cooldown (use `no.target`)
 - **Never** set pace target on RepeatGroupDTO level (only on child steps)
-- `zoneNumber` can be 1 or null (both work)
-- `targetValueUnit` should be null for pace zones
+- **Never** include `zoneNumber` field for custom pace targets (causes Garmin to ignore custom values)
+- **Never** include `targetValueUnit` field (should be omitted entirely)
 
 ---
 

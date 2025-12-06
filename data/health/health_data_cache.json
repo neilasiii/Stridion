@@ -1,7 +1,48 @@
 {
-  "last_updated": "2025-12-05T19:21:54.779948+00:00",
-  "last_sync_date": "2025-12-05",
+  "last_updated": "2025-12-06T15:05:13.641689+00:00",
+  "last_sync_date": "2025-12-06",
   "activities": [
+    {
+      "activity_id": 21179285867,
+      "date": "2025-12-05T16:47:51",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 983.8599853515625,
+      "distance_miles": 0.762356,
+      "calories": 75.0,
+      "avg_heart_rate": 79.0,
+      "max_heart_rate": 89.0,
+      "avg_speed": 2.789464,
+      "pace_per_mile": 21.509198,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 162
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 172
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 182
+        }
+      ]
+    },
     {
       "activity_id": 21168556034,
       "date": "2025-12-04T11:08:46",
@@ -25054,6 +25095,16 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-12-06",
+      "total_duration_minutes": 510.0,
+      "light_sleep_minutes": 347.0,
+      "deep_sleep_minutes": 64.0,
+      "rem_sleep_minutes": 99.0,
+      "awake_minutes": 137.0,
+      "sleep_score": 53,
+      "deep_sleep_percentage": 12.55
+    },
+    {
       "date": "2025-12-05",
       "total_duration_minutes": 414.0,
       "light_sleep_minutes": 257.0,
@@ -28892,6 +28943,18 @@
   ],
   "weight_readings": [
     {
+      "timestamp": "2025-12-06T14:22:55.017000+00:00",
+      "weight_lbs": 168.40024,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-12-05T14:23:03.015000+00:00",
+      "weight_lbs": 169.89938,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
       "timestamp": "2025-12-03T13:21:16.932000+00:00",
       "weight_lbs": 169.49814,
       "body_fat_percentage": null,
@@ -29404,8 +29467,12 @@
   ],
   "resting_hr_readings": [
     [
+      "2025-12-06T12:00:00",
+      45
+    ],
+    [
       "2025-12-05T12:00:00",
-      48
+      46
     ],
     [
       "2025-12-04T12:00:00",
@@ -30937,6 +31004,16 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-12-06",
+      "weekly_avg": 65,
+      "last_night_avg": 74,
+      "last_night_5min_high": 117,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
     {
       "date": "2025-12-05",
       "weekly_avg": 64,
@@ -34770,14 +34847,24 @@
   ],
   "training_readiness": [
     {
-      "date": "2025-12-05",
-      "score": 58,
+      "date": "2025-12-06",
+      "score": 51,
       "level": "MODERATE",
-      "recovery_time": 124,
+      "recovery_time": 102,
+      "sleep_score": 53,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 115
+    },
+    {
+      "date": "2025-12-05",
+      "score": 59,
+      "level": "MODERATE",
+      "recovery_time": 1,
       "sleep_score": 62,
       "hrv_feedback": "GOOD",
       "stress_feedback": "GOOD",
-      "acute_load": 127
+      "acute_load": 131
     },
     {
       "date": "2025-12-04",
@@ -38602,8 +38689,13 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-12-06",
+      "avg_stress": 11,
+      "max_stress": 72
+    },
+    {
       "date": "2025-12-05",
-      "avg_stress": 22,
+      "avg_stress": 21,
       "max_stress": 89
     },
     {
@@ -40519,9 +40611,15 @@
   ],
   "spo2_readings": [
     {
+      "date": "2025-12-06",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 95.0
+    },
+    {
       "date": "2025-12-05",
       "avg_spo2": 94.0,
-      "lowest_spo2": 88,
+      "lowest_spo2": 86,
       "avg_sleep_spo2": 95.0
     },
     {
@@ -42819,9 +42917,14 @@
   ],
   "body_battery": [
     {
+      "date": "2025-12-06",
+      "charged": 50,
+      "drained": 9
+    },
+    {
       "date": "2025-12-05",
-      "charged": 45,
-      "drained": 22
+      "charged": 66,
+      "drained": 40
     },
     {
       "date": "2025-12-04",
@@ -44735,23 +44838,23 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-12-05",
-    "time_5k": 1473,
-    "time_10k": 3090,
-    "time_half_marathon": 6899,
-    "time_marathon": 15044
+    "date": "2025-12-06",
+    "time_5k": 1479,
+    "time_10k": 3103,
+    "time_half_marathon": 6925,
+    "time_marathon": 15104
   },
   "training_status": {
-    "date": "2025-12-05",
+    "date": "2025-12-06",
     "vo2_max": {
       "date": "2025-12-04",
       "value": 50.0,
       "precise_value": 50.2
     },
     "training_load": {
-      "date": "2025-12-05",
+      "date": "2025-12-06",
       "aerobic_low": 434.2562,
-      "aerobic_high": 747.9109,
+      "aerobic_high": 567.8673,
       "anaerobic": 0.0,
       "feedback": "ANAEROBIC_SHORTAGE"
     },
@@ -44845,8 +44948,8 @@
     "threshold_speed_mps": 0.33611017,
     "threshold_speed_mph": 0.7518582836798,
     "functional_threshold_power": 361,
-    "power_to_weight_ratio": 4.695446327536647,
-    "weight_kg": 76.883
+    "power_to_weight_ratio": 4.726058781174314,
+    "weight_kg": 76.385
   },
   "gear_stats": [
     {
@@ -44917,8 +45020,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 502675.7987976074,
-      "total_activities": 59,
+      "total_distance_meters": 503902.68881225586,
+      "total_activities": 60,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -44942,8 +45045,14 @@
   ],
   "daily_steps": [
     {
+      "date": "2025-12-06",
+      "total_steps": 685,
+      "goal_steps": 11790,
+      "goal_met": false
+    },
+    {
       "date": "2025-12-05",
-      "total_steps": 4325,
+      "total_steps": 8777,
       "goal_steps": 12120,
       "goal_met": false
     },
@@ -45147,8 +45256,8 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-11-05",
-    "end_date": "2025-12-05",
+    "start_date": "2025-12-05",
+    "end_date": "2025-12-06",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,

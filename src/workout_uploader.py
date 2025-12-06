@@ -205,6 +205,59 @@ def upload_workout_from_file(client: Garmin, file_path: str,
     return upload_workout(client, workout_json, auto_clean=auto_clean, quiet=quiet)
 
 
+def get_garmin_client(quiet: bool = False) -> Garmin:
+    """
+    Get authenticated Garmin client for workout upload.
+    Uses token authentication if available, falls back to password auth.
+
+    Args:
+        quiet: If True, suppress informational messages
+
+    Returns:
+        Authenticated Garmin client
+
+    Raises:
+        Exception: If authentication fails
+    """
+    # Add src directory to path for imports
+    sys.path.insert(0, str(Path(__file__).parent))
+
+    try:
+        # Try token authentication first (from garmin_token_auth.py)
+        from garmin_token_auth import authenticate_with_tokens
+
+        client = authenticate_with_tokens()
+        if client:
+            if not quiet:
+                print("✓ Successfully authenticated with Garmin Connect (using tokens)")
+            return client
+    except Exception as e:
+        if not quiet:
+            print(f"⚠ Token auth failed: {e}", file=sys.stderr)
+
+    # Fall back to password authentication
+    import os
+    email = os.environ.get('GARMIN_EMAIL')
+    password = os.environ.get('GARMIN_PASSWORD')
+
+    if not email or not password:
+        raise Exception(
+            "Authentication failed: No valid tokens found and GARMIN_EMAIL/GARMIN_PASSWORD not set"
+        )
+
+    try:
+        client = Garmin(email, password)
+        client.login()
+
+        if not quiet:
+            print("✓ Successfully authenticated with Garmin Connect (using password)")
+
+        return client
+
+    except Exception as e:
+        raise Exception(f"Failed to authenticate with Garmin Connect: {e}")
+
+
 def main():
     """
     Command-line interface for workout upload.
@@ -212,30 +265,17 @@ def main():
     Usage:
         python3 src/workout_uploader.py <workout.json>
     """
-    import os
-
     if len(sys.argv) < 2:
         print("Usage: python3 src/workout_uploader.py <workout.json>", file=sys.stderr)
-        print("\nEnvironment variables required:", file=sys.stderr)
-        print("  GARMIN_EMAIL     - Your Garmin Connect email", file=sys.stderr)
-        print("  GARMIN_PASSWORD  - Your Garmin Connect password", file=sys.stderr)
+        print("\nAuthentication: Uses OAuth tokens from ~/.garminconnect/", file=sys.stderr)
+        print("                or GARMIN_EMAIL/GARMIN_PASSWORD environment variables", file=sys.stderr)
         sys.exit(1)
 
     workout_file = sys.argv[1]
 
-    # Get Garmin credentials
-    email = os.getenv('GARMIN_EMAIL')
-    password = os.getenv('GARMIN_PASSWORD')
-
-    if not email or not password:
-        print("Error: GARMIN_EMAIL and GARMIN_PASSWORD environment variables required", file=sys.stderr)
-        sys.exit(1)
-
     try:
-        # Authenticate with Garmin
-        print("Authenticating with Garmin Connect...")
-        client = Garmin(email, password)
-        client.login()
+        # Authenticate with Garmin (token-based or password)
+        client = get_garmin_client()
 
         # Upload workout
         response = upload_workout_from_file(client, workout_file)

@@ -3728,3 +3728,1088 @@ Last updated: 2025-12-05T19:05:08.713184+00:00
 
 ✓ Sync complete!
 ---
+[2025-12-05 16:05:16] Sync attempt (exit code: 0)
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-04 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-04 to 2025-12-05...
+  Found 2 activities
+Fetching sleep data from 2025-12-04 to 2025-12-05...
+  Found 2 sleep sessions
+Fetching VO2 max data...
+  Found 1 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 2 HRV readings
+Fetching training readiness data...
+  Found 2 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-04 to 2025-12-05...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-04 to 2025-12-05...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 2 records
+  ✓ Sleep: 2 records
+  ✓ VO2 Max: 1 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 2 records
+  ✓ Training Readiness: 2 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 7 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 3 walks, 2.1 miles
+
+Sleep: 15 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 55/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 48 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-05T21:05:16.399333+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-05 18:05:15] Sync attempt (exit code: 0)
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-04 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-04 to 2025-12-05...
+  Found 3 activities
+Fetching sleep data from 2025-12-04 to 2025-12-05...
+  Found 2 sleep sessions
+Fetching VO2 max data...
+  Found 1 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 2 HRV readings
+Fetching training readiness data...
+  Found 2 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-04 to 2025-12-05...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-04 to 2025-12-05...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 6 total events, 6 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 9 calendar events with Garmin workout templates...
+  Created 9 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 3 records
+  ✓ Sleep: 2 records
+  ✓ VO2 Max: 1 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 2 records
+  ✓ Training Readiness: 2 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 9 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 15 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 55/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 48 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-05T23:05:14.979080+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-05 20:05:14] Sync attempt (exit code: 0)
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-04 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-04 to 2025-12-05...
+  Found 3 activities
+Fetching sleep data from 2025-12-04 to 2025-12-05...
+  Found 2 sleep sessions
+Fetching VO2 max data...
+  Found 1 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 2 HRV readings
+Fetching training readiness data...
+  Found 2 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-04 to 2025-12-05...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-04 to 2025-12-05...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 6 total events, 6 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 9 calendar events with Garmin workout templates...
+  Created 9 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 3 records
+  ✓ Sleep: 2 records
+  ✓ VO2 Max: 1 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 2 records
+  ✓ Training Readiness: 2 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 9 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 48 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-06T01:05:14.246966+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-05 22:05:11] Sync attempt (exit code: 0)
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-04 to 2025-12-05
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-04 to 2025-12-05...
+  Found 3 activities
+Fetching sleep data from 2025-12-04 to 2025-12-05...
+  Found 2 sleep sessions
+Fetching VO2 max data...
+  Found 1 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 2 HRV readings
+Fetching training readiness data...
+  Found 2 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-04 to 2025-12-05...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-04 to 2025-12-05...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 6 total events, 6 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 9 calendar events with Garmin workout templates...
+  Created 9 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 3 records
+  ✓ Sleep: 2 records
+  ✓ VO2 Max: 1 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 2 records
+  ✓ Training Readiness: 2 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 9 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 48 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-06T03:05:10.945467+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-06 00:05:14] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-06: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-05 to 2025-12-06
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-05 to 2025-12-06...
+  Found 1 activities
+Fetching sleep data from 2025-12-05 to 2025-12-06...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 1 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 1 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-05
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-05 to 2025-12-06...
+  Found 1 days of step data
+Fetching progress summary from 2025-12-05 to 2025-12-06...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 1 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 1 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 1 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 1 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 48 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-06T05:05:14.224461+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-06 02:05:14] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-06: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-05 to 2025-12-06
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-05 to 2025-12-06...
+  Found 1 activities
+Fetching sleep data from 2025-12-05 to 2025-12-06...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 1 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-06
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-05 to 2025-12-06...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-05 to 2025-12-06...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 1 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 1 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 45 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-06T07:05:14.534850+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-06 04:05:12] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-06: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-05 to 2025-12-06
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-05 to 2025-12-06...
+  Found 1 activities
+Fetching sleep data from 2025-12-05 to 2025-12-06...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 1 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-06
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-05 to 2025-12-06...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-05 to 2025-12-06...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 1 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 1 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 45 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-06T09:05:12.466427+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-06 06:05:13] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-06: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-05 to 2025-12-06
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-05 to 2025-12-06...
+  Found 1 activities
+Fetching sleep data from 2025-12-05 to 2025-12-06...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 1 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-06
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-05 to 2025-12-06...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-05 to 2025-12-06...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 1 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 1 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 45 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-06T11:05:13.410130+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-06 08:05:14] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-06: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-05 to 2025-12-06
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-05 to 2025-12-06...
+  Found 1 activities
+Fetching sleep data from 2025-12-05 to 2025-12-06...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 1 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-06
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-05 to 2025-12-06...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-05 to 2025-12-06...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 1 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 1 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 14 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 169.5 lbs (most recent)
+
+Resting HR: 45 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-06T13:05:14.571672+00:00
+============================================================
+
+✓ Sync complete!
+---
+[2025-12-06 10:05:13] Sync attempt (exit code: 0)
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-05 to 2025-12-06
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-05 to 2025-12-06...
+  Found 1 activities
+Fetching sleep data from 2025-12-05 to 2025-12-06...
+  Found 2 sleep sessions
+Fetching VO2 max data...
+  Found 1 VO2 max readings
+Fetching weight data...
+  Found 2 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 2 HRV readings
+Fetching training readiness data...
+  Found 2 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-06
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 81 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-05 to 2025-12-06...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-05 to 2025-12-06...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 1 records
+  ✓ Sleep: 2 records
+  ✓ VO2 Max: 1 records
+  ✓ Weight: 2 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 2 records
+  ✓ Training Readiness: 2 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 8 total
+  Running: 3 runs, 32.4 miles, 5.6 hrs
+           Avg pace: 10:17/mile
+  Walking: 4 walks, 2.8 miles
+
+Sleep: 15 nights
+  Avg duration: 7.3 hrs
+  Avg sleep score: 56/100
+
+VO2 Max: 50.2 ml/kg/min (most recent)
+
+Weight: 168.4 lbs (most recent)
+
+Resting HR: 45 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-06T15:05:13.641689+00:00
+============================================================
+
+✓ Sync complete!
+---
