@@ -194,14 +194,32 @@ head -5 data/athlete/communication_preferences.md  # View current mode
 
 **Detail Levels:** BRIEF (concise), STANDARD (balanced), DETAILED (comprehensive). See [docs/COMMUNICATION_PREFERENCES_GUIDE.md](docs/COMMUNICATION_PREFERENCES_GUIDE.md).
 
+**Morning Report (AI-Powered)**
+
+```bash
+bash bin/morning_report.sh               # Generate report + notification
+bash bin/morning_report.sh --view        # View last full report
+bash bin/morning_report.sh --no-sync     # Skip Garmin sync (use cached data)
+
+# Python API
+python3 src/morning_report.py                    # Full output (notification + report)
+python3 src/morning_report.py --notification-only # Compact notification (~200 chars)
+python3 src/morning_report.py --full-only        # Detailed markdown report
+python3 src/morning_report.py --json             # JSON output with all data
+```
+
+**What it does:**
+- Uses Claude Code headless to analyze recovery metrics and scheduled workout
+- Recommends workout modifications based on readiness, body battery, HRV, sleep
+- Generates compact notification (<240 chars) for Android
+- Creates detailed markdown report with rationale
+- Falls back to rule-based recommendations if AI unavailable
+
 **Automation (Termux)**
 
 ```bash
 bash bin/setup_cron.sh                   # Setup automated sync + morning reports
 bash bin/sync_with_notification.sh       # Manual sync with notification (shows only NEW items)
-bash bin/morning_report.sh               # AI-powered brief report
-bash bin/show_detailed_report.sh         # Enhanced text report
-bash bin/view_morning_report.sh          # Enhanced HTML report
 ```
 
 **Recommended Cron Setup:**

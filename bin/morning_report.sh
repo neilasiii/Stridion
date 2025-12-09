@@ -1,26 +1,23 @@
 #!/bin/bash
 #
-# AI-Powered Morning Report - Daily health and training summary with Claude Code
+# AI-Powered Morning Report
 #
-# Uses Claude Code in headless mode to generate intelligent training recommendations
-# based on recent health data, recovery metrics, and scheduled workouts.
+# Generates an AI coaching report with workout recommendations based on
+# recovery metrics. Sends a compact notification with option to view full report.
 #
-# Designed to run as a cron job at 0715 daily
+# Usage:
+#   morning_report.sh           # Full flow: sync, generate, notify
+#   morning_report.sh --view    # View last generated full report
+#   morning_report.sh --no-sync # Skip Garmin sync (use cached data)
 #
 
-set -e  # Exit on error
+set -e
 
-# Get the directory of this script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-
-# Log file for debugging
 LOG_FILE="$PROJECT_ROOT/data/morning_report.log"
-echo "=== Morning Report (AI): $(date) ===" >> "$LOG_FILE"
-
-# 1. Sync latest Garmin data (incremental - only fetches new data)
-echo "Syncing latest Garmin data..." >> "$LOG_FILE"
-cd "$PROJECT_ROOT"
+REPORT_FILE="$PROJECT_ROOT/data/morning_report.md"
+NOTIFICATION_CHANNEL="morning-report"
 
 # Use venv Python if available
 if [ -f "$PROJECT_ROOT/venv/bin/python3" ]; then
@@ -29,72 +26,87 @@ else
     PYTHON="python3"
 fi
 
-"$PYTHON" "$PROJECT_ROOT/src/garmin_sync.py" --quiet >> "$LOG_FILE" 2>&1 || {
-    echo "Garmin sync failed" >> "$LOG_FILE"
-    termux-notification --title "Morning Report Error" --content "Failed to sync Garmin data" --channel morning-report
-    exit 1
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
 }
 
-# 2. Fetch current weather
-echo "Fetching weather..." >> "$LOG_FILE"
-WEATHER=$("$PYTHON" "$PROJECT_ROOT/src/get_weather.py" 2>> "$LOG_FILE") || {
-    echo "Weather fetch failed, continuing without weather data..." >> "$LOG_FILE"
-    WEATHER="Weather data unavailable"
-}
-
-# 3. Extract health summary using Python
-echo "Extracting health summary..." >> "$LOG_FILE"
-HEALTH_SUMMARY=$("$PYTHON" "$PROJECT_ROOT/src/generate_morning_report.py" 2>> "$LOG_FILE") || {
-    echo "Health summary extraction failed" >> "$LOG_FILE"
-    termux-notification --title "Morning Report Error" --content "Failed to extract health data" --channel morning-report
-    exit 1
-}
-
-# 4. Generate AI-powered recommendations
-echo "Generating AI recommendations..." >> "$LOG_FILE"
-
-# Try AI-powered generation (Gemini free tier or Anthropic)
-if [ -n "$GEMINI_API_KEY" ] || [ -n "$ANTHROPIC_API_KEY" ]; then
-    AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_ai_coaching.py" "$HEALTH_SUMMARY" "$WEATHER" 2>> "$LOG_FILE") || {
-        echo "AI generation failed, using intelligent fallback" >> "$LOG_FILE"
-        AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE")
-    }
-else
-    echo "No API key set (GEMINI_API_KEY or ANTHROPIC_API_KEY), using intelligent fallback" >> "$LOG_FILE"
-    AI_RESPONSE=$("$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_report.py" "$WEATHER" 2>> "$LOG_FILE")
+# View existing report
+if [ "$1" = "--view" ]; then
+    if [ -f "$REPORT_FILE" ]; then
+        # Try to open with termux-share (works better for viewing)
+        if command -v termux-share >/dev/null 2>&1; then
+            termux-share "$REPORT_FILE"
+        else
+            cat "$REPORT_FILE"
+        fi
+    else
+        echo "No morning report found. Run morning_report.sh first."
+        exit 1
+    fi
+    exit 0
 fi
 
-# Split response into BRIEF and DETAILED versions
-REPORT_BRIEF=$(echo "$AI_RESPONSE" | sed -n '1,/---DETAILED---/p' || echo "$AI_RESPONSE" | head -10)
-REPORT_DETAILED=$(echo "$AI_RESPONSE" | sed -n '/---DETAILED---/,$p' | sed '1d' || echo "$AI_RESPONSE")
+log "=== Morning Report Started ==="
 
-# Use brief version for notification
-REPORT="$REPORT_BRIEF"
+# Sync Garmin data unless --no-sync
+if [ "$1" != "--no-sync" ]; then
+    log "Syncing Garmin data..."
+    cd "$PROJECT_ROOT"
 
-# 5. Generate enhanced HTML report for click action
-DETAILED_REPORT_HTML="$PROJECT_ROOT/data/morning_report_detailed.html"
+    # Use smart_sync for efficiency (checks cache age)
+    if bash "$PROJECT_ROOT/bin/smart_sync.sh" >> "$LOG_FILE" 2>&1; then
+        log "Sync completed"
+    else
+        log "Sync failed, continuing with cached data"
+    fi
+fi
 
-# Generate enhanced HTML report with visualizations, gauges, and charts
-echo "Generating enhanced HTML report..." >> "$LOG_FILE"
-"$PYTHON" "$PROJECT_ROOT/src/generate_enhanced_html.py" "$WEATHER" > "$DETAILED_REPORT_HTML" 2>> "$LOG_FILE"
+# Generate report
+log "Generating AI report..."
+cd "$PROJECT_ROOT"
 
-# 6. Copy HTML to Downloads folder (accessible via file:// URIs)
-DOWNLOADS_HTML="$HOME/storage/downloads/morning_report.html"
-cp "$DETAILED_REPORT_HTML" "$DOWNLOADS_HTML" 2>> "$LOG_FILE"
+# Run the Python generator - capture both notification and status
+if OUTPUT=$("$PYTHON" "$PROJECT_ROOT/src/morning_report.py" 2>> "$LOG_FILE"); then
+    # Parse output - first line is notification, rest is report
+    NOTIFICATION=$(echo "$OUTPUT" | sed -n '1p')
 
-# 7. Send notification with clickable action
-echo "Sending notification..." >> "$LOG_FILE"
+    log "Report generated successfully"
+    log "Notification: $NOTIFICATION"
+else
+    log "Report generation failed"
+    NOTIFICATION="Morning report failed - check logs"
+fi
 
-# Try using termux-share directly (may work better than termux-open from notifications)
-termux-notification \
-    --title "🏃 Morning Training Report" \
-    --content "$REPORT" \
-    --channel morning-report \
-    --priority high \
-    --sound \
-    --button1 "View Details" \
-    --button1-action "termux-share $DOWNLOADS_HTML"
+# Send notification with button to view full report
+log "Sending notification..."
 
-echo "Report sent successfully" >> "$LOG_FILE"
-echo "$REPORT" >> "$LOG_FILE"
-echo "" >> "$LOG_FILE"
+if command -v termux-notification >/dev/null 2>&1; then
+    # Create a script to view the report (needed for notification button)
+    VIEW_SCRIPT="$PROJECT_ROOT/bin/view_report_action.sh"
+    cat > "$VIEW_SCRIPT" << 'VIEWEOF'
+#!/bin/bash
+REPORT="$HOME/running-coach/data/morning_report.md"
+if [ -f "$REPORT" ]; then
+    termux-share "$REPORT"
+fi
+VIEWEOF
+    chmod +x "$VIEW_SCRIPT"
+
+    termux-notification \
+        --title "Morning Training Report" \
+        --content "$NOTIFICATION" \
+        --channel "$NOTIFICATION_CHANNEL" \
+        --priority high \
+        --button1 "View Full" \
+        --button1-action "bash $VIEW_SCRIPT"
+
+    log "Notification sent"
+else
+    # No termux-notification, just print
+    echo "=== Morning Report ==="
+    echo "$NOTIFICATION"
+    echo ""
+    echo "Full report saved to: $REPORT_FILE"
+fi
+
+log "=== Morning Report Complete ==="
