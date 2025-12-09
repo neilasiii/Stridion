@@ -111,27 +111,60 @@ def get_recent_strength_sessions(health_cache: Dict[str, Any], days: int = 14) -
     Get recent strength sessions from activities to help AI plan balanced programming.
 
     Returns list of recent strength activities with their focus areas if detectable.
+    Also checks workout markdown files for detailed focus areas.
     """
     activities = health_cache.get("activities", [])
     cutoff = datetime.now() - timedelta(days=days)
+    today = datetime.now().strftime("%Y-%m-%d")
 
     strength_sessions = []
     for act in activities:
-        if act.get("activityType", {}).get("typeKey") != "strength_training":
+        # Check both activityType dict format and activity_type string format
+        act_type = act.get("activityType")
+        if isinstance(act_type, dict):
+            type_key = act_type.get("typeKey", "")
+        else:
+            # Use activity_type string (our cache format uses this)
+            type_key = act.get("activity_type", "") or ""
+
+        # Match "STRENGTH", "strength_training", etc.
+        if "strength" not in type_key.lower():
             continue
 
-        start_time = act.get("startTimeLocal", "")
+        # Try both startTimeLocal and date fields
+        start_time = act.get("startTimeLocal", "") or act.get("date", "")
         if not start_time:
             continue
 
         try:
             act_dt = datetime.strptime(start_time[:10], "%Y-%m-%d")
             if act_dt >= cutoff:
-                strength_sessions.append({
-                    "date": start_time[:10],
-                    "name": act.get("activityName", "Strength"),
-                    "duration_min": int(act.get("duration", 0) / 60) if act.get("duration") else 0
-                })
+                act_date = start_time[:10]
+                act_name = act.get("activityName", "") or act.get("activity_name", "Strength")
+                duration = act.get("duration", 0) or act.get("duration_seconds", 0)
+
+                session = {
+                    "date": act_date,
+                    "name": act_name,
+                    "duration_min": int(duration / 60) if duration else 0,
+                    "is_today": act_date == today,
+                    "focus_areas": ""
+                }
+
+                # Try to get focus areas from workout markdown file
+                workout_file = Path(__file__).parent.parent / "data" / "workouts" / "strength" / f"{act_date}.md"
+                if workout_file.exists():
+                    try:
+                        content = workout_file.read_text()
+                        # Look for Focus: line in the markdown
+                        for line in content.split('\n'):
+                            if line.startswith('**Focus:**'):
+                                session["focus_areas"] = line.replace('**Focus:**', '').strip()
+                                break
+                    except Exception:
+                        pass
+
+                strength_sessions.append(session)
         except ValueError:
             continue
 
@@ -243,8 +276,14 @@ def get_week_schedule_context(week_start: datetime, final_running_date: str = No
     # Get recent strength sessions for balanced programming
     recent_strength = get_recent_strength_sessions(health_cache, days=14)
     strength_history = []
+    today_strength = []
     for s in recent_strength:
-        strength_history.append(f"- {s['date']}: {s['name']} ({s['duration_min']} min)")
+        focus_info = f" - FOCUS: {s['focus_areas']}" if s.get('focus_areas') else ""
+        entry = f"- {s['date']}: {s['name']} ({s['duration_min']} min){focus_info}"
+        if s.get('is_today'):
+            today_strength.append(entry)
+        else:
+            strength_history.append(entry)
 
     # Final running date constraint
     final_date_note = ""
@@ -256,13 +295,24 @@ The final scheduled running day is {final_running_date}.
 Do NOT schedule strength ON {final_running_date} itself (it's a running day).
 Scheduling strength the day BEFORE ({final_running_date}) is fine - just use moderate/light intensity if needed."""
 
+    # Build today's strength section
+    today_strength_section = ""
+    if today_strength:
+        today_strength_section = f"""
+## ⚠️ ALREADY COMPLETED TODAY
+The athlete has ALREADY completed strength training today:
+{chr(10).join(today_strength)}
+
+**CRITICAL: Do NOT schedule strength for today. Future sessions must COMPLEMENT (not repeat) this work.**
+"""
+
     context = f"""
 ## Week Overview
 Week starting: {week_start.strftime('%A, %B %d, %Y')}
 
 All days this week:
 {chr(10).join(all_days)}
-
+{today_strength_section}
 ## Running Schedule (from FinalSurge coach)
 {chr(10).join(week_workouts) if week_workouts else "No scheduled running workouts found"}
 
