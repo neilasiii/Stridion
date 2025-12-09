@@ -6,7 +6,7 @@
     "plan_start_date": "2025-11-30",
     "plan_end_date": "2026-02-22",
     "created_date": "2025-12-02T09:33:18.732385",
-    "last_modified": "2025-12-04T11:40:17.944929",
+    "last_modified": "2025-12-07T11:52:49.950464",
     "athlete": "Neil Stagner",
     "version": "1.0"
   },
@@ -285,11 +285,13 @@
       "id": "908c6f1b-2e67-48d2-8762-01451a263809",
       "date": "2025-12-09",
       "week": 2,
-      "phase": "recovery",
+      "phase": "base_building",
       "domain": "strength",
       "workout": {
-        "type": "rest",
-        "desc": "REST - no strength this week"
+        "type": "foundation_phase1",
+        "desc": "Phase 1 Foundation - Week 1 Primary Session (30-35 min). Warm-up: leg swings, bodyweight squats, glute bridges, bird dogs. Main work (2 rounds): A1. Goblet squat 2x10 RPE5-6, A2. Single-leg RDL 2x8/leg RPE5, A3. Split squat 2x8/leg RPE5-6, B1. Glute bridge 2x12 RPE6, B2. Plank shoulder taps 2x20, B3. Calf raise 2x15 RPE6. Cool-down: stretches. Conservative loads, focus on movement quality. See strength coach for full details.",
+        "duration": 35,
+        "intensity": "moderate"
       }
     },
     {
@@ -371,11 +373,13 @@
       "id": "a85e25f3-4bb2-404f-89d2-3a70927fdb9e",
       "date": "2025-12-12",
       "week": 2,
-      "phase": "recovery",
+      "phase": "base_building",
       "domain": "strength",
       "workout": {
         "type": "rest",
-        "desc": "REST - no strength this week"
+        "desc": "REST - strength moved to Tuesday/Thursday",
+        "duration": 0,
+        "intensity": "rest"
       }
     },
     {
@@ -2353,6 +2357,19 @@
         "type": "stretching",
         "desc": "10 min gentle mobility (hip circles, leg swings, light stretches)",
         "duration": 10
+      }
+    },
+    {
+      "id": "8a3b3b92-9e64-484c-a44c-87d52c5ca4e2",
+      "date": "2025-12-11",
+      "week": 2,
+      "phase": "base_building",
+      "domain": "strength",
+      "workout": {
+        "type": "foundation_phase1_light",
+        "desc": "Phase 1 Foundation - Week 1 Light Session (20-25 min). Warm-up (lighter). Main work (1-2 rounds, adjust based on Tuesday recovery): Goblet squat 1-2x8 RPE4-5, Single-leg RDL 1-2x6/leg RPE4, Split squat 1-2x6/leg RPE4-5, Glute bridge 1-2x10 RPE5, Plank 1-2x30-40s, Calf raise 1-2x12 RPE5. Cool-down. Focus on activation, not fatigue. Skip if significant soreness from Tuesday.",
+        "duration": 25,
+        "intensity": "light"
       }
     }
   ]

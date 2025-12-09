@@ -7,6 +7,7 @@
 # Tokens stored in ~/.garminconnect/ by garminconnect library
 .garmin_credentials.json
 config/.garmin_config.json
+config/.garmin_session.json
 
 # Calendar URLs (may contain private calendar links)
 config/calendar_sources.json
@@ -25,6 +26,20 @@ data/calendar/*.ics
 
 # Garmin raw exports (manual exports from Garmin Connect)
 health_connect_export/
+
+# Test/development files (archived)
+data/archive/test_workouts/
+
+# Archived scripts (unused variants)
+bin/archive/
+
+# Log files
+data/*.log
+data/ai_validation.log
+
+# Generated HTML reports (regenerated on demand)
+data/morning_report_detailed.html
+data/test_morning_report.html
 
 # Python
 __pycache__/

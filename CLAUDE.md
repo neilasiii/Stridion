@@ -73,15 +73,46 @@ vdot, paces = calculate_vdot_from_race('half', 1, 55, 4)  # Returns VDOT + train
 
 Uses official Jack Daniels formulas. Verified accuracy: Half marathon 1:55:04 → VDOT 38.3.
 
-**Garmin Connect Sync**
+**Garmin Connect Sync (with Automatic Workout Generation)**
 ```bash
-bash bin/sync_garmin_data.sh              # Standard sync (30 days)
-bash bin/sync_garmin_data.sh --days 60    # Sync specific days
-bash bin/sync_garmin_data.sh --check-only # Preview without updating
+bash bin/sync_garmin_data.sh                     # Standard sync + auto-generate workouts
+bash bin/sync_garmin_data.sh --days 60           # Sync specific days
+bash bin/sync_garmin_data.sh --check-only        # Preview without updating
+bash bin/sync_garmin_data.sh --no-auto-workouts  # Disable automatic workout generation
 
 bash bin/smart_sync.sh                    # Smart sync (recommended for agents)
 bash bin/smart_sync.sh --force            # Force sync (new workout reported)
 ```
+
+**Automatic Workout Generation:**
+- When syncing, system automatically detects new FinalSurge workouts
+- Generates corresponding Garmin **running** workouts with coach-prescribed paces
+- Generates **strength** workouts (2x/week) scheduled around quality running sessions
+- Uploads and schedules all workouts to Garmin Connect calendar
+- Tracks generated workouts in `data/generated_workouts.json` to prevent duplicates
+- Only generates workouts for upcoming dates (skips past workouts >1 day old)
+
+**Supplemental Workout Generation (Strength/Mobility):**
+```bash
+# Generate strength workouts for current week (runs automatically during sync)
+python3 src/supplemental_workout_generator.py
+
+# Preview what would be generated
+python3 src/supplemental_workout_generator.py --check-only
+
+# Generate for specific week
+python3 src/supplemental_workout_generator.py --week-start 2025-12-09
+
+# Include mobility sessions (disabled by default in sync)
+python3 src/supplemental_workout_generator.py  # (without --skip-mobility)
+```
+
+**How supplemental generation works:**
+1. Analyzes FinalSurge running schedule for the week
+2. Identifies quality sessions (tempo, intervals, long runs)
+3. Places strength 48+ hours before quality running
+4. Generates 2 strength sessions/week: Lower Body + Full Body
+5. Optional: Comprehensive mobility on rest days
 
 **Smart Sync** checks cache age automatically:
 - Cache <30 min old → Uses cached data (fast)
@@ -107,16 +138,25 @@ python3 src/garmin_token_auth.py --test
 
 See [docs/GARMIN_TOKEN_AUTH.md](docs/GARMIN_TOKEN_AUTH.md) for complete authentication guide.
 
-**Workout Upload to Garmin**
+**Workout Upload to Garmin (Manual & Automatic)**
 ```bash
-# Upload structured workout to Garmin Connect calendar
+# Manual upload from JSON file
 bash bin/upload_workout.sh path/to/workout.json
-
-# Or use Python directly
 python3 src/workout_uploader.py path/to/workout.json
+
+# Automatic generation from FinalSurge (runs during sync)
+python3 src/auto_workout_generator.py              # Generate all new workouts
+python3 src/auto_workout_generator.py --check-only # Preview only
 ```
 
-Uploads workouts in Garmin JSON format to your Garmin Connect calendar. See [docs/GARMIN_WORKOUT_FORMAT.md](docs/GARMIN_WORKOUT_FORMAT.md) for complete format specification.
+**Supported Workout Formats (auto-generated from FinalSurge):**
+- Simple runs: `30 min E`, `45 min M`
+- Easy + strides: `60 min E + 3x20 sec strides @ 5k on 40 sec recovery`
+- Tempo with warmup/cooldown: `20 min warm up 25 min @ tempo 20 min warm down`
+- Tempo intervals: `20 min warm up 5x5 min @ tempo on 1 min recovery 20 min warm down`
+- Mixed pace: `30 min E 30 min M 30 min E`
+
+See [docs/GARMIN_WORKOUT_FORMAT.md](docs/GARMIN_WORKOUT_FORMAT.md) for complete format specification.
 
 **Weather Data**
 ```bash
@@ -170,25 +210,24 @@ bash bin/view_morning_report.sh          # Enhanced HTML report
 0 9 * * * cd $HOME/running-coach && bash bin/morning_report.sh             # Morning report
 ```
 
-### Planned Workouts Management
+### Workout Management
 
-**CRITICAL: Workout Priority Rules**
+**Workout Sources:**
 
-Coaches must prioritize workouts in this order:
-
-1. **FinalSurge Scheduled Workouts** (Priority 1 - ALWAYS use these)
+1. **FinalSurge Running Workouts** (Primary - coaching decisions)
    - Location: `data/health/health_data_cache.json` → `scheduled_workouts` array
    - Source: `"source": "ics_calendar"` indicates from FinalSurge ICS feed
-   - These are the athlete's current training plan decisions
+   - Automatically converted to Garmin structured workouts during sync
 
-2. **Baseline Plan Workouts** (Priority 2 - fallback only)
-   - Location: `data/plans/planned_workouts.json`
-   - Use ONLY when no FinalSurge workout exists for that date
+2. **Auto-Generated Strength Workouts** (Supplemental)
+   - Generated automatically when sync detects new FinalSurge workouts
+   - Scheduled 48+ hours before quality running sessions
+   - 2 sessions/week: Lower Body + Full Body
+   - Tracked in `data/generated_workouts.json`
 
-**When checking today's workout:**
-- First check `health_data_cache.json` → `scheduled_workouts` for FinalSurge entry
-- If FinalSurge workout found → use it, baseline plan is superseded
-- If no FinalSurge workout → check `planned_workouts.json` for baseline plan
+3. **Auto-Generated Mobility** (Optional)
+   - Comprehensive mobility on rest days
+   - Disabled by default in sync (run manually with `--skip-mobility` flag removed)
 
 **CRITICAL: FinalSurge Lookahead Rule (ALL AGENTS)**
 
@@ -199,22 +238,18 @@ When recommending ANY workout not from FinalSurge, agents MUST:
 
 See [docs/AGENT_SHARED_CONTEXT.md](docs/AGENT_SHARED_CONTEXT.md) for domain-specific lookahead rules.
 
-**Common Commands**
+**View Scheduled Workouts:**
 
 ```bash
-bash bin/planned_workouts.sh list --today -v          # Today's workout
-bash bin/planned_workouts.sh list --upcoming 7 -v     # Next 7 days
-bash bin/planned_workouts.sh summary --week 2         # Week summary
+# Check FinalSurge workouts in cache
+cat data/health/health_data_cache.json | python3 -c "import json,sys; d=json.load(sys.stdin); [print(f\"{w['scheduled_date']}: {w['name']}\") for w in d.get('scheduled_workouts', [])]"
 
-# Mark workout complete
-bash bin/planned_workouts.sh complete <id> --garmin-id 21089008771 --duration 30 --distance 3.1
+# Preview supplemental workouts
+python3 src/supplemental_workout_generator.py --check-only
 
-# Mark skipped or add adjustment
-bash bin/planned_workouts.sh skip <id> --reason "Poor sleep"
-bash bin/planned_workouts.sh adjust <id> --reason "RHR elevated" --change "Reduced 45→30 min"
+# See generated workouts log
+cat data/generated_workouts.json | python3 -m json.tool
 ```
-
-See [docs/AGENT_PLANNED_WORKOUTS_GUIDE.md](docs/AGENT_PLANNED_WORKOUTS_GUIDE.md) for complete guide.
 
 ### Testing
 
@@ -337,11 +372,13 @@ running-coach/
 │
 ├── src/                            # Python source code
 │   ├── garmin_sync.py              # Garmin Connect API sync
+│   ├── auto_workout_generator.py   # FinalSurge → Garmin running workouts
+│   ├── supplemental_workout_generator.py  # Strength/mobility generation
+│   ├── workout_uploader.py         # Garmin workout upload API
+│   ├── workout_parser.py           # Parse FinalSurge workout descriptions
 │   ├── vdot_calculator.py          # Jack Daniels VDOT calculator
 │   ├── ics_parser.py / ics_exporter.py
-│   ├── get_weather.py              # Weather API integration
-│   ├── workout_library.py          # Workout library manager
-│   └── planned_workout_manager.py  # Workout plan manager
+│   └── get_weather.py              # Weather API integration
 │
 ├── docs/                           # Documentation
 │   ├── QUICKSTART.md               # Setup guide
@@ -357,9 +394,8 @@ running-coach/
 │
 ├── data/
 │   ├── athlete/                    # Athlete context files
-│   ├── plans/                      # Training plans + planned workouts
-│   ├── library/                    # Workout library
 │   ├── health/                     # Health data cache (gitignored)
+│   ├── generated_workouts.json     # Tracks all auto-generated Garmin workouts
 │   └── calendar/                   # Calendar import/export
 │
 ├── .claude/agents/                 # Claude agent configurations

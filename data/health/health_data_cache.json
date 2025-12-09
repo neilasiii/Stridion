@@ -1,7 +1,61 @@
 {
-  "last_updated": "2025-12-06T17:07:25.366075+00:00",
-  "last_sync_date": "2025-12-06",
+  "last_updated": "2025-12-09T07:05:14.879976+00:00",
+  "last_sync_date": "2025-12-09",
   "activities": [
+    {
+      "activity_id": 21202851164,
+      "date": "2025-12-08T10:26:34",
+      "activity_name": "Altamonte Springs - 2025-12-08 - Easy Run 30min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 1875.5560302734375,
+      "distance_miles": 3.131812,
+      "calories": 378.0,
+      "avg_heart_rate": 149.0,
+      "max_heart_rate": 159.0,
+      "avg_speed": 6.010658,
+      "pace_per_mile": 9.981209,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 3.131694,
+          "duration_seconds": 1875.556,
+          "avg_heart_rate": 149.0,
+          "max_heart_rate": 159.0,
+          "avg_speed_mph": 6.010658,
+          "pace_per_mile": 9.981585,
+          "avg_cadence": 149.875,
+          "avg_power": 305.0,
+          "calories": 378.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 209.001,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1613.312,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
     {
       "activity_id": 21179285867,
       "date": "2025-12-05T16:47:51",
@@ -25095,6 +25149,26 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-12-08",
+      "total_duration_minutes": 457.0,
+      "light_sleep_minutes": 289.0,
+      "deep_sleep_minutes": 123.0,
+      "rem_sleep_minutes": 45.0,
+      "awake_minutes": 151.0,
+      "sleep_score": 63,
+      "deep_sleep_percentage": 26.91
+    },
+    {
+      "date": "2025-12-07",
+      "total_duration_minutes": 384.0,
+      "light_sleep_minutes": 289.0,
+      "deep_sleep_minutes": 49.0,
+      "rem_sleep_minutes": 46.0,
+      "awake_minutes": 246.0,
+      "sleep_score": 49,
+      "deep_sleep_percentage": 12.76
+    },
+    {
       "date": "2025-12-06",
       "total_duration_minutes": 510.0,
       "light_sleep_minutes": 347.0,
@@ -28917,6 +28991,10 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2025-12-08T00:00:00",
+      "vo2_max": 49.8
+    },
+    {
       "date": "2025-12-04T00:00:00",
       "vo2_max": 50.2
     },
@@ -28942,6 +29020,18 @@
     }
   ],
   "weight_readings": [
+    {
+      "timestamp": "2025-12-08T13:27:02.825000+00:00",
+      "weight_lbs": 170.79887,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2025-12-08T02:26:04.930000+00:00",
+      "weight_lbs": 172.30022,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
     {
       "timestamp": "2025-12-06T14:22:55.017000+00:00",
       "weight_lbs": 168.40024,
@@ -29466,6 +29556,18 @@
     }
   ],
   "resting_hr_readings": [
+    [
+      "2025-12-09T12:00:00",
+      50
+    ],
+    [
+      "2025-12-08T12:00:00",
+      46
+    ],
+    [
+      "2025-12-07T12:00:00",
+      44
+    ],
     [
       "2025-12-06T12:00:00",
       45
@@ -31004,6 +31106,26 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-12-08",
+      "weekly_avg": 67,
+      "last_night_avg": 67,
+      "last_night_5min_high": 91,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-07",
+      "weekly_avg": 66,
+      "last_night_avg": 68,
+      "last_night_5min_high": 96,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
     {
       "date": "2025-12-06",
       "weekly_avg": 65,
@@ -34847,6 +34969,26 @@
   ],
   "training_readiness": [
     {
+      "date": "2025-12-08",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 838,
+      "sleep_score": 63,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 167
+    },
+    {
+      "date": "2025-12-07",
+      "score": 46,
+      "level": "LOW",
+      "recovery_time": 160,
+      "sleep_score": 49,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 99
+    },
+    {
       "date": "2025-12-06",
       "score": 51,
       "level": "MODERATE",
@@ -38689,9 +38831,24 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-12-09",
+      "avg_stress": 22,
+      "max_stress": 57
+    },
+    {
+      "date": "2025-12-08",
+      "avg_stress": 26,
+      "max_stress": 92
+    },
+    {
+      "date": "2025-12-07",
+      "avg_stress": 25,
+      "max_stress": 96
+    },
+    {
       "date": "2025-12-06",
-      "avg_stress": 15,
-      "max_stress": 82
+      "avg_stress": 22,
+      "max_stress": 87
     },
     {
       "date": "2025-12-05",
@@ -40611,9 +40768,27 @@
   ],
   "spo2_readings": [
     {
+      "date": "2025-12-09",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 92,
+      "avg_sleep_spo2": null
+    },
+    {
+      "date": "2025-12-08",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2025-12-07",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
+    {
       "date": "2025-12-06",
       "avg_spo2": 94.0,
-      "lowest_spo2": 87,
+      "lowest_spo2": 86,
       "avg_sleep_spo2": 95.0
     },
     {
@@ -42917,9 +43092,24 @@
   ],
   "body_battery": [
     {
+      "date": "2025-12-09",
+      "charged": 14,
+      "drained": 0
+    },
+    {
+      "date": "2025-12-08",
+      "charged": 63,
+      "drained": 63
+    },
+    {
+      "date": "2025-12-07",
+      "charged": 52,
+      "drained": 61
+    },
+    {
       "date": "2025-12-06",
-      "charged": 50,
-      "drained": 28
+      "charged": 63,
+      "drained": 69
     },
     {
       "date": "2025-12-05",
@@ -44838,29 +45028,46 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-12-06",
-    "time_5k": 1479,
-    "time_10k": 3103,
-    "time_half_marathon": 6925,
-    "time_marathon": 15104
+    "date": "2025-12-09",
+    "time_5k": 1484,
+    "time_10k": 3112,
+    "time_half_marathon": 6976,
+    "time_marathon": 15265
   },
   "training_status": {
-    "date": "2025-12-06",
-    "vo2_max": {
-      "date": "2025-12-04",
-      "value": 50.0,
-      "precise_value": 50.2
-    },
-    "training_load": {
-      "date": "2025-12-06",
-      "aerobic_low": 434.2562,
-      "aerobic_high": 567.8673,
-      "anaerobic": 0.0,
-      "feedback": "ANAEROBIC_SHORTAGE"
-    },
+    "date": "2025-12-09",
+    "vo2_max": null,
+    "training_load": {},
     "training_status": {}
   },
   "scheduled_workouts": [
+    {
+      "scheduled_date": "2025-12-09",
+      "name": "2025-12-09 - Strength: Lower Body + Core",
+      "description": "2025-12-09 - Strength: Lower Body + Core (35 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x10, glute bridges x10, clamshells x10 each\n\nMAIN WORK:\n- Goblet Squat: 3x10\n  (RPE 7)\n- Single-Leg RDL: 3x8 each\n  (DB held contralateral)\n- Bulgarian Split Squat: 3x8 each\n  (RPE 7)\n- Lateral Band Walk: 2x12 each direction\n  (Hip-width tension)\n- Single-Leg Calf Raise: 3x12 each\n  (Slow eccentric)\n\nCORE:\nPallof press 3x10 each, dead bug 2x10, bird dog 2x8 each\n\nNOTES:\nFocus on control and stability in single-leg movements",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1406106465
+    },
+    {
+      "scheduled_date": "2025-12-11",
+      "name": "2025-12-11 - Strength: Upper Body Push/Pull",
+      "description": "2025-12-11 - Strength: Upper Body Push/Pull (35 min)\n\nWARMUP:\nArm circles 10 each, band pull-aparts x15, push-ups x8, scapular push-ups x10, hollow hold 20s\n\nMAIN WORK:\n- Push-ups: 3x12-15\n  (RPE 7, slow down)\n- Single-arm DB rows: 3x10 each\n  (RPE 7)\n- DB overhead press: 3x10\n  (RPE 6-7)\n- Band face pulls: 3x15\n  (shoulder stability)\n- Reverse lunges: 2x8 each\n  (hip flexor stretch)\n\nCORE:\nHollow hold 3x30s, dead bug 2x10 each, plank 2x30s\n\nNOTES:\nEmphasizes push/pull balance with shoulder health focus",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1406106483
+    },
+    {
+      "scheduled_date": "2025-12-13",
+      "name": "2025-12-13 - Strength: Full Body Integration",
+      "description": "2025-12-13 - Strength: Full Body Integration (28 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x10, glute bridges x10, arm circles x10\n\nMAIN WORK:\n- Goblet Squat: 3x10\n  (RPE 6)\n- Single-Leg Dumbbell RDL: 3x8 each\n  (Balance focus)\n- Dumbbell Step-Ups: 3x8 each\n  (Controlled tempo)\n- Push-Ups: 2x10\n  (RPE 6)\n- Dumbbell Bent-Over Row: 2x10\n  (RPE 6)\n\nCORE:\nBird dog 2x10 each, side plank leg lift 2x8 each, dead bug 2x10\n\nNOTES:\nModerate volume to support Sunday's easy run recovery.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 28,
+      "garmin_id": 1406106487
+    },
     {
       "scheduled_date": "2025-12-14",
       "scheduled_datetime": null,
@@ -44885,26 +45092,6 @@
       "scheduled_date": "2025-12-10",
       "scheduled_datetime": null,
       "name": "Run: 35 min E",
-      "description": "Workout: Run",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar"
-    },
-    {
-      "scheduled_date": "2025-12-08",
-      "scheduled_datetime": null,
-      "name": "Run: 30 min E",
-      "description": "Workout: Run",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar"
-    },
-    {
-      "scheduled_date": "2025-12-06",
-      "scheduled_datetime": null,
-      "name": "Run: 2-3 x 20-30 min easy runs this week",
       "description": "Workout: Run",
       "duration_seconds": null,
       "location": null,
@@ -44948,8 +45135,8 @@
     "threshold_speed_mps": 0.33611017,
     "threshold_speed_mph": 0.7518582836798,
     "functional_threshold_power": 361,
-    "power_to_weight_ratio": 4.726058781174314,
-    "weight_kg": 76.385
+    "power_to_weight_ratio": 4.659687891265344,
+    "weight_kg": 77.473
   },
   "gear_stats": [
     {
@@ -45020,8 +45207,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 503902.68881225586,
-      "total_activities": 60,
+      "total_distance_meters": 508942.8387145996,
+      "total_activities": 61,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -45045,8 +45232,26 @@
   ],
   "daily_steps": [
     {
+      "date": "2025-12-09",
+      "total_steps": 30,
+      "goal_steps": 9620,
+      "goal_met": false
+    },
+    {
+      "date": "2025-12-08",
+      "total_steps": 10508,
+      "goal_steps": 9520,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-07",
+      "total_steps": 6135,
+      "goal_steps": 10360,
+      "goal_met": false
+    },
+    {
       "date": "2025-12-06",
-      "total_steps": 1391,
+      "total_steps": 4624,
       "goal_steps": 11790,
       "goal_met": false
     },
@@ -45256,8 +45461,8 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-11-06",
-    "end_date": "2025-12-06",
+    "start_date": "2025-12-08",
+    "end_date": "2025-12-09",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,

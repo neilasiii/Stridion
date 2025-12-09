@@ -50,9 +50,12 @@ else
     BEFORE_RHR=0
 fi
 
-# Run sync and capture output
+# Run sync and capture output (includes automatic workout generation)
 SYNC_OUTPUT=$(bash bin/sync_garmin_data.sh $DAYS_ARG 2>&1)
 SYNC_EXIT_CODE=$?
+
+# Extract workout creation info from sync output
+WORKOUTS_CREATED=$(echo "$SYNC_OUTPUT" | grep -c "Successfully created workouts" || echo "0")
 
 # Prepare timestamp
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
@@ -189,6 +192,17 @@ RHR: $NEW_RHR" || [ -n "$NEW_RHR" ] && CONTENT="RHR: $NEW_RHR"
 VO2: $NEW_VO2" || [ -n "$NEW_VO2" ] && CONTENT="VO2: $NEW_VO2"
     [ -n "$NEW_WEIGHT" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
 Weight: $NEW_WEIGHT" || [ -n "$NEW_WEIGHT" ] && CONTENT="Weight: $NEW_WEIGHT"
+
+    # Add workout creation info if workouts were created
+    if [ "$WORKOUTS_CREATED" -gt 0 ]; then
+        # Extract workout count and dates from sync output
+        WORKOUT_INFO=$(echo "$SYNC_OUTPUT" | grep -A 10 "Successfully created workouts" | grep "•" | sed 's/.*• //' | sed 's/ (ID:.*//')
+        WORKOUT_COUNT=$(echo "$WORKOUT_INFO" | wc -l)
+
+        [ -n "$CONTENT" ] && CONTENT="$CONTENT
+
+🎯 Created $WORKOUT_COUNT workout(s)" || CONTENT="🎯 Created $WORKOUT_COUNT workout(s)"
+    fi
 
     # If no new items, show "No new data"
     [ -z "$CONTENT" ] && CONTENT="No new data"
