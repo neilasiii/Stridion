@@ -1053,6 +1053,7 @@ def generate_week_supplemental_workouts(
 
     # Generate workouts
     workouts_to_create = []
+    today = datetime.now().strftime("%Y-%m-%d")
 
     # Generate strength workouts using AI-selected dates and focus areas
     for slot in strength_slots:
@@ -1064,6 +1065,12 @@ def generate_week_supplemental_workouts(
         else:
             date, focus_areas = slot[0], None
             intensity = "full"
+
+        # Skip today and past dates - only generate for future
+        if date <= today:
+            if not quiet:
+                print(f"  ⏭ Skipping {date} (today or past)")
+            continue
 
         # Check if already generated (and not needing regen)
         if date in generated_log.get("strength", {}) and not needs_regen:
@@ -1089,6 +1096,10 @@ def generate_week_supplemental_workouts(
         for date, intensity in mobility_slots:
             if intensity != 'comprehensive':
                 continue  # Skip light/moderate for Garmin - too many workouts
+
+            # Skip today and past dates - only generate for future
+            if date <= today:
+                continue
 
             if date in generated_log.get("mobility", {}):
                 if not quiet:
