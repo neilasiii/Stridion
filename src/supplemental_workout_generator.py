@@ -240,13 +240,26 @@ def get_recovery_status(health_cache: Dict[str, Any]) -> Dict[str, Any]:
 
 def get_week_fingerprint(running_schedule: List['RunningWorkout']) -> str:
     """
-    Create a fingerprint of the week's running schedule for change detection.
+    Create a fingerprint of running workouts for change detection.
+
+    Only includes RUNNING workouts (not walks, strength, etc.) from TODAY and FUTURE.
+    This prevents regeneration when:
+    - Completed workouts sync back from Garmin to FinalSurge for past dates
+    - Non-running activities (Walk, Strength) appear for today/past
 
     Returns a string hash of dates and workout names.
     """
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    # Include today and future dates, but only RUNNING workouts (not walks, strength, etc.)
+    current_and_future_running = [
+        w for w in running_schedule
+        if w.date >= today and w.workout_type != 'rest' and 'run' in w.name.lower()
+    ]
+
     schedule_str = "|".join(
         f"{w.date}:{w.name}:{w.is_quality}"
-        for w in sorted(running_schedule, key=lambda x: x.date)
+        for w in sorted(current_and_future_running, key=lambda x: x.date)
     )
     return schedule_str
 
