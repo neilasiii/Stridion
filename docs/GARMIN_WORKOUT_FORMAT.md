@@ -527,11 +527,53 @@ Use `auto_clean=true` in the uploader to remove these automatically.
 
 ---
 
+## Automatic Workout Generation
+
+The system can automatically generate Garmin workouts from FinalSurge coach descriptions using `src/auto_workout_generator.py` and `src/workout_parser.py`.
+
+### Supported Coach Formats
+
+| Format | Example | Generated Structure |
+|--------|---------|---------------------|
+| Simple run | `30 min E` | Single interval step with pace |
+| Easy + strides | `60 min E + 3x20 sec strides @ 5k on 40 sec recovery` | Easy interval + RepeatGroupDTO |
+| Tempo | `20 min warm up 25 min @ tempo 20 min warm down` | Warmup + Tempo interval + Cooldown |
+| Tempo intervals | `20 min warm up 5x5 min @ tempo on 1 min recovery 20 min warm down` | Warmup + RepeatGroupDTO + Cooldown |
+| Mixed pace | `30 min E 30 min M 30 min E` | Sequential interval steps |
+
+### Pace Mappings (Coach → Garmin m/s)
+
+Paces are converted from coach-prescribed mile paces to Garmin's meters/second format:
+
+| Pace Type | Mile Pace | m/s Range |
+|-----------|-----------|-----------|
+| Easy (E) | 10:00-11:10 | 2.402-2.681 |
+| Marathon (M) | 9:05-9:15 | 2.899-2.954 |
+| Tempo (T) | 8:30-8:40 | 3.095-3.156 |
+| 5K | 7:55-8:05 | 3.318-3.387 |
+
+### Auto-Generation Commands
+
+```bash
+# Preview what would be generated
+python3 src/auto_workout_generator.py --check-only
+
+# Generate and upload all new workouts
+python3 src/auto_workout_generator.py
+
+# Runs automatically during sync
+bash bin/sync_garmin_data.sh
+```
+
+---
+
 ## References
 
 - **MCP Server Documentation:** [garmin-connect-mcp-client](https://github.com/Mart1M/garmin-connect-mcp-client)
 - **Python Library:** [garminconnect](https://github.com/cyberjunky/python-garminconnect)
-- **Upload Function:** `src/workout_uploader.py`
+- **Workout Uploader:** `src/workout_uploader.py`
+- **Workout Parser:** `src/workout_parser.py`
+- **Auto Generator:** `src/auto_workout_generator.py`
 
 ## Usage
 
@@ -541,4 +583,7 @@ bash bin/upload_workout.sh path/to/workout.json
 
 # Or use Python directly
 python3 src/workout_uploader.py path/to/workout.json
+
+# Auto-generate from FinalSurge
+python3 src/auto_workout_generator.py
 ```

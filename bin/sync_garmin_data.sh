@@ -5,13 +5,15 @@
 # This is a convenience wrapper that:
 # 1. Syncs data from Garmin Connect API
 # 2. Shows a 14-day summary of activities and health metrics
+# 3. Automatically generates Garmin workouts from new FinalSurge workouts
 #
 # Usage:
-#   bash bin/sync_garmin_data.sh [--days DAYS] [--check-only]
+#   bash bin/sync_garmin_data.sh [--days DAYS] [--check-only] [--no-auto-workouts]
 #
 # Options:
-#   --days DAYS      Number of days to sync (default: 30)
-#   --check-only     Check what would be synced without updating cache
+#   --days DAYS            Number of days to sync (default: 30)
+#   --check-only           Check what would be synced without updating cache
+#   --no-auto-workouts     Skip automatic workout generation
 #
 # Environment Variables:
 #   GARMIN_EMAIL     Garmin Connect email/username (required)
@@ -39,6 +41,7 @@ fi
 # Default options
 DAYS=30
 CHECK_ONLY=""
+AUTO_WORKOUTS=true
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -51,9 +54,13 @@ while [[ $# -gt 0 ]]; do
             CHECK_ONLY="--check-only"
             shift
             ;;
+        --no-auto-workouts)
+            AUTO_WORKOUTS=false
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--days DAYS] [--check-only]"
+            echo "Usage: $0 [--days DAYS] [--check-only] [--no-auto-workouts]"
             exit 1
             ;;
     esac
@@ -61,3 +68,55 @@ done
 
 # Run the sync script with summary
 "$PYTHON" "$PROJECT_ROOT/src/garmin_sync.py" --days "$DAYS" --summary $CHECK_ONLY
+
+# If sync was successful and not check-only, generate Garmin workouts from FinalSurge
+if [ "$AUTO_WORKOUTS" = true ] && [ -z "$CHECK_ONLY" ]; then
+    echo ""
+    echo "Checking for new FinalSurge workouts to generate..."
+
+    # Generate running workouts from FinalSurge
+    WORKOUT_OUTPUT=$("$PYTHON" "$PROJECT_ROOT/src/auto_workout_generator.py" 2>&1)
+    WORKOUT_EXIT=$?
+
+    if [ $WORKOUT_EXIT -eq 0 ]; then
+        echo "$WORKOUT_OUTPUT"
+
+        # Check if any running workouts were created
+        if echo "$WORKOUT_OUTPUT" | grep -q "Successfully created workouts"; then
+            echo ""
+            echo "🎯 New Garmin running workouts created and scheduled!"
+        fi
+    else
+        echo "⚠ Warning: Running workout generation encountered an issue" >&2
+        echo "$WORKOUT_OUTPUT" >&2
+    fi
+
+    # Generate supplemental workouts (strength/mobility) based on FinalSurge schedule
+    # This is non-critical - don't fail the whole sync if AI generation has issues
+    echo ""
+    echo "Checking for supplemental workouts to generate..."
+
+    # Temporarily disable exit-on-error for supplemental generation
+    set +e
+    SUPP_OUTPUT=$("$PYTHON" "$PROJECT_ROOT/src/supplemental_workout_generator.py" --skip-mobility 2>&1)
+    SUPP_EXIT=$?
+    set -e
+
+    if [ $SUPP_EXIT -eq 0 ]; then
+        echo "$SUPP_OUTPUT"
+
+        if echo "$SUPP_OUTPUT" | grep -q "Successfully created supplemental"; then
+            echo ""
+            echo "💪 New strength/mobility workouts created and scheduled!"
+        fi
+    elif [ $SUPP_EXIT -eq 134 ]; then
+        # Exit code 134 = SIGABRT, likely AI out of tokens/context
+        echo "⚠ AI workout generation was interrupted (possibly out of tokens)" >&2
+        echo "  Garmin sync completed successfully, but strength workouts not generated" >&2
+        echo "$SUPP_OUTPUT" >&2
+        # Don't propagate this error - sync itself succeeded
+    else
+        echo "⚠ Warning: Supplemental workout generation encountered an issue" >&2
+        echo "$SUPP_OUTPUT" >&2
+    fi
+fi

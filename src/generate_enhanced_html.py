@@ -88,10 +88,141 @@ def get_recovery_score(cache):
     # Readiness component (40 points)
     readiness = cache.get('training_readiness', [])
     if readiness:
-        ready_score = readiness[0].get('readiness_score', 50)
+        ready_score = readiness[0].get('score', readiness[0].get('readiness_score', 50))
         score += (ready_score - 50) * 0.4
 
     return max(0, min(100, int(score)))
+
+
+def get_hrv_data(cache):
+    """Get HRV data with status and trend."""
+    hrv_readings = cache.get('hrv_readings', [])
+    if not hrv_readings:
+        return None
+
+    latest = hrv_readings[0]
+    return {
+        'last_night': latest.get('last_night_avg'),
+        'weekly_avg': latest.get('weekly_avg'),
+        'status': latest.get('status', 'UNKNOWN'),
+        'baseline_low': latest.get('baseline_balanced_low'),
+        'baseline_high': latest.get('baseline_balanced_upper')
+    }
+
+
+def get_body_battery_data(cache):
+    """Get body battery data."""
+    body_battery = cache.get('body_battery', [])
+    if not body_battery:
+        return None
+
+    latest = body_battery[0]
+    return {
+        'charged': latest.get('charged', 0),
+        'drained': latest.get('drained', 0),
+        'net': latest.get('charged', 0) - latest.get('drained', 0)
+    }
+
+
+def get_stress_data(cache):
+    """Get stress data."""
+    stress_readings = cache.get('stress_readings', [])
+    if not stress_readings:
+        return None
+
+    latest = stress_readings[0]
+    return {
+        'avg': latest.get('avg_stress', 0),
+        'max': latest.get('max_stress', 0)
+    }
+
+
+def get_training_readiness_data(cache):
+    """Get training readiness data with detailed feedback."""
+    readiness = cache.get('training_readiness', [])
+    if not readiness:
+        return None
+
+    latest = readiness[0]
+    return {
+        'score': latest.get('score', 0),
+        'level': latest.get('level', 'UNKNOWN'),
+        'recovery_time': latest.get('recovery_time', 0),
+        'sleep_score': latest.get('sleep_score', 0),
+        'hrv_feedback': latest.get('hrv_feedback', ''),
+        'stress_feedback': latest.get('stress_feedback', ''),
+        'acute_load': latest.get('acute_load', 0)
+    }
+
+
+def get_vo2_max_data(cache):
+    """Get VO2 max data with trend."""
+    vo2_readings = cache.get('vo2_max_readings', [])
+    training_status = cache.get('training_status', {})
+
+    current = None
+    if training_status and 'vo2_max' in training_status:
+        current = training_status['vo2_max'].get('precise_value') or training_status['vo2_max'].get('value')
+    elif vo2_readings:
+        current = vo2_readings[0].get('vo2_max')
+
+    # Calculate trend (compare to 30 days ago if available)
+    trend = None
+    if len(vo2_readings) >= 2:
+        oldest = vo2_readings[-1].get('vo2_max')
+        if current and oldest:
+            trend = round(current - oldest, 1)
+
+    return {
+        'current': current,
+        'trend': trend,
+        'readings': vo2_readings[:5]  # Last 5 readings for chart
+    }
+
+
+def get_race_predictions(cache):
+    """Get race predictions formatted as times."""
+    predictions = cache.get('race_predictions', {})
+    if not predictions:
+        return None
+
+    def format_time(seconds):
+        if not seconds:
+            return 'N/A'
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        secs = seconds % 60
+        if hours > 0:
+            return f"{hours}:{minutes:02d}:{secs:02d}"
+        return f"{minutes}:{secs:02d}"
+
+    return {
+        '5k': format_time(predictions.get('time_5k')),
+        '10k': format_time(predictions.get('time_10k')),
+        'half': format_time(predictions.get('time_half_marathon')),
+        'marathon': format_time(predictions.get('time_marathon'))
+    }
+
+
+def get_weight_data(cache):
+    """Get weight data with trend."""
+    weight_readings = cache.get('weight_readings', [])
+    if not weight_readings:
+        return None
+
+    current = weight_readings[0].get('weight_lbs')
+
+    # Calculate 7-day trend
+    trend = None
+    if len(weight_readings) >= 7:
+        week_ago = weight_readings[6].get('weight_lbs')
+        if current and week_ago:
+            trend = round(current - week_ago, 1)
+
+    return {
+        'current': round(current, 1) if current else None,
+        'trend': trend
+    }
 
 def generate_ai_commentary(cache, weather_data, recovery_score, tsb):
     """Generate AI commentary with Claude Code recommendations using appropriate coaching agents."""
@@ -244,6 +375,15 @@ def generate_html_report(weather_data=None):
     recovery_score = get_recovery_score(cache)
     weekly_activities = get_weekly_activities(cache)
 
+    # Get all the new health metrics
+    hrv_data = get_hrv_data(cache)
+    body_battery = get_body_battery_data(cache)
+    stress_data = get_stress_data(cache)
+    readiness_data = get_training_readiness_data(cache)
+    vo2_data = get_vo2_max_data(cache)
+    race_preds = get_race_predictions(cache)
+    weight_data = get_weight_data(cache)
+
     # Get training load - try Garmin first, then calculate from activities
     progress = cache.get('progress_summary', {})
     tsb = atl = ctl = 0
@@ -300,11 +440,18 @@ def generate_html_report(weather_data=None):
     # Get recent metrics
     sleep_sessions = cache.get('sleep_sessions', [])
     sleep_data = ""
+    sleep_breakdown = ""
     if sleep_sessions:
         sleep = sleep_sessions[0]
         hrs = round(sleep.get('total_duration_minutes', 0) / 60, 1)
         score = sleep.get('sleep_score', 'N/A')
         sleep_data = f"{hrs}h | Quality: {score}/100"
+        # Add sleep breakdown
+        deep = sleep.get('deep_sleep_minutes', 0)
+        rem = sleep.get('rem_sleep_minutes', 0)
+        light = sleep.get('light_sleep_minutes', 0)
+        if deep or rem or light:
+            sleep_breakdown = f"Deep: {deep}m | REM: {rem}m | Light: {light}m"
 
     rhr_data = ""
     rhr_readings = cache.get('resting_hr_readings', [])
@@ -314,6 +461,46 @@ def generate_html_report(weather_data=None):
         diff = recent - baseline
         sign = "+" if diff > 0 else ""
         rhr_data = f"{recent} bpm ({sign}{diff} vs baseline)"
+
+    # HRV status color
+    hrv_color = "#27ae60"  # Default green
+    hrv_status_text = "Balanced"
+    if hrv_data:
+        if hrv_data['status'] == 'LOW':
+            hrv_color = "#e74c3c"
+            hrv_status_text = "Low"
+        elif hrv_data['status'] == 'HIGH':
+            hrv_color = "#3498db"
+            hrv_status_text = "High"
+        elif hrv_data['status'] == 'BALANCED':
+            hrv_color = "#27ae60"
+            hrv_status_text = "Balanced"
+
+    # Stress level color
+    stress_color = "#27ae60"  # Default green
+    stress_level = "Low"
+    if stress_data:
+        avg_stress = stress_data['avg']
+        if avg_stress >= 50:
+            stress_color = "#e74c3c"
+            stress_level = "High"
+        elif avg_stress >= 30:
+            stress_color = "#f39c12"
+            stress_level = "Moderate"
+        else:
+            stress_color = "#27ae60"
+            stress_level = "Low"
+
+    # Body battery color
+    battery_color = "#27ae60"
+    if body_battery:
+        net = body_battery['net']
+        if net < -20:
+            battery_color = "#e74c3c"
+        elif net < 0:
+            battery_color = "#f39c12"
+        else:
+            battery_color = "#27ae60"
 
     # Today's workouts (all domains: running, strength, mobility, etc.)
     # Priority 1: FinalSurge scheduled workouts
@@ -646,12 +833,31 @@ def generate_html_report(weather_data=None):
                     <h3>Sleep</h3>
                     <div class="value">{sleep_data.split('|')[0].strip() if '|' in sleep_data else 'N/A'}</div>
                     <div class="detail">{sleep_data.split('|')[1].strip() if '|' in sleep_data else ''}</div>
+                    <div class="detail" style="margin-top: 5px; font-size: 0.8em;">{sleep_breakdown}</div>
                 </div>
 
                 <div class="metric-card">
                     <h3>Resting Heart Rate</h3>
                     <div class="value">{rhr_data.split(' ')[0] if rhr_data else 'N/A'}</div>
                     <div class="detail">{' '.join(rhr_data.split(' ')[1:]) if rhr_data else ''}</div>
+                </div>
+
+                <div class="metric-card" style="border-left-color: {hrv_color};">
+                    <h3>HRV Status</h3>
+                    <div class="value" style="color: {hrv_color};">{hrv_data['last_night'] if hrv_data else 'N/A'} ms</div>
+                    <div class="detail">Status: {hrv_status_text} | Weekly: {hrv_data['weekly_avg'] if hrv_data else 'N/A'} ms</div>
+                </div>
+
+                <div class="metric-card" style="border-left-color: {battery_color};">
+                    <h3>Body Battery</h3>
+                    <div class="value" style="color: {battery_color};">+{body_battery['charged'] if body_battery else 0} / -{body_battery['drained'] if body_battery else 0}</div>
+                    <div class="detail">Net: {f"{body_battery['net']:+d}" if body_battery else '0'} | {('Gaining energy' if body_battery and body_battery['net'] > 0 else 'Draining') if body_battery else 'N/A'}</div>
+                </div>
+
+                <div class="metric-card" style="border-left-color: {stress_color};">
+                    <h3>Stress Level</h3>
+                    <div class="value" style="color: {stress_color};">{stress_data['avg'] if stress_data else 'N/A'}</div>
+                    <div class="detail">Level: {stress_level} | Max: {stress_data['max'] if stress_data else 'N/A'}</div>
                 </div>
 
                 <div class="metric-card">
@@ -661,6 +867,28 @@ def generate_html_report(weather_data=None):
                 </div>
             </div>
 
+            <!-- Training Readiness -->
+            <section class="section">
+                <h2>Training Readiness</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card" style="border-left-color: {'#27ae60' if readiness_data and readiness_data['score'] >= 60 else '#f39c12' if readiness_data and readiness_data['score'] >= 40 else '#e74c3c'};">
+                        <h3>Readiness Score</h3>
+                        <div class="value">{readiness_data['score'] if readiness_data else 'N/A'}/100</div>
+                        <div class="detail">Level: {readiness_data['level'].replace('_', ' ').title() if readiness_data else 'N/A'}</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Recovery Time</h3>
+                        <div class="value">{readiness_data['recovery_time'] if readiness_data else 0}h</div>
+                        <div class="detail">HRV: {readiness_data['hrv_feedback'].replace('_', ' ').title() if readiness_data else 'N/A'}</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Acute Load</h3>
+                        <div class="value">{readiness_data['acute_load'] if readiness_data else 0}</div>
+                        <div class="detail">Stress: {readiness_data['stress_feedback'].replace('_', ' ').title() if readiness_data else 'N/A'}</div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Training Stress Balance -->
             <section class="section">
                 <h2>Form & Fitness</h2>
@@ -669,6 +897,43 @@ def generate_html_report(weather_data=None):
                     <div class="tsb-info">
                         <div class="tsb-status">{tsb_status}</div>
                         <div class="detail">Training Stress Balance</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VO2 Max & Race Predictions -->
+            <section class="section">
+                <h2>Performance Metrics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>VO2 Max</h3>
+                        <div class="value">{vo2_data['current'] if vo2_data else 'N/A'}</div>
+                        <div class="detail">Trend: {f"{vo2_data['trend']:+.1f}" if vo2_data and vo2_data['trend'] else 'N/A'} (recent)</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Weight</h3>
+                        <div class="value">{weight_data['current'] if weight_data else 'N/A'} lbs</div>
+                        <div class="detail">7-day: {f"{weight_data['trend']:+.1f}" if weight_data and weight_data['trend'] else 'N/A'} lbs</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 20px; color: #2c3e50;">Race Predictions (Garmin)</h3>
+                <div class="metrics-grid" style="margin-top: 15px;">
+                    <div class="metric-card">
+                        <h3>5K</h3>
+                        <div class="value">{race_preds['5k'] if race_preds else 'N/A'}</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>10K</h3>
+                        <div class="value">{race_preds['10k'] if race_preds else 'N/A'}</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Half Marathon</h3>
+                        <div class="value">{race_preds['half'] if race_preds else 'N/A'}</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Marathon</h3>
+                        <div class="value">{race_preds['marathon'] if race_preds else 'N/A'}</div>
                     </div>
                 </div>
             </section>
@@ -698,7 +963,7 @@ def generate_html_report(weather_data=None):
             <!-- Today's Scheduled Workout (Calendar) -->
             <section class="section">
                 <h2>📅 Scheduled Workout (from Calendar)</h2>
-                <div class="workout-card" style="background: #f8f9fa; border-left: 3px solid #95a5a6;">
+                <div class="workout-card" style="background: #f8f9fa; border-left: 3px solid #667eea; color: #2c3e50;">
                     {workout_html}
                 </div>
             </section>

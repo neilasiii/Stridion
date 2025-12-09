@@ -300,12 +300,65 @@ def generate_enhanced_report(weather_data=None):
         sign = "+" if elevation > 0 else ""
         lines.append(f"RHR: {int(recent_rhr)} bpm ({sign}{elevation} vs baseline) {indicator}")
 
+    # HRV
+    hrv_readings = cache.get('hrv_readings', [])
+    if hrv_readings:
+        latest = hrv_readings[0]
+        last_night = latest.get('last_night_avg', 0)
+        weekly = latest.get('weekly_avg', 0)
+        status = latest.get('status', 'UNKNOWN')
+
+        if status == 'LOW':
+            indicator = "⚠️"
+        elif status == 'HIGH':
+            indicator = "⚡"
+        else:
+            indicator = "✓"
+
+        lines.append(f"HRV: {last_night} ms (weekly avg: {weekly}) - {status.title()} {indicator}")
+
+    # Body Battery
+    body_battery = cache.get('body_battery', [])
+    if body_battery:
+        latest = body_battery[0]
+        charged = latest.get('charged', 0)
+        drained = latest.get('drained', 0)
+        net = charged - drained
+
+        if net < -20:
+            indicator = "⚠️"
+        elif net < 0:
+            indicator = "⚡"
+        else:
+            indicator = "✓"
+
+        lines.append(f"Body Battery: +{charged}/-{drained} (net: {net:+d}) {indicator}")
+
+    # Stress
+    stress_readings = cache.get('stress_readings', [])
+    if stress_readings:
+        latest = stress_readings[0]
+        avg = latest.get('avg_stress', 0)
+        max_stress = latest.get('max_stress', 0)
+
+        if avg >= 50:
+            indicator = "⚠️"
+            level = "High"
+        elif avg >= 30:
+            indicator = "⚡"
+            level = "Moderate"
+        else:
+            indicator = "✓"
+            level = "Low"
+
+        lines.append(f"Stress: {avg} avg / {max_stress} max - {level} {indicator}")
+
     # Training Readiness
     readiness = cache.get('training_readiness', [])
     if readiness:
         latest = readiness[0]
-        score = latest.get('readiness_score')
-        recovery_hrs = latest.get('recovery_time_hours', 0)
+        score = latest.get('score', latest.get('readiness_score'))
+        recovery_hrs = latest.get('recovery_time', latest.get('recovery_time_hours', 0))
 
         if score is not None:
             if score >= 70:
@@ -360,7 +413,61 @@ def generate_enhanced_report(weather_data=None):
                 duration = format_duration(stats['total_duration'])
                 lines.append(f"  {activity_type}: {stats['count']} activities, {distance:.1f}mi, {duration}")
 
-    # 3. GEAR STATUS
+    # 3. PERFORMANCE METRICS
+    lines.append("\n📊 PERFORMANCE METRICS")
+    lines.append("─" * 60)
+
+    # VO2 Max
+    vo2_readings = cache.get('vo2_max_readings', [])
+    training_status = cache.get('training_status', {})
+    vo2_current = None
+    if training_status and 'vo2_max' in training_status:
+        vo2_current = training_status['vo2_max'].get('precise_value') or training_status['vo2_max'].get('value')
+    elif vo2_readings:
+        vo2_current = vo2_readings[0].get('vo2_max')
+
+    if vo2_current:
+        # Calculate trend
+        vo2_trend = None
+        if len(vo2_readings) >= 2:
+            oldest = vo2_readings[-1].get('vo2_max')
+            if oldest:
+                vo2_trend = vo2_current - oldest
+
+        trend_str = f" ({vo2_trend:+.1f} recent)" if vo2_trend else ""
+        lines.append(f"VO2 Max: {vo2_current}{trend_str}")
+
+    # Weight
+    weight_readings = cache.get('weight_readings', [])
+    if weight_readings:
+        current_weight = weight_readings[0].get('weight_lbs')
+        if current_weight:
+            weight_trend = None
+            if len(weight_readings) >= 7:
+                week_ago = weight_readings[6].get('weight_lbs')
+                if week_ago:
+                    weight_trend = current_weight - week_ago
+            trend_str = f" ({weight_trend:+.1f} lbs 7-day)" if weight_trend else ""
+            lines.append(f"Weight: {current_weight:.1f} lbs{trend_str}")
+
+    # Race Predictions
+    race_preds = cache.get('race_predictions', {})
+    if race_preds:
+        def format_time(seconds):
+            if not seconds:
+                return 'N/A'
+            hours = seconds // 3600
+            minutes = (seconds % 3600) // 60
+            secs = seconds % 60
+            if hours > 0:
+                return f"{hours}:{minutes:02d}:{secs:02d}"
+            return f"{minutes}:{secs:02d}"
+
+        lines.append("\nRace Predictions (Garmin):")
+        lines.append(f"  5K: {format_time(race_preds.get('time_5k'))} | 10K: {format_time(race_preds.get('time_10k'))}")
+        lines.append(f"  Half: {format_time(race_preds.get('time_half_marathon'))} | Marathon: {format_time(race_preds.get('time_marathon'))}")
+
+    # 4. GEAR STATUS
     gear_alerts = get_gear_status(cache)
     if gear_alerts:
         lines.append("\n👟 GEAR ALERTS")

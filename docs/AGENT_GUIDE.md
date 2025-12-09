@@ -314,17 +314,41 @@ bash bin/planned_workouts.sh adjust <workout_id> \
 
 ## Workout Upload to Garmin Connect
 
-**NEW CAPABILITY:** Upload structured workouts directly to the athlete's Garmin Connect calendar.
+Upload structured workouts directly to the athlete's Garmin Connect calendar - manually or automatically from FinalSurge.
 
-### When to Use
+### Automatic Generation from FinalSurge
 
-Upload workouts when:
-- Athlete requests a custom workout added to Garmin device
-- Creating interval sessions, tempo runs, or structured workouts
-- Converting planned workouts to Garmin-compatible format
-- Athlete prefers workouts on their watch vs. verbal/written instructions
+**FinalSurge workouts are automatically converted to Garmin workouts during sync.**
 
-### Quick Upload
+```bash
+# Sync includes automatic workout generation
+bash bin/sync_garmin_data.sh
+
+# Preview what would be generated
+python3 src/auto_workout_generator.py --check-only
+
+# Generate manually (if needed)
+python3 src/auto_workout_generator.py
+```
+
+**Supported coach workout formats:**
+- Simple runs: `30 min E`, `45 min M`
+- Easy + strides: `60 min E + 3x20 sec strides @ 5k on 40 sec recovery`
+- Tempo: `20 min warm up 25 min @ tempo 20 min warm down`
+- Tempo intervals: `20 min warm up 5x5 min @ tempo on 1 min recovery 20 min warm down`
+- Mixed pace: `30 min E 30 min M 30 min E`
+
+**Coach pace mappings (defined in `src/auto_workout_generator.py`):**
+| Pace | Mile Range | Garmin m/s |
+|------|-----------|------------|
+| E (Easy) | 10:00-11:10 | 2.402-2.681 |
+| M (Marathon) | 9:05-9:15 | 2.899-2.954 |
+| T (Tempo) | 8:30-8:40 | 3.095-3.156 |
+| 5K | 7:55-8:05 | 3.318-3.387 |
+
+### Manual Upload
+
+For custom workouts not from FinalSurge:
 
 ```bash
 # Upload from JSON file
