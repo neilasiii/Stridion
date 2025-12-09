@@ -25,26 +25,26 @@
     "generated_at": "2025-12-06T12:38:08.264021"
   },
   "strength": {
-    "2025-12-08": {
-      "garmin_id": 1406610206,
-      "name": "2025-12-08 - Strength: Lower Body + Hip Stability",
-      "focus_areas": "Lower body emphasis: glutes, hamstrings, single-leg stability (split squats, RDLs, single-leg deadlifts) + hip stabilizers (clamshells, lateral work) + core anti-extension",
+    "2025-12-09": {
+      "garmin_id": 1406767184,
+      "name": "2025-12-09 - Strength: Lower Body + Core",
+      "focus_areas": "Lower body emphasis (glutes, hamstrings, single-leg stability) + core anti-extension + light upper body pulling",
       "intensity": "full",
-      "generated_at": "2025-12-09T14:06:35.668378"
+      "generated_at": "2025-12-09T18:30:04.903835"
     },
     "2025-12-11": {
-      "garmin_id": 1406610212,
-      "name": "2025-12-11 - Strength: Upper Body Power",
-      "focus_areas": "Upper body + core emphasis: horizontal/vertical push (push-ups, overhead press), horizontal/vertical pull (rows, pull-ups/lat work), core anti-rotation (Pallof press, bird dogs)",
+      "garmin_id": 1406767197,
+      "name": "2025-12-11 - Strength: Upper Body + Core",
+      "focus_areas": "Upper body emphasis (pushing and pulling balance) + core anti-rotation + hip stability work",
       "intensity": "full",
-      "generated_at": "2025-12-09T14:06:36.268658"
+      "generated_at": "2025-12-09T18:30:05.618882"
     },
     "2025-12-13": {
-      "garmin_id": 1406610218,
+      "garmin_id": 1406767208,
       "name": "2025-12-13 - Strength: Full Body Foundation",
-      "focus_areas": "Full body integration: compound movements (goblet squats, step-ups), calf strength (single-leg raises), rotational core, light upper body maintenance",
+      "focus_areas": "Full body integration (compound movements: squats, deadlifts, presses) + calf strength + core stability",
       "intensity": "moderate",
-      "generated_at": "2025-12-09T14:06:36.882957"
+      "generated_at": "2025-12-09T18:30:06.241348"
     }
   },
   "mobility": {},
@@ -77,14 +77,14 @@
   },
   "week_snapshots": {
     "2025-12-08": {
-      "running_fingerprint": "2025-12-09:Walk:False|2025-12-10:Run: 35 min E:False|2025-12-12:Run: 40 min E:False|2025-12-14:Run: 45 min E:False",
+      "running_fingerprint": "2025-12-10:Run: 35 min E:False|2025-12-12:Run: 40 min E:False|2025-12-14:Run: 45 min E:False",
       "strength_dates": [
-        "2025-12-08",
+        "2025-12-09",
         "2025-12-11",
         "2025-12-13"
       ],
       "recovery_concern": false,
-      "generated_at": "2025-12-09T14:06:36.883192"
+      "generated_at": "2025-12-09T18:30:06.241458"
     }
   }
 }
