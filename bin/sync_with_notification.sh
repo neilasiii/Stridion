@@ -213,27 +213,27 @@ Weight: $NEW_WEIGHT" || CONTENT="Weight: $NEW_WEIGHT"
 
     # Running workouts from FinalSurge
     if [ "$RUNNING_WORKOUTS_CREATED" -gt 0 ] && [ -n "$RUNNING_WORKOUT_DETAILS" ]; then
-        RUNNING_COUNT=$(echo "$RUNNING_WORKOUT_DETAILS" | wc -l)
-        WORKOUT_NOTIFICATION="🏃 $RUNNING_COUNT run workout(s) scheduled"
-        # Add first workout detail
-        FIRST_RUN=$(echo "$RUNNING_WORKOUT_DETAILS" | head -1)
-        [ -n "$FIRST_RUN" ] && WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
-  → $FIRST_RUN"
+        WORKOUT_NOTIFICATION="🏃 Run workouts scheduled:"
+        # Add all workout details
+        while IFS= read -r workout; do
+            [ -n "$workout" ] && WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
+  → $workout"
+        done <<< "$RUNNING_WORKOUT_DETAILS"
     fi
 
     # Supplemental workouts (strength/mobility)
     if [ "$SUPPLEMENTAL_WORKOUTS_CREATED" -gt 0 ] && [ -n "$SUPPLEMENTAL_WORKOUT_DETAILS" ]; then
-        SUPP_COUNT=$(echo "$SUPPLEMENTAL_WORKOUT_DETAILS" | wc -l)
         if [ -n "$WORKOUT_NOTIFICATION" ]; then
             WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
-💪 $SUPP_COUNT strength workout(s) scheduled"
+💪 Strength workouts scheduled:"
         else
-            WORKOUT_NOTIFICATION="💪 $SUPP_COUNT strength workout(s) scheduled"
+            WORKOUT_NOTIFICATION="💪 Strength workouts scheduled:"
         fi
-        # Add first workout detail
-        FIRST_STRENGTH=$(echo "$SUPPLEMENTAL_WORKOUT_DETAILS" | head -1)
-        [ -n "$FIRST_STRENGTH" ] && WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
-  → $FIRST_STRENGTH"
+        # Add all workout details
+        while IFS= read -r workout; do
+            [ -n "$workout" ] && WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
+  → $workout"
+        done <<< "$SUPPLEMENTAL_WORKOUT_DETAILS"
     fi
 
     # Append to content if we have workout notifications
