@@ -35,6 +35,8 @@ This fetches latest Garmin Connect data, updates the cache, and provides a summa
 
 **Activity & Performance:**
 - `activities[]` - All activity types with splits, HR, pace, intervals, HR zones
+  - **Strength activities** include `workout_description` with full exercise details (sets, reps, notes)
+  - Use this to see exactly what exercises were done in past strength sessions
 - `vo2_max_readings[]` - VO2 max estimates
 - `lactate_threshold{}` - Auto-detected threshold HR and pace
 - `race_predictions{}` - 5K, 10K, half marathon, marathon time predictions
@@ -72,6 +74,14 @@ with open('data/health/health_data_cache.json', 'r') as f:
 # Recent activities
 recent_runs = [a for a in health['activities']
                if a['activity_type'] == 'RUNNING'][:7]
+
+# Recent strength sessions with full workout details
+recent_strength = [a for a in health['activities']
+                   if a['activity_type'] == 'STRENGTH'][:3]
+for s in recent_strength:
+    print(f"{s['date'][:10]}: {s['activity_name']}")
+    if s.get('workout_description'):
+        print(s['workout_description'])  # Full exercise details
 
 # Current readiness
 readiness = health['training_readiness'][0] if health['training_readiness'] else None

@@ -50,7 +50,7 @@ def load_health_cache() -> Dict[str, Any]:
 
 
 def get_week_context(target_date: str) -> str:
-    """Build context about the week's running schedule."""
+    """Build context about the week's running schedule and recent strength work."""
     health_cache = load_health_cache()
     scheduled_workouts = health_cache.get("scheduled_workouts", [])
 
@@ -58,6 +58,7 @@ def get_week_context(target_date: str) -> str:
     target_dt = datetime.strptime(target_date, "%Y-%m-%d")
     week_start = target_dt - timedelta(days=target_dt.weekday())  # Monday
     week_end = week_start + timedelta(days=6)
+    today = datetime.now().strftime("%Y-%m-%d")
 
     # Get running workouts for the week
     week_workouts = []
@@ -76,8 +77,9 @@ def get_week_context(target_date: str) -> str:
     activities = health_cache.get("activities", [])[:5]
     recent_activities = []
     for act in activities:
-        if act.get("activityType", {}).get("typeKey") in ("running", "strength_training"):
-            recent_activities.append(f"- {act.get('startTimeLocal', '')[:10]}: {act.get('activityName', 'Unknown')}")
+        act_type = act.get("activity_type", "")
+        if act_type in ("RUNNING", "STRENGTH"):
+            recent_activities.append(f"- {act.get('date', '')[:10]}: {act.get('activity_name', 'Unknown')}")
 
     # Get recovery metrics
     rhr_data = health_cache.get("resting_heart_rate", [])
@@ -89,13 +91,37 @@ def get_week_context(target_date: str) -> str:
         sleep_hours = sleep_data[0].get("sleepTimeSeconds", 0) / 3600
         latest_sleep = f"{sleep_hours:.1f} hours"
 
+    # Get recent strength sessions with full details
+    recent_strength = get_recent_strength_sessions(health_cache, days=14)
+    strength_section = ""
+    if recent_strength:
+        strength_lines = []
+        for s in recent_strength:
+            focus = f" - Focus: {s['focus_areas']}" if s.get('focus_areas') else ""
+            completed_marker = " ✓ COMPLETED TODAY" if s.get('is_today') else ""
+            strength_lines.append(f"- {s['date']}: {s['name']} ({s['duration_min']} min){focus}{completed_marker}")
+
+            # Include full workout description for today's completed workout
+            if s.get('is_today') and s.get('workout_description'):
+                details = s['workout_description'][:1200]
+                if len(s['workout_description']) > 1200:
+                    details += "\n..."
+                strength_lines.append(f"\n  Today's workout details:\n```\n{details}\n```")
+
+        strength_section = f"""
+## Recent Strength Sessions (last 14 days)
+{chr(10).join(strength_lines)}
+
+**IMPORTANT: Design today's workout to COMPLEMENT (not repeat) recent work.**
+"""
+
     context = f"""
 ## Week's Running Schedule (from FinalSurge)
 {chr(10).join(week_workouts) if week_workouts else "No scheduled running workouts found"}
 
 ## Recent Activities
 {chr(10).join(recent_activities) if recent_activities else "No recent activities"}
-
+{strength_section}
 ## Recovery Status
 - Latest Resting HR: {latest_rhr} bpm
 - Latest Sleep: {latest_sleep or 'unknown'}

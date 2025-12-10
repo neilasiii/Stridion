@@ -137,19 +137,55 @@ def get_recovery_summary(cache):
 
 
 def get_recent_activities(cache, days=7):
-    """Get summary of recent activities."""
+    """Get summary of recent activities including strength sessions."""
     activities = cache.get('activities', [])
     cutoff = (datetime.now() - timedelta(days=days)).isoformat()
+    today = datetime.now().strftime("%Y-%m-%d")
 
     recent = [a for a in activities if a.get('date', '') >= cutoff]
 
     running = [a for a in recent if a.get('activity_type') == 'RUNNING']
+    strength = [a for a in recent if a.get('activity_type') == 'STRENGTH']
+
+    # Build strength session summaries with focus areas
+    strength_sessions = []
+    for a in strength:
+        session = {
+            'date': a.get('date', '')[:10],
+            'name': a.get('activity_name', 'Strength'),
+            'duration_min': int(a.get('duration_seconds', 0) / 60),
+            'focus_areas': '',
+            'workout_description': a.get('workout_description', '')
+        }
+
+        # Try to extract focus from workout description or markdown file
+        if session['workout_description']:
+            for line in session['workout_description'].split('\n'):
+                if 'Focus:' in line or 'focus:' in line.lower():
+                    session['focus_areas'] = line.split(':', 1)[-1].strip()
+                    break
+
+        # Fallback to markdown file
+        if not session['focus_areas']:
+            workout_file = Path(__file__).parent.parent / 'data' / 'workouts' / 'strength' / f"{session['date']}.md"
+            if workout_file.exists():
+                try:
+                    content = workout_file.read_text()
+                    for line in content.split('\n'):
+                        if line.startswith('**Focus:**'):
+                            session['focus_areas'] = line.replace('**Focus:**', '').strip()
+                            break
+                except:
+                    pass
+
+        strength_sessions.append(session)
 
     return {
         'total_activities': len(recent),
         'running_count': len(running),
         'running_miles': round(sum(a.get('distance_miles', 0) for a in running), 1),
-        'last_run': running[0] if running else None
+        'last_run': running[0] if running else None,
+        'strength_sessions': strength_sessions
     }
 
 
@@ -196,6 +232,13 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
     if activities.get('last_run'):
         run = activities['last_run']
         activity_text += f"\nLast run: {run.get('activity_name', 'Run')} - {round(run.get('distance_miles', 0), 1)}mi"
+
+    # Include recent strength sessions if available
+    if activities.get('strength_sessions'):
+        for s in activities['strength_sessions'][:2]:  # Last 2 strength sessions
+            activity_text += f"\nStrength ({s['date']}): {s['name']}"
+            if s.get('focus_areas'):
+                activity_text += f" - {s['focus_areas'][:60]}"
 
     # Weather
     weather_text = weather if weather else "Weather data not available"
