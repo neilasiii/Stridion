@@ -55,7 +55,8 @@ SYNC_OUTPUT=$(bash bin/sync_garmin_data.sh $DAYS_ARG 2>&1)
 SYNC_EXIT_CODE=$?
 
 # Extract workout creation info from sync output
-WORKOUTS_CREATED=$(echo "$SYNC_OUTPUT" | grep -c "Successfully created workouts" || echo "0")
+WORKOUTS_CREATED=$(echo "$SYNC_OUTPUT" | grep -c "Successfully created workouts" 2>/dev/null || true)
+[ -z "$WORKOUTS_CREATED" ] && WORKOUTS_CREATED=0
 
 # Prepare timestamp
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
@@ -182,16 +183,26 @@ except Exception as e:
     # Build notification content (only NEW items)
     CONTENT=""
     [ -n "$NEW_RUNNING" ] && CONTENT="Run: $NEW_RUNNING"
-    [ -n "$NEW_WALKING" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
-Walk: $NEW_WALKING" || [ -n "$NEW_WALKING" ] && CONTENT="Walk: $NEW_WALKING"
-    [ -n "$NEW_SLEEP" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
-Sleep: $NEW_SLEEP" || [ -n "$NEW_SLEEP" ] && CONTENT="Sleep: $NEW_SLEEP"
-    [ -n "$NEW_RHR" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
-RHR: $NEW_RHR" || [ -n "$NEW_RHR" ] && CONTENT="RHR: $NEW_RHR"
-    [ -n "$NEW_VO2" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
-VO2: $NEW_VO2" || [ -n "$NEW_VO2" ] && CONTENT="VO2: $NEW_VO2"
-    [ -n "$NEW_WEIGHT" ] && [ -n "$CONTENT" ] && CONTENT="$CONTENT
-Weight: $NEW_WEIGHT" || [ -n "$NEW_WEIGHT" ] && CONTENT="Weight: $NEW_WEIGHT"
+    if [ -n "$NEW_WALKING" ]; then
+        [ -n "$CONTENT" ] && CONTENT="$CONTENT
+Walk: $NEW_WALKING" || CONTENT="Walk: $NEW_WALKING"
+    fi
+    if [ -n "$NEW_SLEEP" ]; then
+        [ -n "$CONTENT" ] && CONTENT="$CONTENT
+Sleep: $NEW_SLEEP" || CONTENT="Sleep: $NEW_SLEEP"
+    fi
+    if [ -n "$NEW_RHR" ]; then
+        [ -n "$CONTENT" ] && CONTENT="$CONTENT
+RHR: $NEW_RHR" || CONTENT="RHR: $NEW_RHR"
+    fi
+    if [ -n "$NEW_VO2" ]; then
+        [ -n "$CONTENT" ] && CONTENT="$CONTENT
+VO2: $NEW_VO2" || CONTENT="VO2: $NEW_VO2"
+    fi
+    if [ -n "$NEW_WEIGHT" ]; then
+        [ -n "$CONTENT" ] && CONTENT="$CONTENT
+Weight: $NEW_WEIGHT" || CONTENT="Weight: $NEW_WEIGHT"
+    fi
 
     # Add workout creation info if workouts were created
     if [ "$WORKOUTS_CREATED" -gt 0 ]; then
