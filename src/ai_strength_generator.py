@@ -148,21 +148,37 @@ def get_recent_strength_sessions(health_cache: Dict[str, Any], days: int = 14) -
                     "name": act_name,
                     "duration_min": int(duration / 60) if duration else 0,
                     "is_today": act_date == today,
-                    "focus_areas": ""
+                    "focus_areas": "",
+                    "workout_description": ""
                 }
 
-                # Try to get focus areas from workout markdown file
-                workout_file = Path(__file__).parent.parent / "data" / "workouts" / "strength" / f"{act_date}.md"
-                if workout_file.exists():
-                    try:
-                        content = workout_file.read_text()
-                        # Look for Focus: line in the markdown
-                        for line in content.split('\n'):
-                            if line.startswith('**Focus:**'):
-                                session["focus_areas"] = line.replace('**Focus:**', '').strip()
-                                break
-                    except Exception:
-                        pass
+                # First, try to get workout description from cached activity data
+                workout_desc = act.get("workout_description", "")
+                if workout_desc:
+                    session["workout_description"] = workout_desc
+                    # Extract focus from description (usually on line starting with focus areas)
+                    for line in workout_desc.split('\n'):
+                        if 'MAIN WORK:' in line or '- ' in line:
+                            break
+                        if 'Focus:' in line or 'focus:' in line.lower():
+                            session["focus_areas"] = line.split(':', 1)[-1].strip()
+
+                # Fall back to workout markdown file if no cached description
+                if not session["focus_areas"]:
+                    workout_file = Path(__file__).parent.parent / "data" / "workouts" / "strength" / f"{act_date}.md"
+                    if workout_file.exists():
+                        try:
+                            content = workout_file.read_text()
+                            # Store full description if not already set
+                            if not session["workout_description"]:
+                                session["workout_description"] = content
+                            # Look for Focus: line in the markdown
+                            for line in content.split('\n'):
+                                if line.startswith('**Focus:**'):
+                                    session["focus_areas"] = line.replace('**Focus:**', '').strip()
+                                    break
+                        except Exception:
+                            pass
 
                 strength_sessions.append(session)
         except ValueError:
@@ -277,11 +293,15 @@ def get_week_schedule_context(week_start: datetime, final_running_date: str = No
     recent_strength = get_recent_strength_sessions(health_cache, days=14)
     strength_history = []
     today_strength = []
+    today_workout_details = ""
     for s in recent_strength:
         focus_info = f" - FOCUS: {s['focus_areas']}" if s.get('focus_areas') else ""
         entry = f"- {s['date']}: {s['name']} ({s['duration_min']} min){focus_info}"
         if s.get('is_today'):
             today_strength.append(entry)
+            # Capture full workout details for today
+            if s.get('workout_description'):
+                today_workout_details = s['workout_description']
         else:
             strength_history.append(entry)
 
@@ -304,6 +324,18 @@ The athlete has ALREADY completed strength training today:
 {chr(10).join(today_strength)}
 
 **CRITICAL: Do NOT schedule strength for today. Future sessions must COMPLEMENT (not repeat) this work.**
+"""
+        # Add full workout details if available
+        if today_workout_details:
+            # Truncate if too long (keep first 1500 chars)
+            details = today_workout_details[:1500]
+            if len(today_workout_details) > 1500:
+                details += "\n..."
+            today_strength_section += f"""
+### Full Workout Details (completed today):
+```
+{details}
+```
 """
 
     context = f"""

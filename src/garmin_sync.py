@@ -360,6 +360,43 @@ def _fetch_activity_hr_zones(client: Garmin, activity_id: str, quiet: bool = Fal
         return []
 
 
+def _fetch_strength_workout_details(client: Garmin, activity_id: str, quiet: bool = False) -> Optional[str]:
+    """
+    Fetch workout description for a strength activity.
+
+    For strength activities that were created from a scheduled workout template,
+    this fetches the full workout description (exercises, sets, reps, notes).
+
+    Returns the workout description string or None if not available.
+    """
+    try:
+        # Get activity details to find associated workout ID
+        activity_details = client.get_activity(activity_id)
+        metadata = activity_details.get('metadataDTO', {})
+        workout_id = metadata.get('associatedWorkoutId')
+
+        if not workout_id:
+            return None
+
+        # Fetch the workout template
+        try:
+            workout = client.get_workout_by_id(workout_id)
+            description = workout.get('description')
+            if description:
+                return description
+        except Exception:
+            # Workout template may have been deleted (e.g., during regeneration)
+            # Fall back to checking local markdown files
+            pass
+
+        return None
+
+    except Exception as e:
+        if not quiet:
+            print(f"  Warning: Could not fetch workout details for activity {activity_id}: {e}", file=sys.stderr)
+        return None
+
+
 def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> List[Dict[str, Any]]:
     """
     Fetch activities from Garmin Connect for the specified date range.
@@ -434,7 +471,12 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
             # Fetch HR zone data for this activity
             hr_zones = _fetch_activity_hr_zones(client, str(activity_id), quiet)
 
-            activities.append({
+            # For strength activities, try to get workout details
+            workout_description = None
+            if activity_type == 'STRENGTH':
+                workout_description = _fetch_strength_workout_details(client, str(activity_id), quiet)
+
+            activity_data = {
                 'activity_id': activity_id,
                 'date': activity_date,
                 'activity_name': activity_name,
@@ -448,7 +490,13 @@ def fetch_activities(client: Garmin, start_date: date, end_date: date, quiet: bo
                 'pace_per_mile': round(pace_per_mile, 6),
                 'splits': splits,
                 'hr_zones': hr_zones
-            })
+            }
+
+            # Add workout description if available
+            if workout_description:
+                activity_data['workout_description'] = workout_description
+
+            activities.append(activity_data)
 
         if not quiet:
             print(f"  Found {len(activities)} activities")
