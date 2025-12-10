@@ -1,7 +1,156 @@
 {
-  "last_updated": "2025-12-09T07:05:14.879976+00:00",
-  "last_sync_date": "2025-12-09",
+  "last_updated": "2025-12-10T15:46:18.399151+00:00",
+  "last_sync_date": "2025-12-10",
   "activities": [
+    {
+      "activity_id": 21221209003,
+      "date": "2025-12-10T10:08:09",
+      "activity_name": "Altamonte Springs - 2025-12-10 - Easy Run 35min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2105.514892578125,
+      "distance_miles": 3.453652,
+      "calories": 429.0,
+      "avg_heart_rate": 155.0,
+      "max_heart_rate": 168.0,
+      "avg_speed": 5.905522,
+      "pace_per_mile": 10.160814,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 3.453509,
+          "duration_seconds": 2105.515,
+          "avg_heart_rate": 155.0,
+          "max_heart_rate": 168.0,
+          "avg_speed_mph": 5.905522,
+          "pace_per_mile": 10.161235,
+          "avg_cadence": 147.109375,
+          "avg_power": 296.0,
+          "calories": 429.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 245.352,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 549.107,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 1275.255,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 173
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 183
+        }
+      ]
+    },
+    {
+      "activity_id": 21215544706,
+      "date": "2025-12-09T17:37:55",
+      "activity_name": "2025-12-08 - Strength: Lower Bod",
+      "activity_type": "STRENGTH",
+      "duration_seconds": 2122.009033203125,
+      "distance_miles": 0.0,
+      "calories": 176.0,
+      "avg_heart_rate": 100.0,
+      "max_heart_rate": 152.0,
+      "avg_speed": 0.0,
+      "pace_per_mile": 0,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 2122.009,
+          "avg_heart_rate": 100.0,
+          "max_heart_rate": 152.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": 176.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 386.938,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 29.057,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 161
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 181
+        }
+      ]
+    },
+    {
+      "activity_id": 21213277914,
+      "date": "2025-12-09T12:53:12",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 1552.02001953125,
+      "distance_miles": 1.332242,
+      "calories": 134.0,
+      "avg_heart_rate": 88.0,
+      "max_heart_rate": 104.0,
+      "avg_speed": 3.089214,
+      "pace_per_mile": 19.416145,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 161
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 181
+        }
+      ]
+    },
     {
       "activity_id": 21202851164,
       "date": "2025-12-08T10:26:34",
@@ -25149,6 +25298,26 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-12-10",
+      "total_duration_minutes": 428.0,
+      "light_sleep_minutes": 231.0,
+      "deep_sleep_minutes": 140.0,
+      "rem_sleep_minutes": 57.0,
+      "awake_minutes": 129.0,
+      "sleep_score": 65,
+      "deep_sleep_percentage": 32.71
+    },
+    {
+      "date": "2025-12-09",
+      "total_duration_minutes": 398.0,
+      "light_sleep_minutes": 266.0,
+      "deep_sleep_minutes": 65.0,
+      "rem_sleep_minutes": 67.0,
+      "awake_minutes": 87.0,
+      "sleep_score": 67,
+      "deep_sleep_percentage": 16.33
+    },
+    {
       "date": "2025-12-08",
       "total_duration_minutes": 457.0,
       "light_sleep_minutes": 289.0,
@@ -28991,6 +29160,10 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2025-12-10T00:00:00",
+      "vo2_max": 49.9
+    },
+    {
       "date": "2025-12-08T00:00:00",
       "vo2_max": 49.8
     },
@@ -29557,8 +29730,12 @@
   ],
   "resting_hr_readings": [
     [
+      "2025-12-10T12:00:00",
+      48
+    ],
+    [
       "2025-12-09T12:00:00",
-      50
+      47
     ],
     [
       "2025-12-08T12:00:00",
@@ -31106,6 +31283,26 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-12-10",
+      "weekly_avg": 67,
+      "last_night_avg": 69,
+      "last_night_5min_high": 96,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-09",
+      "weekly_avg": 65,
+      "last_night_avg": 60,
+      "last_night_5min_high": 84,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
     {
       "date": "2025-12-08",
       "weekly_avg": 67,
@@ -34969,6 +35166,26 @@
   ],
   "training_readiness": [
     {
+      "date": "2025-12-10",
+      "score": 46,
+      "level": "LOW",
+      "recovery_time": 1280,
+      "sleep_score": 65,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 241
+    },
+    {
+      "date": "2025-12-09",
+      "score": 58,
+      "level": "MODERATE",
+      "recovery_time": 66,
+      "sleep_score": 67,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 168
+    },
+    {
       "date": "2025-12-08",
       "score": 50,
       "level": "MODERATE",
@@ -38831,9 +39048,14 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-12-10",
+      "avg_stress": 14,
+      "max_stress": 51
+    },
+    {
       "date": "2025-12-09",
-      "avg_stress": 22,
-      "max_stress": 57
+      "avg_stress": 23,
+      "max_stress": 93
     },
     {
       "date": "2025-12-08",
@@ -40768,10 +40990,16 @@
   ],
   "spo2_readings": [
     {
+      "date": "2025-12-10",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 95.0
+    },
+    {
       "date": "2025-12-09",
       "avg_spo2": 95.0,
-      "lowest_spo2": 92,
-      "avg_sleep_spo2": null
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
     },
     {
       "date": "2025-12-08",
@@ -43092,159 +43320,228 @@
   ],
   "body_battery": [
     {
+      "date": "2025-12-10",
+      "charged": 50,
+      "drained": 9,
+      "latest_level": 87,
+      "latest_timestamp": 1765370160000
+    },
+    {
       "date": "2025-12-09",
-      "charged": 14,
-      "drained": 0
+      "charged": 58,
+      "drained": 49,
+      "latest_level": 45,
+      "latest_timestamp": 1765342440000
     },
     {
       "date": "2025-12-08",
       "charged": 63,
-      "drained": 63
+      "drained": 63,
+      "latest_level": 22,
+      "latest_timestamp": 1765248120000
     },
     {
       "date": "2025-12-07",
       "charged": 52,
-      "drained": 61
+      "drained": 61,
+      "latest_level": 37,
+      "latest_timestamp": 1765169820000
     },
     {
       "date": "2025-12-06",
       "charged": 63,
-      "drained": 69
+      "drained": 69,
+      "latest_level": 33,
+      "latest_timestamp": 1765075860000
     },
     {
       "date": "2025-12-05",
       "charged": 66,
-      "drained": 40
+      "drained": 40,
+      "latest_level": 52,
+      "latest_timestamp": 1764997020000
     },
     {
       "date": "2025-12-04",
       "charged": 56,
-      "drained": 82
+      "drained": 82,
+      "latest_level": 21,
+      "latest_timestamp": 1764905400000
     },
     {
       "date": "2025-12-03",
       "charged": 67,
-      "drained": 54
+      "drained": 54,
+      "latest_level": 37,
+      "latest_timestamp": 1764814500000
     },
     {
       "date": "2025-12-02",
       "charged": 68,
-      "drained": 71
+      "drained": 71,
+      "latest_level": 21,
+      "latest_timestamp": 1764728100000
     },
     {
       "date": "2025-12-01",
       "charged": 80,
-      "drained": 51
+      "drained": 51,
+      "latest_level": 42,
+      "latest_timestamp": 1764651420000
     },
     {
       "date": "2025-11-30",
       "charged": 61,
-      "drained": 70
+      "drained": 70,
+      "latest_level": 7,
+      "latest_timestamp": 1764559260000
     },
     {
       "date": "2025-11-29",
       "charged": 61,
-      "drained": 69
+      "drained": 69,
+      "latest_level": 19,
+      "latest_timestamp": 1764475740000
     },
     {
       "date": "2025-11-28",
       "charged": 63,
-      "drained": 72
+      "drained": 72,
+      "latest_level": 24,
+      "latest_timestamp": 1764384840000
     },
     {
       "date": "2025-11-27",
       "charged": 75,
-      "drained": 59
+      "drained": 59,
+      "latest_level": 32,
+      "latest_timestamp": 1764297900000
     },
     {
       "date": "2025-11-26",
       "charged": 56,
-      "drained": 68
+      "drained": 68,
+      "latest_level": 20,
+      "latest_timestamp": 1764214560000
     },
     {
       "date": "2025-11-25",
       "charged": 67,
-      "drained": 53
+      "drained": 53,
+      "latest_level": 24,
+      "latest_timestamp": 1764126000000
     },
     {
       "date": "2025-11-24",
       "charged": 41,
-      "drained": 25
+      "drained": 25,
+      "latest_level": 21,
+      "latest_timestamp": 1764046620000
     },
     {
       "date": "2025-11-23",
       "charged": 40,
-      "drained": 79
+      "drained": 79,
+      "latest_level": 5,
+      "latest_timestamp": 1763931600000
     },
     {
       "date": "2025-11-22",
       "charged": 76,
-      "drained": 58
+      "drained": 58,
+      "latest_level": 22,
+      "latest_timestamp": 1763863020000
     },
     {
       "date": "2025-11-21",
       "charged": 60,
-      "drained": 74
+      "drained": 74,
+      "latest_level": 20,
+      "latest_timestamp": 1763783100000
     },
     {
       "date": "2025-11-20",
       "charged": 62,
-      "drained": 57
+      "drained": 57,
+      "latest_level": 30,
+      "latest_timestamp": 1763695080000
     },
     {
       "date": "2025-11-19",
       "charged": 68,
-      "drained": 70
+      "drained": 70,
+      "latest_level": 25,
+      "latest_timestamp": 1763608860000
     },
     {
       "date": "2025-11-18",
       "charged": 60,
-      "drained": 66
+      "drained": 66,
+      "latest_level": 27,
+      "latest_timestamp": 1763522460000
     },
     {
       "date": "2025-11-17",
       "charged": 66,
-      "drained": 65
+      "drained": 65,
+      "latest_level": 33,
+      "latest_timestamp": 1763436420000
     },
     {
       "date": "2025-11-16",
       "charged": 81,
-      "drained": 61
+      "drained": 61,
+      "latest_level": 34,
+      "latest_timestamp": 1763351100000
     },
     {
       "date": "2025-11-15",
       "charged": 74,
-      "drained": 78
+      "drained": 78,
+      "latest_level": 10,
+      "latest_timestamp": 1763261460000
     },
     {
       "date": "2025-11-14",
       "charged": 63,
-      "drained": 76
+      "drained": 76,
+      "latest_level": 18,
+      "latest_timestamp": 1763178480000
     },
     {
       "date": "2025-11-13",
       "charged": 47,
-      "drained": 56
+      "drained": 56,
+      "latest_level": 31,
+      "latest_timestamp": 1763089380000
     },
     {
       "date": "2025-11-12",
       "charged": 45,
-      "drained": 64
+      "drained": 64,
+      "latest_level": 47,
+      "latest_timestamp": 1763009460000
     },
     {
       "date": "2025-11-11",
       "charged": 72,
-      "drained": 56
+      "drained": 56,
+      "latest_level": 65,
+      "latest_timestamp": 1762923240000
     },
     {
       "date": "2025-11-10",
       "charged": 78,
-      "drained": 68
+      "drained": 68,
+      "latest_level": 49,
+      "latest_timestamp": 1762836840000
     },
     {
       "date": "2025-11-09",
       "charged": 65,
-      "drained": 38
+      "drained": 38,
+      "latest_level": 33,
+      "latest_timestamp": 1762742520000
     },
     {
       "date": "2025-11-08",
@@ -45028,45 +45325,82 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-12-09",
-    "time_5k": 1484,
-    "time_10k": 3112,
-    "time_half_marathon": 6976,
-    "time_marathon": 15265
+    "date": "2025-12-10",
+    "time_5k": 1482,
+    "time_10k": 3108,
+    "time_half_marathon": 6968,
+    "time_marathon": 15249
   },
   "training_status": {
-    "date": "2025-12-09",
-    "vo2_max": null,
-    "training_load": {},
+    "date": "2025-12-10",
+    "vo2_max": {
+      "date": "2025-12-10",
+      "value": 50.0,
+      "precise_value": 49.9
+    },
+    "training_load": {
+      "date": "2025-12-10",
+      "aerobic_low": 478.18323,
+      "aerobic_high": 567.8673,
+      "anaerobic": 0.0,
+      "feedback": "ANAEROBIC_SHORTAGE"
+    },
     "training_status": {}
   },
   "scheduled_workouts": [
     {
       "scheduled_date": "2025-12-09",
-      "name": "2025-12-09 - Strength: Lower Body + Core",
-      "description": "2025-12-09 - Strength: Lower Body + Core (35 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x10, glute bridges x10, clamshells x10 each\n\nMAIN WORK:\n- Goblet Squat: 3x10\n  (RPE 7)\n- Single-Leg RDL: 3x8 each\n  (DB held contralateral)\n- Bulgarian Split Squat: 3x8 each\n  (RPE 7)\n- Lateral Band Walk: 2x12 each direction\n  (Hip-width tension)\n- Single-Leg Calf Raise: 3x12 each\n  (Slow eccentric)\n\nCORE:\nPallof press 3x10 each, dead bug 2x10, bird dog 2x8 each\n\nNOTES:\nFocus on control and stability in single-leg movements",
+      "name": "2025-12-09 - Strength: Full Body Foundation",
+      "description": "2025-12-09 - Strength: Full Body Foundation (35 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x10, glute bridges x10, band pull-aparts x12\n\nMAIN WORK:\n- Goblet Squat: 3x10\n  (RPE 7)\n- Single-Leg RDL: 3x8 each\n  (slow eccentric)\n- Reverse Lunge: 3x10 each\n  (pause at bottom)\n- Bent-Over Dumbbell Row: 3x10\n  (RPE 7)\n- Band-Resisted Glute Bridge: 2x15\n  (pause at top)\n- Dumbbell Bicep Curl: 2x12\n  (controlled)\n\nCORE:\nDead bug 2x10, plank 2x40s, pallof press 2x8 each\n\nNOTES:\nFocus on control and stability with single-leg work",
       "source": "auto_generated",
       "domain": "strength",
       "duration_min": 35,
-      "garmin_id": 1406106465
+      "garmin_id": 1406772173
     },
     {
       "scheduled_date": "2025-12-11",
-      "name": "2025-12-11 - Strength: Upper Body Push/Pull",
-      "description": "2025-12-11 - Strength: Upper Body Push/Pull (35 min)\n\nWARMUP:\nArm circles 10 each, band pull-aparts x15, push-ups x8, scapular push-ups x10, hollow hold 20s\n\nMAIN WORK:\n- Push-ups: 3x12-15\n  (RPE 7, slow down)\n- Single-arm DB rows: 3x10 each\n  (RPE 7)\n- DB overhead press: 3x10\n  (RPE 6-7)\n- Band face pulls: 3x15\n  (shoulder stability)\n- Reverse lunges: 2x8 each\n  (hip flexor stretch)\n\nCORE:\nHollow hold 3x30s, dead bug 2x10 each, plank 2x30s\n\nNOTES:\nEmphasizes push/pull balance with shoulder health focus",
+      "name": "2025-12-11 - Strength: Upper Body + Core",
+      "description": "2025-12-11 - Strength: Upper Body + Core (35 min)\n\nWARMUP:\nArm circles 10 each, band pull-aparts x15, scapular push-ups x10, cat-cow x8\n\nMAIN WORK:\n- Push-ups: 3x12-15\n  (RPE 7, tempo controlled)\n- DB Bent-Over Rows: 3x12/arm\n  (RPE 7)\n- DB Overhead Press: 3x10\n  (Standing, core braced)\n- Band Face Pulls: 3x15\n  (High anchor point)\n- Eccentric Push-ups: 2x8\n  (4 sec lower)\n\nCORE:\nPallof press 3x12/side, side plank 2x30s/side, dead bug 2x10/side\n\nNOTES:\nFocus on controlled tempo and full range of motion",
       "source": "auto_generated",
       "domain": "strength",
       "duration_min": 35,
-      "garmin_id": 1406106483
+      "garmin_id": 1406818642
     },
     {
       "scheduled_date": "2025-12-13",
-      "name": "2025-12-13 - Strength: Full Body Integration",
-      "description": "2025-12-13 - Strength: Full Body Integration (28 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x10, glute bridges x10, arm circles x10\n\nMAIN WORK:\n- Goblet Squat: 3x10\n  (RPE 6)\n- Single-Leg Dumbbell RDL: 3x8 each\n  (Balance focus)\n- Dumbbell Step-Ups: 3x8 each\n  (Controlled tempo)\n- Push-Ups: 2x10\n  (RPE 6)\n- Dumbbell Bent-Over Row: 2x10\n  (RPE 6)\n\nCORE:\nBird dog 2x10 each, side plank leg lift 2x8 each, dead bug 2x10\n\nNOTES:\nModerate volume to support Sunday's easy run recovery.",
+      "name": "2025-12-13 - Strength: Full Body Balance",
+      "description": "2025-12-13 - Strength: Full Body Balance (30 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x12, arm circles 10 each, glute bridges x10\n\nMAIN WORK:\n- Goblet Squats: 3x12\n  (RPE 6, controlled tempo)\n- Walking Lunges: 3x10/leg\n  (RPE 6)\n- Push-up/Band Row Superset: 3x10 each\n  (Minimal rest between)\n- Single-Leg Calf Raises: 3x15/leg\n  (Slow eccentric)\n- DB Overhead Press: 2x12\n  (RPE 6)\n\nCORE:\nDead bugs 2x10/side, pallof press 2x10/side, plank 2x35s\n\nNOTES:\nBalance push/pull and quad-dominant work for overall maintenance",
       "source": "auto_generated",
       "domain": "strength",
-      "duration_min": 28,
-      "garmin_id": 1406106487
+      "duration_min": 30,
+      "garmin_id": 1406818644
+    },
+    {
+      "scheduled_date": "2025-12-08",
+      "name": "2025-12-08 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
+      "source": "auto_generated",
+      "domain": "mobility",
+      "duration_min": 30,
+      "garmin_id": 1406772178
+    },
+    {
+      "scheduled_date": "2025-12-11",
+      "name": "2025-12-11 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
+      "source": "auto_generated",
+      "domain": "mobility",
+      "duration_min": 30,
+      "garmin_id": 1406772184
+    },
+    {
+      "scheduled_date": "2025-12-13",
+      "name": "2025-12-13 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
+      "source": "auto_generated",
+      "domain": "mobility",
+      "duration_min": 30,
+      "garmin_id": 1406772190
     },
     {
       "scheduled_date": "2025-12-14",
@@ -45090,12 +45424,12 @@
     },
     {
       "scheduled_date": "2025-12-10",
-      "scheduled_datetime": null,
+      "scheduled_datetime": "2025-12-10T15:08:09",
       "name": "Run: 35 min E",
       "description": "Workout: Run",
-      "duration_seconds": null,
+      "duration_seconds": 3600,
       "location": null,
-      "all_day": true,
+      "all_day": false,
       "source": "ics_calendar"
     },
     {
@@ -45207,8 +45541,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 508942.8387145996,
-      "total_activities": 61,
+      "total_distance_meters": 516644.96884155273,
+      "total_activities": 63,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -45232,8 +45566,14 @@
   ],
   "daily_steps": [
     {
+      "date": "2025-12-10",
+      "total_steps": 430,
+      "goal_steps": 9380,
+      "goal_met": false
+    },
+    {
       "date": "2025-12-09",
-      "total_steps": 30,
+      "total_steps": 7157,
       "goal_steps": 9620,
       "goal_met": false
     },
@@ -45461,8 +45801,8 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-12-08",
-    "end_date": "2025-12-09",
+    "start_date": "2025-11-10",
+    "end_date": "2025-12-10",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,
