@@ -54,9 +54,13 @@ fi
 SYNC_OUTPUT=$(bash bin/sync_garmin_data.sh $DAYS_ARG 2>&1)
 SYNC_EXIT_CODE=$?
 
-# Extract workout creation info from sync output
-WORKOUTS_CREATED=$(echo "$SYNC_OUTPUT" | grep -c "Successfully created workouts" 2>/dev/null || true)
-[ -z "$WORKOUTS_CREATED" ] && WORKOUTS_CREATED=0
+# Extract workout creation info from sync output (both running and supplemental)
+RUNNING_WORKOUTS_CREATED=$(echo "$SYNC_OUTPUT" | grep -c "Successfully created workouts:" 2>/dev/null || echo "0")
+SUPPLEMENTAL_WORKOUTS_CREATED=$(echo "$SYNC_OUTPUT" | grep -c "Successfully created supplemental workouts:" 2>/dev/null || echo "0")
+
+# Extract individual workout details
+RUNNING_WORKOUT_DETAILS=$(echo "$SYNC_OUTPUT" | grep -A 20 "Successfully created workouts:" | grep "•" | head -10 | sed 's/.*• //' | sed 's/ (ID:.*//')
+SUPPLEMENTAL_WORKOUT_DETAILS=$(echo "$SYNC_OUTPUT" | grep -A 20 "Successfully created supplemental workouts:" | grep "•" | head -10 | sed 's/.*• //' | sed 's/ (ID:.*//')
 
 # Prepare timestamp
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
@@ -205,14 +209,38 @@ Weight: $NEW_WEIGHT" || CONTENT="Weight: $NEW_WEIGHT"
     fi
 
     # Add workout creation info if workouts were created
-    if [ "$WORKOUTS_CREATED" -gt 0 ]; then
-        # Extract workout count and dates from sync output
-        WORKOUT_INFO=$(echo "$SYNC_OUTPUT" | grep -A 10 "Successfully created workouts" | grep "•" | sed 's/.*• //' | sed 's/ (ID:.*//')
-        WORKOUT_COUNT=$(echo "$WORKOUT_INFO" | wc -l)
+    WORKOUT_NOTIFICATION=""
 
+    # Running workouts from FinalSurge
+    if [ "$RUNNING_WORKOUTS_CREATED" -gt 0 ] && [ -n "$RUNNING_WORKOUT_DETAILS" ]; then
+        RUNNING_COUNT=$(echo "$RUNNING_WORKOUT_DETAILS" | wc -l)
+        WORKOUT_NOTIFICATION="🏃 $RUNNING_COUNT run workout(s) scheduled"
+        # Add first workout detail
+        FIRST_RUN=$(echo "$RUNNING_WORKOUT_DETAILS" | head -1)
+        [ -n "$FIRST_RUN" ] && WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
+  → $FIRST_RUN"
+    fi
+
+    # Supplemental workouts (strength/mobility)
+    if [ "$SUPPLEMENTAL_WORKOUTS_CREATED" -gt 0 ] && [ -n "$SUPPLEMENTAL_WORKOUT_DETAILS" ]; then
+        SUPP_COUNT=$(echo "$SUPPLEMENTAL_WORKOUT_DETAILS" | wc -l)
+        if [ -n "$WORKOUT_NOTIFICATION" ]; then
+            WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
+💪 $SUPP_COUNT strength workout(s) scheduled"
+        else
+            WORKOUT_NOTIFICATION="💪 $SUPP_COUNT strength workout(s) scheduled"
+        fi
+        # Add first workout detail
+        FIRST_STRENGTH=$(echo "$SUPPLEMENTAL_WORKOUT_DETAILS" | head -1)
+        [ -n "$FIRST_STRENGTH" ] && WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
+  → $FIRST_STRENGTH"
+    fi
+
+    # Append to content if we have workout notifications
+    if [ -n "$WORKOUT_NOTIFICATION" ]; then
         [ -n "$CONTENT" ] && CONTENT="$CONTENT
 
-🎯 Created $WORKOUT_COUNT workout(s)" || CONTENT="🎯 Created $WORKOUT_COUNT workout(s)"
+$WORKOUT_NOTIFICATION" || CONTENT="$WORKOUT_NOTIFICATION"
     fi
 
     # If no new items, show "No new data"
