@@ -25,26 +25,19 @@
     "generated_at": "2025-12-06T12:38:08.264021"
   },
   "strength": {
-    "2025-12-09": {
-      "garmin_id": 1406767184,
-      "name": "2025-12-09 - Strength: Lower Body + Core",
-      "focus_areas": "Lower body emphasis (glutes, hamstrings, single-leg stability) + core anti-extension + light upper body pulling",
-      "intensity": "full",
-      "generated_at": "2025-12-09T18:30:04.903835"
-    },
     "2025-12-11": {
-      "garmin_id": 1406767197,
+      "garmin_id": 1406818642,
       "name": "2025-12-11 - Strength: Upper Body + Core",
-      "focus_areas": "Upper body emphasis (pushing and pulling balance) + core anti-rotation + hip stability work",
+      "focus_areas": "Upper body emphasis: horizontal/vertical push (push-ups, overhead press), horizontal/vertical pull (rows, pull-up progressions) + core anti-rotation (pallof press, side planks)",
       "intensity": "full",
-      "generated_at": "2025-12-09T18:30:05.618882"
+      "generated_at": "2025-12-09T20:37:58.710787"
     },
     "2025-12-13": {
-      "garmin_id": 1406767208,
-      "name": "2025-12-13 - Strength: Full Body Foundation",
-      "focus_areas": "Full body integration (compound movements: squats, deadlifts, presses) + calf strength + core stability",
+      "garmin_id": 1406818644,
+      "name": "2025-12-13 - Strength: Full Body Balance",
+      "focus_areas": "Full body maintenance: quad-dominant lower (goblet squats, lunges) + calf strength (single-leg raises) + upper body balance (push/pull superset) + core anti-extension",
       "intensity": "moderate",
-      "generated_at": "2025-12-09T18:30:06.241348"
+      "generated_at": "2025-12-09T20:37:59.085798"
     }
   },
   "mobility": {},
@@ -79,12 +72,11 @@
     "2025-12-08": {
       "running_fingerprint": "2025-12-10:Run: 35 min E:False|2025-12-12:Run: 40 min E:False|2025-12-14:Run: 45 min E:False",
       "strength_dates": [
-        "2025-12-09",
         "2025-12-11",
         "2025-12-13"
       ],
       "recovery_concern": false,
-      "generated_at": "2025-12-09T18:30:06.241458"
+      "generated_at": "2025-12-09T20:37:59.085981"
     }
   }
 }
