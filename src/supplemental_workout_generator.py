@@ -955,7 +955,8 @@ def generate_week_supplemental_workouts(
     check_only: bool = False,
     quiet: bool = False,
     skip_mobility: bool = False,
-    use_ai: bool = True
+    use_ai: bool = True,
+    force_regen: bool = False
 ) -> List[Dict[str, Any]]:
     """
     Generate supplemental workouts for a week based on FinalSurge schedule.
@@ -970,6 +971,7 @@ def generate_week_supplemental_workouts(
         check_only: If True, preview without uploading
         quiet: Suppress output
         skip_mobility: If True, only generate strength (mobility can get noisy)
+        force_regen: If True, force regeneration including today's workout
         use_ai: If True, use Claude AI for BOTH date selection AND workout generation
 
     Returns:
@@ -1039,6 +1041,11 @@ def generate_week_supplemental_workouts(
         week_key, running_schedule, strength_dates, health_cache, generated_log, quiet
     )
 
+    # Force flag overrides regeneration check
+    if force_regen and not needs_regen:
+        needs_regen = True
+        regen_reason = "Forced regeneration"
+
     if needs_regen:
         if not quiet:
             print(f"\n🔄 Regenerating strength workouts: {regen_reason}")
@@ -1066,10 +1073,17 @@ def generate_week_supplemental_workouts(
             date, focus_areas = slot[0], None
             intensity = "full"
 
-        # Skip today and past dates - only generate for future
-        if date <= today:
+        # Skip past dates - only generate for today and future
+        # When regenerating, we must allow today since we may have deleted today's workout
+        if date < today:
             if not quiet:
-                print(f"  ⏭ Skipping {date} (today or past)")
+                print(f"  ⏭ Skipping {date} (past)")
+            continue
+
+        # Skip today only for new generation, not regeneration
+        if date == today and not needs_regen:
+            if not quiet:
+                print(f"  ⏭ Skipping {date} (today - use --force to regenerate)")
             continue
 
         # Check if already generated (and not needing regen)
@@ -1200,7 +1214,8 @@ def generate_supplemental_workouts_smart(
     check_only: bool = False,
     quiet: bool = False,
     skip_mobility: bool = True,
-    use_ai: bool = True
+    use_ai: bool = True,
+    force_regen: bool = False
 ) -> List[Dict[str, Any]]:
     """
     Smart generation that handles current week + next week if FinalSurge has workouts.
@@ -1221,7 +1236,8 @@ def generate_supplemental_workouts_smart(
         check_only=check_only,
         quiet=quiet,
         skip_mobility=skip_mobility,
-        use_ai=use_ai
+        use_ai=use_ai,
+        force_regen=force_regen
     )
     all_created.extend(created)
 
@@ -1282,6 +1298,11 @@ def main():
         action="store_true",
         help="Use hardcoded templates instead of AI generation"
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Force regeneration of all workouts for the week, including today"
+    )
 
     args = parser.parse_args()
 
@@ -1294,7 +1315,8 @@ def main():
                 check_only=args.check_only,
                 quiet=args.quiet,
                 skip_mobility=args.skip_mobility,
-                use_ai=not args.no_ai
+                use_ai=not args.no_ai,
+                force_regen=args.force
             )
         else:
             # Smart mode: current week + next week if FinalSurge has workouts
@@ -1302,7 +1324,8 @@ def main():
                 check_only=args.check_only,
                 quiet=args.quiet,
                 skip_mobility=args.skip_mobility,
-                use_ai=not args.no_ai
+                use_ai=not args.no_ai,
+                force_regen=args.force
             )
 
         if created:
