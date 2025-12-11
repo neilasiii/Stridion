@@ -2009,8 +2009,22 @@ def main():
         # ICS calendar workouts should REPLACE (not merge) to handle moves/deletions
         if new_scheduled_workouts and 'scheduled_date' in new_scheduled_workouts[0]:
             # These are ICS calendar workouts - remove old ICS workouts and replace with new
+            existing_ics = [w for w in cache['scheduled_workouts']
+                          if w.get('source', '').startswith('ics_calendar')]
             existing_non_ics = [w for w in cache['scheduled_workouts']
                                if not w.get('source', '').startswith('ics_calendar')]
+
+            # Detect removed FinalSurge workouts (for notification)
+            old_ics_dates = {w['scheduled_date'] for w in existing_ics if 'scheduled_date' in w}
+            new_ics_dates = {w['scheduled_date'] for w in new_scheduled_workouts if 'scheduled_date' in w}
+            removed_dates = old_ics_dates - new_ics_dates
+
+            if removed_dates and not args.quiet:
+                today = datetime.now().date()
+                future_removed = sorted([d for d in removed_dates if datetime.strptime(d, '%Y-%m-%d').date() >= today])
+                if future_removed:
+                    print(f"  ⚠ FinalSurge workouts removed: {', '.join(future_removed)}")
+
             cache['scheduled_workouts'] = existing_non_ics + new_scheduled_workouts
         else:
             # These are Garmin template workouts - use normal merge

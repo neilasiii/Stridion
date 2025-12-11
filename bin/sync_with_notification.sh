@@ -63,6 +63,11 @@ SUPPLEMENTAL_WORKOUTS_CREATED=$(echo "$SYNC_OUTPUT" | grep -c "Successfully crea
 RUNNING_WORKOUT_DETAILS=$(echo "$SYNC_OUTPUT" | grep -A 20 "Successfully created workouts:" | grep "•" | head -10 | sed 's/.*• //' | sed 's/ (ID:.*//')
 SUPPLEMENTAL_WORKOUT_DETAILS=$(echo "$SYNC_OUTPUT" | grep -A 20 "Successfully created supplemental workouts:" | grep "•" | head -10 | sed 's/.*• //' | sed 's/ (ID:.*//')
 
+# Extract REMOVED workout info (from garmin_sync, auto_workout_generator, supplemental_workout_generator)
+# Pattern 1: "Removed: date1, date2" (supplemental generator)
+# Pattern 2: "FinalSurge workouts removed: date1, date2" (garmin_sync)
+REMOVED_WORKOUTS=$(echo "$SYNC_OUTPUT" | grep -E "(Removed:|FinalSurge workouts removed:)" | sed 's/.*Removed: //' | sed 's/.*FinalSurge workouts removed: //' | tr ',' '\n' | sed 's/^ *//' | sed '/^$/d' | sort -u | tr '\n' ',' | sed 's/,$//' | sed 's/,/, /g')
+
 # Prepare timestamp
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
@@ -235,6 +240,17 @@ Weight: $NEW_WEIGHT" || CONTENT="Weight: $NEW_WEIGHT"
             [ -n "$workout" ] && WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
   → $workout"
         done <<< "$SUPPLEMENTAL_WORKOUT_DETAILS"
+    fi
+
+    # Add removed workout notifications
+    if [ -n "$REMOVED_WORKOUTS" ]; then
+        if [ -n "$WORKOUT_NOTIFICATION" ]; then
+            WORKOUT_NOTIFICATION="$WORKOUT_NOTIFICATION
+
+🗑 Workouts removed: $REMOVED_WORKOUTS"
+        else
+            WORKOUT_NOTIFICATION="🗑 Workouts removed: $REMOVED_WORKOUTS"
+        fi
     fi
 
     # Append to content if we have workout notifications
