@@ -242,24 +242,22 @@ def get_week_fingerprint(running_schedule: List['RunningWorkout']) -> str:
     """
     Create a fingerprint of running workouts for change detection.
 
-    Only includes RUNNING workouts (not walks, strength, etc.) from TODAY and FUTURE.
-    This prevents regeneration when:
-    - Completed workouts sync back from Garmin to FinalSurge for past dates
-    - Non-running activities (Walk, Strength) appear for today/past
+    Includes ALL running workouts for the week (past and future).
+    This ensures the fingerprint doesn't change just because days pass.
+    Only regenerates when actual FinalSurge schedule changes.
 
-    Returns a string hash of dates and workout names.
+    Returns a string of dates and workout names.
     """
-    today = datetime.now().strftime("%Y-%m-%d")
-
-    # Include today and future dates, but only RUNNING workouts (not walks, strength, etc.)
-    current_and_future_running = [
+    # Include ALL running workouts (not walks, strength, etc.)
+    # Don't filter by date - we want a stable fingerprint for the week
+    running_workouts = [
         w for w in running_schedule
-        if w.date >= today and w.workout_type != 'rest' and 'run' in w.name.lower()
+        if w.workout_type != 'rest' and 'run' in w.name.lower()
     ]
 
     schedule_str = "|".join(
         f"{w.date}:{w.name}:{w.is_quality}"
-        for w in sorted(current_and_future_running, key=lambda x: x.date)
+        for w in sorted(running_workouts, key=lambda x: x.date)
     )
     return schedule_str
 
