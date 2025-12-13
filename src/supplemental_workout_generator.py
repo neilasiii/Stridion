@@ -607,7 +607,7 @@ def generate_strength_workout_ai(date: str, focus_areas: str = None, intensity: 
 def generate_strength_workout_fallback(date: str, intensity: str = "full", focus_areas: str = None, session_role: str = "A") -> SupplementalWorkout:
     """
     Fallback strength workout generator using A/B/C templates.
-    Used when AI generation fails or is disabled.
+    Uses KEY FOCUS + SUPPORTING hierarchy with running-specific upper body.
 
     Args:
         date: Target date
@@ -624,208 +624,206 @@ def generate_strength_workout_fallback(date: str, intensity: str = "full", focus
         elif "Squat" in focus_areas or "Session A" in focus_areas:
             session_role = "A"
 
+    # Default to BUILD intent, Foundation phase for fallback
+    weekly_intent = "BUILD"
+
     if intensity == "light":
-        # Light session - reduced volume, activation focus
+        weekly_intent = "HOLD"
         name = f"{date} - Strength: Session {session_role} (Light)"
         if session_role == "A":
-            description = """Session A - Light (20-25 min)
-Squat + Push emphasis, reduced intensity
+            description = f"""[{weekly_intent} | Foundation | Session A] (20-25 min)
+Squat + Push emphasis - activation only
 
 WARMUP:
 Leg swings 8ea, BW squats x8, glute bridges x8
 
-PRIMARY LIFT:
+KEY FOCUS:
 - Goblet Squat: 2x8, rest 60s (RPE 5-6)
-  Progression: Paused at normal intensity
+  Progression: Paused - resume next BUILD week
 
-SECONDARY:
-- Push-ups: 2x8, rest 45s
-- Glute Bridge: 2x10
+SUPPORTING:
+- Push-ups: 2x8, rest 45s (trunk rigidity)
+- Glute Bridge: 2x10 (hip activation)
 
 ACCESSORY:
-- Calf Raises: 2x12
-- Dead Bug: 2x8 each
-- Plank: 2x20s
+- Calf Raises (straight): 2x12
+- Dead Bug: 2x8 each (anti-extension)
 
-NOTE: Activation only. No soreness before quality run."""
+NOTES: Activation only. No soreness expected."""
         elif session_role == "B":
-            description = """Session B - Light (20-25 min)
-Hinge + Pull emphasis, reduced intensity
+            description = f"""[{weekly_intent} | Foundation | Session B] (20-25 min)
+Hinge + Pull emphasis - activation only
 
 WARMUP:
 Hip circles 8ea, RDL bodyweight x6, bird dogs x6
 
-PRIMARY LIFT:
-- Single-leg RDL: 2x6 each, rest 60s (RPE 5-6, BW)
-  Progression: Paused at normal intensity
+KEY FOCUS:
+- DB RDL: 2x8, rest 60s (RPE 5-6, light)
+  Progression: Paused - resume next BUILD week
 
-SECONDARY:
-- Band Rows: 2x10, rest 45s
-- Lateral Band Walks: 2x10 each
+SUPPORTING:
+- Chest-supported Row: 2x10, rest 45s (posture, no grip fatigue)
+- Band Pull-apart: 2x15 (posture)
 
 ACCESSORY:
 - Bent-knee Calf Raise: 2x12
-- Pallof Press: 2x8 each
-- Bird Dog: 2x6 each
+- Pallof Press: 2x8 each (anti-rotation)
 
-NOTE: Movement quality focus. Light activation only."""
+NOTES: Movement quality focus. Light activation only."""
         else:  # C
-            description = """Session C - Light (20-25 min)
-Unilateral + Calves, reduced intensity
+            description = f"""[{weekly_intent} | Foundation | Session C] (20-25 min)
+Unilateral + Calves - activation only
 
 WARMUP:
 Ankle circles 10ea, BW lunges x6ea, glute bridges x8
 
-PRIMARY LIFT:
+KEY FOCUS:
 - Split Squat: 2x6 each, rest 60s (RPE 5-6, BW)
-  Progression: Paused at normal intensity
+  Progression: Paused - resume next BUILD week
 
-SECONDARY:
-- Step-ups: 2x6 each
+SUPPORTING:
+- Step-ups: 2x6 each (single-leg stability)
 
 ACCESSORY:
 - Calf Raises (straight): 2x10
 - Calf Raises (bent): 2x10
-- Dead Bug: 2x8 each
+- Suitcase Carry: 2x20s each (anti-lateral flexion)
 
-NOTE: Light prep only. Save legs for running."""
+NOTES: Light prep only. Save legs for running."""
         duration = 25
 
     elif intensity == "moderate":
+        weekly_intent = "HOLD"
         name = f"{date} - Strength: Session {session_role}"
         if session_role == "A":
-            description = """Session A (25-30 min)
+            description = f"""[{weekly_intent} | Foundation | Session A] (25-30 min)
 Squat + Push emphasis
 
 WARMUP:
 Leg swings 10ea, BW squats x10, glute bridges x10
 
-PRIMARY LIFT:
+KEY FOCUS:
 - Goblet Squat: 3x8, rest 90s (RPE 6-7, tempo 3-1-1)
-  Progression: Add 1 rep when RPE <7
+  Progression: Maintain load, refine depth
 
-SECONDARY:
-- Push-ups: 3x10, rest 60s
-- RDL: 2x8, rest 60s (posterior chain support)
+SUPPORTING:
+- Push-ups: 3x10, rest 60s (trunk rigidity)
+- DB RDL: 2x8, rest 60s (posterior chain)
 
 ACCESSORY:
-- Calf Raises: 2x15
-- Dead Bug: 2x10 each
-- Plank: 2x30s
+- Calf Raises (straight): 2x15
+- Plank: 2x30s (anti-extension)
 
-NOTE: Moderate session. Monitor for quality runs."""
+NOTES: Moderate session. Minimal soreness expected."""
         elif session_role == "B":
-            description = """Session B (25-30 min)
+            description = f"""[{weekly_intent} | Foundation | Session B] (25-30 min)
 Hinge + Pull emphasis
 
 WARMUP:
-Hip circles 10ea, good mornings x8, arm circles 10ea
+Hip circles 10ea, good mornings x8, band pull-aparts x12
 
-PRIMARY LIFT:
-- Romanian Deadlift: 3x8, rest 90s (RPE 6-7)
-  Progression: Add 1 rep when RPE <7
+KEY FOCUS:
+- DB RDL: 3x8, rest 90s (RPE 6-7)
+  Progression: Maintain load, refine hinge pattern
 
-SECONDARY:
-- Band/DB Rows: 3x10, rest 60s
-- Single-leg RDL: 2x6 each
+SUPPORTING:
+- Chest-supported Row: 3x10, rest 60s (posture, no grip fatigue)
+- Single-leg RDL: 2x6 each (light, balance)
 
 ACCESSORY:
 - Bent-knee Calf Raise: 2x15
-- Pallof Press: 2x10 each
-- Bird Dog: 2x8 each
+- Pallof Press: 2x10 each (anti-rotation)
 
-NOTE: Hinge focus. Pull balances upper body."""
+NOTES: Hinge focus. Pull supports posture."""
         else:  # C
-            description = """Session C (25-30 min)
+            description = f"""[{weekly_intent} | Foundation | Session C] (25-30 min)
 Unilateral + Calves + Trunk
 
 WARMUP:
 Ankle circles 10ea, lunges x6ea, leg swings 8ea
 
-PRIMARY LIFT:
-- Bulgarian Split Squat: 3x6 each, rest 90s (RPE 6-7)
-  Progression: Add 1 rep when RPE <7
+KEY FOCUS:
+- Reverse Lunge: 3x8 each, rest 90s (RPE 6-7)
+  Progression: Maintain load, refine balance
 
-SECONDARY:
-- Step-ups: 2x8 each, rest 60s
-- Glute Bridge (single-leg): 2x8 each
+SUPPORTING:
+- Step-ups: 2x8 each, rest 60s (single-leg strength)
+- Half-kneeling DB Press: 2x8 each (trunk stability)
 
 ACCESSORY:
 - Calf Raises (straight): 2x15
 - Calf Raises (bent): 2x12
-- Farmer Carry: 2x30s
+- Farmer Carry: 2x30s (trunk + grip)
 
-NOTE: Single-leg stability focus."""
+NOTES: Single-leg stability focus."""
         duration = 30
 
     else:  # full intensity
+        weekly_intent = "BUILD"
         name = f"{date} - Strength: Session {session_role}"
         if session_role == "A":
-            description = """Session A (30-35 min)
+            description = f"""[{weekly_intent} | Foundation | Session A] (30-35 min)
 Squat + Push emphasis
 
 WARMUP:
-Cat-cow x8, BW squats x10, leg swings 10ea, inchworms x5
+Cat-cow x8, BW squats x10, leg swings 10ea, band pull-aparts x12
 
-PRIMARY LIFT:
-- Goblet Squat: 4x8, rest 90-120s (RPE 7, tempo 3-1-1)
-  Progression: Add 1 rep/set at RPE <7, then +load
+KEY FOCUS:
+- Goblet Squat: 4x8, rest 90-120s (RPE 6-8, tempo 3-1-1)
+  Progression: Add 1 rep/set at RPE <7, then +5-10lb
 
-SECONDARY:
-- Push-ups: 3x12, rest 60-90s
-- RDL: 3x10, rest 60s
+SUPPORTING:
+- Push-ups: 3x10-12, rest 60s (trunk rigidity)
+- DB RDL: 3x10, rest 60s (posterior chain balance)
 
 ACCESSORY:
-- Reverse Lunge: 2x8 each
-- Calf Raises: 3x15
-- Dead Bug: 2x10 each
+- Calf Raises (straight): 3x15
+- Dead Bug: 2x10 each (anti-extension)
 - Plank: 2x30s
 
-NOTE: Primary squat day. Push upper body."""
+NOTES: Expected soreness: minimal. Scale if runs feel heavy."""
         elif session_role == "B":
-            description = """Session B (30-35 min)
+            description = f"""[{weekly_intent} | Foundation | Session B] (30-35 min)
 Hinge + Pull emphasis
 
 WARMUP:
-Hip circles 10ea, good mornings x10, arm circles 10ea
+Hip circles 10ea, good mornings x10, band pull-aparts x15
 
-PRIMARY LIFT:
-- Romanian Deadlift: 4x8, rest 90-120s (RPE 7)
+KEY FOCUS:
+- DB RDL: 4x8, rest 90-120s (RPE 6-8)
   Progression: Add 1 rep/set at RPE <7, then +load
 
-SECONDARY:
-- DB/Band Rows: 3x12, rest 60-90s
-- Single-leg RDL: 3x6 each, rest 60s
+SUPPORTING:
+- Chest-supported Row: 3x12, rest 60s (posture, isolates back)
+- Single-leg RDL: 3x6 each, rest 60s (unilateral hinge)
 
 ACCESSORY:
-- Lateral Band Walk: 2x12 each
 - Bent-knee Calf Raise: 3x15
-- Pallof Press: 2x10 each
+- Pallof Press: 2x10 each (anti-rotation)
 - Bird Dog: 2x8 each
 
-NOTE: Hinge focus. Pull for upper body balance."""
+NOTES: Expected soreness: minimal. Hinge focus, pull for posture."""
         else:  # C
-            description = """Session C (30-35 min)
-Unilateral + Calves + Trunk
+            description = f"""[{weekly_intent} | Foundation | Session C] (30-35 min)
+Unilateral + Velocity + Calves
 
 WARMUP:
 Ankle circles 10ea, walking lunges x8ea, hip circles 8ea
 
-PRIMARY LIFT:
-- Bulgarian Split Squat: 4x6 each, rest 90-120s (RPE 7)
-  Progression: Add 1 rep at RPE <7, then elevate rear foot
+KEY FOCUS:
+- Reverse Lunge: 4x8 each, rest 90-120s (RPE 6-8)
+  Progression: Add 1 rep at RPE <7, then add load
 
-SECONDARY:
-- Step-ups: 3x8 each, rest 60-90s
-- Single-leg Glute Bridge: 3x10 each
+SUPPORTING:
+- Step-ups: 3x8 each, rest 60s (single-leg power)
+- Half-kneeling DB Press: 3x8 each (trunk stability, arm drive)
 
 ACCESSORY:
 - Single-leg Calf Raise (straight): 3x12 each
 - Single-leg Calf Raise (bent): 2x12 each
-- Farmer Carry: 3x30s
-- Side Plank: 2x20s each
+- Suitcase Carry: 2x30s each (anti-lateral flexion)
 
-NOTE: Single-leg + calf emphasis. Running-specific."""
+NOTES: Expected soreness: minimal. Running-specific single-leg focus."""
         duration = 35
 
     return SupplementalWorkout(

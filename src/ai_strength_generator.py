@@ -413,88 +413,70 @@ def select_strength_days_with_ai(
     week_context = get_week_schedule_context(week_start, final_running_date)
     week_end = week_start + timedelta(days=6)
 
-    prompt = f"""You are an expert strength coach for endurance runners using an A/B/C session system.
+    prompt = f"""You are an expert strength coach for endurance runners with structured programming.
 
 {week_context}
 
-## MANDATORY SESSION STRUCTURE (A/B/C SYSTEM)
+## WEEKLY LOAD INTENT (REQUIRED)
 
-You MUST assign each session a ROLE based on the total sessions this week:
+First, determine the week's training intent:
+| Intent | When to Use |
+|--------|-------------|
+| BUILD | Recovery good, no race <3 weeks, progress Key Focus lifts |
+| HOLD | Moderate fatigue, quality running week, maintain loads |
+| DELOAD | High fatigue, race approaching, TSB < -20, reduce volume 30-40% |
+
+## SESSION STRUCTURE (A/B/C)
 
 **2 SESSIONS/WEEK:**
-- Session A — Squat + Push Emphasis
-  * Primary: Squat or split-squat pattern
-  * Secondary: Posterior chain
-  * Upper: Push
-  * Trunk: Anti-extension focus
-
-- Session B — Hinge + Pull + Unilateral
-  * Primary: Hinge pattern
-  * Secondary: Single-leg lower body
-  * Upper: Pull
-  * Calves + Trunk: Anti-rotation focus
+- Session A — Squat + Push: Key Focus = squat pattern
+- Session B — Hinge + Pull: Key Focus = hinge pattern
 
 **3 SESSIONS/WEEK:**
 - Session A — Squat-Dominant
 - Session B — Hinge-Dominant
-- Session C — Unilateral + Calves + Trunk
+- Session C — Unilateral + Velocity
 
-## MOVEMENT BUCKET COVERAGE (REQUIRED)
+## PHASE-APPROPRIATE LIFTS
 
-Across the week, ALL must be covered:
-- Squat pattern
-- Hinge pattern
-- Single-leg lower body
-- Upper push
-- Upper pull
-- Calves (straight AND bent knee across sessions)
-- Trunk (anti-rotation / anti-extension / carries)
+Current phase determines Key Focus lift options:
+- **Foundation:** Goblet squat, Split squat, DB RDL, Single-leg RDL (light)
+- **Development:** Front squat, RFESS loaded, Trap bar DL, Heavy DB RDL
+- **Race-Specific:** RFESS moderate, Speed goblet, KB swings, Skater squat
+
+## MOVEMENT COVERAGE (verify for week)
+Squat, Hinge, Single-leg, Push, Pull, Calves (straight+bent), Trunk
 
 ## SCHEDULING RULES
 
-**HARD RULES (never violate):**
-1. NEVER schedule strength on a running day - running days are BLOCKED
-2. Space strength sessions at least 2 days apart when possible
-3. Target 2-3 strength sessions per week
-4. If "Final Running Day Constraint" specified, do NOT schedule ON that date
+**HARD RULES:**
+1. NEVER schedule on running days
+2. Space sessions 2+ days apart
+3. Target 2-3 sessions/week
+4. Don't schedule ON final running day
 
 **SOFT RULES:**
-5. Avoid the day AFTER a long run
-6. Prefer early-to-mid week (Mon-Thu)
-7. If recovery COMPROMISED, fewer sessions or lighter intensity
-8. Day BEFORE quality run = lighter intensity
+5. Avoid day after long run
+6. Prefer Mon-Thu
+7. Compromised recovery = fewer/lighter sessions
+8. Day before quality = lighter intensity
 
-**Easy weeks = MORE strength opportunity:**
-- All easy running = 3 strength sessions if schedule allows
-- Quality running weeks = 2 sessions
-
-## INTENSITY LEVELS
-- "full": 30-35 min, RPE 6-8
-- "moderate": 25-30 min, RPE 6-7
-- "light": 20-25 min, RPE 5-6 (use before quality runs)
-
-## OUTPUT FORMAT
-
-Respond with ONLY JSON (no markdown):
+## OUTPUT FORMAT (JSON only)
 {{
+  "weekly_intent": "BUILD" or "HOLD" or "DELOAD",
+  "phase": "Foundation" or "Development" or "Race-Specific" or "Taper",
   "selected_days": [
     {{
       "date": "YYYY-MM-DD",
       "session_role": "A" or "B" or "C",
-      "focus_areas": "Primary: [pattern]. Secondary: [pattern]. Upper: [push/pull]. Trunk: [type]",
+      "key_focus": "Exercise name (phase-appropriate)",
+      "focus_areas": "Key Focus: [lift]. Supporting: [lifts]. Upper: [type]. Trunk: [type]",
       "intensity": "full" or "moderate" or "light",
       "rationale": "Brief explanation"
     }}
   ],
-  "weekly_coverage_notes": "Verify: squat ✓, hinge ✓, single-leg ✓, push ✓, pull ✓, calves ✓, trunk ✓",
+  "weekly_coverage_notes": "squat ✓, hinge ✓, single-leg ✓, push ✓, pull ✓, calves ✓, trunk ✓",
   "scheduling_notes": "Overall week notes"
-}}
-
-If no days suitable:
-{{
-  "selected_days": [],
-  "weekly_coverage_notes": "N/A",
-  "scheduling_notes": "Why no strength recommended"
 }}
 """
 
@@ -598,6 +580,7 @@ def generate_strength_workout_with_ai(
     # Build focus guidance based on session role
     focus_guidance = ""
     session_role = "A"  # Default
+    key_focus_lift = "Goblet Squat"  # Default
     if focus_areas:
         # Extract session role if embedded in focus_areas
         if "Session A" in focus_areas or "Squat" in focus_areas:
@@ -609,86 +592,96 @@ def generate_strength_workout_with_ai(
 
         focus_guidance = f"""
 ## Session Role & Focus
-{focus_areas}
-
-Follow the lift hierarchy for this session role."""
+{focus_areas}"""
     else:
         focus_guidance = """
 ## Session Focus
-Design a well-rounded Session A (Squat + Push emphasis) that supports running."""
+Session A (Squat + Push emphasis)"""
 
     # Map intensity to duration and RPE
     intensity_map = {
-        "full": {"duration": "30-35", "rpe": "6-8", "volume": "standard", "rest_primary": "90-120s", "rest_secondary": "60-90s"},
-        "moderate": {"duration": "25-30", "rpe": "6-7", "volume": "slightly reduced", "rest_primary": "90s", "rest_secondary": "60s"},
-        "light": {"duration": "20-25", "rpe": "5-6", "volume": "reduced", "rest_primary": "60-90s", "rest_secondary": "45-60s"}
+        "full": {"duration": "30-35", "rpe": "6-8", "volume": "standard", "rest_key": "90-120s", "rest_support": "60-90s"},
+        "moderate": {"duration": "25-30", "rpe": "6-7", "volume": "slightly reduced", "rest_key": "90s", "rest_support": "60s"},
+        "light": {"duration": "20-25", "rpe": "5-6", "volume": "reduced", "rest_key": "60-90s", "rest_support": "45-60s"}
     }
     intensity_info = intensity_map.get(intensity, intensity_map["full"])
 
-    prompt = f"""You are the runner-strength-coach using structured A/B/C programming.
-Generate a strength workout for {target_date}.
+    prompt = f"""You are the runner-strength-coach. Generate a workout for {target_date}.
 
 {week_context}
 {focus_guidance}
 
-## MANDATORY LIFT HIERARCHY
+## SESSION HIERARCHY (ENFORCED)
 
-Each workout MUST follow this structure:
+**KEY FOCUS LIFT (1-2 max)**
+- Primary training stimulus, progression tracked
+- 3-5 sets, RPE {intensity_info['rpe']}, Rest: {intensity_info['rest_key']}
+- MUST be phase-appropriate (see below)
 
-**1. PRIMARY LIFT** (main stimulus)
-- 3-5 sets, RPE {intensity_info['rpe']}
-- Rest: {intensity_info['rest_primary']}
-- Must match session role (A=squat, B=hinge, C=single-leg)
+**SUPPORTING WORK (2-3)**
+- Complements Key Focus, no progression tracking
+- 2-3 sets, RPE 6-7, Rest: {intensity_info['rest_support']}
 
-**2. SECONDARY LIFTS** (1-2 exercises)
-- 2-3 sets each, RPE 6-7
-- Rest: {intensity_info['rest_secondary']}
+**ACCESSORY** (calves, trunk)
+- 2-3 sets, control focus
 
-**3. ACCESSORY/RESILIENCE** (calves, trunk, stability)
-- 2-3 sets each
-- Rest: 30-60s
+## PHASE-APPROPRIATE KEY FOCUS LIFTS
 
-## Intensity: {intensity.upper()}
-- Duration: {intensity_info['duration']} min
-- Volume: {intensity_info['volume']}
+| Phase | Squat (A) | Hinge (B) | Single-leg (C) |
+|-------|-----------|-----------|----------------|
+| Foundation | Goblet squat, Split squat | DB RDL, SL RDL light | Reverse lunge, Step-up |
+| Development | Front squat, RFESS loaded | Trap bar DL, Heavy DB RDL | RFESS loaded, Walking lunge |
+| Race-Specific | RFESS moderate, Speed goblet | SL RDL, KB swings | Skater squat, SL box squat |
 
-## Equipment Available
-Home gym: dumbbells, resistance bands, bodyweight
+## RUNNING-SPECIFIC UPPER BODY
 
-## Exercise Selection by Pattern
-- Squat: goblet squat, split squat, Bulgarian split squat
-- Hinge: RDL, single-leg RDL, good morning
-- Single-leg: step-ups, lunges, pistol progressions
-- Push: push-ups, overhead press, dips
-- Pull: rows, band pull-aparts, inverted rows
-- Calves: single-leg calf raises (straight + bent knee)
-- Trunk: pallof press, dead bugs, bird dogs, planks, carries
+**Push (arm drive + posture):**
+- Half-kneeling DB press (trunk stability)
+- Push-up strict (trunk rigidity)
+- Landmine press (diagonal arm drive)
+*Avoid: Bench press (limited trunk demand)*
 
-## CRITICAL: Keep descriptions CONCISE (max 950 chars total)
+**Pull (posture + late-race resilience):**
+- Chest-supported row (isolates back, no grip fatigue)
+- Half-kneeling cable/band row (anti-rotation + pull)
+- Band pull-apart (posture, high reps)
+*Avoid: Heavy barbell rows (grip fatigue)*
 
-## Output Format (JSON only, no markdown):
+**Carries (trunk stability):**
+- Farmer carry, Suitcase carry, Goblet carry
+*Can replace trunk accessory*
+
+## Intensity: {intensity.upper()} | Duration: {intensity_info['duration']} min
+
+## Equipment: Dumbbells, bands, bodyweight
+
+## CRITICAL: Keep output CONCISE (max 950 chars formatted)
+
+## Output Format (JSON only):
 {{
   "name": "{target_date} - Strength: Session {session_role}",
   "session_role": "{session_role}",
+  "weekly_intent": "BUILD or HOLD or DELOAD",
+  "phase": "Foundation or Development or Race-Specific",
   "focus_areas": "{focus_areas or 'Session A: Squat + Push'}",
   "intensity": "{intensity}",
   "duration_min": {intensity_info['duration'].split('-')[1]},
   "warmup": "Brief: movement x reps, movement x reps...",
-  "primary_lift": {{
-    "exercise": "Name",
-    "sets": 3,
+  "key_focus": {{
+    "exercise": "Phase-appropriate lift",
+    "sets": 4,
     "reps": "8-10",
-    "rest": "{intensity_info['rest_primary']}",
+    "rest": "{intensity_info['rest_key']}",
     "notes": "RPE {intensity_info['rpe']}, tempo 3-1-1",
-    "progression": "Add 1 rep/set when RPE <7, then increase load"
+    "progression": "Add 1 rep/set when RPE <7, then +load"
   }},
-  "secondary_lifts": [
-    {{"exercise": "Name", "sets": 3, "reps": "10", "rest": "{intensity_info['rest_secondary']}", "notes": "brief"}}
+  "supporting": [
+    {{"exercise": "Name", "sets": 3, "reps": "10", "rest": "{intensity_info['rest_support']}", "running_benefit": "brief"}}
   ],
   "accessory": [
     {{"exercise": "Name", "sets": 2, "reps": "12", "notes": "brief"}}
   ],
-  "notes": "One short integration note"
+  "notes": "Expected soreness: none/minimal. Scale if runs feel heavy."
 }}
 """
 
@@ -747,23 +740,65 @@ def format_workout_description(workout_data: Dict[str, Any], max_length: int = 1
     """
     Format the AI-generated workout into a readable description.
 
-    Handles both old format (main_work array) and new format (primary_lift + secondary_lifts + accessory).
+    Handles multiple formats:
+    - New format: key_focus + supporting + accessory (with weekly_intent)
+    - Previous format: primary_lift + secondary_lifts + accessory
+    - Old format: main_work array
+
     Ensures the output fits within Garmin's 1024 character limit.
     """
     session_role = workout_data.get('session_role', '')
-    role_label = f" [Session {session_role}]" if session_role else ""
+    weekly_intent = workout_data.get('weekly_intent', '')
+    phase = workout_data.get('phase', '')
+
+    # Build header
+    header_parts = []
+    if weekly_intent:
+        header_parts.append(weekly_intent)
+    if phase:
+        header_parts.append(phase)
+    if session_role:
+        header_parts.append(f"Session {session_role}")
+
+    header = f" [{' | '.join(header_parts)}]" if header_parts else ""
 
     lines = [
-        f"{workout_data['name']}{role_label} ({workout_data['duration_min']} min)",
+        f"{workout_data['name']}{header} ({workout_data['duration_min']} min)",
         "",
         "WARMUP:",
         workout_data.get('warmup', '5 min dynamic warmup'),
         ""
     ]
 
-    # Check for new structured format
-    if 'primary_lift' in workout_data:
-        # New A/B/C structured format
+    # Check for newest format (key_focus + supporting)
+    if 'key_focus' in workout_data:
+        key = workout_data['key_focus']
+        lines.append("KEY FOCUS:")
+        rest_info = f", rest {key.get('rest', '90s')}" if key.get('rest') else ""
+        lines.append(f"- {key['exercise']}: {key.get('sets', 4)}x{key.get('reps', '8-10')}{rest_info}")
+        if key.get('notes'):
+            lines.append(f"  ({key['notes']})")
+        if key.get('progression'):
+            lines.append(f"  Progression: {key['progression']}")
+
+        if workout_data.get('supporting'):
+            lines.extend(["", "SUPPORTING:"])
+            for ex in workout_data['supporting']:
+                rest_info = f", rest {ex.get('rest', '60s')}" if ex.get('rest') else ""
+                lines.append(f"- {ex['exercise']}: {ex.get('sets', 3)}x{ex.get('reps', '10')}{rest_info}")
+                benefit = ex.get('running_benefit') or ex.get('notes')
+                if benefit:
+                    lines.append(f"  ({benefit})")
+
+        if workout_data.get('accessory'):
+            lines.extend(["", "ACCESSORY:"])
+            for ex in workout_data['accessory']:
+                lines.append(f"- {ex['exercise']}: {ex.get('sets', 2)}x{ex.get('reps', '12')}")
+                if ex.get('notes'):
+                    lines.append(f"  ({ex['notes']})")
+
+    # Check for previous format (primary_lift + secondary_lifts)
+    elif 'primary_lift' in workout_data:
         primary = workout_data['primary_lift']
         lines.append("PRIMARY LIFT:")
         rest_info = f", rest {primary.get('rest', '90s')}" if primary.get('rest') else ""
@@ -788,8 +823,8 @@ def format_workout_description(workout_data: Dict[str, Any], max_length: int = 1
                 if ex.get('notes'):
                     lines.append(f"  ({ex['notes']})")
 
+    # Old flat format (backward compatibility)
     elif 'main_work' in workout_data:
-        # Old flat format (backward compatibility)
         lines.append("MAIN WORK:")
         for exercise in workout_data.get('main_work', []):
             reps = exercise.get('reps', '10')
