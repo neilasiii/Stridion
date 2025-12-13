@@ -413,75 +413,88 @@ def select_strength_days_with_ai(
     week_context = get_week_schedule_context(week_start, final_running_date)
     week_end = week_start + timedelta(days=6)
 
-    prompt = f"""You are an expert strength coach for endurance runners. Your task is to:
-1. Select the OPTIMAL days for strength training this week
-2. Design the FOCUS AREAS for each session to create balanced, well-rounded programming
+    prompt = f"""You are an expert strength coach for endurance runners using an A/B/C session system.
 
 {week_context}
 
-## SCHEDULING RULES (MUST FOLLOW)
+## MANDATORY SESSION STRUCTURE (A/B/C SYSTEM)
+
+You MUST assign each session a ROLE based on the total sessions this week:
+
+**2 SESSIONS/WEEK:**
+- Session A — Squat + Push Emphasis
+  * Primary: Squat or split-squat pattern
+  * Secondary: Posterior chain
+  * Upper: Push
+  * Trunk: Anti-extension focus
+
+- Session B — Hinge + Pull + Unilateral
+  * Primary: Hinge pattern
+  * Secondary: Single-leg lower body
+  * Upper: Pull
+  * Calves + Trunk: Anti-rotation focus
+
+**3 SESSIONS/WEEK:**
+- Session A — Squat-Dominant
+- Session B — Hinge-Dominant
+- Session C — Unilateral + Calves + Trunk
+
+## MOVEMENT BUCKET COVERAGE (REQUIRED)
+
+Across the week, ALL must be covered:
+- Squat pattern
+- Hinge pattern
+- Single-leg lower body
+- Upper push
+- Upper pull
+- Calves (straight AND bent knee across sessions)
+- Trunk (anti-rotation / anti-extension / carries)
+
+## SCHEDULING RULES
 
 **HARD RULES (never violate):**
 1. NEVER schedule strength on a running day - running days are BLOCKED
 2. Space strength sessions at least 2 days apart when possible
-3. Target 2-3 strength sessions per week as baseline
-4. If a "Final Running Day Constraint" is specified above, do NOT schedule strength ON that date itself (but the day BEFORE is fine)
+3. Target 2-3 strength sessions per week
+4. If "Final Running Day Constraint" specified, do NOT schedule ON that date
 
-**SOFT RULES (prefer but can adjust):**
-5. Avoid the day AFTER a long run (recovery day)
-6. Prefer early-to-mid week (Mon-Thu) over late week (Fri-Sun)
-7. If recovery is COMPROMISED, consider fewer sessions or lighter intensity
-8. If scheduling the day BEFORE a QUALITY session (tempo, intervals, long run), use lighter intensity
+**SOFT RULES:**
+5. Avoid the day AFTER a long run
+6. Prefer early-to-mid week (Mon-Thu)
+7. If recovery COMPROMISED, fewer sessions or lighter intensity
+8. Day BEFORE quality run = lighter intensity
 
-**IMPORTANT - Easy weeks deserve MORE strength, not less:**
-- When all running is easy-paced (no quality sessions), this is an OPPORTUNITY for strength
-- Easy running weeks should have 3 strength sessions if schedule allows
-- Only reduce to 2 sessions when quality running demands recovery
-
-## PROGRAMMING PRINCIPLES
-
-Design strength sessions that:
-- Support running performance (don't compete with it)
-- Cover all major muscle groups across the week:
-  * Lower body: glutes, hamstrings, quads, calves, hip stabilizers
-  * Upper body: pushing (chest/shoulders/triceps), pulling (back/biceps)
-  * Core: anti-rotation, anti-extension, hip stability
-- Prioritize running-specific muscles (posterior chain, single-leg stability, calf strength)
-- Vary focus between sessions to allow recovery while maintaining coverage
-- Adjust intensity based on proximity to quality running sessions
+**Easy weeks = MORE strength opportunity:**
+- All easy running = 3 strength sessions if schedule allows
+- Quality running weeks = 2 sessions
 
 ## INTENSITY LEVELS
-- "full": Standard intensity session (30-35 min), RPE 7
-- "moderate": Slightly reduced intensity (25-30 min), RPE 6
-- "light": Reduced volume/intensity (20-25 min), RPE 5 - use before quality runs
-
-## YOUR TASK
-
-1. Analyze the running schedule and select 0-3 strength days
-2. For each day, design the focus areas (be specific about which muscle groups)
-3. Explain your rationale for each session
+- "full": 30-35 min, RPE 6-8
+- "moderate": 25-30 min, RPE 6-7
+- "light": 20-25 min, RPE 5-6 (use before quality runs)
 
 ## OUTPUT FORMAT
 
-Respond with ONLY a JSON object (no markdown, no explanation outside JSON):
+Respond with ONLY JSON (no markdown):
 {{
   "selected_days": [
     {{
       "date": "YYYY-MM-DD",
-      "focus_areas": "Describe the specific focus - e.g., 'Posterior chain emphasis (glutes, hamstrings) + hip stability + core anti-rotation'",
+      "session_role": "A" or "B" or "C",
+      "focus_areas": "Primary: [pattern]. Secondary: [pattern]. Upper: [push/pull]. Trunk: [type]",
       "intensity": "full" or "moderate" or "light",
-      "rationale": "Brief explanation of why this day and focus are optimal"
+      "rationale": "Brief explanation"
     }}
   ],
-  "weekly_coverage_notes": "Explain how the sessions together provide balanced coverage",
-  "scheduling_notes": "Any overall notes about the week's setup"
+  "weekly_coverage_notes": "Verify: squat ✓, hinge ✓, single-leg ✓, push ✓, pull ✓, calves ✓, trunk ✓",
+  "scheduling_notes": "Overall week notes"
 }}
 
-If no days are suitable (e.g., runs every day, severely compromised recovery), return:
+If no days suitable:
 {{
   "selected_days": [],
   "weekly_coverage_notes": "N/A",
-  "scheduling_notes": "Explanation of why no strength is recommended"
+  "scheduling_notes": "Why no strength recommended"
 }}
 """
 
@@ -582,74 +595,100 @@ def generate_strength_workout_with_ai(
     """
     week_context = get_week_context(target_date)
 
-    # Build focus guidance
+    # Build focus guidance based on session role
     focus_guidance = ""
+    session_role = "A"  # Default
     if focus_areas:
-        focus_guidance = f"""
-## Session Focus (AI-selected)
-Focus areas for this session: {focus_areas}
+        # Extract session role if embedded in focus_areas
+        if "Session A" in focus_areas or "Squat" in focus_areas:
+            session_role = "A"
+        elif "Session B" in focus_areas or "Hinge" in focus_areas:
+            session_role = "B"
+        elif "Session C" in focus_areas or "Unilateral" in focus_areas:
+            session_role = "C"
 
-Design the workout to emphasize these areas while ensuring good exercise selection
-for a runner's needs."""
+        focus_guidance = f"""
+## Session Role & Focus
+{focus_areas}
+
+Follow the lift hierarchy for this session role."""
     else:
         focus_guidance = """
 ## Session Focus
-Design a well-rounded strength session that supports running performance.
-Prioritize: posterior chain, hip stability, single-leg strength, calf strength, core."""
+Design a well-rounded Session A (Squat + Push emphasis) that supports running."""
 
     # Map intensity to duration and RPE
     intensity_map = {
-        "full": {"duration": "30-35", "rpe": "7", "volume": "standard"},
-        "moderate": {"duration": "25-30", "rpe": "6", "volume": "slightly reduced"},
-        "light": {"duration": "20-25", "rpe": "5", "volume": "reduced"}
+        "full": {"duration": "30-35", "rpe": "6-8", "volume": "standard", "rest_primary": "90-120s", "rest_secondary": "60-90s"},
+        "moderate": {"duration": "25-30", "rpe": "6-7", "volume": "slightly reduced", "rest_primary": "90s", "rest_secondary": "60s"},
+        "light": {"duration": "20-25", "rpe": "5-6", "volume": "reduced", "rest_primary": "60-90s", "rest_secondary": "45-60s"}
     }
     intensity_info = intensity_map.get(intensity, intensity_map["full"])
 
-    prompt = f"""You are the runner-strength-coach. Generate a strength workout for {target_date}.
+    prompt = f"""You are the runner-strength-coach using structured A/B/C programming.
+Generate a strength workout for {target_date}.
 
 {week_context}
 {focus_guidance}
 
-## Intensity Level: {intensity.upper()}
-- Target duration: {intensity_info['duration']} minutes
-- Target RPE: {intensity_info['rpe']}
+## MANDATORY LIFT HIERARCHY
+
+Each workout MUST follow this structure:
+
+**1. PRIMARY LIFT** (main stimulus)
+- 3-5 sets, RPE {intensity_info['rpe']}
+- Rest: {intensity_info['rest_primary']}
+- Must match session role (A=squat, B=hinge, C=single-leg)
+
+**2. SECONDARY LIFTS** (1-2 exercises)
+- 2-3 sets each, RPE 6-7
+- Rest: {intensity_info['rest_secondary']}
+
+**3. ACCESSORY/RESILIENCE** (calves, trunk, stability)
+- 2-3 sets each
+- Rest: 30-60s
+
+## Intensity: {intensity.upper()}
+- Duration: {intensity_info['duration']} min
 - Volume: {intensity_info['volume']}
 
-## Requirements
-Generate a strength workout appropriate for a runner. Consider:
-1. The running schedule - don't create excessive fatigue before runs
-2. Recovery status from the metrics above
-3. This is for a home gym with dumbbells, resistance bands, and bodyweight
-4. Include both compound movements and targeted accessory work
-5. Ensure proper exercise selection for the focus areas
+## Equipment Available
+Home gym: dumbbells, resistance bands, bodyweight
 
-## Exercise Selection Guidelines
-- Lower body: squats, lunges, RDLs, step-ups, calf raises, glute bridges
-- Upper body: push-ups, rows, overhead press, band pull-aparts
-- Core: dead bugs, bird dogs, pallof press, planks, anti-rotation holds
-- Single-leg work is highly valued for runners
+## Exercise Selection by Pattern
+- Squat: goblet squat, split squat, Bulgarian split squat
+- Hinge: RDL, single-leg RDL, good morning
+- Single-leg: step-ups, lunges, pistol progressions
+- Push: push-ups, overhead press, dips
+- Pull: rows, band pull-aparts, inverted rows
+- Calves: single-leg calf raises (straight + bent knee)
+- Trunk: pallof press, dead bugs, bird dogs, planks, carries
 
-## CRITICAL: Keep descriptions CONCISE
-The final formatted workout description MUST fit within 950 characters total.
-- Warmup: List movements briefly (e.g., "leg swings 10 each, squats x10, glute bridges x10")
-- Main work notes: Keep VERY short (e.g., "RPE 7" or "slow eccentric") - NO long explanations
-- Core: Brief list (e.g., "Dead bug 2x10, plank 2x30s, bird dog 2x8")
-- Do NOT include alternatives in the notes - just the primary exercise
+## CRITICAL: Keep descriptions CONCISE (max 950 chars total)
 
-## Output Format
-Respond with ONLY a JSON object (no markdown, no explanation) in this exact format:
+## Output Format (JSON only, no markdown):
 {{
-  "name": "{target_date} - Strength: [Short Name]",
-  "focus_areas": "{focus_areas or 'describe the focus'}",
+  "name": "{target_date} - Strength: Session {session_role}",
+  "session_role": "{session_role}",
+  "focus_areas": "{focus_areas or 'Session A: Squat + Push'}",
   "intensity": "{intensity}",
   "duration_min": {intensity_info['duration'].split('-')[1]},
-  "warmup": "Brief list: movement x reps, movement x reps...",
-  "main_work": [
-    {{"exercise": "Exercise Name", "sets": 3, "reps": "10", "notes": "RPE {intensity_info['rpe']}"}},
-    ...
+  "warmup": "Brief: movement x reps, movement x reps...",
+  "primary_lift": {{
+    "exercise": "Name",
+    "sets": 3,
+    "reps": "8-10",
+    "rest": "{intensity_info['rest_primary']}",
+    "notes": "RPE {intensity_info['rpe']}, tempo 3-1-1",
+    "progression": "Add 1 rep/set when RPE <7, then increase load"
+  }},
+  "secondary_lifts": [
+    {{"exercise": "Name", "sets": 3, "reps": "10", "rest": "{intensity_info['rest_secondary']}", "notes": "brief"}}
   ],
-  "core": "Brief: exercise sets x reps, exercise sets x reps...",
-  "notes": "One short sentence max"
+  "accessory": [
+    {{"exercise": "Name", "sets": 2, "reps": "12", "notes": "brief"}}
+  ],
+  "notes": "One short integration note"
 }}
 """
 
@@ -708,31 +747,60 @@ def format_workout_description(workout_data: Dict[str, Any], max_length: int = 1
     """
     Format the AI-generated workout into a readable description.
 
+    Handles both old format (main_work array) and new format (primary_lift + secondary_lifts + accessory).
     Ensures the output fits within Garmin's 1024 character limit.
-    If truncation is needed, cuts at a clean line boundary.
     """
+    session_role = workout_data.get('session_role', '')
+    role_label = f" [Session {session_role}]" if session_role else ""
+
     lines = [
-        f"{workout_data['name']} ({workout_data['duration_min']} min)",
+        f"{workout_data['name']}{role_label} ({workout_data['duration_min']} min)",
         "",
         "WARMUP:",
         workout_data.get('warmup', '5 min dynamic warmup'),
-        "",
-        "MAIN WORK:"
+        ""
     ]
 
-    for exercise in workout_data.get('main_work', []):
-        reps = exercise.get('reps', '10')
-        sets = exercise.get('sets', 3)
-        notes = exercise.get('notes', '')
-        lines.append(f"- {exercise['exercise']}: {sets}x{reps}")
-        if notes:
-            lines.append(f"  ({notes})")
+    # Check for new structured format
+    if 'primary_lift' in workout_data:
+        # New A/B/C structured format
+        primary = workout_data['primary_lift']
+        lines.append("PRIMARY LIFT:")
+        rest_info = f", rest {primary.get('rest', '90s')}" if primary.get('rest') else ""
+        lines.append(f"- {primary['exercise']}: {primary.get('sets', 3)}x{primary.get('reps', '10')}{rest_info}")
+        if primary.get('notes'):
+            lines.append(f"  ({primary['notes']})")
+        if primary.get('progression'):
+            lines.append(f"  Progression: {primary['progression']}")
 
-    lines.extend([
-        "",
-        "CORE:",
-        workout_data.get('core', '5 min core work'),
-    ])
+        if workout_data.get('secondary_lifts'):
+            lines.extend(["", "SECONDARY:"])
+            for ex in workout_data['secondary_lifts']:
+                rest_info = f", rest {ex.get('rest', '60s')}" if ex.get('rest') else ""
+                lines.append(f"- {ex['exercise']}: {ex.get('sets', 3)}x{ex.get('reps', '10')}{rest_info}")
+                if ex.get('notes'):
+                    lines.append(f"  ({ex['notes']})")
+
+        if workout_data.get('accessory'):
+            lines.extend(["", "ACCESSORY:"])
+            for ex in workout_data['accessory']:
+                lines.append(f"- {ex['exercise']}: {ex.get('sets', 2)}x{ex.get('reps', '12')}")
+                if ex.get('notes'):
+                    lines.append(f"  ({ex['notes']})")
+
+    elif 'main_work' in workout_data:
+        # Old flat format (backward compatibility)
+        lines.append("MAIN WORK:")
+        for exercise in workout_data.get('main_work', []):
+            reps = exercise.get('reps', '10')
+            sets = exercise.get('sets', 3)
+            notes = exercise.get('notes', '')
+            lines.append(f"- {exercise['exercise']}: {sets}x{reps}")
+            if notes:
+                lines.append(f"  ({notes})")
+
+        if workout_data.get('core'):
+            lines.extend(["", "CORE:", workout_data['core']])
 
     if workout_data.get('notes'):
         lines.extend(["", "NOTES:", workout_data['notes']])
@@ -748,9 +816,8 @@ def format_workout_description(workout_data: Dict[str, Any], max_length: int = 1
     current_length = 0
 
     for line in lines:
-        # +1 for newline character
         line_length = len(line) + 1
-        if current_length + line_length > max_length - 20:  # Leave room for "..."
+        if current_length + line_length > max_length - 20:
             break
         truncated_lines.append(line)
         current_length += line_length

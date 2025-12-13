@@ -50,6 +50,7 @@ class SupplementalWorkout:
     duration_min: int
     intensity: str  # light, moderate, full
     focus_areas: str = ""  # AI-determined focus areas for strength sessions
+    session_role: str = ""  # A, B, or C for strength session structure
 
 
 # Garmin sport type IDs (verified from Garmin Connect API)
@@ -593,7 +594,8 @@ def generate_strength_workout_ai(date: str, focus_areas: str = None, intensity: 
             description=description,
             duration_min=workout_data.get("duration_min", 35),
             intensity=intensity,
-            focus_areas=workout_data.get("focus_areas", focus_areas or "")
+            focus_areas=workout_data.get("focus_areas", focus_areas or ""),
+            session_role=workout_data.get("session_role", "A")
         )
 
     except Exception as e:
@@ -602,89 +604,228 @@ def generate_strength_workout_ai(date: str, focus_areas: str = None, intensity: 
         return None
 
 
-def generate_strength_workout_fallback(date: str, intensity: str = "full", focus_areas: str = None) -> SupplementalWorkout:
+def generate_strength_workout_fallback(date: str, intensity: str = "full", focus_areas: str = None, session_role: str = "A") -> SupplementalWorkout:
     """
-    Fallback strength workout generator (hardcoded templates).
+    Fallback strength workout generator using A/B/C templates.
     Used when AI generation fails or is disabled.
 
     Args:
         date: Target date
         intensity: "full", "moderate", or "light"
-        focus_areas: Optional focus areas (used for naming only in fallback)
+        focus_areas: Optional focus areas
+        session_role: "A", "B", or "C" for session structure
     """
+    # Determine session role from focus_areas if provided
+    if focus_areas:
+        if "Hinge" in focus_areas or "Session B" in focus_areas:
+            session_role = "B"
+        elif "Unilateral" in focus_areas or "Session C" in focus_areas:
+            session_role = "C"
+        elif "Squat" in focus_areas or "Session A" in focus_areas:
+            session_role = "A"
+
     if intensity == "light":
-        name = f"{date} - Strength: Light (Pre-Quality)"
-        description = """Light Strength Session (20-25 min)
+        # Light session - reduced volume, activation focus
+        name = f"{date} - Strength: Session {session_role} (Light)"
+        if session_role == "A":
+            description = """Session A - Light (20-25 min)
+Squat + Push emphasis, reduced intensity
 
-Use this reduced session before quality running days.
-Focus on activation and movement quality, NOT fatigue.
+WARMUP:
+Leg swings 8ea, BW squats x8, glute bridges x8
 
-WARMUP (5 min):
-- Leg swings 8 each direction
-- Bodyweight squats x8
-- Glute bridges x8
+PRIMARY LIFT:
+- Goblet Squat: 2x8, rest 60s (RPE 5-6)
+  Progression: Paused at normal intensity
 
-MAIN WORK (12-15 min):
-1. Goblet Squat: 2x8 @ RPE 5-6 (light weight)
-2. Single-leg RDL: 2x6 each (bodyweight or very light)
-3. Lateral Band Walks: 2x10 each direction
-4. Calf Raises: 2x12
+SECONDARY:
+- Push-ups: 2x8, rest 45s
+- Glute Bridge: 2x10
 
-CORE (5 min):
-- Dead Bug: 2x8 each side
-- Bird Dog: 2x6 each side
+ACCESSORY:
+- Calf Raises: 2x12
+- Dead Bug: 2x8 each
 - Plank: 2x20s
 
-NOTE: Keep RPE low (5-6). No soreness should result."""
+NOTE: Activation only. No soreness before quality run."""
+        elif session_role == "B":
+            description = """Session B - Light (20-25 min)
+Hinge + Pull emphasis, reduced intensity
+
+WARMUP:
+Hip circles 8ea, RDL bodyweight x6, bird dogs x6
+
+PRIMARY LIFT:
+- Single-leg RDL: 2x6 each, rest 60s (RPE 5-6, BW)
+  Progression: Paused at normal intensity
+
+SECONDARY:
+- Band Rows: 2x10, rest 45s
+- Lateral Band Walks: 2x10 each
+
+ACCESSORY:
+- Bent-knee Calf Raise: 2x12
+- Pallof Press: 2x8 each
+- Bird Dog: 2x6 each
+
+NOTE: Movement quality focus. Light activation only."""
+        else:  # C
+            description = """Session C - Light (20-25 min)
+Unilateral + Calves, reduced intensity
+
+WARMUP:
+Ankle circles 10ea, BW lunges x6ea, glute bridges x8
+
+PRIMARY LIFT:
+- Split Squat: 2x6 each, rest 60s (RPE 5-6, BW)
+  Progression: Paused at normal intensity
+
+SECONDARY:
+- Step-ups: 2x6 each
+
+ACCESSORY:
+- Calf Raises (straight): 2x10
+- Calf Raises (bent): 2x10
+- Dead Bug: 2x8 each
+
+NOTE: Light prep only. Save legs for running."""
         duration = 25
 
     elif intensity == "moderate":
-        name = f"{date} - Strength: Moderate"
-        description = """Moderate Strength Session (25-30 min)
+        name = f"{date} - Strength: Session {session_role}"
+        if session_role == "A":
+            description = """Session A (25-30 min)
+Squat + Push emphasis
 
-WARMUP (5 min):
-- Leg swings (forward/lateral) 10 each
-- Bodyweight squats x10
-- Glute bridges x10
-- Arm circles 10 each
+WARMUP:
+Leg swings 10ea, BW squats x10, glute bridges x10
 
-MAIN WORK (17 min):
-1. Goblet Squat: 3x8 @ RPE 6
-2. Push-ups: 2x10-12
-3. Romanian Deadlift: 3x8 @ RPE 6
-4. Band Rows: 2x12
-5. Calf Raises: 2x15
+PRIMARY LIFT:
+- Goblet Squat: 3x8, rest 90s (RPE 6-7, tempo 3-1-1)
+  Progression: Add 1 rep when RPE <7
 
-CORE (5 min):
-- Dead Bug: 2x10 each side
+SECONDARY:
+- Push-ups: 3x10, rest 60s
+- RDL: 2x8, rest 60s (posterior chain support)
+
+ACCESSORY:
+- Calf Raises: 2x15
+- Dead Bug: 2x10 each
 - Plank: 2x30s
-- Bird Dog: 2x8 each side"""
+
+NOTE: Moderate session. Monitor for quality runs."""
+        elif session_role == "B":
+            description = """Session B (25-30 min)
+Hinge + Pull emphasis
+
+WARMUP:
+Hip circles 10ea, good mornings x8, arm circles 10ea
+
+PRIMARY LIFT:
+- Romanian Deadlift: 3x8, rest 90s (RPE 6-7)
+  Progression: Add 1 rep when RPE <7
+
+SECONDARY:
+- Band/DB Rows: 3x10, rest 60s
+- Single-leg RDL: 2x6 each
+
+ACCESSORY:
+- Bent-knee Calf Raise: 2x15
+- Pallof Press: 2x10 each
+- Bird Dog: 2x8 each
+
+NOTE: Hinge focus. Pull balances upper body."""
+        else:  # C
+            description = """Session C (25-30 min)
+Unilateral + Calves + Trunk
+
+WARMUP:
+Ankle circles 10ea, lunges x6ea, leg swings 8ea
+
+PRIMARY LIFT:
+- Bulgarian Split Squat: 3x6 each, rest 90s (RPE 6-7)
+  Progression: Add 1 rep when RPE <7
+
+SECONDARY:
+- Step-ups: 2x8 each, rest 60s
+- Glute Bridge (single-leg): 2x8 each
+
+ACCESSORY:
+- Calf Raises (straight): 2x15
+- Calf Raises (bent): 2x12
+- Farmer Carry: 2x30s
+
+NOTE: Single-leg stability focus."""
         duration = 30
 
     else:  # full intensity
-        name = f"{date} - Strength: Full Body"
-        description = """Full Body Strength (30-35 min)
+        name = f"{date} - Strength: Session {session_role}"
+        if session_role == "A":
+            description = """Session A (30-35 min)
+Squat + Push emphasis
 
-WARMUP (5 min):
-- Arm circles 10 each direction
-- Cat-cow x8
-- Bodyweight squats x10
-- Leg swings 10 each
-- Inchworms x5
+WARMUP:
+Cat-cow x8, BW squats x10, leg swings 10ea, inchworms x5
 
-MAIN WORK (22 min):
-1. Goblet Squat: 3x10 @ RPE 7
-2. Push-ups: 3x10-15 (or modified)
-3. Romanian Deadlift: 3x10 @ RPE 7
-4. Inverted Row or Band Pull-apart: 3x12
-5. Reverse Lunges: 3x8 each leg
-6. Single-leg Glute Bridge: 3x10 each
-7. Calf Raises: 3x15
+PRIMARY LIFT:
+- Goblet Squat: 4x8, rest 90-120s (RPE 7, tempo 3-1-1)
+  Progression: Add 1 rep/set at RPE <7, then +load
 
-CORE (5 min):
-- Pallof Press: 2x10 each side
-- Dead Bug: 2x10 each side
-- Plank: 2x30s"""
+SECONDARY:
+- Push-ups: 3x12, rest 60-90s
+- RDL: 3x10, rest 60s
+
+ACCESSORY:
+- Reverse Lunge: 2x8 each
+- Calf Raises: 3x15
+- Dead Bug: 2x10 each
+- Plank: 2x30s
+
+NOTE: Primary squat day. Push upper body."""
+        elif session_role == "B":
+            description = """Session B (30-35 min)
+Hinge + Pull emphasis
+
+WARMUP:
+Hip circles 10ea, good mornings x10, arm circles 10ea
+
+PRIMARY LIFT:
+- Romanian Deadlift: 4x8, rest 90-120s (RPE 7)
+  Progression: Add 1 rep/set at RPE <7, then +load
+
+SECONDARY:
+- DB/Band Rows: 3x12, rest 60-90s
+- Single-leg RDL: 3x6 each, rest 60s
+
+ACCESSORY:
+- Lateral Band Walk: 2x12 each
+- Bent-knee Calf Raise: 3x15
+- Pallof Press: 2x10 each
+- Bird Dog: 2x8 each
+
+NOTE: Hinge focus. Pull for upper body balance."""
+        else:  # C
+            description = """Session C (30-35 min)
+Unilateral + Calves + Trunk
+
+WARMUP:
+Ankle circles 10ea, walking lunges x8ea, hip circles 8ea
+
+PRIMARY LIFT:
+- Bulgarian Split Squat: 4x6 each, rest 90-120s (RPE 7)
+  Progression: Add 1 rep at RPE <7, then elevate rear foot
+
+SECONDARY:
+- Step-ups: 3x8 each, rest 60-90s
+- Single-leg Glute Bridge: 3x10 each
+
+ACCESSORY:
+- Single-leg Calf Raise (straight): 3x12 each
+- Single-leg Calf Raise (bent): 2x12 each
+- Farmer Carry: 3x30s
+- Side Plank: 2x20s each
+
+NOTE: Single-leg + calf emphasis. Running-specific."""
         duration = 35
 
     return SupplementalWorkout(
@@ -694,7 +835,8 @@ CORE (5 min):
         description=description,
         duration_min=duration,
         intensity=intensity,
-        focus_areas=focus_areas or "Full body - running support"
+        focus_areas=focus_areas or f"Session {session_role}",
+        session_role=session_role
     )
 
 
@@ -715,6 +857,7 @@ def generate_strength_workout_with_focus(
     date: str,
     focus_areas: str = None,
     intensity: str = "full",
+    session_role: str = "A",
     use_ai: bool = True,
     quiet: bool = False
 ) -> SupplementalWorkout:
@@ -723,8 +866,9 @@ def generate_strength_workout_with_focus(
 
     Args:
         date: Target date
-        focus_areas: AI-determined focus areas (e.g., "Posterior chain + hip stability")
+        focus_areas: AI-determined focus areas (e.g., "Primary: Squat. Secondary: Push.")
         intensity: "full", "moderate", or "light"
+        session_role: "A", "B", or "C" for session structure
         use_ai: If True, use Claude AI to generate; if False, use templates
         quiet: Suppress output
     """
@@ -736,14 +880,14 @@ def generate_strength_workout_with_focus(
 
         # AI failed - notify and fallback
         if not quiet:
-            print(f"  ↩ Falling back to template for {date}")
+            print(f"  ↩ Falling back to template for {date} (Session {session_role})")
         send_termux_notification(
             "⚠️ AI Workout Generation Failed",
-            f"Using template for {date} ({intensity}). Check Claude tokens/quota."
+            f"Using Session {session_role} template for {date}. Check Claude tokens/quota."
         )
 
-    # Fallback to hardcoded templates
-    return generate_strength_workout_fallback(date, intensity, focus_areas)
+    # Fallback to hardcoded templates with session role
+    return generate_strength_workout_fallback(date, intensity, focus_areas, session_role)
 
 
 def generate_mobility_workout(date: str, intensity: str, running_workout: Optional[RunningWorkout]) -> SupplementalWorkout:
@@ -930,10 +1074,11 @@ def find_strength_slots_with_ai(
         if not quiet:
             for day in selected:
                 date = day.get("date")
+                session_role = day.get("session_role", "A")
                 focus = day.get("focus_areas", "")
                 intensity = day.get("intensity", "full")
                 rationale = day.get("rationale", "")
-                print(f"    • {date} ({intensity}): {focus}")
+                print(f"    • {date} Session {session_role} ({intensity}): {focus}")
                 if rationale:
                     print(f"        Rationale: {rationale}")
 
@@ -1060,16 +1205,18 @@ def generate_week_supplemental_workouts(
     workouts_to_create = []
     today = datetime.now().strftime("%Y-%m-%d")
 
-    # Generate strength workouts using AI-selected dates and focus areas
+    # Generate strength workouts using AI-selected dates, focus areas, and session roles
     for slot in strength_slots:
         # Handle both dict (new format) and tuple (legacy fallback)
         if isinstance(slot, dict):
             date = slot.get("date")
             focus_areas = slot.get("focus_areas")
             intensity = slot.get("intensity", "full")
+            session_role = slot.get("session_role", "A")
         else:
             date, focus_areas = slot[0], None
             intensity = "full"
+            session_role = "A"
 
         # Skip past dates - only generate for today and future
         # When regenerating, we must allow today since we may have deleted today's workout
@@ -1090,11 +1237,12 @@ def generate_week_supplemental_workouts(
                 print(f"  ⏭ Strength for {date} already generated")
             continue
 
-        # Generate workout with AI-selected focus areas
+        # Generate workout with AI-selected focus areas and session role
         workout = generate_strength_workout_with_focus(
             date=date,
             focus_areas=focus_areas,
             intensity=intensity,
+            session_role=session_role,
             use_ai=use_ai,
             quiet=quiet
         )
@@ -1167,6 +1315,7 @@ def generate_week_supplemental_workouts(
             generated_log[workout.domain][workout.date] = {
                 "garmin_id": garmin_id,
                 "name": workout.name,
+                "session_role": workout.session_role if hasattr(workout, 'session_role') else "",
                 "focus_areas": workout.focus_areas if hasattr(workout, 'focus_areas') else "",
                 "intensity": workout.intensity,
                 "generated_at": datetime.now().isoformat()
@@ -1176,6 +1325,7 @@ def generate_week_supplemental_workouts(
                 "date": workout.date,
                 "name": workout.name,
                 "domain": workout.domain,
+                "session_role": workout.session_role if hasattr(workout, 'session_role') else "",
                 "focus_areas": workout.focus_areas if hasattr(workout, 'focus_areas') else "",
                 "intensity": workout.intensity,
                 "garmin_id": garmin_id,
