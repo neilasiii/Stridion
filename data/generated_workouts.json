@@ -19,11 +19,6 @@
     "finalsurge_name": "Test - 10 min Easy",
     "generated_at": "2025-12-06T11:00:00"
   },
-  "2025-12-14": {
-    "garmin_id": 1403215879,
-    "finalsurge_name": "Run: 45 min E",
-    "generated_at": "2025-12-06T12:38:08.264021"
-  },
   "strength": {
     "2025-12-11": {
       "garmin_id": 1407883520,
@@ -38,6 +33,27 @@
       "focus_areas": "Lower body emphasis: Posterior chain (glutes, hamstrings, RDLs) + single-leg stability (Bulgarian split squats, single-leg deadlifts) + hip stabilizers (lateral band work, clamshells) + core anti-extension",
       "intensity": "moderate",
       "generated_at": "2025-12-11T10:23:26.931124"
+    },
+    "2025-12-16": {
+      "garmin_id": 1408633882,
+      "name": "2025-12-16 - Strength: Full Body",
+      "focus_areas": "Posterior chain emphasis: glutes, hamstrings, single-leg stability (split squats, RDLs, step-ups) + calf strength (single-leg raises) + core anti-rotation",
+      "intensity": "full",
+      "generated_at": "2025-12-12T12:06:45.663425"
+    },
+    "2025-12-18": {
+      "garmin_id": 1408633888,
+      "name": "2025-12-18 - Strength: Upper Body Push/Pull",
+      "focus_areas": "Upper body emphasis: pushing (push-ups, overhead press, dips) + pulling (rows, pull-ups, face pulls) + core anti-extension (planks, dead bugs)",
+      "intensity": "full",
+      "generated_at": "2025-12-12T12:06:46.144348"
+    },
+    "2025-12-20": {
+      "garmin_id": 1408633891,
+      "name": "2025-12-20 - Strength: Full Body",
+      "focus_areas": "Full body integration: hip stabilizers (lateral work, clamshells, single-leg balance) + light quad work (goblet squats, lunges) + pulling movements + core stability",
+      "intensity": "full",
+      "generated_at": "2025-12-12T12:06:46.976197"
     }
   },
   "mobility": {},
@@ -61,11 +77,6 @@
       "garmin_id": 1403206495,
       "finalsurge_name": "Test - 10 min Easy",
       "generated_at": "2025-12-06T11:00:00"
-    },
-    "2025-12-14": {
-      "garmin_id": 1403215879,
-      "finalsurge_name": "Run: 45 min E",
-      "generated_at": "2025-12-06T12:38:08.264021"
     }
   },
   "week_snapshots": {
@@ -77,6 +88,46 @@
       ],
       "recovery_concern": false,
       "generated_at": "2025-12-11T10:23:26.931247"
+    },
+    "2025-12-15": {
+      "running_fingerprint": "2025-12-15:Run: 30-45 min E:False|2025-12-17:Run: 30-45 min E:False|2025-12-19:Run: 30-45 min E:False|2025-12-21:Run: 40-55 min E:False",
+      "strength_dates": [
+        "2025-12-16",
+        "2025-12-18",
+        "2025-12-20"
+      ],
+      "recovery_concern": false,
+      "generated_at": "2025-12-12T12:06:46.976350"
     }
+  },
+  "2025-12-21": {
+    "garmin_id": 1408770005,
+    "finalsurge_name": "Run: 40-55 min E",
+    "workout_type": "easy",
+    "generated_at": "2025-12-12T16:21:26.951541"
+  },
+  "2025-12-19": {
+    "garmin_id": 1408770007,
+    "finalsurge_name": "Run: 30-45 min E",
+    "workout_type": "easy",
+    "generated_at": "2025-12-12T16:21:27.312437"
+  },
+  "2025-12-17": {
+    "garmin_id": 1408770009,
+    "finalsurge_name": "Run: 30-45 min E",
+    "workout_type": "easy",
+    "generated_at": "2025-12-12T16:21:27.830575"
+  },
+  "2025-12-15": {
+    "garmin_id": 1408770011,
+    "finalsurge_name": "Run: 30-45 min E",
+    "workout_type": "easy",
+    "generated_at": "2025-12-12T16:21:28.325033"
+  },
+  "2025-12-14": {
+    "garmin_id": 1408770013,
+    "finalsurge_name": "Run: 45 min E",
+    "workout_type": "easy",
+    "generated_at": "2025-12-12T16:21:28.835743"
   }
 }

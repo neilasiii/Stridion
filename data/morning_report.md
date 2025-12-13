@@ -1,61 +1,41 @@
-# Morning Report - Tuesday, December 09, 2025
-
-# Morning Report - Tuesday, December 9, 2025
+# Morning Report - Friday, December 12, 2025
 
 ## Recovery Analysis
 
 | Metric | Value | Status |
 |--------|-------|--------|
-| Sleep | 6.6h (67/100) | Adequate |
-| Deep Sleep | 16.0% | Normal range |
-| Training Readiness | 57/100 | Moderate |
-| Body Battery | 60/100 | Good |
-| HRV | 60ms | Balanced |
-| RHR | 49 bpm (+2.7 vs baseline) | Slightly elevated |
-| Stress | 22/100 avg | Low |
+| Sleep | 6.7h, 67/100 | Adequate (23% deep is good) |
+| Training Readiness | 54/100 | MODERATE |
+| Body Battery | 87/100 | STRONG |
+| HRV | 75ms | BALANCED |
+| RHR | 43 bpm | Normal range |
+| Stress | 12/100 | LOW |
 
-**Overall Recovery Status:** MODERATE - Green light for scheduled training
-
-## Today's Scheduled Workout
-
-**Strength: Lower Body + Core (35 min)**
-
-Warmup:
-- Leg swings 10 each
-- Bodyweight squats x10
-- Glute bridges x10
-- Clamshells x10 each
-
-Main Work:
-- Goblet Squat: 3x10 (RPE 7)
-- Single-Leg RDL (details truncated in data)
+**Key Observations:**
+- Body battery at 87/100 indicates excellent energy reserves
+- HRV balanced and stress very low (12) suggest good autonomic recovery
+- Sleep was slightly short but quality was decent with 23% deep sleep
+- Training readiness at 54 is moderate, not a red flag for easy aerobic work
 
 ## Workout Recommendation
 
-**✅ PROCEED AS PLANNED**
+**✅ Complete 40 min Easy as scheduled**
 
-Execute the Lower Body + Core session as scheduled. No modifications needed.
+No modifications needed. This is a straightforward easy run that your body can handle well today.
 
-### Execution Notes:
-- Honor the RPE 7 target on goblet squats - should feel challenging but sustainable
-- Focus on quality movement patterns, especially on single-leg RDLs
-- The low stress level (22/100) indicates good capacity for focused strength work
-- Body battery at 60 provides adequate energy reserves for a 35-minute session
+### Execution Guidelines:
+- **Pace:** Keep it conversational, likely 10:30-11:00/mi based on your current fitness
+- **Effort:** Should feel effortless; you could hold a conversation
+- **Weather:** Ideal conditions - starting at 52°F, warming to mid-60s. Light layers that you can adjust.
 
 ## Rationale
 
-1. **Training Readiness (57)** - While labeled "moderate," this is sufficient for a programmed strength session. Strength work is less metabolically demanding than quality running.
+1. **Volume is appropriate:** 40 minutes easy is a modest aerobic stimulus. Your recent load (6.6 miles over 7 days) is light, so there's no accumulated fatigue concern.
 
-2. **Body Battery (60)** - Solid reserve for a moderate-effort strength day. You won't be depleting below comfortable levels.
+2. **Recovery supports it:** While readiness is "moderate" at 54, your body battery (87) and low stress (12) indicate you have the physiological capacity for easy aerobic work. The readiness score may be dampened by the shorter sleep duration rather than actual fatigue.
 
-3. **Sleep Quality (6.6h, 67/100)** - Adequate for supporting adaptation from strength training. Not optimal, but not a limiter.
+3. **Training continuity matters:** You had your last run on Dec 10 (2 days ago). Maintaining consistency with easy aerobic work is important during base building.
 
-4. **Low Stress (22/100)** - Indicates good parasympathetic tone and capacity for training stimulus.
+4. **Weather is optimal:** Clear skies, low humidity, light wind - no adjustments needed for conditions.
 
-5. **RHR Slightly Elevated (+2.7)** - Minor flag, but within normal variation. Not significant enough to warrant modification for a strength session.
-
-6. **Strategic Timing** - Lower body strength placed appropriately in your weekly schedule, supporting your running without competing with quality sessions.
-
-## Looking Ahead
-
-With 3 runs totaling 9.0 miles in the last 7 days and your most recent easy run yesterday, today's strength work maintains training consistency while varying the stimulus. Monitor how you feel post-session - if unusual fatigue develops, prioritize sleep tonight.
+**Bottom line:** Your body is ready for this easy effort. Enjoy the run!

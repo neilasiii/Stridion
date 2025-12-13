@@ -61,8 +61,8 @@ def parse_time_to_seconds(time_str: str) -> int:
     Examples:
         "30 min" -> 1800
         "22:30" -> 1350
-        "22:30-25 min" -> 1350 (uses lower bound)
-        "60-65 min" -> 3600 (uses lower bound)
+        "22:30-25 min" -> 1500 (uses upper bound)
+        "60-65 min" -> 3900 (uses upper bound)
         "20 sec" -> 20
         "1:30" -> 90
         "90 sec" -> 90
@@ -71,15 +71,18 @@ def parse_time_to_seconds(time_str: str) -> int:
 
     # Handle range like "60-65 min" or "22:30-25 min"
     if '-' in time_str:
-        # Take the first part (lower bound)
+        # Take the second part (upper bound) - coach gives range, use higher end
         parts = time_str.split('-')
-        time_str = parts[0].strip()
-        # If no unit in first part, get from second
-        if 'min' not in time_str and 'sec' not in time_str:
-            if 'min' in parts[1]:
-                time_str += ' min'
-            elif 'sec' in parts[1]:
-                time_str += ' sec'
+        # Extract numeric portion from second part
+        second_part = parts[1].strip()
+        # Get unit from second part (which always has it)
+        unit = ''
+        if 'min' in second_part:
+            unit = ' min'
+        elif 'sec' in second_part:
+            unit = ' sec'
+        # Extract just the number from second part
+        time_str = re.match(r'[\d:]+', second_part).group(0) + unit
 
     # Handle MM:SS format (but NOT if it looks like a range endpoint)
     if ':' in time_str and 'min' not in time_str:

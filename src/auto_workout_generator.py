@@ -242,13 +242,14 @@ def create_repeat_group(
     }
 
 
-def generate_garmin_workout(parsed: ParsedWorkout, workout_name: str) -> Dict[str, Any]:
+def generate_garmin_workout(parsed: ParsedWorkout, workout_name: str, coach_description: str = None) -> Dict[str, Any]:
     """
     Generate Garmin workout JSON from parsed workout.
 
     Args:
         parsed: ParsedWorkout from workout_parser
         workout_name: Display name for the workout
+        coach_description: Original coach-prescribed workout description (FinalSurge)
 
     Returns:
         Garmin workout JSON ready for upload
@@ -314,6 +315,10 @@ def generate_garmin_workout(parsed: ParsedWorkout, workout_name: str) -> Dict[st
             }
         ]
     }
+
+    # Add coach's original description to workout notes
+    if coach_description:
+        workout["description"] = f"Coach (FinalSurge): {coach_description}"
 
     return workout
 
@@ -463,8 +468,8 @@ def generate_and_upload_workouts(check_only: bool = False, quiet: bool = False) 
             # Generate workout name
             garmin_name = generate_workout_name(scheduled_date, parsed)
 
-            # Generate Garmin workout JSON
-            workout_json = generate_garmin_workout(parsed, garmin_name)
+            # Generate Garmin workout JSON with original coach description
+            workout_json = generate_garmin_workout(parsed, garmin_name, coach_description=finalsurge_name)
 
             # Upload workout
             if not quiet:
