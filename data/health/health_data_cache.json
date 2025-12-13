@@ -1,7 +1,61 @@
 {
-  "last_updated": "2025-12-10T15:46:18.399151+00:00",
-  "last_sync_date": "2025-12-10",
+  "last_updated": "2025-12-13T01:28:16.636196+00:00",
+  "last_sync_date": "2025-12-12",
   "activities": [
+    {
+      "activity_id": 21241939209,
+      "date": "2025-12-12T18:41:35",
+      "activity_name": "Lee County - 2025-12-12 - Easy Run 40min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2410.705078125,
+      "distance_miles": 3.805051,
+      "calories": 463.0,
+      "avg_heart_rate": 146.0,
+      "max_heart_rate": 160.0,
+      "avg_speed": 5.681828,
+      "pace_per_mile": 10.559234,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 3.805038,
+          "duration_seconds": 2410.705,
+          "avg_heart_rate": 146.0,
+          "max_heart_rate": 160.0,
+          "avg_speed_mph": 5.681828,
+          "pace_per_mile": 10.559268,
+          "avg_cadence": 144.71875,
+          "avg_power": 281.0,
+          "calories": 463.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 714.989,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1662.504,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 4.006,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 173
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 183
+        }
+      ]
+    },
     {
       "activity_id": 21221209003,
       "date": "2025-12-10T10:08:09",
@@ -25298,6 +25352,26 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-12-12",
+      "total_duration_minutes": 399.0,
+      "light_sleep_minutes": 262.0,
+      "deep_sleep_minutes": 90.0,
+      "rem_sleep_minutes": 47.0,
+      "awake_minutes": 107.0,
+      "sleep_score": 67,
+      "deep_sleep_percentage": 22.56
+    },
+    {
+      "date": "2025-12-11",
+      "total_duration_minutes": 496.0,
+      "light_sleep_minutes": 369.0,
+      "deep_sleep_minutes": 56.0,
+      "rem_sleep_minutes": 71.0,
+      "awake_minutes": 95.0,
+      "sleep_score": 54,
+      "deep_sleep_percentage": 11.29
+    },
+    {
       "date": "2025-12-10",
       "total_duration_minutes": 428.0,
       "light_sleep_minutes": 231.0,
@@ -29160,6 +29234,10 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2025-12-12T00:00:00",
+      "vo2_max": 49.7
+    },
+    {
       "date": "2025-12-10T00:00:00",
       "vo2_max": 49.9
     },
@@ -29729,6 +29807,14 @@
     }
   ],
   "resting_hr_readings": [
+    [
+      "2025-12-12T12:00:00",
+      43
+    ],
+    [
+      "2025-12-11T12:00:00",
+      46
+    ],
     [
       "2025-12-10T12:00:00",
       48
@@ -31283,6 +31369,26 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-12-12",
+      "weekly_avg": 69,
+      "last_night_avg": 75,
+      "last_night_5min_high": 92,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-11",
+      "weekly_avg": 67,
+      "last_night_avg": 70,
+      "last_night_5min_high": 104,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
     {
       "date": "2025-12-10",
       "weekly_avg": 67,
@@ -35166,10 +35272,30 @@
   ],
   "training_readiness": [
     {
-      "date": "2025-12-10",
+      "date": "2025-12-12",
+      "score": 38,
+      "level": "LOW",
+      "recovery_time": 1255,
+      "sleep_score": 67,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 248
+    },
+    {
+      "date": "2025-12-11",
       "score": 46,
       "level": "LOW",
-      "recovery_time": 1280,
+      "recovery_time": 87,
+      "sleep_score": 54,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 203
+    },
+    {
+      "date": "2025-12-10",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 914,
       "sleep_score": 65,
       "hrv_feedback": "VERY_GOOD",
       "stress_feedback": "GOOD",
@@ -39048,9 +39174,19 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-12-12",
+      "avg_stress": 25,
+      "max_stress": 92
+    },
+    {
+      "date": "2025-12-11",
+      "avg_stress": 31,
+      "max_stress": 96
+    },
+    {
       "date": "2025-12-10",
-      "avg_stress": 14,
-      "max_stress": 51
+      "avg_stress": 28,
+      "max_stress": 93
     },
     {
       "date": "2025-12-09",
@@ -40989,6 +41125,18 @@
     }
   ],
   "spo2_readings": [
+    {
+      "date": "2025-12-12",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2025-12-11",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
     {
       "date": "2025-12-10",
       "avg_spo2": 95.0,
@@ -43320,11 +43468,25 @@
   ],
   "body_battery": [
     {
+      "date": "2025-12-12",
+      "charged": 45,
+      "drained": 77,
+      "latest_level": 15,
+      "latest_timestamp": 1765588680000
+    },
+    {
+      "date": "2025-12-11",
+      "charged": 88,
+      "drained": 71,
+      "latest_level": 47,
+      "latest_timestamp": 1765515420000
+    },
+    {
       "date": "2025-12-10",
-      "charged": 50,
-      "drained": 9,
-      "latest_level": 87,
-      "latest_timestamp": 1765370160000
+      "charged": 65,
+      "drained": 81,
+      "latest_level": 16,
+      "latest_timestamp": 1765420020000
     },
     {
       "date": "2025-12-09",
@@ -45325,22 +45487,22 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-12-10",
-    "time_5k": 1482,
-    "time_10k": 3108,
-    "time_half_marathon": 6968,
-    "time_marathon": 15249
+    "date": "2025-12-12",
+    "time_5k": 1484,
+    "time_10k": 3115,
+    "time_half_marathon": 6987,
+    "time_marathon": 15291
   },
   "training_status": {
-    "date": "2025-12-10",
+    "date": "2025-12-12",
     "vo2_max": {
-      "date": "2025-12-10",
+      "date": "2025-12-12",
       "value": 50.0,
-      "precise_value": 49.9
+      "precise_value": 49.7
     },
     "training_load": {
-      "date": "2025-12-10",
-      "aerobic_low": 478.18323,
+      "date": "2025-12-12",
+      "aerobic_low": 478.37842,
       "aerobic_high": 567.8673,
       "anaerobic": 0.0,
       "feedback": "ANAEROBIC_SHORTAGE"
@@ -45356,24 +45518,6 @@
       "domain": "strength",
       "duration_min": 35,
       "garmin_id": 1406772173
-    },
-    {
-      "scheduled_date": "2025-12-11",
-      "name": "2025-12-11 - Strength: Upper Body + Core",
-      "description": "2025-12-11 - Strength: Upper Body + Core (35 min)\n\nWARMUP:\nArm circles 10 each, band pull-aparts x15, scapular push-ups x10, cat-cow x8\n\nMAIN WORK:\n- Push-ups: 3x12-15\n  (RPE 7, tempo controlled)\n- DB Bent-Over Rows: 3x12/arm\n  (RPE 7)\n- DB Overhead Press: 3x10\n  (Standing, core braced)\n- Band Face Pulls: 3x15\n  (High anchor point)\n- Eccentric Push-ups: 2x8\n  (4 sec lower)\n\nCORE:\nPallof press 3x12/side, side plank 2x30s/side, dead bug 2x10/side\n\nNOTES:\nFocus on controlled tempo and full range of motion",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1406818642
-    },
-    {
-      "scheduled_date": "2025-12-13",
-      "name": "2025-12-13 - Strength: Full Body Balance",
-      "description": "2025-12-13 - Strength: Full Body Balance (30 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x12, arm circles 10 each, glute bridges x10\n\nMAIN WORK:\n- Goblet Squats: 3x12\n  (RPE 6, controlled tempo)\n- Walking Lunges: 3x10/leg\n  (RPE 6)\n- Push-up/Band Row Superset: 3x10 each\n  (Minimal rest between)\n- Single-Leg Calf Raises: 3x15/leg\n  (Slow eccentric)\n- DB Overhead Press: 2x12\n  (RPE 6)\n\nCORE:\nDead bugs 2x10/side, pallof press 2x10/side, plank 2x35s\n\nNOTES:\nBalance push/pull and quad-dominant work for overall maintenance",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 30,
-      "garmin_id": 1406818644
     },
     {
       "scheduled_date": "2025-12-08",
@@ -45403,6 +45547,91 @@
       "garmin_id": 1406772190
     },
     {
+      "scheduled_date": "2025-12-11",
+      "name": "2025-12-11 - Strength: Upper Body + Core",
+      "description": "2025-12-11 - Strength: Upper Body + Core (35 min)\n\nWARMUP:\narm circles 10 each, scap push-ups x10, band pull-aparts x15, cat-cow x10\n\nMAIN WORK:\n- Push-ups: 3x12-15\n  (RPE 7, controlled tempo)\n- Bent-Over Dumbbell Row: 3x10-12\n  (RPE 7, squeeze at top)\n- Overhead Dumbbell Press: 3x8-10\n  (RPE 7)\n- Band Face Pulls: 3x15\n  (rear delts focus)\n- Glute Bridge: 2x15\n  (2s hold at top)\n- Calf Raises: 2x20\n  (slow eccentric)\n\nCORE:\nPallof press 3x10 each, dead bug 2x12, side plank 2x30s each\n\nNOTES:\nUpper body emphasis with anti-rotation core work",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1407883520
+    },
+    {
+      "scheduled_date": "2025-12-13",
+      "name": "2025-12-13 - Strength: Full Body",
+      "description": "2025-12-13 - Strength: Full Body (30 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x10, glute bridges x10, band pull-aparts x12\n\nMAIN WORK:\n- Single-Leg RDL: 3x8 each\n  (RPE 6)\n- Bulgarian Split Squat: 3x8 each\n  (RPE 6)\n- Dumbbell Row: 3x10\n  (RPE 6)\n- Lateral Band Walk: 2x12 steps each\n  (Hip stabilizers)\n- Clamshells: 2x15 each\n  (Band resistance)\n\nCORE:\nDead bug 2x10 each, plank 2x30s, pallof press 2x8 each side\n\nNOTES:\nFocus on control and stability through posterior chain movements",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 30,
+      "garmin_id": 1407883581
+    },
+    {
+      "scheduled_date": "2025-12-16",
+      "name": "2025-12-16 - Strength: Full Body",
+      "description": "2025-12-16 - Strength: Full Body (35 min)\n\nWARMUP:\nLeg swings 10 each, air squats x10, glute bridges x10, band pull-aparts x12\n\nMAIN WORK:\n- Bulgarian Split Squat: 3x8 each\n  (RPE 7, DBs)\n- Single-Leg RDL: 3x10 each\n  (RPE 7, DB)\n- Single-Leg Calf Raise: 3x12 each\n  (Slow tempo)\n- Push-ups: 3x12\n  (RPE 6)\n- Band Rows: 3x15\n  (Squeeze scapula)\n\nCORE:\nPallof press 3x10 each, dead bug 2x10 each, side plank 2x30s each\n\nNOTES:\nEmphasizes single-leg stability and posterior chain without compromising Wednesday's run.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1408633882
+    },
+    {
+      "scheduled_date": "2025-12-18",
+      "name": "2025-12-18 - Strength: Upper Body Push/Pull",
+      "description": "2025-12-18 - Strength: Upper Body Push/Pull (35 min)\n\nWARMUP:\nArm circles 10 each, band pull-aparts x15, shoulder taps x10, scapular push-ups x8\n\nMAIN WORK:\n- Push-ups: 3x12-15\n  (RPE 7, controlled tempo)\n- Single-arm DB Row: 3x10 each\n  (RPE 7)\n- DB Overhead Press: 3x10\n  (RPE 7)\n- Band Face Pulls: 3x15\n  (Squeeze shoulder blades)\n- Tricep Dips: 2x10-12\n  (Bench or chair)\n\nCORE:\nDead bug 3x10, plank 2x45s, pallof press 2x10 each\n\nNOTES:\nFocus on quality reps and full range of motion.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1408633888
+    },
+    {
+      "scheduled_date": "2025-12-20",
+      "name": "2025-12-20 - Strength: Full Body",
+      "description": "2025-12-20 - Strength: Full Body (35 min)\n\nWARMUP:\nLeg swings 10 each, clamshells 10 each, glute bridges x12, bodyweight squats x10\n\nMAIN WORK:\n- Goblet Squat: 3x12\n  (RPE 7)\n- Single-Leg RDL: 3x8 each\n  (Balance focus)\n- Reverse Lunge: 3x10 each\n  (RPE 7)\n- Band Lateral Walk: 2x12 each\n  (Hip stabilizers)\n- Bent-Over DB Row: 3x12\n  (RPE 7)\n- Push-Up: 3x10-12\n  (Controlled tempo)\n- Band Pull-Apart: 2x15\n  (Shoulder health)\n\nCORE:\nDead bug 2x10, pallof press 2x10 each, plank 2x30s\n\nNOTES:\nFocus on hip stability and full-body coordination to support running mechanics.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1408633891
+    },
+    {
+      "scheduled_date": "2025-12-21",
+      "scheduled_datetime": null,
+      "name": "Run: 40-55 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-19",
+      "scheduled_datetime": null,
+      "name": "Run: 30-45 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-17",
+      "scheduled_datetime": null,
+      "name": "Run: 30-45 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-15",
+      "scheduled_datetime": null,
+      "name": "Run: 30-45 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
       "scheduled_date": "2025-12-14",
       "scheduled_datetime": null,
       "name": "Run: 45 min E",
@@ -45414,18 +45643,8 @@
     },
     {
       "scheduled_date": "2025-12-12",
-      "scheduled_datetime": null,
+      "scheduled_datetime": "2025-12-12T23:41:35",
       "name": "Run: 40 min E",
-      "description": "Workout: Run",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar"
-    },
-    {
-      "scheduled_date": "2025-12-10",
-      "scheduled_datetime": "2025-12-10T15:08:09",
-      "name": "Run: 35 min E",
       "description": "Workout: Run",
       "duration_seconds": 3600,
       "location": null,
@@ -45541,8 +45760,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 516644.96884155273,
-      "total_activities": 63,
+      "total_distance_meters": 522768.58895874023,
+      "total_activities": 64,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -45566,10 +45785,22 @@
   ],
   "daily_steps": [
     {
-      "date": "2025-12-10",
-      "total_steps": 430,
-      "goal_steps": 9380,
+      "date": "2025-12-12",
+      "total_steps": 14783,
+      "goal_steps": 9200,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-11",
+      "total_steps": 5068,
+      "goal_steps": 9660,
       "goal_met": false
+    },
+    {
+      "date": "2025-12-10",
+      "total_steps": 12183,
+      "goal_steps": 9380,
+      "goal_met": true
     },
     {
       "date": "2025-12-09",
@@ -45801,8 +46032,8 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-11-10",
-    "end_date": "2025-12-10",
+    "start_date": "2025-11-12",
+    "end_date": "2025-12-12",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,
