@@ -1142,27 +1142,32 @@ async def daily_workouts_task():
 
         workout_text = stdout.decode().strip()
 
-        # Split into chunks if needed (Discord has 2000 char limit)
-        if len(workout_text) <= 2000:
-            await channel.send(workout_text)
-        else:
-            # Split by workout sections (##)
-            sections = workout_text.split('\n## ')
-            current_chunk = sections[0]  # Title
+        # Split by workout sections (## headers) and send each as separate message
+        sections = workout_text.split('\n## ')
 
-            for section in sections[1:]:
-                section_text = f"\n## {section}"
+        # Send the header (date)
+        await channel.send(sections[0])
 
-                if len(current_chunk) + len(section_text) <= 1900:
-                    current_chunk += section_text
-                else:
-                    # Send current chunk and start new one
-                    await channel.send(current_chunk)
-                    current_chunk = section_text
+        # Send each workout as a separate message
+        for section in sections[1:]:
+            workout_message = f"## {section}"
 
-            # Send final chunk
-            if current_chunk:
-                await channel.send(current_chunk)
+            # If a single workout exceeds 2000 chars, split it by paragraphs
+            if len(workout_message) <= 2000:
+                await channel.send(workout_message)
+            else:
+                # Split long workout by paragraphs
+                paragraphs = workout_message.split('\n\n')
+                chunk = ""
+                for para in paragraphs:
+                    if len(chunk) + len(para) + 2 > 2000:
+                        if chunk:
+                            await channel.send(chunk.strip())
+                        chunk = para + '\n\n'
+                    else:
+                        chunk += para + '\n\n'
+                if chunk:
+                    await channel.send(chunk.strip())
 
     except Exception as e:
         logger.error(f"Daily workouts task error: {e}")
