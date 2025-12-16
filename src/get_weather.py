@@ -220,8 +220,34 @@ def get_configured_location():
         except ValueError:
             pass
 
-    # Try config file
+    # Try user-specific location (set via /location command) - highest priority
     project_root = Path(__file__).parent.parent
+    user_config = project_root / 'config' / 'user_location.env'
+
+    if user_config.exists():
+        try:
+            with open(user_config) as f:
+                lat = None
+                lon = None
+                location_name = None
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        if line.startswith('WEATHER_LATITUDE='):
+                            lat = line.split('=', 1)[1].strip()
+                        elif line.startswith('WEATHER_LONGITUDE='):
+                            lon = line.split('=', 1)[1].strip()
+                        elif line.startswith('LOCATION_NAME='):
+                            location_name = line.split('=', 1)[1].strip()
+
+            if lat and lon:
+                if location_name:
+                    print(f"Using location: {location_name}", file=sys.stderr)
+                return float(lat), float(lon)
+        except:
+            pass
+
+    # Try default config file
     config_file = project_root / 'config' / 'location.env'
 
     if config_file.exists():
