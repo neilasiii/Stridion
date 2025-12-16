@@ -57,19 +57,29 @@ def load_athlete_context():
 
 
 def get_todays_workout(cache):
-    """Get today's scheduled workout."""
+    """Get today's scheduled workouts (returns list of all workouts for today)."""
     today = datetime.now().date().isoformat()
+    workouts = []
 
     for workout in cache.get('scheduled_workouts', []):
         workout_date = workout.get('scheduled_date') or workout.get('date', '')
         if workout_date.startswith(today):
-            return {
+            workouts.append({
                 'name': workout.get('workout_name') or workout.get('name', 'Workout'),
                 'description': workout.get('description', ''),
-                'source': workout.get('source', 'unknown')
-            }
+                'source': workout.get('source', 'unknown'),
+                'domain': workout.get('domain', 'unknown')
+            })
 
-    return None
+    # Deduplicate by name (in case same workout appears multiple times)
+    seen = set()
+    unique_workouts = []
+    for w in workouts:
+        if w['name'] not in seen:
+            seen.add(w['name'])
+            unique_workouts.append(w)
+
+    return unique_workouts if unique_workouts else None
 
 
 def get_recovery_summary(cache):
@@ -220,12 +230,28 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
     if 'stress' in recovery:
         recovery_text.append(f"Stress: avg {recovery['stress']['avg']}/100")
 
-    # Format workout
+    # Format workouts (can be multiple)
     workout_text = "No workout scheduled today"
     if workout:
-        workout_text = f"Scheduled: {workout['name']}"
-        if workout.get('description'):
-            workout_text += f"\nDetails: {workout['description'][:200]}"
+        if isinstance(workout, list):
+            workout_text = f"Scheduled workouts ({len(workout)}):"
+            for i, w in enumerate(workout, 1):
+                workout_text += f"\n{i}. {w['name']}"
+                if w.get('description'):
+                    # For strength/mobility, extract key focus areas
+                    desc = w['description']
+                    if 'Key Focus:' in desc or 'KEY FOCUS:' in desc:
+                        for line in desc.split('\n'):
+                            if 'Key Focus:' in line or 'KEY FOCUS:' in line:
+                                workout_text += f"\n   {line.strip()}"
+                                break
+                    elif len(desc) < 200:
+                        workout_text += f"\n   {desc}"
+        else:
+            # Backwards compatibility - single workout
+            workout_text = f"Scheduled: {workout['name']}"
+            if workout.get('description'):
+                workout_text += f"\nDetails: {workout['description'][:200]}"
 
     # Format recent activity
     activity_text = f"Last 7 days: {activities['running_count']} runs, {activities['running_miles']} miles"
@@ -291,8 +317,8 @@ CRITICAL RULES:
 
 
 def call_claude_headless(prompt):
-    """Call Claude Code in headless mode."""
-    # Find claude binary - check common locations
+    """Call Claude Code with Gemini fallback."""
+    # Try Claude first
     claude_path = None
     for path in [
         os.path.expanduser('~/.local/bin/claude'),
@@ -303,32 +329,42 @@ def call_claude_headless(prompt):
             claude_path = path
             break
 
-    if not claude_path:
-        return None, "Claude Code binary not found"
+    if claude_path:
+        try:
+            result = subprocess.run(
+                [
+                    claude_path, '-p', prompt,
+                    '--output-format', 'text'
+                ],
+                capture_output=True,
+                text=True,
+                timeout=180,
+                cwd=str(Path(__file__).parent.parent)
+            )
 
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout.strip(), None
+
+        except (FileNotFoundError, subprocess.TimeoutExpired, Exception) as e:
+            print(f"Claude failed ({e}), trying Gemini fallback...", file=sys.stderr)
+
+    # Fallback to Gemini
     try:
-        result = subprocess.run(
-            [
-                claude_path, '-p', prompt,
-                '--output-format', 'text'
-            ],
-            capture_output=True,
-            text=True,
-            timeout=180,
-            cwd=str(Path(__file__).parent.parent)
-        )
+        # Import Gemini client
+        project_root = Path(__file__).parent.parent
+        sys.path.insert(0, str(project_root / 'src'))
+        from gemini_client import call_gemini
 
-        if result.returncode == 0 and result.stdout.strip():
-            return result.stdout.strip(), None
+        response, error = call_gemini(prompt, max_tokens=2048)
+
+        if error:
+            return None, f"Claude unavailable, Gemini error: {error}"
         else:
-            return None, f"Claude exit code {result.returncode}: {result.stderr[:200]}"
+            # Add marker that Gemini was used
+            return f"{response}\n\n*Generated by Gemini (Claude unavailable)*", None
 
-    except FileNotFoundError:
-        return None, "Claude Code not installed"
-    except subprocess.TimeoutExpired:
-        return None, "Claude timed out after 180s"
     except Exception as e:
-        return None, str(e)
+        return None, f"Both Claude and Gemini failed: {str(e)}"
 
 
 def parse_ai_response(response):
@@ -404,7 +440,13 @@ def generate_fallback_report(workout, recovery, activities):
             severity = max(severity, 1)
 
     # Build notification
-    workout_name = workout['name'] if workout else "Rest day"
+    if workout:
+        if isinstance(workout, list):
+            workout_name = f"{len(workout)} workouts"
+        else:
+            workout_name = workout['name']
+    else:
+        workout_name = "Rest day"
 
     if severity >= 3:
         rec = "Consider rest"
@@ -421,10 +463,19 @@ def generate_fallback_report(workout, recovery, activities):
     if len(notification) > 240:
         notification = notification[:237] + "..."
 
+    # Format workout list for full report
+    if workout:
+        if isinstance(workout, list):
+            workout_details = "\n".join(f"- {w['name']}" for w in workout)
+        else:
+            workout_details = workout_name
+    else:
+        workout_details = workout_name
+
     full_report = f"""# Morning Training Report
 
 ## Today's Workout
-{workout_name}
+{workout_details}
 
 ## Recovery Assessment
 {chr(10).join(f"- {c}" for c in concerns) if concerns else "- All metrics within normal range"}
