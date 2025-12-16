@@ -66,6 +66,56 @@ user_sessions = {}  # {user_id: {"session_id": str, "last_activity": datetime, "
 user_locks = {}  # {user_id: asyncio.Lock} - prevent concurrent Claude calls for same user
 
 
+async def send_long_message(message_obj, content, max_length=2000):
+    """
+    Send a long message by splitting it into chunks if needed.
+
+    Args:
+        message_obj: Discord message object to reply to
+        content: The content to send (can exceed Discord's 2000 char limit)
+        max_length: Maximum length per message (default 2000 for Discord)
+    """
+    if len(content) <= max_length:
+        await message_obj.reply(content)
+        return
+
+    # Split by paragraphs first (double newline)
+    paragraphs = content.split('\n\n')
+    chunks = []
+    current_chunk = ""
+
+    for para in paragraphs:
+        # If single paragraph exceeds limit, split by sentences
+        if len(para) > max_length:
+            sentences = para.split('. ')
+            for sentence in sentences:
+                if len(current_chunk) + len(sentence) + 2 > max_length:
+                    if current_chunk:
+                        chunks.append(current_chunk.strip())
+                        current_chunk = sentence + '. '
+                else:
+                    current_chunk += sentence + '. '
+        else:
+            # Try to add paragraph to current chunk
+            if len(current_chunk) + len(para) + 2 > max_length:
+                chunks.append(current_chunk.strip())
+                current_chunk = para + '\n\n'
+            else:
+                current_chunk += para + '\n\n'
+
+    # Add remaining content
+    if current_chunk:
+        chunks.append(current_chunk.strip())
+
+    # Send first chunk as reply
+    if chunks:
+        await message_obj.reply(chunks[0])
+
+        # Send remaining chunks as regular messages
+        for chunk in chunks[1:]:
+            await message_obj.channel.send(chunk)
+
+
 class RunningCoachBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
@@ -784,9 +834,6 @@ async def on_message(message: discord.Message):
                     await message.reply("❌ AI services unavailable. Both Claude and Gemini failed.")
                     return
 
-                # Truncate if needed
-                response = response[:2000] if len(response) > 2000 else response
-
                 # Add to conversation history
                 add_to_history(user_id, "user", message.content)
                 add_to_history(user_id, "assistant", response)
@@ -795,7 +842,8 @@ async def on_message(message: discord.Message):
                 if provider == 'gemini':
                     response = f"{response}\n\n*Powered by Gemini (Claude unavailable)*"
 
-                await message.reply(response)
+                # Use send_long_message to automatically split if needed
+                await send_long_message(message, response)
 
             except Exception as e:
                 await message.reply(f"❌ Error: {str(e)}")
