@@ -24,12 +24,6 @@ Designed to work with [Claude Code](https://docs.claude.com/en/docs/claude-code)
 - **Calendar Integration** - Import/export workouts from FinalSurge, TrainingPeaks, or any ICS calendar
 - **Workout Upload** - Push structured workouts directly to Garmin Connect calendar
 
-### 📚 Workout Library
-
-- 19+ pre-built workout templates across all coaching domains
-- Smart filtering by domain, type, difficulty, duration, VDOT range
-- Command-line access for easy browsing and customization
-
 ### 💬 Flexible Communication
 
 - **BRIEF Mode** (default) - Quick, scannable workouts
@@ -79,10 +73,6 @@ python3 src/get_weather.py
 
 ### Workout Management
 ```bash
-# Browse workout library
-bash bin/workout_library.sh stats
-bash bin/workout_library.sh search --domain running --type tempo
-
 # View scheduled workouts
 bash bin/planned_workouts.sh list --upcoming 7 -v
 
@@ -95,23 +85,26 @@ bash bin/export_calendar.sh --days 14
 
 ### Morning Reports
 ```bash
-# AI-powered brief report (notification)
+# Generate AI-powered morning report
 bash bin/morning_report.sh
 
-# Enhanced text report (terminal)
-bash bin/show_detailed_report.sh
+# View last generated report
+bash bin/morning_report.sh --view
 
-# HTML dashboard (browser)
-bash bin/view_morning_report.sh
+# Generate without syncing (use cached data)
+bash bin/morning_report.sh --no-sync
 ```
 
-### Automation (Termux)
+### Discord Bot
 ```bash
-# Setup automated sync with cron
-bash bin/setup_cron.sh
+# Start Discord bot (manual)
+bash bin/start_discord_bot.sh
 
-# Manual sync with notification
-bash bin/sync_with_notification.sh
+# Check service status
+sudo systemctl status running-coach-bot
+
+# View bot logs
+journalctl -u running-coach-bot -f
 ```
 
 ## Architecture

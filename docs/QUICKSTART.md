@@ -223,20 +223,24 @@ Then import the generated file (`data/calendar/workouts.ics`) into:
 - **Outlook**: File → Import/Export → Import an iCalendar file
 - **Apple Calendar**: File → Import
 
-## Morning Reports (Termux Only)
+## Morning Reports
 
-Get daily training summaries automatically on Android with Termux:
+Get daily training summaries with AI-powered analysis:
 
-### Setup Automated Reports
+### Discord Bot (Recommended)
+
+Use the `/report` command in Discord for instant morning reports with recovery metrics and workout recommendations.
+
+See [DISCORD_BOT_SETUP_COMPLETE.md](DISCORD_BOT_SETUP_COMPLETE.md) for setup instructions.
+
+### Command Line
 
 ```bash
-# Install cron automation
-bash bin/setup_cron.sh
+# Generate AI-powered morning report
+bash bin/morning_report.sh
 ```
 
-This sets up:
-- Garmin data sync every 6 hours
-- Morning report at 9:00 AM daily
+**Note:** For legacy Termux automation scripts (Android), see `bin/archive/termux/README.md`.
 
 ### Manual Reports
 
@@ -399,7 +403,7 @@ bash bin/sync_garmin_data.sh --days 90
 
 4. **Start Coaching** - Open in Claude Code and ask for today's workout
 
-5. **Setup Automation** (Termux) - Run `bash bin/setup_cron.sh` for automated syncs and reports
+5. **Setup Discord Bot** (Optional) - See [DISCORD_BOT_SETUP_COMPLETE.md](DISCORD_BOT_SETUP_COMPLETE.md) for automated coaching interface
 
 ## Additional Resources
 
