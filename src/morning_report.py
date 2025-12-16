@@ -292,14 +292,26 @@ CRITICAL RULES:
 
 def call_claude_headless(prompt):
     """Call Claude Code in headless mode."""
+    # Find claude binary - check common locations
+    claude_path = None
+    for path in [
+        os.path.expanduser('~/.local/bin/claude'),
+        '/usr/local/bin/claude',
+        '/usr/bin/claude'
+    ]:
+        if os.path.exists(path):
+            claude_path = path
+            break
+
+    if not claude_path:
+        return None, "Claude Code binary not found"
+
     try:
         result = subprocess.run(
             [
-                'claude', '-p',
-                '--dangerously-skip-permissions',
-                '--allowedTools', ''  # Text-only, no tools
+                claude_path, '-p', prompt,
+                '--output-format', 'text'
             ],
-            input=prompt,
             capture_output=True,
             text=True,
             timeout=180,

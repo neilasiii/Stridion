@@ -20,40 +20,37 @@
     "generated_at": "2025-12-06T11:00:00"
   },
   "strength": {
-    "2025-12-11": {
-      "garmin_id": 1407883520,
-      "name": "2025-12-11 - Strength: Upper Body + Core",
-      "focus_areas": "Full body emphasis: Upper body pulling (back, biceps, rear delts) + pushing (chest, shoulders, triceps) + core anti-rotation and stability + light lower body maintenance (calf raises, glute bridges)",
-      "intensity": "full",
-      "generated_at": "2025-12-11T10:23:26.301286"
-    },
     "2025-12-13": {
-      "garmin_id": 1407883581,
+      "garmin_id": 1409625226,
       "name": "2025-12-13 - Strength: Full Body",
-      "focus_areas": "Lower body emphasis: Posterior chain (glutes, hamstrings, RDLs) + single-leg stability (Bulgarian split squats, single-leg deadlifts) + hip stabilizers (lateral band work, clamshells) + core anti-extension",
-      "intensity": "moderate",
-      "generated_at": "2025-12-11T10:23:26.931124"
+      "session_role": "B",
+      "focus_areas": "Key Focus: DB RDL. Supporting: Single-leg RDL, Calf raises (straight). Upper: Horizontal row, Overhead press. Trunk: Pallof press anti-rotation",
+      "intensity": "full",
+      "generated_at": "2025-12-13T21:17:46.595203"
     },
     "2025-12-16": {
-      "garmin_id": 1408633882,
-      "name": "2025-12-16 - Strength: Full Body",
-      "focus_areas": "Posterior chain emphasis: glutes, hamstrings, single-leg stability (split squats, RDLs, step-ups) + calf strength (single-leg raises) + core anti-rotation",
+      "garmin_id": 1409625545,
+      "name": "2025-12-16 - Strength: Session A",
+      "session_role": "A",
+      "focus_areas": "Key Focus: Goblet Squat (3\u00d78-10). Supporting: RFESS (3\u00d78/leg). Upper: Push (DB Press 3\u00d78-10). Trunk: Anti-extension (Pallof 3\u00d710/side)",
       "intensity": "full",
-      "generated_at": "2025-12-12T12:06:45.663425"
+      "generated_at": "2025-12-13T21:18:56.181843"
     },
     "2025-12-18": {
-      "garmin_id": 1408633888,
-      "name": "2025-12-18 - Strength: Upper Body Push/Pull",
-      "focus_areas": "Upper body emphasis: pushing (push-ups, overhead press, dips) + pulling (rows, pull-ups, face pulls) + core anti-extension (planks, dead bugs)",
+      "garmin_id": 1409625546,
+      "name": "2025-12-18 - Strength: Session B",
+      "session_role": "B",
+      "focus_areas": "Key Focus: DB RDL (3\u00d710). Supporting: Single-leg RDL (3\u00d78/leg). Upper: Pull (DB Rows 3\u00d710). Trunk: Anti-rotation (Dead bugs 3\u00d710)",
       "intensity": "full",
-      "generated_at": "2025-12-12T12:06:46.144348"
+      "generated_at": "2025-12-13T21:18:56.412043"
     },
     "2025-12-20": {
-      "garmin_id": 1408633891,
-      "name": "2025-12-20 - Strength: Full Body",
-      "focus_areas": "Full body integration: hip stabilizers (lateral work, clamshells, single-leg balance) + light quad work (goblet squats, lunges) + pulling movements + core stability",
+      "garmin_id": 1409625551,
+      "name": "2025-12-20 - Strength: Session A",
+      "session_role": "A",
+      "focus_areas": "Key Focus: Split Squat (3\u00d78/leg). Supporting: Lateral lunge (3\u00d78/leg), Calf raises straight (3\u00d712), bent (3\u00d712). Upper: Push/Pull superset (DB Press + Rows 3\u00d78). Trunk: Side plank (3\u00d730s)",
       "intensity": "full",
-      "generated_at": "2025-12-12T12:06:46.976197"
+      "generated_at": "2025-12-13T21:18:56.648498"
     }
   },
   "mobility": {},
@@ -81,23 +78,22 @@
   },
   "week_snapshots": {
     "2025-12-08": {
-      "running_fingerprint": "2025-12-12:Run: 40 min E:False|2025-12-14:Run: 45 min E:False",
+      "running_fingerprint": "2025-12-14:Run: 45 min E:False|2025-12-14:Run: 45 min E:False",
       "strength_dates": [
-        "2025-12-11",
         "2025-12-13"
       ],
       "recovery_concern": false,
-      "generated_at": "2025-12-11T10:23:26.931247"
+      "generated_at": "2025-12-13T21:17:46.595242"
     },
     "2025-12-15": {
-      "running_fingerprint": "2025-12-15:Run: 30-45 min E:False|2025-12-17:Run: 30-45 min E:False|2025-12-19:Run: 30-45 min E:False|2025-12-21:Run: 40-55 min E:False",
+      "running_fingerprint": "2025-12-15:Run: 30-45 min E:False|2025-12-15:Run: 30-45 min E:False|2025-12-17:Run: 30-45 min E:False|2025-12-17:Run: 30-45 min E:False|2025-12-19:Run: 30-45 min E:False|2025-12-19:Run: 30-45 min E:False|2025-12-21:Run: 40-55 min E:False",
       "strength_dates": [
         "2025-12-16",
         "2025-12-18",
         "2025-12-20"
       ],
       "recovery_concern": false,
-      "generated_at": "2025-12-12T12:06:46.976350"
+      "generated_at": "2025-12-13T21:18:56.648533"
     }
   },
   "2025-12-21": {

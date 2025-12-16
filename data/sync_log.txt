@@ -12014,3 +12014,355 @@ Strength sessions planned for: 2025-12-16, 2025-12-18, 2025-12-20
 
 No new supplemental workouts to generate
 ---
+[2025-12-13 00:06:27] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-13: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-12 to 2025-12-13
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-12 to 2025-12-13...
+  Found 1 activities
+Fetching sleep data from 2025-12-12 to 2025-12-13...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 1 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 1 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-12
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 95 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-12 to 2025-12-13...
+  Found 1 days of step data
+Fetching progress summary from 2025-12-12 to 2025-12-13...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 1 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 1 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 1 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 1 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 11 total
+  Running: 5 runs, 16.3 miles, 2.8 hrs
+           Avg pace: 10:13/mile
+  Walking: 4 walks, 3.1 miles
+
+Sleep: 14 nights
+  Avg duration: 7.4 hrs
+  Avg sleep score: 58/100
+
+VO2 Max: 49.7 ml/kg/min (most recent)
+
+Weight: 170.8 lbs (most recent)
+
+Resting HR: 43 bpm (most recent), 46 bpm avg
+
+============================================================
+Last updated: 2025-12-13T05:05:20.672881+00:00
+============================================================
+
+✓ Sync complete!
+
+Checking for new FinalSurge workouts to generate...
+No new FinalSurge workouts to generate
+
+Checking for supplemental workouts to generate...
+
+============================================================
+Checking current week (2025-12-08)...
+============================================================
+
+Running schedule for week of 2025-12-08:
+     2025-12-14: Run: 45 min E [FINAL]
+  🤖 AI selecting optimal strength days and focus areas...
+      (Final running day: 2025-12-14 - strength must be scheduled before this)
+    • 2025-12-10 (full): Upper body emphasis: pulling (rows, pull variations, rear delts) + pushing (push-ups, overhead press) + core anti-rotation (pallof press, bird dogs)
+        Rationale: Wednesday is 4 days before Sunday's easy run - ample recovery time. Upper body focus since lower body was trained Monday. This balances weekly coverage.
+    • 2025-12-12 (full): Full body integration: compound movements (goblet squats, step-ups) + calf strength (single-leg calf raises) + core anti-extension (planks, dead bugs) + light upper body maintenance
+        Rationale: Friday is 2 days before Sunday's easy run - sufficient recovery. Full body session completes weekly coverage. Easy run pace on Sunday tolerates this proximity.
+    • 2025-12-13 (moderate): Posterior chain emphasis: glute activation (hip thrusts, bridges) + hamstring strength (RDLs, Nordic curls) + single-leg stability (split squats, single-leg deadlifts) + hip stabilizers
+        Rationale: Saturday is 1 day before Sunday's easy run - moderate intensity ensures no interference. Posterior chain focus rotates from Monday's lower body session, completing the training cycle.
+
+    Weekly coverage: This 3-session week provides comprehensive coverage: Monday targeted lower body/posterior chain, Wednesday focuses on upper body + core anti-rotation, Friday delivers full-body integration with calf emphasis, and Saturday completes the cycle with posterior chain work. All major muscle groups addressed with running-specific priorities (posterior chain, single-leg work, hip stability) distributed across sessions.
+
+📋 AI scheduling notes: With only one EASY run scheduled (Sunday), this is an optimal week for 3 strength sessions. Sessions are well-spaced (Wed, Fri, Sat) with Saturday using moderate intensity due to next-day running. Easy running pace tolerates this proximity. The programming creates a complete training cycle while supporting running performance.
+
+Strength sessions planned for: 2025-12-10, 2025-12-12, 2025-12-13
+
+🔄 Regenerating strength workouts: FinalSurge schedule changed
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  🗑 Deleted Garmin workout 1407883520
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  🗑 Deleted Garmin workout 1407883581
+  Removed: 2025-12-11, 2025-12-13
+  ⏭ Skipping 2025-12-10 (past)
+  ⏭ Skipping 2025-12-12 (past)
+  🤖 Generating AI-powered moderate intensity workout for 2025-12-13...
+      Focus: Posterior chain emphasis: glute activation (hip thrusts, bridges) + hamstring strength (RDLs, Nordic curls) + single-leg stability (split squats, single-leg deadlifts) + hip stabilizers
+
+Workouts to generate:
+  • 2025-12-13: 2025-12-13 - Strength: Full Body (30 min)
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+✓ Successfully authenticated with Garmin Connect (using tokens)
+
+Uploading strength workout for 2025-12-13...
+Scheduling workout 1408940127 to 2025-12-13...
+✓ Scheduled workout 1408940127 to 2025-12-13
+  📄 Saved: /data/data/com.termux/files/home/running-coach/data/workouts/strength/2025-12-13.md
+
+============================================================
+Checking next week (2025-12-15)...
+============================================================
+
+Running schedule for week of 2025-12-15:
+     2025-12-15: Run: 30-45 min E
+     2025-12-17: Run: 30-45 min E
+     2025-12-19: Run: 30-45 min E
+     2025-12-21: Run: 40-55 min E [FINAL]
+  🤖 AI selecting optimal strength days and focus areas...
+      (Final running day: 2025-12-21 - strength must be scheduled before this)
+    • 2025-12-16 (full): Full body emphasis: Upper body pushing (push-ups, overhead press) + pulling (rows, pull-ups) + core anti-rotation (pallof press, side planks) + light lower body accessory (calf raises, glute bridges)
+        Rationale: Tuesday allows 48+ hours since last strength (Dec 9) and falls between two easy runs. Upper body focus complements recent lower body session while including light lower body maintenance.
+    • 2025-12-18 (full): Lower body emphasis: Single-leg strength (split squats, step-ups, single-leg RDLs) + hip stabilizers (lateral band work, clamshells) + core anti-extension (planks, deadbugs)
+        Rationale: Thursday provides 2-day spacing from previous strength. Lower body focus balances the week's programming. Easy run Friday allows adequate recovery.
+    • 2025-12-20 (full): Posterior chain emphasis: Glute-focused work (hip thrusts, Romanian deadlifts) + hamstring strength (Nordic curls or sliders) + core rotational work (woodchops, Russian twists) + calf strength
+        Rationale: Saturday provides 2-day spacing and falls before Sunday's easy run. Posterior chain focus completes balanced weekly coverage and addresses running-specific muscle groups not fully covered earlier.
+
+    Weekly coverage: Three sessions provide comprehensive coverage: Session 1 prioritizes upper body (pushing/pulling) with light lower maintenance; Session 2 emphasizes single-leg stability and hip stabilizers; Session 3 targets posterior chain (glutes/hamstrings) and calves. Core work rotates through anti-rotation, anti-extension, and rotational patterns. All major muscle groups addressed with running-specific priorities.
+
+📋 AI scheduling notes: All running this week is easy-paced with no quality sessions - this is an IDEAL week for 3 full-intensity strength sessions. No scheduling conflicts, good spacing (2 days between sessions), and all sessions fall between easy runs allowing adequate recovery. This easy running week is an opportunity to build strength capacity.
+
+Strength sessions planned for: 2025-12-16, 2025-12-18, 2025-12-20
+  ⏭ Strength for 2025-12-16 already generated
+  ⏭ Strength for 2025-12-18 already generated
+  ⏭ Strength for 2025-12-20 already generated
+
+No new supplemental workouts to generate
+
+============================================================
+✓ Successfully created supplemental workouts:
+  • 2025-12-13: 2025-12-13 - Strength: Full Body (ID: 1408940127)
+============================================================
+
+💪 New strength/mobility workouts created and scheduled!
+---
+[2025-12-13 06:06:50] Sync attempt (exit code: 0)
+  Warning: Error fetching sleep for 2025-12-13: TypeError
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-12-12 to 2025-12-13
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-12-12 to 2025-12-13...
+  Found 1 activities
+Fetching sleep data from 2025-12-12 to 2025-12-13...
+  Found 1 sleep sessions
+Fetching VO2 max data...
+  Found 0 VO2 max readings
+Fetching weight data...
+  Found 0 weight readings
+Fetching resting heart rate data...
+  Found 2 resting HR readings
+Fetching HRV data...
+  Found 1 HRV readings
+Fetching training readiness data...
+  Found 2 readiness readings
+Fetching stress data...
+  Found 2 stress readings
+Fetching SpO2 data...
+  Found 2 SpO2 readings
+Fetching body battery data...
+  Found 2 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-13
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 93 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-12-12 to 2025-12-13...
+  Found 2 days of step data
+Fetching progress summary from 2025-12-12 to 2025-12-13...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 1 records
+  ✓ Sleep: 1 records
+  ⚠ VO2 Max: 0 records
+  ⚠ Weight: 0 records
+  ✓ Resting HR: 2 records
+  ✓ HRV: 1 records
+  ✓ Training Readiness: 2 records
+  ✓ Stress: 2 records
+  ✓ SpO2: 2 records
+  ✓ Body Battery: 2 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 2 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 11 total
+  Running: 5 runs, 16.3 miles, 2.8 hrs
+           Avg pace: 10:13/mile
+  Walking: 4 walks, 3.1 miles
+
+Sleep: 14 nights
+  Avg duration: 7.4 hrs
+  Avg sleep score: 58/100
+
+VO2 Max: 49.7 ml/kg/min (most recent)
+
+Weight: 170.8 lbs (most recent)
+
+Resting HR: 50 bpm (most recent), 47 bpm avg
+
+============================================================
+Last updated: 2025-12-13T11:05:10.005118+00:00
+============================================================
+
+✓ Sync complete!
+
+Checking for new FinalSurge workouts to generate...
+No new FinalSurge workouts to generate
+
+Checking for supplemental workouts to generate...
+
+============================================================
+Checking current week (2025-12-08)...
+============================================================
+
+Running schedule for week of 2025-12-08:
+     2025-12-14: Run: 45 min E [FINAL]
+  🤖 AI selecting optimal strength days and focus areas...
+      (Final running day: 2025-12-14 - strength must be scheduled before this)
+    • 2025-12-13 Session B (moderate): Key Focus: DB RDL. Supporting: Single-leg RDL, Calf raises. Upper: Horizontal push (DB press), Vertical pull (lat pulldown). Trunk: Anti-rotation (Pallof press)
+        Rationale: Day before easy run warrants moderate intensity. Session B (hinge-dominant) complements Monday's Session A (squat). Foundation phase = DB RDL as primary hinge pattern. Recovery phase = maintain quality movement without aggressive loading.
+
+    Weekly coverage: squat ✓ (Mon goblet), hinge ✓ (Today DB RDL), single-leg ✓ (Mon split squat + Today SL RDL), push ✓, pull ✓, calves ✓, trunk ✓
+
+📋 AI scheduling notes: Recovery week 2 post-marathon. Already completed Session A (Lower Body) on Mon 12/9. Adding Session B today (Sat 12/13) provides 2 sessions/week with 3+ days spacing. Light day tomorrow (45 min E) allows for moderate intensity today. Weekly coverage complete across all movement patterns.
+
+Strength sessions planned for: 2025-12-13
+  ⏭ Skipping 2025-12-13 (today - use --force to regenerate)
+
+No new supplemental workouts to generate
+
+============================================================
+Checking next week (2025-12-15)...
+============================================================
+
+Running schedule for week of 2025-12-15:
+     2025-12-15: Run: 30-45 min E
+     2025-12-17: Run: 30-45 min E
+     2025-12-19: Run: 30-45 min E
+     2025-12-21: Run: 40-55 min E [FINAL]
+  🤖 AI selecting optimal strength days and focus areas...
+      (Final running day: 2025-12-21 - strength must be scheduled before this)
+    • 2025-12-16 Session A (full): Key Focus: Goblet Squat (progress load from previous sessions). Supporting: Split squat (unilateral). Upper: Horizontal push (push-ups/DB bench). Trunk: Anti-extension (plank variations)
+        Rationale: Week 3 Base Building phase - good recovery window, day after easy run. Progress goblet squat loads while maintaining quality mechanics. Full session supports volume progression.
+    • 2025-12-20 Session B (full): Key Focus: DB Romanian Deadlift (bilateral hinge progression). Supporting: Single-leg RDL (light, unilateral hinge). Upper: Vertical pull (band rows/inverted rows). Trunk: Anti-rotation (Pallof press, bird dogs)
+        Rationale: Day before easy run (Sun) - full intensity appropriate. 4 days after Session A provides adequate recovery. Hinge emphasis complements squat-focused Session A.
+
+    Weekly coverage: squat ✓ (goblet, split), hinge ✓ (DB RDL, SL-RDL), single-leg ✓ (split squat, SL-RDL), push ✓ (horizontal), pull ✓ (vertical rows), calves ✓ (can add 2x15 straight+bent each session), trunk ✓ (anti-extension A, anti-rotation B)
+
+📋 AI scheduling notes: Optimal 2-session week during Base Building. All easy runs create low running stress, allowing full-intensity strength work. Tuesday/Saturday spacing provides 4 days between sessions and avoids all running days (Mon/Wed/Fri/Sun).
+
+Strength sessions planned for: 2025-12-16, 2025-12-20
+  ⏭ Strength for 2025-12-16 already generated
+  ⏭ Strength for 2025-12-20 already generated
+
+No new supplemental workouts to generate
+---

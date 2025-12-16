@@ -457,7 +457,7 @@ def get_week_running_schedule(health_cache: Dict[str, Any], week_start: datetime
     return sorted(running_workouts, key=lambda w: w.date)
 
 
-def find_strength_slots(running_schedule: List[RunningWorkout], week_start: datetime) -> List[str]:
+def find_strength_slots(running_schedule: List[RunningWorkout], week_start: datetime) -> List[Dict[str, Any]]:
     """
     Find optimal days for strength training based on running schedule.
 
@@ -465,11 +465,12 @@ def find_strength_slots(running_schedule: List[RunningWorkout], week_start: date
     - NEVER schedule strength on a running day
     - Place strength 48+ hours before quality running sessions
     - Avoid day after long runs
-    - Target 2 sessions per week
-    - Prefer early in the week (Mon/Tue) if possible
+    - 3 SESSIONS for easy weeks (all easy runs)
+    - 2 SESSIONS for quality weeks (has tempo/intervals/long run)
+    - Prefer spacing sessions 2+ days apart
 
     Returns:
-        List of dates (YYYY-MM-DD) for strength sessions
+        List of dicts with date, session_role, intensity, focus_areas
     """
     # Get all dates in the week
     week_dates = [(week_start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)]
@@ -480,6 +481,10 @@ def find_strength_slots(running_schedule: List[RunningWorkout], week_start: date
     # Find quality run dates for additional buffer
     quality_dates = {w.date for w in running_schedule if w.is_quality}
     long_run_dates = {w.date for w in running_schedule if w.workout_type == 'long'}
+
+    # Determine if this is an easy week (no quality runs = 3 sessions)
+    is_easy_week = len(quality_dates) == 0 and len(long_run_dates) == 0
+    target_sessions = 3 if is_easy_week else 2
 
     # Calculate "bad" dates for strength
     bad_dates = set()
@@ -509,20 +514,52 @@ def find_strength_slots(running_schedule: List[RunningWorkout], week_start: date
 
     available.sort(key=day_priority)
 
-    # Return up to 2 strength days, spaced at least 2 days apart
+    # Select strength days, spaced at least 2 days apart
     strength_dates = []
     for date in available:
+        if len(strength_dates) >= target_sessions:
+            break
         if len(strength_dates) == 0:
             strength_dates.append(date)
-        elif len(strength_dates) == 1:
-            # Ensure at least 2 days apart
-            prev = datetime.strptime(strength_dates[0], "%Y-%m-%d")
+        else:
+            # Ensure at least 2 days apart from all previous
             curr = datetime.strptime(date, "%Y-%m-%d")
-            if abs((curr - prev).days) >= 2:
+            too_close = False
+            for prev_date in strength_dates:
+                prev = datetime.strptime(prev_date, "%Y-%m-%d")
+                if abs((curr - prev).days) < 2:
+                    too_close = True
+                    break
+            if not too_close:
                 strength_dates.append(date)
-                break
 
-    return strength_dates
+    # Sort by date and assign session roles
+    strength_dates.sort()
+    session_roles = ["A", "B", "C"]
+
+    # Build result with session roles and default focus areas
+    result = []
+    for i, date in enumerate(strength_dates):
+        role = session_roles[i] if i < len(session_roles) else "A"
+        # Last session before Sunday run should be moderate intensity
+        intensity = "moderate" if i == len(strength_dates) - 1 and is_easy_week else "full"
+
+        # Default focus areas based on session role
+        if role == "A":
+            focus = "Key Focus: Goblet squat (4x8-10). Supporting: Reverse lunge, Half-kneeling press. Trunk: Dead bug"
+        elif role == "B":
+            focus = "Key Focus: DB RDL (4x8-10). Supporting: Single-leg RDL, Chest-supported row. Trunk: Pallof press"
+        else:  # C
+            focus = "Key Focus: RFESS (3x8/leg). Supporting: Step-ups, KB swings. Trunk: Suitcase carry"
+
+        result.append({
+            "date": date,
+            "session_role": role,
+            "intensity": intensity,
+            "focus_areas": focus
+        })
+
+    return result
 
 
 def find_mobility_slots(running_schedule: List[RunningWorkout], strength_dates: List[str], week_start: datetime) -> List[Tuple[str, str]]:
@@ -1149,25 +1186,17 @@ def generate_week_supplemental_workouts(
         if not strength_slots:
             if not quiet:
                 print(f"  ↩ AI scheduling failed, falling back to code-based selection")
-            # Fallback: use code-based selection with default focus
-            code_dates = find_strength_slots(running_schedule, week_start)
+            # Fallback: use code-based selection (now returns dicts with session_role)
+            strength_slots = find_strength_slots(running_schedule, week_start)
             # Filter out dates ON the final running date (but day before is OK)
             if final_running_date:
-                code_dates = [d for d in code_dates if d != final_running_date]
-            strength_slots = [
-                {"date": d, "focus_areas": None, "intensity": "full"}
-                for d in code_dates
-            ]
+                strength_slots = [s for s in strength_slots if s["date"] != final_running_date]
     else:
-        # Use code-based selection
-        code_dates = find_strength_slots(running_schedule, week_start)
+        # Use code-based selection (now returns dicts with session_role)
+        strength_slots = find_strength_slots(running_schedule, week_start)
         # Filter out dates ON the final running date (but day before is OK)
         if final_running_date:
-            code_dates = [d for d in code_dates if d != final_running_date]
-        strength_slots = [
-            {"date": d, "focus_areas": None, "intensity": "full"}
-            for d in code_dates
-        ]
+            strength_slots = [s for s in strength_slots if s["date"] != final_running_date]
 
     strength_dates = [s["date"] if isinstance(s, dict) else s[0] for s in strength_slots]
 

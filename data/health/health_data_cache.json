@@ -1,7 +1,115 @@
 {
-  "last_updated": "2025-12-13T01:28:16.636196+00:00",
-  "last_sync_date": "2025-12-12",
+  "last_updated": "2025-12-15T20:31:59.735299+00:00",
+  "last_sync_date": "2025-12-15",
   "activities": [
+    {
+      "activity_id": 21265422196,
+      "date": "2025-12-15T12:22:50",
+      "activity_name": "Lee County - 2025-12-15 - Easy Run 45min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2758.79296875,
+      "distance_miles": 4.571197,
+      "calories": 522.0,
+      "avg_heart_rate": 140.0,
+      "max_heart_rate": 159.0,
+      "avg_speed": 5.965919,
+      "pace_per_mile": 10.058609,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 4.571153,
+          "duration_seconds": 2758.793,
+          "avg_heart_rate": 140.0,
+          "max_heart_rate": 159.0,
+          "avg_speed_mph": 5.965919,
+          "pace_per_mile": 10.058705,
+          "avg_cadence": 146.90625,
+          "avg_power": 305.0,
+          "calories": 522.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1445.0,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1230.776,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21256837219,
+      "date": "2025-12-14T10:22:30",
+      "activity_name": "Lee County - 2025-12-14 - Easy Run 45min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2785.5830078125,
+      "distance_miles": 4.598469,
+      "calories": 553.0,
+      "avg_heart_rate": 148.0,
+      "max_heart_rate": 161.0,
+      "avg_speed": 5.94355,
+      "pace_per_mile": 10.096052,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 4.598469,
+          "duration_seconds": 2785.583,
+          "avg_heart_rate": 148.0,
+          "max_heart_rate": 161.0,
+          "avg_speed_mph": 5.94355,
+          "pace_per_mile": 10.096052,
+          "avg_cadence": 147.796875,
+          "avg_power": 295.0,
+          "calories": 553.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 619.973,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1835.596,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 265.976,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 173
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 183
+        }
+      ]
+    },
     {
       "activity_id": 21241939209,
       "date": "2025-12-12T18:41:35",
@@ -25352,6 +25460,36 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-12-15",
+      "total_duration_minutes": 410.0,
+      "light_sleep_minutes": 288.0,
+      "deep_sleep_minutes": 68.0,
+      "rem_sleep_minutes": 54.0,
+      "awake_minutes": 88.0,
+      "sleep_score": 64,
+      "deep_sleep_percentage": 16.59
+    },
+    {
+      "date": "2025-12-14",
+      "total_duration_minutes": 464.7,
+      "light_sleep_minutes": 334.0,
+      "deep_sleep_minutes": 69.0,
+      "rem_sleep_minutes": 62.0,
+      "awake_minutes": 162.0,
+      "sleep_score": 53,
+      "deep_sleep_percentage": 14.84
+    },
+    {
+      "date": "2025-12-13",
+      "total_duration_minutes": 311.0,
+      "light_sleep_minutes": 235.0,
+      "deep_sleep_minutes": 61.0,
+      "rem_sleep_minutes": 15.0,
+      "awake_minutes": 11.0,
+      "sleep_score": 57,
+      "deep_sleep_percentage": 19.61
+    },
+    {
       "date": "2025-12-12",
       "total_duration_minutes": 399.0,
       "light_sleep_minutes": 262.0,
@@ -29234,6 +29372,14 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2025-12-15T00:00:00",
+      "vo2_max": 49.7
+    },
+    {
+      "date": "2025-12-14T00:00:00",
+      "vo2_max": 49.6
+    },
+    {
       "date": "2025-12-12T00:00:00",
       "vo2_max": 49.7
     },
@@ -29807,6 +29953,18 @@
     }
   ],
   "resting_hr_readings": [
+    [
+      "2025-12-15T12:00:00",
+      47
+    ],
+    [
+      "2025-12-14T12:00:00",
+      48
+    ],
+    [
+      "2025-12-13T12:00:00",
+      48
+    ],
     [
       "2025-12-12T12:00:00",
       43
@@ -31369,6 +31527,36 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-12-15",
+      "weekly_avg": 66,
+      "last_night_avg": 66,
+      "last_night_5min_high": 86,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-14",
+      "weekly_avg": 66,
+      "last_night_avg": 66,
+      "last_night_5min_high": 95,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-13",
+      "weekly_avg": 67,
+      "last_night_avg": 60,
+      "last_night_5min_high": 82,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
     {
       "date": "2025-12-12",
       "weekly_avg": 69,
@@ -35272,6 +35460,36 @@
   ],
   "training_readiness": [
     {
+      "date": "2025-12-15",
+      "score": 35,
+      "level": "LOW",
+      "recovery_time": 1222,
+      "sleep_score": 64,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 326
+    },
+    {
+      "date": "2025-12-14",
+      "score": 17,
+      "level": "POOR",
+      "recovery_time": 1442,
+      "sleep_score": 53,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 279
+    },
+    {
+      "date": "2025-12-13",
+      "score": 39,
+      "level": "LOW",
+      "recovery_time": 622,
+      "sleep_score": 57,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 210
+    },
+    {
       "date": "2025-12-12",
       "score": 38,
       "level": "LOW",
@@ -39174,8 +39392,23 @@
   ],
   "stress_readings": [
     {
+      "date": "2025-12-15",
+      "avg_stress": 21,
+      "max_stress": 96
+    },
+    {
+      "date": "2025-12-14",
+      "avg_stress": 24,
+      "max_stress": 95
+    },
+    {
+      "date": "2025-12-13",
+      "avg_stress": 26,
+      "max_stress": 90
+    },
+    {
       "date": "2025-12-12",
-      "avg_stress": 25,
+      "avg_stress": 26,
       "max_stress": 92
     },
     {
@@ -41125,6 +41358,24 @@
     }
   ],
   "spo2_readings": [
+    {
+      "date": "2025-12-15",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2025-12-14",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2025-12-13",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
     {
       "date": "2025-12-12",
       "avg_spo2": 95.0,
@@ -43468,11 +43719,32 @@
   ],
   "body_battery": [
     {
+      "date": "2025-12-15",
+      "charged": 47,
+      "drained": 51,
+      "latest_level": 41,
+      "latest_timestamp": 1765823400000
+    },
+    {
+      "date": "2025-12-14",
+      "charged": 81,
+      "drained": 75,
+      "latest_level": 44,
+      "latest_timestamp": 1765774440000
+    },
+    {
+      "date": "2025-12-13",
+      "charged": 69,
+      "drained": 54,
+      "latest_level": 39,
+      "latest_timestamp": 1765688220000
+    },
+    {
       "date": "2025-12-12",
-      "charged": 45,
-      "drained": 77,
-      "latest_level": 15,
-      "latest_timestamp": 1765588680000
+      "charged": 58,
+      "drained": 81,
+      "latest_level": 11,
+      "latest_timestamp": 1765593540000
     },
     {
       "date": "2025-12-11",
@@ -45487,25 +45759,25 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-12-12",
-    "time_5k": 1484,
-    "time_10k": 3115,
-    "time_half_marathon": 6987,
-    "time_marathon": 15291
+    "date": "2025-12-15",
+    "time_5k": 1480,
+    "time_10k": 3108,
+    "time_half_marathon": 6975,
+    "time_marathon": 15266
   },
   "training_status": {
-    "date": "2025-12-12",
+    "date": "2025-12-15",
     "vo2_max": {
-      "date": "2025-12-12",
+      "date": "2025-12-15",
       "value": 50.0,
       "precise_value": 49.7
     },
     "training_load": {
-      "date": "2025-12-12",
-      "aerobic_low": 478.37842,
-      "aerobic_high": 567.8673,
+      "date": "2025-12-15",
+      "aerobic_low": 571.6552,
+      "aerobic_high": 377.72284,
       "anaerobic": 0.0,
-      "feedback": "ANAEROBIC_SHORTAGE"
+      "feedback": "AEROBIC_HIGH_SHORTAGE"
     },
     "training_status": {}
   },
@@ -45547,49 +45819,58 @@
       "garmin_id": 1406772190
     },
     {
-      "scheduled_date": "2025-12-11",
-      "name": "2025-12-11 - Strength: Upper Body + Core",
-      "description": "2025-12-11 - Strength: Upper Body + Core (35 min)\n\nWARMUP:\narm circles 10 each, scap push-ups x10, band pull-aparts x15, cat-cow x10\n\nMAIN WORK:\n- Push-ups: 3x12-15\n  (RPE 7, controlled tempo)\n- Bent-Over Dumbbell Row: 3x10-12\n  (RPE 7, squeeze at top)\n- Overhead Dumbbell Press: 3x8-10\n  (RPE 7)\n- Band Face Pulls: 3x15\n  (rear delts focus)\n- Glute Bridge: 2x15\n  (2s hold at top)\n- Calf Raises: 2x20\n  (slow eccentric)\n\nCORE:\nPallof press 3x10 each, dead bug 2x12, side plank 2x30s each\n\nNOTES:\nUpper body emphasis with anti-rotation core work",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1407883520
-    },
-    {
-      "scheduled_date": "2025-12-13",
-      "name": "2025-12-13 - Strength: Full Body",
-      "description": "2025-12-13 - Strength: Full Body (30 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x10, glute bridges x10, band pull-aparts x12\n\nMAIN WORK:\n- Single-Leg RDL: 3x8 each\n  (RPE 6)\n- Bulgarian Split Squat: 3x8 each\n  (RPE 6)\n- Dumbbell Row: 3x10\n  (RPE 6)\n- Lateral Band Walk: 2x12 steps each\n  (Hip stabilizers)\n- Clamshells: 2x15 each\n  (Band resistance)\n\nCORE:\nDead bug 2x10 each, plank 2x30s, pallof press 2x8 each side\n\nNOTES:\nFocus on control and stability through posterior chain movements",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 30,
-      "garmin_id": 1407883581
-    },
-    {
       "scheduled_date": "2025-12-16",
-      "name": "2025-12-16 - Strength: Full Body",
-      "description": "2025-12-16 - Strength: Full Body (35 min)\n\nWARMUP:\nLeg swings 10 each, air squats x10, glute bridges x10, band pull-aparts x12\n\nMAIN WORK:\n- Bulgarian Split Squat: 3x8 each\n  (RPE 7, DBs)\n- Single-Leg RDL: 3x10 each\n  (RPE 7, DB)\n- Single-Leg Calf Raise: 3x12 each\n  (Slow tempo)\n- Push-ups: 3x12\n  (RPE 6)\n- Band Rows: 3x15\n  (Squeeze scapula)\n\nCORE:\nPallof press 3x10 each, dead bug 2x10 each, side plank 2x30s each\n\nNOTES:\nEmphasizes single-leg stability and posterior chain without compromising Wednesday's run.",
+      "name": "2025-12-16 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
       "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1408633882
+      "domain": "mobility",
+      "duration_min": 30,
+      "garmin_id": 1409157491
     },
     {
       "scheduled_date": "2025-12-18",
-      "name": "2025-12-18 - Strength: Upper Body Push/Pull",
-      "description": "2025-12-18 - Strength: Upper Body Push/Pull (35 min)\n\nWARMUP:\nArm circles 10 each, band pull-aparts x15, shoulder taps x10, scapular push-ups x8\n\nMAIN WORK:\n- Push-ups: 3x12-15\n  (RPE 7, controlled tempo)\n- Single-arm DB Row: 3x10 each\n  (RPE 7)\n- DB Overhead Press: 3x10\n  (RPE 7)\n- Band Face Pulls: 3x15\n  (Squeeze shoulder blades)\n- Tricep Dips: 2x10-12\n  (Bench or chair)\n\nCORE:\nDead bug 3x10, plank 2x45s, pallof press 2x10 each\n\nNOTES:\nFocus on quality reps and full range of motion.",
+      "name": "2025-12-18 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
       "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1408633888
+      "domain": "mobility",
+      "duration_min": 30,
+      "garmin_id": 1409157513
     },
     {
       "scheduled_date": "2025-12-20",
-      "name": "2025-12-20 - Strength: Full Body",
-      "description": "2025-12-20 - Strength: Full Body (35 min)\n\nWARMUP:\nLeg swings 10 each, clamshells 10 each, glute bridges x12, bodyweight squats x10\n\nMAIN WORK:\n- Goblet Squat: 3x12\n  (RPE 7)\n- Single-Leg RDL: 3x8 each\n  (Balance focus)\n- Reverse Lunge: 3x10 each\n  (RPE 7)\n- Band Lateral Walk: 2x12 each\n  (Hip stabilizers)\n- Bent-Over DB Row: 3x12\n  (RPE 7)\n- Push-Up: 3x10-12\n  (Controlled tempo)\n- Band Pull-Apart: 2x15\n  (Shoulder health)\n\nCORE:\nDead bug 2x10, pallof press 2x10 each, plank 2x30s\n\nNOTES:\nFocus on hip stability and full-body coordination to support running mechanics.",
+      "name": "2025-12-20 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
+      "source": "auto_generated",
+      "domain": "mobility",
+      "duration_min": 30,
+      "garmin_id": 1409157523
+    },
+    {
+      "scheduled_date": "2025-12-16",
+      "name": "2025-12-16 - Strength: Session A",
+      "description": "[BUILD | Foundation | Session A] (30-35 min)\nSquat + Push emphasis\n\nWARMUP:\nCat-cow x8, BW squats x10, leg swings 10ea, band pull-aparts x12\n\nKEY FOCUS:\n- Goblet Squat: 4x8, rest 90-120s (RPE 6-8, tempo 3-1-1)\n  Progression: Add 1 rep/set at RPE <7, then +5-10lb\n\nSUPPORTING:\n- Push-ups: 3x10-12, rest 60s (trunk rigidity)\n- DB RDL: 3x10, rest 60s (posterior chain balance)\n\nACCESSORY:\n- Calf Raises (straight): 3x15\n- Dead Bug: 2x10 each (anti-extension)\n- Plank: 2x30s\n\nNOTES: Expected soreness: minimal. Scale if runs feel heavy.",
       "source": "auto_generated",
       "domain": "strength",
       "duration_min": 35,
-      "garmin_id": 1408633891
+      "garmin_id": 1409625545
+    },
+    {
+      "scheduled_date": "2025-12-18",
+      "name": "2025-12-18 - Strength: Session B",
+      "description": "[BUILD | Foundation | Session B] (30-35 min)\nHinge + Pull emphasis\n\nWARMUP:\nHip circles 10ea, good mornings x10, band pull-aparts x15\n\nKEY FOCUS:\n- DB RDL: 4x8, rest 90-120s (RPE 6-8)\n  Progression: Add 1 rep/set at RPE <7, then +load\n\nSUPPORTING:\n- Chest-supported Row: 3x12, rest 60s (posture, isolates back)\n- Single-leg RDL: 3x6 each, rest 60s (unilateral hinge)\n\nACCESSORY:\n- Bent-knee Calf Raise: 3x15\n- Pallof Press: 2x10 each (anti-rotation)\n- Bird Dog: 2x8 each\n\nNOTES: Expected soreness: minimal. Hinge focus, pull for posture.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1409625546
+    },
+    {
+      "scheduled_date": "2025-12-20",
+      "name": "2025-12-20 - Strength: Session A",
+      "description": "[BUILD | Foundation | Session A] (30-35 min)\nSquat + Push emphasis\n\nWARMUP:\nCat-cow x8, BW squats x10, leg swings 10ea, band pull-aparts x12\n\nKEY FOCUS:\n- Goblet Squat: 4x8, rest 90-120s (RPE 6-8, tempo 3-1-1)\n  Progression: Add 1 rep/set at RPE <7, then +5-10lb\n\nSUPPORTING:\n- Push-ups: 3x10-12, rest 60s (trunk rigidity)\n- DB RDL: 3x10, rest 60s (posterior chain balance)\n\nACCESSORY:\n- Calf Raises (straight): 3x15\n- Dead Bug: 2x10 each (anti-extension)\n- Plank: 2x30s\n\nNOTES: Expected soreness: minimal. Scale if runs feel heavy.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1409625551
     },
     {
       "scheduled_date": "2025-12-21",
@@ -45623,9 +45904,85 @@
     },
     {
       "scheduled_date": "2025-12-15",
-      "scheduled_datetime": null,
+      "scheduled_datetime": "2025-12-15T17:22:50",
       "name": "Run: 30-45 min E",
       "description": "Workout: Run",
+      "duration_seconds": 3600,
+      "location": null,
+      "all_day": false,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-19",
+      "scheduled_datetime": null,
+      "name": "Run: 30-45 min E",
+      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-18",
+      "scheduled_datetime": null,
+      "name": "2025-12-18 - Strength: Session B",
+      "description": "2025-12-18 - Strength: Session B [BUILD | Foundation | Session B] (35 min)\n\nWARMUP:\nBird dog 2x8/side\\, Glute bridge 12\\, Cossack squat 8/side\\, Band pull-apart 15\n\nKEY FOCUS:\n- Single-Leg RDL (DB): 3x8/leg\\, rest 90-120s\n  (RPE 6-7\\, tempo 3-1-1. Hinge focus\\, maintain neutral spine)\n  Progression: Add 1 rep/leg when RPE <6\\, then +2.5-5 lbs\n\nSUPPORTING:\n- DB RDL (bilateral): 3x10\\, rest 75s\n  (Posterior chain strength\\, complements SL RDL)\n- Chest-supported DB row: 3x10\\, rest 60s\n  (Posture\\, late-race upper body resilience)\n\nACCESSORY:\n- Dead bug: 3x8/side\n  (Anti-extension trunk control\\, 3-sec holds)\n- Calf raises: 2x15\n  (Eccentric control\\, 2-sec lower)\n\nNOTES:\nExpected soreness: minimal hamstring/glute. Complements 12/9 lower body session. Scale if Friday easy run feels heavy.\\\n\\\nSource: auto_generated",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar+garmin_template",
+      "workout_id": 1409435342,
+      "sport_type": "strength_training",
+      "workout_provider": null
+    },
+    {
+      "scheduled_date": "2025-12-18",
+      "scheduled_datetime": null,
+      "name": "2025-12-18 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s\\\n\\\nSource: auto_generated",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-17",
+      "scheduled_datetime": null,
+      "name": "Run: 30-45 min E",
+      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-16",
+      "scheduled_datetime": null,
+      "name": "2025-12-16 - Strength: Session A",
+      "description": "2025-12-16 - Strength: Session A [BUILD | Foundation | Session A] (35 min)\n\nWARMUP:\nCat-cow x8\\, Glute bridge x10\\, Goblet squat x10 light\\, Band pull-apart x15\n\nKEY FOCUS:\n- Goblet Squat: 3x8-10\\, rest 90-120s\n  (RPE 6-8\\, tempo 3-1-1 (3s down\\, 1s pause\\, 1s up))\n  Progression: Add 1 rep/set when RPE <7\\, then +5lbs\n\nSUPPORTING:\n- Split Squat ISO Hold: 3x20s/leg\\, rest 60-90s\n  (Single-leg stability\\, propulsion strength)\n- Half-Kneeling DB Press: 3x8\\, rest 60s\n  (Trunk stability during arm drive)\n- Chest-Supported DB Row: 3x10\\, rest 60s\n  (Posture maintenance\\, late-race resilience)\n\nACCESSORY:\n- Pallof Press (anti-rotation): 2x10/side\n  (Band tension\\, control tempo)\n- Single-leg Calf Raise: 2x12/leg\n  (Pause at top\\, eccentric control)\n\nNOTES:\nExpected soreness: minimal. Easy runs Wed/Fri should feel fresh. Scale volume if runs feel heavy.\\\n\\\nSource: auto_generated",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar+garmin_template",
+      "workout_id": 1409435341,
+      "sport_type": "strength_training",
+      "workout_provider": null
+    },
+    {
+      "scheduled_date": "2025-12-16",
+      "scheduled_datetime": null,
+      "name": "2025-12-16 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s\\\n\\\nSource: auto_generated",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-15",
+      "scheduled_datetime": null,
+      "name": "Run: 30-45 min E",
+      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
       "duration_seconds": null,
       "location": null,
       "all_day": true,
@@ -45635,20 +45992,30 @@
       "scheduled_date": "2025-12-14",
       "scheduled_datetime": null,
       "name": "Run: 45 min E",
-      "description": "Workout: Run",
+      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
       "duration_seconds": null,
       "location": null,
       "all_day": true,
       "source": "ics_calendar"
     },
     {
-      "scheduled_date": "2025-12-12",
-      "scheduled_datetime": "2025-12-12T23:41:35",
-      "name": "Run: 40 min E",
-      "description": "Workout: Run",
-      "duration_seconds": 3600,
+      "scheduled_date": "2025-12-13",
+      "scheduled_datetime": null,
+      "name": "2025-12-13 - Mobility: Comprehensive",
+      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s\\\n\\\nSource: auto_generated",
+      "duration_seconds": null,
       "location": null,
-      "all_day": false,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-13",
+      "scheduled_datetime": null,
+      "name": "2025-12-13 - Strength: Full Body",
+      "description": "2025-12-13 - Strength: Full Body (30 min)\n\nWARMUP:\nleg swings 10 each\\, glute bridges x10\\, bird dogs x8\\, clamshells x10\n\nMAIN WORK:\n- Single-leg RDL: 3x8/side\n  (RPE 6)\n- Bulgarian split squat: 3x10/side\n  (controlled tempo)\n- Hip thrust: 3x12\n  (2-sec hold at top)\n- Band pull-apart: 2x15\n  (RPE 5)\n- Dumbbell row: 2x10/side\n  (RPE 6)\n\nCORE:\nDead bug 2x10\\, side plank 2x20s\\, pallof press 2x8\n\nNOTES:\nEmphasizes posterior chain and single-leg stability without repeating recent lower body work\\\n\\\nSource: auto_generated",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
       "source": "ics_calendar"
     },
     {
@@ -45760,8 +46127,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 522768.58895874023,
-      "total_activities": 64,
+      "total_distance_meters": 537525.6988220215,
+      "total_activities": 66,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -45785,8 +46152,26 @@
   ],
   "daily_steps": [
     {
+      "date": "2025-12-15",
+      "total_steps": 10038,
+      "goal_steps": 10130,
+      "goal_met": false
+    },
+    {
+      "date": "2025-12-14",
+      "total_steps": 14895,
+      "goal_steps": 9600,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-13",
+      "total_steps": 7570,
+      "goal_steps": 9820,
+      "goal_met": false
+    },
+    {
       "date": "2025-12-12",
-      "total_steps": 14783,
+      "total_steps": 15312,
       "goal_steps": 9200,
       "goal_met": true
     },
@@ -46032,8 +46417,8 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-11-12",
-    "end_date": "2025-12-12",
+    "start_date": "2025-11-15",
+    "end_date": "2025-12-15",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,

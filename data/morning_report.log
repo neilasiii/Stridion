@@ -3400,3 +3400,163 @@ To force sync, run: bash bin/smart_sync.sh --force
 [2025-12-12 09:11:49] Sending notification...
 [2025-12-12 09:11:49] Notification sent
 [2025-12-12 09:11:49] === Morning Report Complete ===
+[2025-12-13 09:00:01] === Morning Report Started ===
+[2025-12-13 09:00:01] Syncing Garmin data...
+Cache is 100 minutes old (max: 30). Syncing...
+API call failed for path '/workout-service/workout/1406610206': Error in request: 404 Client Error: Not Found for url: https://connectapi.garmin.com/workout-service/workout/1406610206 (status=404)
+Garmin Connect Health Data Sync
+============================================================
+Date range: 2025-11-13 to 2025-12-13
+============================================================
+
+Authenticating with Garmin Connect...
+✓ Loaded valid tokens from /data/data/com.termux/files/home/.garminconnect
+  ✓ Authentication successful
+
+Fetching activities from 2025-11-13 to 2025-12-13...
+  Found 22 activities
+Fetching sleep data from 2025-11-13 to 2025-12-13...
+  Found 31 sleep sessions
+Fetching VO2 max data...
+  Found 1 VO2 max readings
+Fetching weight data...
+  Found 8 weight readings
+Fetching resting heart rate data...
+  Found 31 resting HR readings
+Fetching HRV data...
+  Found 31 HRV readings
+Fetching training readiness data...
+  Found 31 readiness readings
+Fetching stress data...
+  Found 31 stress readings
+Fetching SpO2 data...
+  Found 31 SpO2 readings
+Fetching body battery data...
+  Found 31 body battery readings
+Fetching race predictions...
+  Found race predictions for 2025-12-13
+Fetching lactate threshold data...
+  Found lactate threshold data
+Fetching training status...
+  Found training status
+Fetching scheduled workouts...
+  Found 95 workout templates
+Fetching gear stats...
+  Found 6 gear items
+Fetching daily steps from 2025-11-13 to 2025-12-13...
+  Found 31 days of step data
+Fetching progress summary from 2025-11-13 to 2025-12-13...
+  Found progress summary (ATL: None, CTL: None, TSB: None)
+
+Downloading ICS calendars from URLs...
+  Fetching: FinalSurge Training Calendar
+    URL: https://log.finalsurge.com/delivery/ical/YGV6PZINYVRWVCK
+    Found 5 total events, 5 in sync window
+
+Importing local ICS calendar files...
+  Reading finalsurge.ics...
+    Found 3 total events, 3 in sync window
+  Merging 8 calendar events with Garmin workout templates...
+  Created 8 scheduled workouts with dates
+
+============================================================
+Fetch Summary
+============================================================
+  ✓ Activities: 22 records
+  ✓ Sleep: 31 records
+  ✓ VO2 Max: 1 records
+  ✓ Weight: 8 records
+  ✓ Resting HR: 31 records
+  ✓ HRV: 31 records
+  ✓ Training Readiness: 31 records
+  ✓ Stress: 31 records
+  ✓ SpO2: 31 records
+  ✓ Body Battery: 31 records
+  ✓ Race Predictions: Yes
+  ✓ Lactate Threshold: Yes
+  ✓ Training Status: Yes
+  ✓ Scheduled Workouts: 8 workouts
+  ✓ Gear Stats: 6 gear items
+  ✓ Daily Steps: 31 days
+  ✓ Progress Summary: Yes
+============================================================
+
+
+Merging with existing cache...
+
+Cache updated: /data/data/com.termux/files/home/running-coach/data/health/health_data_cache.json
+
+============================================================
+Health Data Summary (Last 14 Days)
+============================================================
+
+Activities: 11 total
+  Running: 5 runs, 16.3 miles, 2.8 hrs
+           Avg pace: 10:13/mile
+  Walking: 4 walks, 3.1 miles
+
+Sleep: 15 nights
+  Avg duration: 7.2 hrs
+  Avg sleep score: 58/100
+
+VO2 Max: 49.7 ml/kg/min (most recent)
+
+Weight: 170.8 lbs (most recent)
+
+Resting HR: 48 bpm (most recent), 46 bpm avg
+
+============================================================
+Last updated: 2025-12-13T14:00:42.842346+00:00
+============================================================
+
+✓ Sync complete!
+
+Checking for new FinalSurge workouts to generate...
+No new FinalSurge workouts to generate
+
+Checking for supplemental workouts to generate...
+Error from Claude: 
+Error from Claude: 
+
+============================================================
+Checking current week (2025-12-08)...
+============================================================
+
+Running schedule for week of 2025-12-08:
+     2025-12-14: Run: 45 min E [FINAL]
+  🤖 AI selecting optimal strength days and focus areas...
+      (Final running day: 2025-12-14 - strength must be scheduled before this)
+  ↩ AI scheduling failed, falling back to code-based selection
+
+Strength sessions planned for: 2025-12-08, 2025-12-10
+  ⏭ Skipping 2025-12-08 (past)
+  ⏭ Skipping 2025-12-10 (past)
+
+No new supplemental workouts to generate
+
+============================================================
+Checking next week (2025-12-15)...
+============================================================
+
+Running schedule for week of 2025-12-15:
+     2025-12-15: Run: 30-45 min E
+     2025-12-17: Run: 30-45 min E
+     2025-12-19: Run: 30-45 min E
+     2025-12-21: Run: 40-55 min E [FINAL]
+  🤖 AI selecting optimal strength days and focus areas...
+      (Final running day: 2025-12-21 - strength must be scheduled before this)
+  ↩ AI scheduling failed, falling back to code-based selection
+
+Strength sessions planned for: 2025-12-16, 2025-12-18
+  ⏭ Strength for 2025-12-16 already generated
+  ⏭ Strength for 2025-12-18 already generated
+
+No new supplemental workouts to generate
+[2025-12-13 09:01:02] Sync completed
+[2025-12-13 09:01:02] Generating AI report...
+AI error: Claude exit code 1: , using fallback
+[2025-12-13 09:01:12] Report generated successfully
+[2025-12-13 09:01:12] Notification: 2025-12-13 - Mobility: Comprehensive: Consider rest (readiness 39, sleep 5.2h)
+[2025-12-13 09:01:12] Sending notification...
+[2025-12-13 09:01:12] Notification sent
+[2025-12-13 09:01:12] === Morning Report Complete ===
