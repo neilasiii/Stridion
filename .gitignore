@@ -64,3 +64,4 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+config/gemini_api.env
