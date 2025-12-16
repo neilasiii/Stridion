@@ -449,17 +449,22 @@ Squat, Hinge, Single-leg, Push, Pull, Calves (straight+bent), Trunk
 
 ## SCHEDULING RULES
 
+**SESSION COUNT (CRITICAL - MUST FOLLOW):**
+- **3 SESSIONS**: Easy week (all easy runs, no tempo/intervals/long run). Variable sleep is FINE for 3 sessions.
+- **2 SESSIONS**: Quality week (has tempo, intervals, or long run) OR severely compromised recovery (RHR elevated >10% OR sleep <5 hours)
+
+If all runs are easy (E pace) AND recovery is not severely compromised, YOU MUST schedule 3 sessions.
+
 **HARD RULES:**
 1. NEVER schedule on running days
 2. Space sessions 2+ days apart
-3. Target 2-3 sessions/week
-4. Don't schedule ON final running day
+3. Don't schedule ON final running day
 
 **SOFT RULES:**
-5. Avoid day after long run
-6. Prefer Mon-Thu
-7. Compromised recovery = fewer/lighter sessions
-8. Day before quality = lighter intensity
+4. Avoid day after long run
+5. Prefer Mon-Thu for strength
+6. Compromised recovery = fewer/lighter sessions
+7. Day before quality run = lighter intensity
 
 ## OUTPUT FORMAT (JSON only)
 {{

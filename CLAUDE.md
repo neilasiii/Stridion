@@ -215,6 +215,30 @@ python3 src/morning_report.py --json             # JSON output with all data
 - Creates detailed markdown report with rationale
 - Falls back to rule-based recommendations if AI unavailable
 
+**Discord Bot Interface**
+
+```bash
+bash bin/start_discord_bot.sh            # Start Discord bot (manual)
+sudo systemctl status running-coach-bot  # Check systemd service status
+journalctl -u running-coach-bot -f       # View bot logs
+```
+
+**Available Commands:**
+- `/sync` - Sync Garmin health data
+- `/report` - Generate morning report
+- `/workout` - Show today's workouts
+- `/status` - View recovery metrics
+- `/ask <question>` - Ask AI coach a question
+- `/reset` - Start fresh conversation (resets session)
+- `/sessions` - View active session info
+
+**Session Management:**
+- Conversational coaching in #coach channel maintains context across messages
+- Each user has persistent session (24-hour inactivity timeout)
+- Automatic session cleanup every hour
+
+See [docs/DISCORD_BOT_SETUP_COMPLETE.md](docs/DISCORD_BOT_SETUP_COMPLETE.md) for complete setup guide.
+
 **Automation (Termux)**
 
 ```bash
