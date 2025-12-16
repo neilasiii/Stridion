@@ -354,22 +354,30 @@ vdot, paces = calculate_vdot_from_race('half', 1, 55, 4)
    - Metric cards, weather conditions
    - Opens via `termux-share`
 
-### 10. Automation System (Termux)
+### 10. Discord Bot & Automation
 
-**Location:** `bin/setup_cron.sh`
+**Location:** `src/discord_bot.py`, `bin/start_discord_bot.sh`
 
 **Features:**
-- Automated Garmin sync (every 6 hours)
-- Daily morning reports (9:00 AM)
-- Sync with notifications (`bin/sync_with_notification.sh`)
-- Logs to `data/sync_log.txt` and `data/morning_report.log`
+- Runs as systemd service on Debian LXC
+- Persistent conversational coaching sessions
+- Slash commands: `/sync`, `/report`, `/workout`, `/status`, `/ask`
+- Automatic session cleanup (24-hour timeout)
+- Smart sync with cache-aware data fetching
 
-**Recommended Cron Setup:**
+**Service Management:**
 ```bash
-# Incremental sync every 6 hours + morning report
-5 */6 * * * cd $HOME/running-coach && bash bin/sync_with_notification.sh
-0 9 * * * cd $HOME/running-coach && bash bin/morning_report.sh
+# Check service status
+sudo systemctl status running-coach-bot
+
+# View logs
+journalctl -u running-coach-bot -f
+
+# Restart service
+sudo systemctl restart running-coach-bot
 ```
+
+**Legacy Termux Scripts:** Archived in `bin/archive/termux/` for Android environments
 
 ---
 

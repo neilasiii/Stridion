@@ -176,15 +176,6 @@ bash bin/export_calendar.sh              # Next 14 days
 bash bin/export_calendar.sh --days 30    # Custom duration
 ```
 
-**Workout Library**
-
-```bash
-bash bin/workout_library.sh stats                    # Library statistics
-bash bin/workout_library.sh search --domain running  # Search workouts
-bash bin/workout_library.sh get <workout-id>         # Get details
-```
-
-19+ pre-built workouts across all domains. See [docs/AGENT_WORKOUT_LIBRARY_GUIDE.md](docs/AGENT_WORKOUT_LIBRARY_GUIDE.md).
 
 **Communication Preferences**
 
@@ -239,18 +230,14 @@ journalctl -u running-coach-bot -f       # View bot logs
 
 See [docs/DISCORD_BOT_SETUP_COMPLETE.md](docs/DISCORD_BOT_SETUP_COMPLETE.md) for complete setup guide.
 
-**Automation (Termux)**
+**Automation**
 
-```bash
-bash bin/setup_cron.sh                   # Setup automated sync + morning reports
-bash bin/sync_with_notification.sh       # Manual sync with notification (shows only NEW items)
-```
+The system runs on systemd with the Discord bot providing the primary interface. For legacy Termux scripts (Android), see `bin/archive/termux/README.md`.
 
-**Recommended Cron Setup:**
-```bash
-5 */6 * * * cd $HOME/running-coach && bash bin/sync_with_notification.sh  # Incremental sync
-0 9 * * * cd $HOME/running-coach && bash bin/morning_report.sh             # Morning report
-```
+**Current Setup:**
+- Discord bot runs as systemd service: `sudo systemctl status running-coach-bot`
+- Manual sync: `bash bin/sync_garmin_data.sh` or `bash bin/smart_sync.sh`
+- Morning reports: `bash bin/morning_report.sh` (can be run via cron if needed)
 
 ### Workout Management
 
