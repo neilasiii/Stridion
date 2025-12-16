@@ -468,6 +468,99 @@ async def status_command(interaction: discord.Interaction):
         await interaction.followup.send(f"❌ Error: {str(e)}")
 
 
+@bot.tree.command(name="location", description="Set your current location for weather forecasts")
+@app_commands.describe(location="City name (e.g., 'Miami, FL') or coordinates (e.g., '25.7617,-80.1918')")
+async def location_command(interaction: discord.Interaction, location: str):
+    """Set user's current location for weather."""
+    await interaction.response.defer(thinking=True)
+
+    try:
+        # Parse location - either city name or coordinates
+        location = location.strip()
+
+        if ',' in location and all(part.replace('.', '').replace('-', '').replace(' ', '').isdigit() for part in location.split(',')):
+            # Looks like coordinates (lat,lon)
+            try:
+                parts = [p.strip() for p in location.split(',')]
+                lat = float(parts[0])
+                lon = float(parts[1])
+
+                # Validate ranges
+                if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
+                    await interaction.followup.send("❌ Invalid coordinates. Latitude must be -90 to 90, longitude -180 to 180.")
+                    return
+
+                location_str = f"{lat},{lon}"
+                display_name = f"coordinates {lat}, {lon}"
+            except (ValueError, IndexError):
+                await interaction.followup.send("❌ Invalid coordinate format. Use: `latitude,longitude` (e.g., `25.7617,-80.1918`)")
+                return
+        else:
+            # City name - use geocoding API to get coordinates
+            try:
+                # Use Open-Meteo geocoding (free, no API key)
+                import urllib.parse
+                encoded_city = urllib.parse.quote(location)
+
+                proc = await asyncio.create_subprocess_exec(
+                    "curl", "-s", f"https://geocoding-api.open-meteo.com/v1/search?name={encoded_city}&count=1&language=en&format=json",
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE
+                )
+                stdout, _ = await asyncio.wait_for(proc.communicate(), timeout=10)
+
+                geo_data = json.loads(stdout.decode())
+
+                if not geo_data.get('results'):
+                    await interaction.followup.send(f"❌ Location '{location}' not found. Try being more specific (e.g., 'Miami, FL' or use coordinates).")
+                    return
+
+                result = geo_data['results'][0]
+                lat = result['latitude']
+                lon = result['longitude']
+                location_str = f"{lat},{lon}"
+                display_name = f"{result['name']}, {result.get('admin1', result.get('country', ''))}"
+
+            except Exception as e:
+                await interaction.followup.send(f"❌ Error looking up location: {str(e)}")
+                return
+
+        # Save to config file
+        user_location_file = PROJECT_ROOT / 'config' / 'user_location.env'
+        with open(user_location_file, 'w') as f:
+            f.write(f"# User's current location (set via Discord /location command)\n")
+            f.write(f"# Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"WEATHER_LATITUDE={lat}\n")
+            f.write(f"WEATHER_LONGITUDE={lon}\n")
+            f.write(f"LOCATION_NAME={display_name}\n")
+
+        # Test weather fetch
+        proc = await asyncio.create_subprocess_exec(
+            "python3", "src/get_weather.py", "--lat", str(lat), "--lon", str(lon),
+            cwd=PROJECT_ROOT,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=30)
+
+        if proc.returncode == 0:
+            weather = stdout.decode().strip()
+            embed = discord.Embed(
+                title="📍 Location Updated",
+                description=f"Weather location set to **{display_name}**",
+                color=discord.Color.green(),
+                timestamp=datetime.now()
+            )
+            embed.add_field(name="Current Weather", value=f"```{weather[:1000]}```", inline=False)
+            embed.set_footer(text="This will be used for morning reports and weather queries")
+            await interaction.followup.send(embed=embed)
+        else:
+            await interaction.followup.send(f"✓ Location set to **{display_name}**, but weather fetch failed.")
+
+    except Exception as e:
+        await interaction.followup.send(f"❌ Error: {str(e)}")
+
+
 @bot.tree.command(name="ask", description="Ask the AI coach a question")
 @app_commands.describe(question="Your training question")
 async def ask_command(interaction: discord.Interaction, question: str):
