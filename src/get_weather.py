@@ -164,14 +164,125 @@ Next 6 hours:"""
         print(f"Error parsing weather data: {e}", file=sys.stderr)
         return None
 
+def get_location_from_ip():
+    """Get location automatically using IP-based geolocation (free service)."""
+    try:
+        # Use ipapi.co - free tier allows 1000 requests/day, no API key needed
+        result = subprocess.run(
+            ['curl', '-s', '--max-time', '10', 'https://ipapi.co/json/'],
+            capture_output=True,
+            text=True,
+            timeout=15
+        )
+
+        if result.returncode != 0:
+            return None
+
+        data = json.loads(result.stdout)
+
+        # Check for error response
+        if 'error' in data:
+            print(f"IP geolocation error: {data.get('reason', 'Unknown')}", file=sys.stderr)
+            return None
+
+        lat = data.get('latitude')
+        lon = data.get('longitude')
+        city = data.get('city')
+        region = data.get('region')
+
+        if lat and lon:
+            print(f"Detected location: {city}, {region} ({lat}, {lon})", file=sys.stderr)
+            return float(lat), float(lon)
+
+        return None
+
+    except subprocess.TimeoutExpired:
+        print("IP geolocation timed out", file=sys.stderr)
+        return None
+    except json.JSONDecodeError:
+        print("Invalid geolocation response", file=sys.stderr)
+        return None
+    except Exception as e:
+        print(f"Error getting location from IP: {e}", file=sys.stderr)
+        return None
+
+def get_configured_location():
+    """Get location from environment or config file."""
+    import os
+
+    # Try environment variables first
+    lat = os.environ.get('WEATHER_LATITUDE')
+    lon = os.environ.get('WEATHER_LONGITUDE')
+
+    if lat and lon:
+        try:
+            return float(lat), float(lon)
+        except ValueError:
+            pass
+
+    # Try config file
+    project_root = Path(__file__).parent.parent
+    config_file = project_root / 'config' / 'location.env'
+
+    if config_file.exists():
+        try:
+            with open(config_file) as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        if line.startswith('WEATHER_LATITUDE='):
+                            lat = line.split('=', 1)[1].strip()
+                        elif line.startswith('WEATHER_LONGITUDE='):
+                            lon = line.split('=', 1)[1].strip()
+
+            if lat and lon:
+                return float(lat), float(lon)
+        except:
+            pass
+
+    return None
+
 def main():
     """Main entry point."""
-    # Get location
-    location = get_location()
-    if not location:
-        print("Unable to get location. Make sure termux-api is installed:", file=sys.stderr)
-        print("  pkg install termux-api", file=sys.stderr)
-        sys.exit(1)
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Get weather forecast')
+    parser.add_argument('--lat', type=float, help='Latitude')
+    parser.add_argument('--lon', type=float, help='Longitude')
+    parser.add_argument('--use-termux', action='store_true', help='Use termux-location (Android only)')
+    parser.add_argument('--no-auto', action='store_true', help='Disable automatic IP-based location')
+    args = parser.parse_args()
+
+    # Determine location source (priority order)
+    location = None
+
+    if args.lat and args.lon:
+        # 1. Command-line arguments (highest priority)
+        location = (args.lat, args.lon)
+    elif args.use_termux:
+        # 2. Termux-location (Android/Termux only)
+        location = get_location()
+        if not location:
+            print("Unable to get location. Make sure termux-api is installed:", file=sys.stderr)
+            print("  pkg install termux-api", file=sys.stderr)
+            sys.exit(1)
+    else:
+        # 3. Try configured location
+        location = get_configured_location()
+
+        # 4. Fall back to automatic IP-based geolocation
+        if not location and not args.no_auto:
+            print("No manual location configured, using automatic IP-based detection...", file=sys.stderr)
+            location = get_location_from_ip()
+
+        if not location:
+            print("Unable to determine location. Options:", file=sys.stderr)
+            print("  1. Let it auto-detect (default - uses IP geolocation)", file=sys.stderr)
+            print("  2. Set environment: WEATHER_LATITUDE and WEATHER_LONGITUDE", file=sys.stderr)
+            print("  3. Create config/location.env with coordinates", file=sys.stderr)
+            print("  4. Pass --lat and --lon arguments", file=sys.stderr)
+            print("  5. Use --use-termux on Android", file=sys.stderr)
+            sys.exit(1)
 
     lat, lon = location
 

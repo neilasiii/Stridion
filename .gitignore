@@ -65,3 +65,4 @@ venv/
 .DS_Store
 Thumbs.db
 config/gemini_api.env
+config/location.env
