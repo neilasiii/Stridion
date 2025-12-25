@@ -34,6 +34,33 @@ def load_health_data():
         sys.exit(1)
 
 
+def has_todays_sleep():
+    """
+    Check if there's sleep data for today in the cache.
+
+    Returns:
+        bool: True if sleep data exists for today, False otherwise
+    """
+    try:
+        cache = load_health_data()
+        sleep_sessions = cache.get('sleep_sessions', [])
+
+        if not sleep_sessions:
+            return False
+
+        # Most recent sleep session
+        recent_sleep = sleep_sessions[0]
+        sleep_date = recent_sleep.get('date', '')
+
+        # Check if it matches today's date
+        today = datetime.now().date().isoformat()
+        return sleep_date == today
+
+    except Exception as e:
+        print(f"Error checking sleep data: {e}", file=sys.stderr)
+        return False
+
+
 def load_athlete_context():
     """Load athlete context files."""
     project_root = Path(__file__).parent.parent
@@ -80,6 +107,46 @@ def get_todays_workout(cache):
             unique_workouts.append(w)
 
     return unique_workouts if unique_workouts else None
+
+
+def get_upcoming_workouts(cache, days=5):
+    """Get upcoming scheduled workouts for the next N days (excluding today)."""
+    today = datetime.now().date()
+    upcoming = []
+
+    for workout in cache.get('scheduled_workouts', []):
+        workout_date_str = workout.get('scheduled_date') or workout.get('date', '')
+        if not workout_date_str:
+            continue
+
+        # Parse workout date
+        try:
+            workout_date = datetime.fromisoformat(workout_date_str.split('T')[0]).date()
+        except:
+            continue
+
+        # Check if it's in our upcoming window (after today, within N days)
+        days_ahead = (workout_date - today).days
+        if 1 <= days_ahead <= days:
+            upcoming.append({
+                'date': workout_date_str[:10],
+                'days_ahead': days_ahead,
+                'name': workout.get('workout_name') or workout.get('name', 'Workout'),
+                'description': workout.get('description', ''),
+                'domain': workout.get('domain', 'unknown')
+            })
+
+    # Sort by date and deduplicate by (date, name)
+    upcoming.sort(key=lambda x: x['date'])
+    seen = set()
+    unique_upcoming = []
+    for w in upcoming:
+        key = (w['date'], w['name'])
+        if key not in seen:
+            seen.add(key)
+            unique_upcoming.append(w)
+
+    return unique_upcoming
 
 
 def get_recovery_summary(cache):
@@ -199,7 +266,7 @@ def get_recent_activities(cache, days=7):
     }
 
 
-def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None):
+def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None, upcoming_workouts=None):
     """Build the prompt for Claude Code."""
     today = datetime.now().strftime('%A, %B %d, %Y')
 
@@ -266,6 +333,21 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
             if s.get('focus_areas'):
                 activity_text += f" - {s['focus_areas'][:60]}"
 
+    # Format upcoming workouts
+    upcoming_text = "No upcoming workouts in next 5 days"
+    if upcoming_workouts and len(upcoming_workouts) > 0:
+        upcoming_lines = []
+        for w in upcoming_workouts[:5]:  # Show next 5 workouts
+            day_label = "Tomorrow" if w['days_ahead'] == 1 else f"In {w['days_ahead']} days"
+            upcoming_lines.append(f"{day_label} ({w['date']}): {w['name']}")
+            # For strength/mobility, add key focus if available
+            if w.get('description') and ('Key Focus:' in w['description'] or 'Focus:' in w['description']):
+                for line in w['description'].split('\n'):
+                    if 'Key Focus:' in line or 'Focus:' in line:
+                        upcoming_lines.append(f"  → {line.strip()}")
+                        break
+        upcoming_text = "\n".join(upcoming_lines)
+
     # Weather
     weather_text = weather if weather else "Weather data not available"
 
@@ -276,6 +358,9 @@ RECOVERY METRICS:
 
 TODAY'S WORKOUT:
 {workout_text}
+
+UPCOMING SCHEDULE (Next 5 days):
+{upcoming_text}
 
 RECENT ACTIVITY:
 {activity_text}
@@ -294,7 +379,7 @@ You are an expert running coach. Based on the recovery metrics above, provide:
 2. If modifying, be SPECIFIC (e.g., "reduce 45min to 30min" or "keep easy pace, skip strides")
 3. Key reasoning based on the recovery data
 
-OUTPUT FORMAT - You MUST follow this EXACTLY:
+OUTPUT FORMAT - You MUST follow this EXACTLY and output the ACTUAL content, not placeholders:
 
 NOTIFICATION:
 [Single line, max 200 chars. Format: "Original → Recommendation (key reason). Recovery metric"]
@@ -311,7 +396,8 @@ CRITICAL RULES:
 - Use ONLY the metrics provided above. Never invent or estimate values.
 - If a metric is missing, acknowledge it.
 - The NOTIFICATION line must be under 200 characters.
-- Be specific and actionable."""
+- Be specific and actionable.
+- DO NOT use placeholders like "Generated above" or "[Report content provided above]" - output the COMPLETE report text directly."""
 
     return prompt
 
@@ -523,11 +609,22 @@ def main():
     parser.add_argument('--notification-only', action='store_true', help='Only output notification')
     parser.add_argument('--full-only', action='store_true', help='Only output full report')
     parser.add_argument('--no-weather', action='store_true', help='Skip weather fetch')
+    parser.add_argument('--check-sleep', action='store_true', help='Check if sleep data exists for today (exit 0=yes, 1=no)')
     args = parser.parse_args()
+
+    # Handle sleep check mode
+    if args.check_sleep:
+        if has_todays_sleep():
+            print("Sleep data found for today")
+            sys.exit(0)
+        else:
+            print("No sleep data for today")
+            sys.exit(1)
 
     # Load data
     cache = load_health_data()
     workout = get_todays_workout(cache)
+    upcoming_workouts = get_upcoming_workouts(cache, days=5)
     recovery = get_recovery_summary(cache)
     activities = get_recent_activities(cache)
     athlete_context = load_athlete_context()
@@ -536,7 +633,7 @@ def main():
     weather = None if args.no_weather else get_weather()
 
     # Build prompt
-    prompt = build_ai_prompt(workout, recovery, activities, athlete_context, weather)
+    prompt = build_ai_prompt(workout, recovery, activities, athlete_context, weather, upcoming_workouts)
 
     # Call Claude
     response, error = call_claude_headless(prompt)
