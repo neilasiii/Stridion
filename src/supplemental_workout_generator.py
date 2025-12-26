@@ -136,15 +136,29 @@ def add_workout_to_health_cache(workout: 'SupplementalWorkout', garmin_id: int):
     scheduled = cache.get('scheduled_workouts', [])
 
     # Check if already exists (avoid duplicates)
-    for existing in scheduled:
+    # Match by garmin_id OR (date + domain + source)
+    existing_idx = None
+    for idx, existing in enumerate(scheduled):
+        # Match by garmin_id (exact match)
+        if existing.get('garmin_id') == garmin_id:
+            existing_idx = idx
+            break
+        # Match by date + domain + source (for workouts without garmin_id yet)
         if (existing.get('scheduled_date') == workout.date and
             existing.get('source') == 'auto_generated' and
             existing.get('domain') == workout.domain):
-            # Update existing entry
-            existing['name'] = workout.name
-            existing['description'] = workout.description
-            existing['garmin_id'] = garmin_id
+            existing_idx = idx
             break
+
+    if existing_idx is not None:
+        # Update existing entry
+        scheduled[existing_idx].update({
+            'name': workout.name,
+            'description': workout.description,
+            'garmin_id': garmin_id,
+            'domain': workout.domain,
+            'duration_min': workout.duration_min
+        })
     else:
         # Add new entry
         scheduled.append({
@@ -178,8 +192,7 @@ def load_generated_workouts_log() -> Dict[str, Any]:
         if "mobility" not in data:
             data["mobility"] = {}
         if "running" not in data:
-            # Migrate old format
-            data["running"] = {k: v for k, v in data.items() if k not in ("strength", "mobility", "week_snapshots")}
+            data["running"] = {}
         if "week_snapshots" not in data:
             data["week_snapshots"] = {}
         return data
@@ -284,6 +297,19 @@ def check_regeneration_needed(
         return False, ""
 
     snapshot = snapshots[week_key]
+
+    # Check if snapshot was created today - if so, don't regenerate
+    # This prevents multiple regenerations in the same day
+    snapshot_date = snapshot.get("generated_at", "")
+    if snapshot_date:
+        try:
+            snapshot_dt = datetime.fromisoformat(snapshot_date.replace("Z", "+00:00"))
+            today = datetime.now()
+            if snapshot_dt.date() == today.date():
+                # Generated today, don't regenerate
+                return False, ""
+        except (ValueError, AttributeError):
+            pass
 
     # Check 1: Running schedule changed
     current_fingerprint = get_week_fingerprint(running_schedule)
@@ -432,7 +458,7 @@ def get_week_running_schedule(health_cache: Dict[str, Any], week_start: datetime
     running_workouts = []
 
     for workout in scheduled_workouts:
-        # Only process FinalSurge workouts
+        # Only process FinalSurge workouts (running workouts)
         if workout.get("source") != "ics_calendar":
             continue
 
@@ -455,6 +481,43 @@ def get_week_running_schedule(health_cache: Dict[str, Any], week_start: datetime
             ))
 
     return sorted(running_workouts, key=lambda w: w.date)
+
+
+def get_existing_strength_dates_from_finalsurge(health_cache: Dict[str, Any], week_start: datetime) -> set:
+    """
+    Get dates that already have strength workouts from FinalSurge.
+
+    This prevents the supplemental generator from creating duplicate strength
+    workouts on days that already have them scheduled in FinalSurge.
+
+    Returns:
+        Set of date strings (YYYY-MM-DD) that have FinalSurge strength workouts
+    """
+    scheduled_workouts = health_cache.get("scheduled_workouts", [])
+    week_end = week_start + timedelta(days=6)
+
+    strength_dates = set()
+
+    for workout in scheduled_workouts:
+        # Check for FinalSurge strength workouts (ics_calendar or ics_calendar+garmin_template)
+        source = workout.get("source", "")
+        if not source.startswith("ics_calendar"):
+            continue
+
+        scheduled_date = workout.get("scheduled_date")
+        if not scheduled_date:
+            continue
+
+        workout_date = datetime.strptime(scheduled_date, "%Y-%m-%d")
+
+        # Check if in target week
+        if week_start <= workout_date <= week_end:
+            # Check if it's a strength workout
+            name_lower = workout.get("name", "").lower()
+            if any(term in name_lower for term in ["strength", "lifting", "weights", "gym"]):
+                strength_dates.add(scheduled_date)
+
+    return strength_dates
 
 
 def find_strength_slots(running_schedule: List[RunningWorkout], week_start: datetime) -> List[Dict[str, Any]]:
@@ -1165,6 +1228,16 @@ def generate_week_supplemental_workouts(
     if not running_schedule:
         if not quiet:
             print(f"No FinalSurge running workouts found for week of {week_start.strftime('%Y-%m-%d')}")
+        return []
+
+    # Check for existing FinalSurge strength workouts
+    finalsurge_strength_dates = get_existing_strength_dates_from_finalsurge(health_cache, week_start)
+
+    if finalsurge_strength_dates and not quiet:
+        print(f"\n⚠ FinalSurge already has strength workouts on: {', '.join(sorted(finalsurge_strength_dates))}")
+        print("  Supplemental generator will NOT create strength workouts for this week.")
+        print("  (FinalSurge strength workouts take precedence)")
+        # Don't generate any strength workouts if FinalSurge has them
         return []
 
     # Get final running date for the constraint

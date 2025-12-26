@@ -64,10 +64,20 @@ def load_generated_workouts_log() -> Dict[str, Any]:
     log_path = Path(__file__).parent.parent / "data" / "generated_workouts.json"
 
     if not log_path.exists():
-        return {}
+        return {"running": {}, "strength": {}, "mobility": {}, "week_snapshots": {}}
 
     with open(log_path, 'r') as f:
-        return json.load(f)
+        data = json.load(f)
+        # Ensure all sections exist
+        if "running" not in data:
+            data["running"] = {}
+        if "strength" not in data:
+            data["strength"] = {}
+        if "mobility" not in data:
+            data["mobility"] = {}
+        if "week_snapshots" not in data:
+            data["week_snapshots"] = {}
+        return data
 
 
 def save_generated_workouts_log(log_data: Dict[str, Any]):
@@ -366,6 +376,9 @@ def find_new_workouts(health_cache: Dict[str, Any], generated_log: Dict[str, Any
     new_workouts = []
     scheduled_workouts = health_cache.get("scheduled_workouts", [])
 
+    # Check running section for already-generated workouts
+    running_log = generated_log.get("running", {})
+
     for workout in scheduled_workouts:
         # Only process FinalSurge workouts (source: ics_calendar)
         if workout.get("source") != "ics_calendar":
@@ -373,8 +386,8 @@ def find_new_workouts(health_cache: Dict[str, Any], generated_log: Dict[str, Any
 
         scheduled_date = workout.get("scheduled_date")
 
-        # Skip if already generated
-        if scheduled_date in generated_log:
+        # Skip if already generated (check running section)
+        if scheduled_date in running_log:
             continue
 
         # Skip if in the past (more than 1 day old)
@@ -481,8 +494,11 @@ def generate_and_upload_workouts(check_only: bool = False, quiet: bool = False) 
             # Schedule workout
             schedule_workout(client, garmin_id, scheduled_date, quiet=quiet)
 
-            # Log generated workout
-            generated_log[scheduled_date] = {
+            # Log generated workout to running section
+            if "running" not in generated_log:
+                generated_log["running"] = {}
+
+            generated_log["running"][scheduled_date] = {
                 "garmin_id": garmin_id,
                 "finalsurge_name": finalsurge_name,
                 "workout_type": parsed.workout_type,

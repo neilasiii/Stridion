@@ -192,6 +192,205 @@ def call_ai_with_fallback(prompt, allowed_tools=None, timeout=180):
         return None, None
 
 
+async def call_claude_streaming(prompt, allowed_tools=None, timeout=600):
+    """
+    Call Claude Code in streaming mode (async generator).
+
+    Args:
+        prompt: The prompt to send
+        allowed_tools: Tools to allow Claude to use
+        timeout: Total timeout in seconds
+
+    Yields:
+        Chunks of text as they arrive from Claude
+    """
+    if not os.path.exists(CLAUDE_PATH):
+        return  # Will fall back to Gemini in caller
+
+    try:
+        args = [
+            CLAUDE_PATH, '-p', prompt,
+            '--output-format', 'stream-json',
+            '--verbose',
+            '--include-partial-messages'
+        ]
+
+        if allowed_tools:
+            args.extend(['--allowedTools', allowed_tools])
+
+        logger.info(f"[Streaming] Starting Claude with args: {' '.join(args[:5])}...")
+
+        # Start subprocess
+        process = await asyncio.create_subprocess_exec(
+            *args,
+            cwd=PROJECT_ROOT,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+
+        logger.info("[Streaming] Claude process started")
+
+        # Read stdout line by line as it streams (stream-json format)
+        chunks_received = 0
+        try:
+            while True:
+                # Wait for next line with timeout
+                # Use longer timeout to account for tool use (Claude reading files, etc)
+                # First chunk: 120s (startup + first API call)
+                # Subsequent: 120s (allows for tool execution between chunks)
+                timeout_duration = 120
+
+                line_bytes = await asyncio.wait_for(
+                    process.stdout.readline(),
+                    timeout=timeout_duration
+                )
+
+                if not line_bytes:
+                    # EOF reached
+                    logger.info(f"[Streaming] EOF reached after {chunks_received} chunks")
+                    break
+
+                # Parse JSON stream format
+                try:
+                    line_text = line_bytes.decode('utf-8').strip()
+                    if not line_text:
+                        continue
+
+                    chunk_data = json.loads(line_text)
+
+                    # Extract text content from stream-json format
+                    # Look for stream_event with content_block_delta
+                    if chunk_data.get('type') == 'stream_event':
+                        event = chunk_data.get('event', {})
+                        if event.get('type') == 'content_block_delta':
+                            delta = event.get('delta', {})
+                            if delta.get('type') == 'text_delta':
+                                text = delta.get('text', '')
+                                if text:
+                                    chunks_received += 1
+                                    yield text
+
+                except json.JSONDecodeError as e:
+                    # Skip invalid JSON lines
+                    logger.debug(f"[Streaming] JSON decode error: {e}")
+                    continue
+
+        except asyncio.TimeoutError:
+            logger.warning(f"[Streaming] Claude chunk timeout after {chunks_received} chunks (waited {timeout_duration}s)")
+            process.kill()
+            # Get stderr for debugging
+            stderr = await process.stderr.read()
+            stderr_text = stderr.decode('utf-8') if stderr else "No error output"
+            logger.warning(f"[Streaming] stderr on timeout: {stderr_text[:500]}")
+            return
+
+        # Wait for process to complete
+        await asyncio.wait_for(process.wait(), timeout=10)
+
+        logger.info(f"[Streaming] Claude process completed with returncode: {process.returncode}, chunks: {chunks_received}")
+
+        if process.returncode != 0:
+            # Get stderr for debugging
+            stderr = await process.stderr.read()
+            stderr_text = stderr.decode('utf-8') if stderr else "No error output"
+            logger.warning(f"[Streaming] Claude failed - returncode: {process.returncode}, stderr: {stderr_text[:500]}")
+
+    except Exception as e:
+        logger.error(f"[Streaming] Claude exception: {e}", exc_info=True)
+
+
+async def stream_to_discord(message_obj, prompt, allowed_tools=None, initial_text="Thinking..."):
+    """
+    Stream Claude response to Discord with live updates.
+
+    Args:
+        message_obj: Discord message object (for reply) or interaction (for followup)
+        prompt: The prompt to send to Claude
+        allowed_tools: Tools to allow Claude to use
+        initial_text: Initial message to show while waiting
+
+    Returns:
+        (final_response, provider) - provider is 'claude' or 'gemini'
+    """
+    # Determine if this is a message or interaction
+    is_interaction = hasattr(message_obj, 'followup')
+
+    # Send initial message
+    if is_interaction:
+        sent_message = await message_obj.followup.send(f"💭 {initial_text}")
+    else:
+        sent_message = await message_obj.reply(f"💭 {initial_text}")
+
+    # Try streaming from Claude
+    current_text = ""
+    last_update = asyncio.get_event_loop().time()
+    update_interval = 1.5  # Update every 1.5 seconds for more responsive feel
+    provider = None
+    chunk_count = 0
+    last_chunk_time = asyncio.get_event_loop().time()
+
+    try:
+        logger.info("[Streaming] Starting stream_to_discord")
+        async for chunk in call_claude_streaming(prompt, allowed_tools):
+            if chunk:
+                chunk_count += 1
+                current_text += chunk
+                last_chunk_time = asyncio.get_event_loop().time()
+
+                # Update Discord message periodically (respect rate limits)
+                now = asyncio.get_event_loop().time()
+                if now - last_update >= update_interval:
+                    # Truncate if too long for Discord
+                    display_text = current_text[:4000] if len(current_text) > 4000 else current_text
+
+                    try:
+                        await sent_message.edit(content=display_text)
+                        last_update = now
+                        logger.debug(f"[Streaming] Updated Discord message ({len(current_text)} chars, {chunk_count} chunks)")
+                    except discord.errors.HTTPException as e:
+                        logger.warning(f"[Streaming] Discord edit error: {e}")
+                        # Continue streaming even if edit fails
+
+        # Final update with complete response
+        if current_text:
+            display_text = current_text[:4000] if len(current_text) > 4000 else current_text
+            await sent_message.edit(content=display_text)
+            logger.info(f"[Streaming] Completed successfully - {len(current_text)} chars, {chunk_count} chunks")
+            return current_text, 'claude'
+        else:
+            logger.warning("[Streaming] No text received from Claude streaming")
+
+    except Exception as e:
+        logger.error(f"[Streaming] Error during streaming: {e}", exc_info=True)
+
+    # If streaming failed or no response, fall back to Gemini
+    logger.info("[Streaming] Falling back to Gemini (non-streaming)")
+
+    try:
+        await sent_message.edit(content="💭 Claude unavailable, using Gemini...")
+
+        sys.path.insert(0, str(PROJECT_ROOT / 'src'))
+        from gemini_client import call_gemini
+
+        response, error = call_gemini(prompt, max_tokens=4096)
+
+        if error or not response:
+            await sent_message.edit(content="❌ AI services unavailable. Both Claude and Gemini failed.")
+            return None, None
+
+        # Update with Gemini response
+        display_text = response[:4000] if len(response) > 4000 else response
+        display_text += "\n\n*Powered by Gemini (Claude unavailable)*"
+
+        await sent_message.edit(content=display_text)
+        return response, 'gemini'
+
+    except Exception as e:
+        logger.error(f"[Streaming] Gemini fallback failed: {e}")
+        await sent_message.edit(content="❌ AI services unavailable.")
+        return None, None
+
+
 # ============== Session Management Helpers ==============
 
 def get_or_create_session(user_id: int) -> str:
@@ -289,30 +488,214 @@ async def sync_command(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
     try:
-        result = subprocess.run(
-            ["bash", "bin/sync_garmin_data.sh", "--no-auto-workouts"],
+        # Capture BEFORE state from cache
+        cache_file = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
+        before_counts = {}
+
+        if cache_file.exists():
+            try:
+                with open(cache_file) as f:
+                    cache = json.load(f)
+                    before_counts = {
+                        'activities': len(cache.get('activities', [])),
+                        'sleep': len(cache.get('sleep_sessions', [])),
+                        'vo2': len(cache.get('vo2_max_readings', [])),
+                        'weight': len(cache.get('weight_readings', [])),
+                        'rhr': len(cache.get('resting_hr_readings', [])),
+                        'scheduled_workouts': len(cache.get('scheduled_workouts', []))
+                    }
+            except:
+                before_counts = {'activities': 0, 'sleep': 0, 'vo2': 0, 'weight': 0, 'rhr': 0, 'scheduled_workouts': 0}
+        else:
+            before_counts = {'activities': 0, 'sleep': 0, 'vo2': 0, 'weight': 0, 'rhr': 0, 'scheduled_workouts': 0}
+
+        # Run sync
+        proc = await asyncio.create_subprocess_exec(
+            "bash", "bin/sync_garmin_data.sh",
             cwd=PROJECT_ROOT,
-            capture_output=True,
-            text=True,
-            timeout=300
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
         )
+        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=300)
 
-        # Parse output for summary
-        output = result.stdout[-1900:]  # Discord limit
+        if proc.returncode != 0:
+            raise Exception(f"Sync failed with exit code {proc.returncode}")
 
-        embed = discord.Embed(
-            title="✓ Garmin Sync Complete" if result.returncode == 0 else "✗ Sync Failed",
-            description=f"```\n{output}\n```",
-            color=discord.Color.green() if result.returncode == 0 else discord.Color.red(),
-            timestamp=datetime.now()
-        )
+        sync_output = stdout.decode() if stdout else ""
+
+        # Capture AFTER state and calculate NEW items
+        after_counts = {}
+        new_data_details = []
+
+        if cache_file.exists():
+            try:
+                with open(cache_file) as f:
+                    cache = json.load(f)
+
+                    after_counts = {
+                        'activities': len(cache.get('activities', [])),
+                        'sleep': len(cache.get('sleep_sessions', [])),
+                        'vo2': len(cache.get('vo2_max_readings', [])),
+                        'weight': len(cache.get('weight_readings', [])),
+                        'rhr': len(cache.get('resting_hr_readings', [])),
+                        'scheduled_workouts': len(cache.get('scheduled_workouts', []))
+                    }
+
+                    # Analyze NEW activities
+                    new_activity_count = after_counts['activities'] - before_counts['activities']
+                    if new_activity_count > 0:
+                        activities = cache.get('activities', [])
+                        new_activities = activities[:new_activity_count]
+
+                        running = [a for a in new_activities if a.get('activity_type') == 'RUNNING']
+                        walking = [a for a in new_activities if a.get('activity_type') == 'WALKING']
+                        strength = [a for a in new_activities if a.get('activity_type') == 'STRENGTH']
+
+                        if running:
+                            total_miles = sum(a.get('distance_miles', 0) for a in running)
+                            total_hours = sum(a.get('duration_seconds', 0) for a in running) / 3600
+                            new_data_details.append(f"🏃 Run: {len(running)} runs, {total_miles:.1f} mi, {total_hours:.1f} hrs")
+
+                        if walking:
+                            total_miles = sum(a.get('distance_miles', 0) for a in walking)
+                            new_data_details.append(f"🚶 Walk: {len(walking)} walks, {total_miles:.1f} mi")
+
+                        if strength:
+                            new_data_details.append(f"💪 Strength: {len(strength)} sessions")
+
+                    # Analyze NEW sleep
+                    new_sleep_count = after_counts['sleep'] - before_counts['sleep']
+                    if new_sleep_count > 0:
+                        new_data_details.append(f"😴 Sleep: {new_sleep_count} nights")
+
+                    # Analyze NEW VO2 max
+                    new_vo2_count = after_counts['vo2'] - before_counts['vo2']
+                    if new_vo2_count > 0:
+                        vo2_readings = cache.get('vo2_max_readings', [])
+                        if vo2_readings:
+                            latest_vo2 = vo2_readings[0].get('vo2_max')
+                            if latest_vo2:
+                                new_data_details.append(f"📈 VO2: {latest_vo2:.1f} ml/kg/min")
+
+                    # Analyze NEW weight
+                    new_weight_count = after_counts['weight'] - before_counts['weight']
+                    if new_weight_count > 0:
+                        weight_readings = cache.get('weight_readings', [])
+                        if weight_readings:
+                            latest_weight = weight_readings[0].get('weight_lbs')
+                            if latest_weight:
+                                new_data_details.append(f"⚖️ Weight: {latest_weight:.1f} lbs")
+
+                    # Analyze NEW RHR
+                    new_rhr_count = after_counts['rhr'] - before_counts['rhr']
+                    if new_rhr_count > 0:
+                        rhr_readings = cache.get('resting_hr_readings', [])
+                        if rhr_readings and rhr_readings[0]:
+                            latest_rhr = rhr_readings[0][1]
+                            new_data_details.append(f"❤️ RHR: {latest_rhr} bpm")
+
+            except Exception as e:
+                logger.error(f"Error analyzing cache: {e}")
+
+        # Extract workout generation info from sync output
+        running_workout_details = []
+        supplemental_workout_details = []
+        removed_workouts = []
+
+        # Parse running workouts
+        if "Successfully created workouts:" in sync_output:
+            lines = sync_output.split('\n')
+            in_workout_section = False
+            for line in lines:
+                if "Successfully created workouts:" in line:
+                    in_workout_section = True
+                    continue
+                if in_workout_section:
+                    if line.strip().startswith('•'):
+                        workout = line.strip()[2:].split(' (ID:')[0].strip()
+                        running_workout_details.append(f"  → {workout}")
+                    elif line.strip() and not line.strip().startswith('•'):
+                        in_workout_section = False
+
+        # Parse supplemental workouts
+        if "Successfully created supplemental workouts:" in sync_output:
+            lines = sync_output.split('\n')
+            in_supplemental_section = False
+            for line in lines:
+                if "Successfully created supplemental workouts:" in line:
+                    in_supplemental_section = True
+                    continue
+                if in_supplemental_section:
+                    if line.strip().startswith('•'):
+                        workout = line.strip()[2:].split(' (ID:')[0].strip()
+                        supplemental_workout_details.append(f"  → {workout}")
+                    elif line.strip() and not line.strip().startswith('•'):
+                        in_supplemental_section = False
+
+        # Parse removed workouts
+        for line in sync_output.split('\n'):
+            if 'Removed:' in line or 'workouts removed:' in line:
+                # Extract dates from "Removed: 2025-12-15, 2025-12-16"
+                parts = line.split('Removed:', 1) if 'Removed:' in line else line.split('workouts removed:', 1)
+                if len(parts) > 1:
+                    dates = [d.strip() for d in parts[1].split(',')]
+                    removed_workouts.extend(dates)
+
+        # Build notification content
+        content_lines = []
+
+        # Add new data details
+        content_lines.extend(new_data_details)
+
+        # Add workout generation notifications
+        if running_workout_details:
+            content_lines.append("\n🏃 Running workouts scheduled:")
+            content_lines.extend(running_workout_details)
+
+        if supplemental_workout_details:
+            content_lines.append("\n💪 Strength workouts scheduled:")
+            content_lines.extend(supplemental_workout_details)
+
+        if removed_workouts:
+            removed_str = ", ".join(removed_workouts[:5])  # Limit to first 5
+            content_lines.append(f"\n🗑️ Workouts removed: {removed_str}")
+
+        # Create embed
+        if content_lines:
+            content_text = '\n'.join(content_lines)
+            embed = discord.Embed(
+                title="✓ Garmin Sync Complete",
+                description=content_text,
+                color=discord.Color.green(),
+                timestamp=datetime.now()
+            )
+        else:
+            # No new data
+            embed = discord.Embed(
+                title="🔄 Sync Complete",
+                description="No new data",
+                color=discord.Color.blue(),
+                timestamp=datetime.now()
+            )
 
         await interaction.followup.send(embed=embed)
 
-    except subprocess.TimeoutExpired:
-        await interaction.followup.send("❌ Sync timed out after 5 minutes")
+    except asyncio.TimeoutError:
+        embed = discord.Embed(
+            title="⚠️ Sync Timeout",
+            description="Sync took longer than 5 minutes",
+            color=discord.Color.orange(),
+            timestamp=datetime.now()
+        )
+        await interaction.followup.send(embed=embed)
     except Exception as e:
-        await interaction.followup.send(f"❌ Error: {str(e)}")
+        embed = discord.Embed(
+            title="❌ Sync Failed",
+            description=f"Error: {str(e)}",
+            color=discord.Color.red(),
+            timestamp=datetime.now()
+        )
+        await interaction.followup.send(embed=embed)
 
 
 @bot.tree.command(name="report", description="Generate morning training report")
@@ -950,25 +1333,138 @@ async def cleanup_sessions_task():
     cleanup_expired_sessions()
 
 
-@tasks.loop(time=time(hour=9, minute=0, tzinfo=EST))  # 9:00 AM EST
+async def check_sleep_and_sync(retry_intervals=None):
+    """
+    Check if sleep data exists for today. If not, sync and retry.
+
+    Args:
+        retry_intervals: List of wait times (in minutes) between retries.
+                        Default: [15, 30, 60] (retry at 15min, 30min, 60min after initial attempt)
+
+    Returns:
+        bool: True if sleep data was found, False if all retries exhausted
+    """
+    if retry_intervals is None:
+        retry_intervals = [15, 30, 60]  # Default: retry at 15min, 30min, 60min
+
+    # Check if sleep data exists
+    proc = await asyncio.create_subprocess_exec(
+        "python3", "src/morning_report.py", "--check-sleep",
+        cwd=PROJECT_ROOT,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+    await proc.wait()
+
+    if proc.returncode == 0:
+        # Sleep data exists!
+        logger.info("[Morning Report] Sleep data found for today")
+        return True
+
+    logger.info("[Morning Report] No sleep data for today, running sync...")
+
+    # No sleep data - run sync
+    try:
+        sync_proc = await asyncio.create_subprocess_exec(
+            "bash", "bin/sync_garmin_data.sh",
+            cwd=PROJECT_ROOT,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        await asyncio.wait_for(sync_proc.wait(), timeout=300)
+        logger.info("[Morning Report] Sync completed")
+    except Exception as e:
+        logger.warning(f"[Morning Report] Sync failed: {e}")
+
+    # Check again after sync
+    proc = await asyncio.create_subprocess_exec(
+        "python3", "src/morning_report.py", "--check-sleep",
+        cwd=PROJECT_ROOT,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+    await proc.wait()
+
+    if proc.returncode == 0:
+        logger.info("[Morning Report] Sleep data found after sync")
+        return True
+
+    # Still no sleep - user likely still asleep
+    logger.info("[Morning Report] No sleep data after sync, assuming still asleep. Will retry...")
+
+    # Retry with delays
+    for i, wait_minutes in enumerate(retry_intervals, 1):
+        logger.info(f"[Morning Report] Retry {i}/{len(retry_intervals)} scheduled in {wait_minutes} minutes")
+        await asyncio.sleep(wait_minutes * 60)
+
+        # Check sleep again
+        proc = await asyncio.create_subprocess_exec(
+            "python3", "src/morning_report.py", "--check-sleep",
+            cwd=PROJECT_ROOT,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        await proc.wait()
+
+        if proc.returncode == 0:
+            logger.info(f"[Morning Report] Sleep data found on retry {i}")
+            return True
+
+        # If not the last retry, sync again
+        if i < len(retry_intervals):
+            logger.info(f"[Morning Report] Still no sleep on retry {i}, syncing again...")
+            try:
+                sync_proc = await asyncio.create_subprocess_exec(
+                    "bash", "bin/sync_garmin_data.sh",
+                    cwd=PROJECT_ROOT,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE
+                )
+                await asyncio.wait_for(sync_proc.wait(), timeout=300)
+            except Exception as e:
+                logger.warning(f"[Morning Report] Sync failed on retry {i}: {e}")
+
+    # All retries exhausted
+    logger.warning("[Morning Report] All retries exhausted, no sleep data found")
+    return False
+
+
+@tasks.loop(time=time(hour=5, minute=30, tzinfo=EST))  # 5:30 AM EST
 async def morning_report_task():
-    """Send daily morning report."""
+    """Send daily morning report (waits for sleep data with retries from 5:30 AM to ~10:00 AM)."""
     channel = bot.get_channel(CHANNELS["morning_report"])
     if not channel:
         print(f"Warning: Morning report channel {CHANNELS['morning_report']} not found")
         return
 
     try:
-        # Sync first (async)
-        proc = await asyncio.create_subprocess_exec(
-            "bash", "bin/sync_garmin_data.sh",
-            cwd=PROJECT_ROOT,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        await asyncio.wait_for(proc.wait(), timeout=300)
+        # Send initial notification that we're checking
+        status_message = await channel.send("⏳ Checking for sleep data before generating morning report...")
 
-        # Generate report (async)
+        # Check for sleep data and sync/retry as needed
+        # Retry every 20 minutes from 5:30 AM until ~10:00 AM (13 retries = 260 minutes)
+        # This catches early wake-ups and handles sleeping in
+        sleep_found = await check_sleep_and_sync(retry_intervals=[20] * 13)
+
+        # Delete status message
+        try:
+            await status_message.delete()
+        except:
+            pass  # Ignore if deletion fails
+
+        if not sleep_found:
+            # No sleep data after all retries
+            current_time = datetime.now().strftime("%I:%M %p")
+            embed = discord.Embed(
+                title="⏰ Morning Report Delayed",
+                description=f"No sleep data detected after checking from 5:30 AM to ~{current_time}. You might still be asleep, or there may be a sync issue.\n\nYou can manually generate the report with `/report` when ready.",
+                color=discord.Color.orange(),
+                timestamp=datetime.now()
+            )
+            await channel.send(embed=embed)
+            return
+
+        # Sleep data exists - generate report
         proc = await asyncio.create_subprocess_exec(
             "python3", "src/morning_report.py", "--full-only",
             cwd=PROJECT_ROOT,
@@ -986,12 +1482,16 @@ async def morning_report_task():
                 timestamp=datetime.now()
             )
             await channel.send(embed=embed)
+        else:
+            error_msg = stderr.decode() if stderr else "Unknown error"
+            await channel.send(f"❌ Report generation failed: {error_msg[:500]}")
 
     except Exception as e:
+        logger.error(f"Morning report task error: {e}", exc_info=True)
         await channel.send(f"❌ Morning report failed: {str(e)}")
 
 
-@tasks.loop(time=[time(hour=6, minute=0, tzinfo=EST), time(hour=12, minute=0, tzinfo=EST)])  # 6:00 AM and 12:00 PM EST
+@tasks.loop(time=[time(hour=0, minute=0, tzinfo=EST), time(hour=6, minute=0, tzinfo=EST), time(hour=12, minute=0, tzinfo=EST), time(hour=18, minute=0, tzinfo=EST)])  # Every 6 hours: 12:00 AM, 6:00 AM, 12:00 PM, 6:00 PM EST
 async def periodic_sync_task():
     """Periodic Garmin sync with summary notification (Termux-style format)."""
     channel = bot.get_channel(CHANNELS["sync_log"])
