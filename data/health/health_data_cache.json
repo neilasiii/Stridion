@@ -1,7 +1,223 @@
 {
-  "last_updated": "2025-12-17T22:15:38.873429+00:00",
-  "last_sync_date": "2025-12-17",
+  "last_updated": "2025-12-25T23:00:48.763361+00:00",
+  "last_sync_date": "2025-12-25",
   "activities": [
+    {
+      "activity_id": 21342602806,
+      "date": "2025-12-24T12:13:52",
+      "activity_name": "Lee County - 2025-12-24 - Easy Run 50min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3173.6640625,
+      "distance_miles": 5.21835,
+      "calories": 601.0,
+      "avg_heart_rate": 141.0,
+      "max_heart_rate": 154.0,
+      "avg_speed": 5.918943,
+      "pace_per_mile": 10.136231,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.218058,
+          "duration_seconds": 3173.664,
+          "avg_heart_rate": 141.0,
+          "max_heart_rate": 154.0,
+          "avg_speed_mph": 5.918943,
+          "pace_per_mile": 10.136797,
+          "avg_cadence": 146.578125,
+          "avg_power": 300.0,
+          "calories": 601.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1555.812,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1535.682,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21327129783,
+      "date": "2025-12-22T17:21:19",
+      "activity_name": "Lee County - 2025-12-22 - Easy Run 45min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2818.490966796875,
+      "distance_miles": 4.515267,
+      "calories": 505.0,
+      "avg_heart_rate": 132.0,
+      "max_heart_rate": 144.0,
+      "avg_speed": 5.766831,
+      "pace_per_mile": 10.403559,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 4.514969,
+          "duration_seconds": 2818.491,
+          "avg_heart_rate": 132.0,
+          "max_heart_rate": 144.0,
+          "avg_speed_mph": 5.766831,
+          "pace_per_mile": 10.404247,
+          "avg_cadence": 147.0625,
+          "avg_power": 295.0,
+          "calories": 505.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2392.314,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 16.999,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21316858387,
+      "date": "2025-12-21T10:56:02",
+      "activity_name": "Lee County - 2025-12-21 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3310.06494140625,
+      "distance_miles": 5.316322,
+      "calories": 627.0,
+      "avg_heart_rate": 143.0,
+      "max_heart_rate": 160.0,
+      "avg_speed": 5.78249,
+      "pace_per_mile": 10.377052,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.312159,
+          "duration_seconds": 3310.065,
+          "avg_heart_rate": 143.0,
+          "max_heart_rate": 160.0,
+          "avg_speed_mph": 5.778016,
+          "pace_per_mile": 10.385184,
+          "avg_cadence": 146.375,
+          "avg_power": 293.0,
+          "calories": 627.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1568.341,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1618.497,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 18.909,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21300560387,
+      "date": "2025-12-19T14:06:11",
+      "activity_name": "Treadmill Running",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2703.0390625,
+      "distance_miles": 4.270011,
+      "calories": 525.0,
+      "avg_heart_rate": 149.0,
+      "max_heart_rate": 162.0,
+      "avg_speed": 5.686302,
+      "pace_per_mile": 10.550476,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 4.588465,
+          "duration_seconds": 2703.039,
+          "avg_heart_rate": 149.0,
+          "max_heart_rate": 162.0,
+          "avg_speed_mph": 6.11132,
+          "pace_per_mile": 9.81824,
+          "avg_cadence": 143.03125,
+          "avg_power": 298.0,
+          "calories": 525.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 529.0,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1907.012,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 214.507,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
     {
       "activity_id": 21282115644,
       "date": "2025-12-17T10:16:26",
@@ -25514,6 +25730,86 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2025-12-25",
+      "total_duration_minutes": 405.0,
+      "light_sleep_minutes": 312.0,
+      "deep_sleep_minutes": 38.0,
+      "rem_sleep_minutes": 55.0,
+      "awake_minutes": 61.0,
+      "sleep_score": 69,
+      "deep_sleep_percentage": 9.38
+    },
+    {
+      "date": "2025-12-24",
+      "total_duration_minutes": 456.0,
+      "light_sleep_minutes": 307.0,
+      "deep_sleep_minutes": 62.0,
+      "rem_sleep_minutes": 87.0,
+      "awake_minutes": 110.0,
+      "sleep_score": 53,
+      "deep_sleep_percentage": 13.6
+    },
+    {
+      "date": "2025-12-23",
+      "total_duration_minutes": 375.0,
+      "light_sleep_minutes": 268.0,
+      "deep_sleep_minutes": 81.0,
+      "rem_sleep_minutes": 26.0,
+      "awake_minutes": 151.0,
+      "sleep_score": 58,
+      "deep_sleep_percentage": 21.6
+    },
+    {
+      "date": "2025-12-22",
+      "total_duration_minutes": 537.0,
+      "light_sleep_minutes": 341.0,
+      "deep_sleep_minutes": 98.0,
+      "rem_sleep_minutes": 98.0,
+      "awake_minutes": 98.0,
+      "sleep_score": 61,
+      "deep_sleep_percentage": 18.25
+    },
+    {
+      "date": "2025-12-21",
+      "total_duration_minutes": 417.0,
+      "light_sleep_minutes": 303.0,
+      "deep_sleep_minutes": 79.0,
+      "rem_sleep_minutes": 35.0,
+      "awake_minutes": 206.0,
+      "sleep_score": 50,
+      "deep_sleep_percentage": 18.94
+    },
+    {
+      "date": "2025-12-20",
+      "total_duration_minutes": 434.9,
+      "light_sleep_minutes": 301.0,
+      "deep_sleep_minutes": 77.0,
+      "rem_sleep_minutes": 57.0,
+      "awake_minutes": 182.0,
+      "sleep_score": 53,
+      "deep_sleep_percentage": 17.7
+    },
+    {
+      "date": "2025-12-19",
+      "total_duration_minutes": 469.0,
+      "light_sleep_minutes": 383.0,
+      "deep_sleep_minutes": 53.0,
+      "rem_sleep_minutes": 33.0,
+      "awake_minutes": 163.0,
+      "sleep_score": 49,
+      "deep_sleep_percentage": 11.3
+    },
+    {
+      "date": "2025-12-18",
+      "total_duration_minutes": 490.9,
+      "light_sleep_minutes": 351.0,
+      "deep_sleep_minutes": 67.0,
+      "rem_sleep_minutes": 73.0,
+      "awake_minutes": 164.0,
+      "sleep_score": 53,
+      "deep_sleep_percentage": 13.65
+    },
+    {
       "date": "2025-12-17",
       "total_duration_minutes": 521.0,
       "light_sleep_minutes": 403.0,
@@ -29446,6 +29742,18 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2025-12-24T00:00:00",
+      "vo2_max": 49.6
+    },
+    {
+      "date": "2025-12-22T00:00:00",
+      "vo2_max": 49.6
+    },
+    {
+      "date": "2025-12-21T00:00:00",
+      "vo2_max": 49.6
+    },
+    {
       "date": "2025-12-17T00:00:00",
       "vo2_max": 49.7
     },
@@ -30031,6 +30339,38 @@
     }
   ],
   "resting_hr_readings": [
+    [
+      "2025-12-25T12:00:00",
+      51
+    ],
+    [
+      "2025-12-24T12:00:00",
+      48
+    ],
+    [
+      "2025-12-23T12:00:00",
+      48
+    ],
+    [
+      "2025-12-22T12:00:00",
+      48
+    ],
+    [
+      "2025-12-21T12:00:00",
+      46
+    ],
+    [
+      "2025-12-20T12:00:00",
+      45
+    ],
+    [
+      "2025-12-19T12:00:00",
+      48
+    ],
+    [
+      "2025-12-18T12:00:00",
+      46
+    ],
     [
       "2025-12-17T12:00:00",
       48
@@ -31613,6 +31953,86 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2025-12-25",
+      "weekly_avg": 65,
+      "last_night_avg": 59,
+      "last_night_5min_high": 80,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-24",
+      "weekly_avg": 66,
+      "last_night_avg": 67,
+      "last_night_5min_high": 103,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-23",
+      "weekly_avg": 66,
+      "last_night_avg": 60,
+      "last_night_5min_high": 87,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-22",
+      "weekly_avg": 67,
+      "last_night_avg": 66,
+      "last_night_5min_high": 85,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-21",
+      "weekly_avg": 67,
+      "last_night_avg": 68,
+      "last_night_5min_high": 100,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-20",
+      "weekly_avg": 67,
+      "last_night_avg": 70,
+      "last_night_5min_high": 120,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-19",
+      "weekly_avg": 65,
+      "last_night_avg": 64,
+      "last_night_5min_high": 88,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2025-12-18",
+      "weekly_avg": 67,
+      "last_night_avg": 69,
+      "last_night_5min_high": 104,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
     {
       "date": "2025-12-17",
       "weekly_avg": 67,
@@ -35566,6 +35986,86 @@
   ],
   "training_readiness": [
     {
+      "date": "2025-12-25",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 66,
+      "sleep_score": 69,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 251
+    },
+    {
+      "date": "2025-12-24",
+      "score": 26,
+      "level": "LOW",
+      "recovery_time": 1280,
+      "sleep_score": 53,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 304
+    },
+    {
+      "date": "2025-12-23",
+      "score": 40,
+      "level": "LOW",
+      "recovery_time": 386,
+      "sleep_score": 58,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 263
+    },
+    {
+      "date": "2025-12-22",
+      "score": 37,
+      "level": "LOW",
+      "recovery_time": 1120,
+      "sleep_score": 61,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 317
+    },
+    {
+      "date": "2025-12-21",
+      "score": 25,
+      "level": "LOW",
+      "recovery_time": 998,
+      "sleep_score": 50,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 304
+    },
+    {
+      "date": "2025-12-20",
+      "score": 33,
+      "level": "LOW",
+      "recovery_time": 439,
+      "sleep_score": 53,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 253
+    },
+    {
+      "date": "2025-12-19",
+      "score": 17,
+      "level": "POOR",
+      "recovery_time": 1338,
+      "sleep_score": 49,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 309
+    },
+    {
+      "date": "2025-12-18",
+      "score": 37,
+      "level": "LOW",
+      "recovery_time": 102,
+      "sleep_score": 53,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 245
+    },
+    {
       "date": "2025-12-17",
       "score": 31,
       "level": "LOW",
@@ -39518,9 +40018,49 @@
   ],
   "stress_readings": [
     {
-      "date": "2025-12-17",
-      "avg_stress": 19,
+      "date": "2025-12-25",
+      "avg_stress": 21,
       "max_stress": 84
+    },
+    {
+      "date": "2025-12-24",
+      "avg_stress": 28,
+      "max_stress": 96
+    },
+    {
+      "date": "2025-12-23",
+      "avg_stress": 27,
+      "max_stress": 96
+    },
+    {
+      "date": "2025-12-22",
+      "avg_stress": 23,
+      "max_stress": 89
+    },
+    {
+      "date": "2025-12-21",
+      "avg_stress": 21,
+      "max_stress": 87
+    },
+    {
+      "date": "2025-12-20",
+      "avg_stress": 22,
+      "max_stress": 84
+    },
+    {
+      "date": "2025-12-19",
+      "avg_stress": 26,
+      "max_stress": 99
+    },
+    {
+      "date": "2025-12-18",
+      "avg_stress": 20,
+      "max_stress": 91
+    },
+    {
+      "date": "2025-12-17",
+      "avg_stress": 21,
+      "max_stress": 93
     },
     {
       "date": "2025-12-16",
@@ -41494,6 +42034,54 @@
     }
   ],
   "spo2_readings": [
+    {
+      "date": "2025-12-25",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2025-12-24",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2025-12-23",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 84,
+      "avg_sleep_spo2": 94.0
+    },
+    {
+      "date": "2025-12-22",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2025-12-21",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2025-12-20",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2025-12-19",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 97.0
+    },
+    {
+      "date": "2025-12-18",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
     {
       "date": "2025-12-17",
       "avg_spo2": 95.0,
@@ -43867,11 +44455,67 @@
   ],
   "body_battery": [
     {
+      "date": "2025-12-25",
+      "charged": 55,
+      "drained": 20,
+      "latest_level": 56,
+      "latest_timestamp": 1766676780000
+    },
+    {
+      "date": "2025-12-24",
+      "charged": 64,
+      "drained": 83,
+      "latest_level": 15,
+      "latest_timestamp": 1766632140000
+    },
+    {
+      "date": "2025-12-23",
+      "charged": 58,
+      "drained": 67,
+      "latest_level": 21,
+      "latest_timestamp": 1766543580000
+    },
+    {
+      "date": "2025-12-22",
+      "charged": 68,
+      "drained": 72,
+      "latest_level": 31,
+      "latest_timestamp": 1766456460000
+    },
+    {
+      "date": "2025-12-21",
+      "charged": 73,
+      "drained": 62,
+      "latest_level": 52,
+      "latest_timestamp": 1766379420000
+    },
+    {
+      "date": "2025-12-20",
+      "charged": 69,
+      "drained": 63,
+      "latest_level": 28,
+      "latest_timestamp": 1766283480000
+    },
+    {
+      "date": "2025-12-19",
+      "charged": 60,
+      "drained": 73,
+      "latest_level": 22,
+      "latest_timestamp": 1766197620000
+    },
+    {
+      "date": "2025-12-18",
+      "charged": 61,
+      "drained": 62,
+      "latest_level": 36,
+      "latest_timestamp": 1766112480000
+    },
+    {
       "date": "2025-12-17",
-      "charged": 39,
-      "drained": 35,
+      "charged": 61,
+      "drained": 57,
       "latest_level": 48,
-      "latest_timestamp": 1765991160000
+      "latest_timestamp": 1766033100000
     },
     {
       "date": "2025-12-16",
@@ -46027,23 +46671,23 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-12-17",
-    "time_5k": 1477,
-    "time_10k": 3101,
-    "time_half_marathon": 6959,
-    "time_marathon": 15231
+    "date": "2025-12-25",
+    "time_5k": 1478,
+    "time_10k": 3120,
+    "time_half_marathon": 7005,
+    "time_marathon": 15455
   },
   "training_status": {
-    "date": "2025-12-17",
+    "date": "2025-12-25",
     "vo2_max": {
-      "date": "2025-12-17",
+      "date": "2025-12-24",
       "value": 50.0,
-      "precise_value": 49.7
+      "precise_value": 49.6
     },
     "training_load": {
-      "date": "2025-12-17",
-      "aerobic_low": 549.66034,
-      "aerobic_high": 377.72284,
+      "date": "2025-12-25",
+      "aerobic_low": 842.00226,
+      "aerobic_high": 0.0,
       "anaerobic": 0.0,
       "feedback": "AEROBIC_HIGH_SHORTAGE"
     },
@@ -46114,9 +46758,28 @@
       "garmin_id": 1412726075
     },
     {
-      "scheduled_date": "2025-12-21",
+      "scheduled_date": "2025-12-27",
+      "name": "2025-12-27 - Strength: Session C",
+      "description": "[HOLD | Foundation | Session C] (25-30 min)\nUnilateral + Calves + Trunk\n\nWARMUP:\nAnkle circles 10ea, lunges x6ea, leg swings 8ea\n\nKEY FOCUS:\n- Reverse Lunge: 3x8 each, rest 90s (RPE 6-7)\n  Progression: Maintain load, refine balance\n\nSUPPORTING:\n- Step-ups: 2x8 each, rest 60s (single-leg strength)\n- Half-kneeling DB Press: 2x8 each (trunk stability)\n\nACCESSORY:\n- Calf Raises (straight): 2x15\n- Calf Raises (bent): 2x12\n- Farmer Carry: 2x30s (trunk + grip)\n\nNOTES: Single-leg stability focus.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 30,
+      "garmin_id": 1419606788
+    },
+    {
+      "scheduled_date": "2025-12-28",
       "scheduled_datetime": null,
       "name": "Run: 40-55 min E",
+      "description": "Workout: Run",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
+    },
+    {
+      "scheduled_date": "2025-12-26",
+      "scheduled_datetime": null,
+      "name": "Run: 45-50 min E",
       "description": "Workout: Run",
       "duration_seconds": null,
       "location": null,
@@ -46127,20 +46790,10 @@
       "scheduled_date": "2025-12-19",
       "scheduled_datetime": null,
       "name": "Run: 30-45 min E",
-      "description": "Workout: Run",
+      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
       "duration_seconds": null,
       "location": null,
       "all_day": true,
-      "source": "ics_calendar"
-    },
-    {
-      "scheduled_date": "2025-12-17",
-      "scheduled_datetime": "2025-12-17T15:16:26",
-      "name": "Run: 30-45 min E",
-      "description": "Workout: Run",
-      "duration_seconds": 3600,
-      "location": null,
-      "all_day": false,
       "source": "ics_calendar"
     },
     {
@@ -46155,6 +46808,16 @@
       "workout_id": 1409435342,
       "sport_type": "strength_training",
       "workout_provider": null
+    },
+    {
+      "scheduled_date": "2025-12-17",
+      "scheduled_datetime": null,
+      "name": "Run: 30-45 min E",
+      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
+      "duration_seconds": null,
+      "location": null,
+      "all_day": true,
+      "source": "ics_calendar"
     },
     {
       "scheduled_date": "2025-12-16",
@@ -46308,8 +46971,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 542385.5186462402,
-      "total_activities": 67,
+      "total_distance_meters": 573477.8877868652,
+      "total_activities": 71,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -46333,10 +46996,58 @@
   ],
   "daily_steps": [
     {
-      "date": "2025-12-17",
-      "total_steps": 7706,
-      "goal_steps": 10470,
+      "date": "2025-12-25",
+      "total_steps": 2895,
+      "goal_steps": 13350,
       "goal_met": false
+    },
+    {
+      "date": "2025-12-24",
+      "total_steps": 22371,
+      "goal_steps": 12340,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-23",
+      "total_steps": 9046,
+      "goal_steps": 12700,
+      "goal_met": false
+    },
+    {
+      "date": "2025-12-22",
+      "total_steps": 18583,
+      "goal_steps": 11220,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-21",
+      "total_steps": 17159,
+      "goal_steps": 10560,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-20",
+      "total_steps": 8010,
+      "goal_steps": 10840,
+      "goal_met": false
+    },
+    {
+      "date": "2025-12-19",
+      "total_steps": 15480,
+      "goal_steps": 10320,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-18",
+      "total_steps": 7597,
+      "goal_steps": 10620,
+      "goal_met": false
+    },
+    {
+      "date": "2025-12-17",
+      "total_steps": 11921,
+      "goal_steps": 10470,
+      "goal_met": true
     },
     {
       "date": "2025-12-16",
@@ -46886,8 +47597,8 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-12-16",
-    "end_date": "2025-12-17",
+    "start_date": "2025-11-25",
+    "end_date": "2025-12-25",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,

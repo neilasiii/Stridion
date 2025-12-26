@@ -17,6 +17,30 @@
       "finalsurge_name": "Run: 30-45 min E",
       "workout_type": "easy",
       "generated_at": "2025-12-16T06:16:58.380236"
+    },
+    "2025-12-28": {
+      "garmin_id": 1414281400,
+      "finalsurge_name": "Run: 40-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-18T18:00:40.542668"
+    },
+    "2025-12-26": {
+      "garmin_id": 1414281409,
+      "finalsurge_name": "Run: 45-50 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-18T18:00:40.732295"
+    },
+    "2025-12-24": {
+      "garmin_id": 1414281412,
+      "finalsurge_name": "Run: 45-50 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-18T18:00:40.919096"
+    },
+    "2025-12-22": {
+      "garmin_id": 1414281413,
+      "finalsurge_name": "Run: 30-45 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-18T18:00:41.114400"
     }
   },
   "strength": {
@@ -27,6 +51,14 @@
       "focus_areas": "Key Focus: Goblet squat (4x8-10). Supporting: Reverse lunge, Half-kneeling press. Trunk: Dead bug",
       "intensity": "moderate",
       "generated_at": "2025-12-16T12:00:36.452234"
+    },
+    "2025-12-27": {
+      "garmin_id": 1419606788,
+      "name": "2025-12-27 - Strength: Session C",
+      "session_role": "C",
+      "focus_areas": "Key Focus: RFESS (3x8/leg). Supporting: Step-ups, KB swings. Trunk: Suitcase carry",
+      "intensity": "moderate",
+      "generated_at": "2025-12-25T00:00:34.004561"
     }
   },
   "mobility": {},
@@ -38,6 +70,16 @@
       ],
       "recovery_concern": false,
       "generated_at": "2025-12-16T12:00:36.452321"
+    },
+    "2025-12-22": {
+      "running_fingerprint": "2025-12-26:Run: 45-50 min E:False|2025-12-28:Run: 40-55 min E:False",
+      "strength_dates": [
+        "2025-12-22",
+        "2025-12-24",
+        "2025-12-27"
+      ],
+      "recovery_concern": false,
+      "generated_at": "2025-12-25T00:00:34.004590"
     }
   }
 }

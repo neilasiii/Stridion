@@ -24,6 +24,7 @@ data/calendar/*.ics
 
 # Cache backups (created automatically on corruption or before updates)
 *.json.bak
+*.json.backup-*
 
 # Note: data/health/health_data_cache.json is committed for cross-session persistence
 
@@ -39,10 +40,14 @@ bin/archive/
 # Log files
 data/*.log
 data/ai_validation.log
+*.log
 
 # Generated HTML reports (regenerated on demand)
 data/morning_report_detailed.html
 data/test_morning_report.html
+
+# Test files
+test_*.py
 
 # Python
 __pycache__/

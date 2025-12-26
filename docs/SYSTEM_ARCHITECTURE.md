@@ -517,7 +517,7 @@ data/
 **Sync Frequency:**
 - Manual: Run `bash bin/sync_garmin_data.sh` as needed
 - Automated (Termux): Every 6 hours via cron
-- Morning reports: 9:00 AM daily
+- Morning reports: Starts checking at 5:30 AM EST, continues until ~10:00 AM (sleep-aware)
 
 ### Expected Performance
 
