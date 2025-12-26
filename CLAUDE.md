@@ -177,6 +177,24 @@ bash bin/export_calendar.sh --days 30    # Custom duration
 ```
 
 
+**View Daily Workouts**
+
+```bash
+bash bin/daily_workouts.sh                    # Today's workouts
+bash bin/daily_workouts.sh --tomorrow         # Tomorrow's workouts
+bash bin/daily_workouts.sh --date 2025-12-20  # Specific date
+
+# Python API
+python3 src/daily_workout_formatter.py                # Today's workouts
+python3 src/daily_workout_formatter.py --date YYYY-MM-DD
+python3 src/daily_workout_formatter.py --tomorrow
+```
+
+**What it displays:**
+- Running workouts from FinalSurge (with full workout descriptions)
+- Strength workouts (with all sets, reps, tempo, rest periods, progression notes)
+- Mobility workouts (with all exercises, durations, and sequences)
+
 **Communication Preferences**
 
 ```bash
@@ -197,6 +215,7 @@ python3 src/morning_report.py                    # Full output (notification + r
 python3 src/morning_report.py --notification-only # Compact notification (~200 chars)
 python3 src/morning_report.py --full-only        # Detailed markdown report
 python3 src/morning_report.py --json             # JSON output with all data
+python3 src/morning_report.py --check-sleep      # Check if sleep data exists for today (exit 0=yes, 1=no)
 ```
 
 **What it does:**
@@ -204,7 +223,16 @@ python3 src/morning_report.py --json             # JSON output with all data
 - Recommends workout modifications based on readiness, body battery, HRV, sleep
 - Generates compact notification (<240 chars) for Android
 - Creates detailed markdown report with rationale
-- Falls back to rule-based recommendations if AI unavailable
+- **AI Fallback:** Uses Gemini API if Claude unavailable, falls back to rule-based if both fail
+
+**Sleep-Aware Scheduling (Discord Bot):**
+- Automated morning reports start checking at **5:30 AM EST** and continue until ~10:00 AM
+- Checks for sleep data every 20 minutes (catches early wake-ups and handles sleeping in)
+- If no sleep data detected, assumes you're still asleep and retries automatically
+- Automatically syncs with Garmin between retries to fetch latest sleep data
+- Generates report as soon as sleep data is found (e.g., if you wake at 6:30 AM, report sent ~6:30-6:50 AM)
+- Sends delayed notification if sleep data still missing by ~10:00 AM
+- Manual `/report` command bypasses sleep check and generates immediately
 
 **Discord Bot Interface**
 
@@ -219,14 +247,28 @@ journalctl -u running-coach-bot -f       # View bot logs
 - `/report` - Generate morning report
 - `/workout` - Show today's workouts
 - `/status` - View recovery metrics
-- `/ask <question>` - Ask AI coach a question
+- `/ask <question>` - Ask AI coach a question (general)
+- `/running <question>` - Ask running coach specifically
+- `/strength <question>` - Ask strength coach specifically
+- `/mobility <question>` - Ask mobility coach specifically
+- `/nutrition <question>` - Ask nutrition coach specifically
 - `/reset` - Start fresh conversation (resets session)
 - `/sessions` - View active session info
+
+**AI Features:**
+- All AI commands use **Claude Code with Gemini fallback**
+- If Claude is unavailable (outage or usage limit), automatically uses Google Gemini API (free tier)
+- Requires `GEMINI_API_KEY` in `config/gemini_api.env` for fallback to work
+- Get free API key: https://aistudio.google.com/app/apikey
 
 **Session Management:**
 - Conversational coaching in #coach channel maintains context across messages
 - Each user has persistent session (24-hour inactivity timeout)
 - Automatic session cleanup every hour
+
+**Scheduled Tasks:**
+- **Morning Report:** Starts checking at 5:30 AM EST, continues until ~10:00 AM (sends to #morning-report channel when sleep data detected)
+- **Periodic Sync:** 6:00 AM and 12:00 PM EST (sends to #sync-log channel with Termux-style notifications)
 
 See [docs/DISCORD_BOT_SETUP_COMPLETE.md](docs/DISCORD_BOT_SETUP_COMPLETE.md) for complete setup guide.
 
@@ -236,8 +278,21 @@ The system runs on systemd with the Discord bot providing the primary interface.
 
 **Current Setup:**
 - Discord bot runs as systemd service: `sudo systemctl status running-coach-bot`
+- **Restart bot:** `sudo systemctl restart running-coach-bot` (user has NOPASSWD sudo for systemctl)
 - Manual sync: `bash bin/sync_garmin_data.sh` or `bash bin/smart_sync.sh`
-- Morning reports: `bash bin/morning_report.sh` (can be run via cron if needed)
+- Morning reports: `bash bin/morning_report.sh` (automated via Discord bot at 9am EST)
+
+**Gemini API Configuration (for AI fallback):**
+```bash
+# Create config file
+cp config/gemini_api.env.example config/gemini_api.env
+
+# Add your API key (get from https://aistudio.google.com/app/apikey)
+echo "GEMINI_API_KEY=your_api_key_here" > config/gemini_api.env
+
+# Test Gemini connection
+python3 src/gemini_client.py --test
+```
 
 ### Workout Management
 

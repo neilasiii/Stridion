@@ -110,7 +110,7 @@ You can also send messages directly in the **#coach** channel for conversational
 
 ### Automated Tasks
 
-- **Morning Report** - Posts at 9:00 AM daily to #morning-report
+- **Morning Report** - Starts checking at 5:30 AM EST and continues until ~10:00 AM, posts to #morning-report when sleep data is detected (sleep-aware scheduling)
 - **Periodic Sync** - Runs every 6 hours, posts updates to #sync-log when there are new activities or workouts
 
 ### Conversational Coaching
@@ -168,8 +168,9 @@ journalctl -u running-coach-bot --since "1 hour ago"
 
 - Check that #morning-report channel ID is correct in `config/discord_bot.env`
 - Verify bot has "Send Messages" permission in that channel
-- Check logs at 9:00 AM for errors
-- Test manually with `/report` command
+- Check logs between 5:30 AM - 10:00 AM for errors
+- System waits for sleep data - if no sleep detected by ~10:00 AM, sends delayed notification
+- Test manually with `/report` command (bypasses sleep check)
 
 ---
 
@@ -210,7 +211,7 @@ sudo systemctl disable running-coach-bot
 
 1. ✅ Install and start the systemd service (see Manual Steps above)
 2. ✅ Test all slash commands in Discord
-3. ✅ Verify morning report posts at 9:00 AM tomorrow
+3. ✅ Verify morning report starts checking at 5:30 AM tomorrow (sends when sleep data detected)
 4. ✅ Monitor for 24 hours to ensure stability
 5. 🔲 Optional: Disable any old Termux cron jobs if migrating from Android
 
