@@ -3,12 +3,20 @@
     {
       "name": "FinalSurge Training Calendar",
       "url": "https://log.finalsurge.com/delivery/ical/YOUR_CALENDAR_ID_HERE",
-      "enabled": true
+      "enabled": true,
+      "type": "training"
     },
     {
       "name": "TrainingPeaks Calendar (disabled example)",
       "url": "webcal://www.trainingpeaks.com/ical/YOUR_ID.ics",
-      "enabled": false
+      "enabled": false,
+      "type": "training"
+    },
+    {
+      "name": "Spouse Work Schedule (constraint calendar example)",
+      "url": "https://example.com/spouse_calendar.ics",
+      "enabled": false,
+      "type": "constraint"
     }
   ]
 }
