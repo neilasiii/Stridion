@@ -76,30 +76,6 @@
       "intensity": "moderate",
       "generated_at": "2025-12-16T12:00:36.452234"
     },
-    "2025-12-30": {
-      "garmin_id": 1421438022,
-      "name": "2025-12-30 - Strength: Session A",
-      "session_role": "A",
-      "focus_areas": "Key Focus: Goblet squat (4x8-10). Supporting: Reverse lunge, Half-kneeling press. Trunk: Dead bug",
-      "intensity": "full",
-      "generated_at": "2025-12-27T06:32:09.384496"
-    },
-    "2026-01-01": {
-      "garmin_id": 1421438035,
-      "name": "2026-01-01 - Strength: Session B",
-      "session_role": "B",
-      "focus_areas": "Key Focus: DB RDL (4x8-10). Supporting: Single-leg RDL, Chest-supported row. Trunk: Pallof press",
-      "intensity": "full",
-      "generated_at": "2025-12-27T06:32:09.638967"
-    },
-    "2026-01-03": {
-      "garmin_id": 1421438039,
-      "name": "2026-01-03 - Strength: Session C",
-      "session_role": "C",
-      "focus_areas": "Key Focus: RFESS (3x8/leg). Supporting: Step-ups, KB swings. Trunk: Suitcase carry",
-      "intensity": "moderate",
-      "generated_at": "2025-12-27T06:32:09.897966"
-    },
     "2025-12-27": {
       "garmin_id": 1421700496,
       "name": "2025-12-27 - Strength: Session C",
@@ -107,6 +83,30 @@
       "focus_areas": "Key Focus: Split squat (unilateral). Supporting: Step-ups, glute bridges. Upper: Push+Pull combo. Trunk: Anti-lateral flexion (side plank)",
       "intensity": "moderate",
       "generated_at": "2025-12-27T12:26:54.811668"
+    },
+    "2025-12-30": {
+      "garmin_id": 1421719825,
+      "name": "2025-12-30 - Strength: Session A",
+      "session_role": "A",
+      "focus_areas": "Key Focus: Goblet Squat. Supporting: Reverse Lunge, DB RDL. Upper: Half-kneeling DB Press. Trunk: Pallof Press.",
+      "intensity": "full",
+      "generated_at": "2025-12-27T12:51:50.656550"
+    },
+    "2026-01-01": {
+      "garmin_id": 1421719827,
+      "name": "2026-01-01 - Strength: Session A",
+      "session_role": "A",
+      "focus_areas": "Key Focus: DB RDL. Supporting: Single-leg RDL (light). Upper: Pull (DB Row). Trunk: Anti-rotation (Pallof, Dead Bug).",
+      "intensity": "full",
+      "generated_at": "2025-12-27T12:51:50.917998"
+    },
+    "2026-01-04": {
+      "garmin_id": 1421719829,
+      "name": "2026-01-04 - Strength: Session A",
+      "session_role": "A",
+      "focus_areas": "Key Focus: Split Squat. Supporting: Speed Goblet Squat. Upper: Push + Pull combo. Trunk: Anti-lateral flexion (Suitcase Carry).",
+      "intensity": "full",
+      "generated_at": "2025-12-27T12:51:51.203902"
     }
   },
   "mobility": {},
@@ -130,14 +130,14 @@
       "generated_at": "2025-12-27T12:26:54.811696"
     },
     "2025-12-29": {
-      "running_fingerprint": "2025-12-29:Run: 50-55 min E:False|2025-12-31:Run: 50-55 min E:False|2026-01-02:Run: 50-55 min E:False|2026-01-04:Run: 60-70 min E:False",
+      "running_fingerprint": "2025-12-29:Run: 50-55 min E:False|2025-12-31:Run: 50-55 min E:False|2026-01-02:Run: 50-55 min E:False|2026-01-03:Run: 60-70 min E:False",
       "strength_dates": [
         "2025-12-30",
         "2026-01-01",
-        "2026-01-03"
+        "2026-01-04"
       ],
       "recovery_concern": false,
-      "generated_at": "2025-12-27T06:32:09.897996"
+      "generated_at": "2025-12-27T12:51:51.203934"
     }
   }
 }

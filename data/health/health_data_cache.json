@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-12-27T17:41:22.343420+00:00",
+  "last_updated": "2025-12-27T17:51:51.206091+00:00",
   "last_sync_date": "2025-12-27",
   "activities": [
     {
@@ -44605,9 +44605,9 @@
     {
       "date": "2025-12-27",
       "charged": 51,
-      "drained": 28,
-      "latest_level": 73,
-      "latest_timestamp": 1766855700000
+      "drained": 30,
+      "latest_level": 71,
+      "latest_timestamp": 1766857140000
     },
     {
       "date": "2025-12-26",
@@ -46920,33 +46920,6 @@
       "garmin_id": 1412726075
     },
     {
-      "scheduled_date": "2025-12-30",
-      "name": "2025-12-30 - Strength: Session A",
-      "description": "[BUILD | Foundation | Session A] (30-35 min)\nSquat + Push emphasis\n\nWARMUP:\nCat-cow x8, BW squats x10, leg swings 10ea, band pull-aparts x12\n\nKEY FOCUS:\n- Goblet Squat: 4x8, rest 90-120s (RPE 6-8, tempo 3-1-1)\n  Progression: Add 1 rep/set at RPE <7, then +5-10lb\n\nSUPPORTING:\n- Push-ups: 3x10-12, rest 60s (trunk rigidity)\n- DB RDL: 3x10, rest 60s (posterior chain balance)\n\nACCESSORY:\n- Calf Raises (straight): 3x15\n- Dead Bug: 2x10 each (anti-extension)\n- Plank: 2x30s\n\nNOTES: Expected soreness: minimal. Scale if runs feel heavy.",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1421438022
-    },
-    {
-      "scheduled_date": "2026-01-01",
-      "name": "2026-01-01 - Strength: Session B",
-      "description": "[BUILD | Foundation | Session B] (30-35 min)\nHinge + Pull emphasis\n\nWARMUP:\nHip circles 10ea, good mornings x10, band pull-aparts x15\n\nKEY FOCUS:\n- DB RDL: 4x8, rest 90-120s (RPE 6-8)\n  Progression: Add 1 rep/set at RPE <7, then +load\n\nSUPPORTING:\n- Chest-supported Row: 3x12, rest 60s (posture, isolates back)\n- Single-leg RDL: 3x6 each, rest 60s (unilateral hinge)\n\nACCESSORY:\n- Bent-knee Calf Raise: 3x15\n- Pallof Press: 2x10 each (anti-rotation)\n- Bird Dog: 2x8 each\n\nNOTES: Expected soreness: minimal. Hinge focus, pull for posture.",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1421438035
-    },
-    {
-      "scheduled_date": "2026-01-03",
-      "name": "2026-01-03 - Strength: Session C",
-      "description": "[HOLD | Foundation | Session C] (25-30 min)\nUnilateral + Calves + Trunk\n\nWARMUP:\nAnkle circles 10ea, lunges x6ea, leg swings 8ea\n\nKEY FOCUS:\n- Reverse Lunge: 3x8 each, rest 90s (RPE 6-7)\n  Progression: Maintain load, refine balance\n\nSUPPORTING:\n- Step-ups: 2x8 each, rest 60s (single-leg strength)\n- Half-kneeling DB Press: 2x8 each (trunk stability)\n\nACCESSORY:\n- Calf Raises (straight): 2x15\n- Calf Raises (bent): 2x12\n- Farmer Carry: 2x30s (trunk + grip)\n\nNOTES: Single-leg stability focus.",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 30,
-      "garmin_id": 1421438039
-    },
-    {
       "scheduled_date": "2025-12-27",
       "name": "2025-12-27 - Strength: Session C",
       "description": "[HOLD | Foundation | Session C] (25-30 min)\nUnilateral + Calves + Trunk\n\nWARMUP:\nAnkle circles 10ea, lunges x6ea, leg swings 8ea\n\nKEY FOCUS:\n- Reverse Lunge: 3x8 each, rest 90s (RPE 6-7)\n  Progression: Maintain load, refine balance\n\nSUPPORTING:\n- Step-ups: 2x8 each, rest 60s (single-leg strength)\n- Half-kneeling DB Press: 2x8 each (trunk stability)\n\nACCESSORY:\n- Calf Raises (straight): 2x15\n- Calf Raises (bent): 2x12\n- Farmer Carry: 2x30s (trunk + grip)\n\nNOTES: Single-leg stability focus.",
@@ -46954,6 +46927,33 @@
       "domain": "strength",
       "duration_min": 30,
       "garmin_id": 1421700496
+    },
+    {
+      "scheduled_date": "2025-12-30",
+      "name": "2025-12-30 - Strength: Session A",
+      "description": "2025-12-30 - Strength: Session A [BUILD | Foundation | Session A] (35 min)\n\nWARMUP:\nCat-cow x10, Bird-dog x8/side, Goblet squat x10 (light), Glute bridge x12\n\nKEY FOCUS:\n- Goblet Squat: 4x8-10, rest 90-120s\n  (RPE 6-7, tempo 3-1-1 (3s down, 1s pause, 1s up), DB at chest)\n  Progression: Add 1 rep/set when RPE <7 across all sets, then +5-10lb DB\n\nSUPPORTING:\n- Reverse Lunge (alternating): 3x8/leg, rest 60-90s\n  (Single-leg stability, stance phase strength)\n- DB RDL: 3x10, rest 60-90s\n  (Hamstring/glute endurance, propulsion power)\n- Half-kneeling DB Press: 3x8/arm, rest 60s\n  (Trunk stability + arm drive mechanics)\n\nACCESSORY:\n- Pallof Press (band): 2x10/side\n  (Anti-rotation, controlled tempo)\n- Calf Raise (DB held): 2x15\n  (2s pause at top, full ROM)\n\nNOTES:\nExpected soreness: minimal glutes/quads. Scale key focus to RPE 6 if runs Mon/Wed feel heavy. 48+ hrs before next easy run.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1421716810
+    },
+    {
+      "scheduled_date": "2026-01-01",
+      "name": "2026-01-01 - Strength: Session A",
+      "description": "2026-01-01 - Strength: Session A [BUILD | Foundation | Session A] (35 min)\n\nWARMUP:\nGlute bridge x10, Bird dog x8/side, Bodyweight RDL x8, Arm circles x10/dir\n\nKEY FOCUS:\n- DB Romanian Deadlift: 4x8-10, rest 90-120s\n  (RPE 6-8, tempo 3-1-1, hinge at hips, soft knees)\n  Progression: Add 1 rep/set when RPE <7, then +5lbs\n\nSUPPORTING:\n- Single-leg RDL (light DB): 3x8/leg, rest 60-90s\n  (Hip stability, prevents IT band issues)\n- Chest-supported DB row: 3x10-12, rest 60s\n  (Posture in late-race fatigue)\n- Half-kneeling Pallof press: 3x10/side, rest 45s\n  (Anti-rotation for trunk stability)\n\nACCESSORY:\n- Standing calf raise: 2x15\n  (Control 2s up, 2s down)\n- Dead bug: 2x10/side\n  (Slow, maintain low back contact)\n\nNOTES:\nExpected soreness: minimal glutes/hamstrings. Scale if Friday run feels heavy. Good placement before weekend easy runs.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1421716813
+    },
+    {
+      "scheduled_date": "2026-01-04",
+      "name": "2026-01-04 - Strength: Session A",
+      "description": "2026-01-04 - Strength: Session A [BUILD | Foundation | Session A] (35 min)\n\nWARMUP:\nGlute bridge x10, Bodyweight split squat x6/leg, Band pull-apart x15, World's greatest stretch x4/side\n\nKEY FOCUS:\n- DB Split Squat (rear foot elevated 4-6\"): 4x8-10/leg, rest 90-120s\n  (RPE 7-8, tempo 3-1-1 (3s down). Torso upright, front knee tracking over toes.)\n  Progression: Add 1 rep/leg when RPE <7, then +2.5-5lb/hand\n\nSUPPORTING:\n- Speed Goblet Squat (light): 3x12, rest 60s\n  (Power, hip extension speed)\n- Half-kneeling DB Press: 3x8-10/side, rest 60-90s\n  (Arm drive, trunk stability)\n- Chest-supported DB Row: 3x10-12, rest 60s\n  (Posture, late-race resilience)\n\nACCESSORY:\n- Suitcase Carry: 2x40m/side\n  (Anti-lateral flexion, trunk rigidity)\n- Calf Raises (slow eccentric): 2x15\n  (3s down, Achilles health)\n\nNOTES:\nExpected soreness: minimal glutes/quads. 48h before Sat long run. Scale supporting work if easy runs feel heavy.",
+      "source": "auto_generated",
+      "domain": "strength",
+      "duration_min": 35,
+      "garmin_id": 1421716819
     },
     {
       "scheduled_date": "2026-01-03",
@@ -47264,7 +47264,7 @@
   "daily_steps": [
     {
       "date": "2025-12-27",
-      "total_steps": 4027,
+      "total_steps": 4038,
       "goal_steps": 14190,
       "goal_met": false
     },
