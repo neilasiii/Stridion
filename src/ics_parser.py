@@ -269,6 +269,53 @@ def filter_future_events(events: List[Dict[str, Any]],
     return filtered
 
 
+def _detect_workout_domain(event: Dict[str, Any]) -> str:
+    """
+    Detect the workout domain (running, strength, mobility, etc.) from event info.
+
+    Args:
+        event: ICS event dictionary
+
+    Returns:
+        Domain string: 'running', 'strength', 'mobility', 'cycling', or 'unknown'
+    """
+    name = event.get('name', '').lower()
+    description = event.get('description', '').lower()
+    combined = f"{name} {description}"
+
+    # Check for strength indicators
+    if any(keyword in combined for keyword in [
+        'strength', 'weights', 'lifting', 'squat', 'deadlift',
+        'press', 'pull-up', 'push-up', 'lunge', 'rdl'
+    ]):
+        return 'strength'
+
+    # Check for mobility indicators
+    if any(keyword in combined for keyword in [
+        'mobility', 'stretching', 'flexibility', 'yoga',
+        'foam roll', 'dynamic warm'
+    ]):
+        return 'mobility'
+
+    # Check for cycling indicators
+    if any(keyword in combined for keyword in [
+        'bike', 'cycling', 'ride', 'trainer'
+    ]):
+        return 'cycling'
+
+    # Check for running indicators
+    if any(keyword in combined for keyword in [
+        'run:', 'running', 'easy', 'tempo', 'interval',
+        'marathon', 'threshold', 'recovery', 'long run',
+        'min e', 'min m', 'min t', 'min i', 'min r',  # Daniels pace codes
+        '@ e', '@ m', '@ t', '@ i', '@ r'
+    ]):
+        return 'running'
+
+    # Default to unknown
+    return 'unknown'
+
+
 def merge_ics_with_garmin_workouts(ics_events: List[Dict[str, Any]],
                                    garmin_workouts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
@@ -300,6 +347,9 @@ def merge_ics_with_garmin_workouts(ics_events: List[Dict[str, Any]],
             'all_day': ics_event['all_day'],
             'source': 'ics_calendar'
         }
+
+        # Detect and tag workout domain
+        workout['domain'] = _detect_workout_domain(ics_event)
 
         # Try to find matching Garmin workout template
         garmin_match = garmin_by_name.get(ics_event['name'])

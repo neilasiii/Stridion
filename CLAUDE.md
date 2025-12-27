@@ -176,6 +176,39 @@ bash bin/export_calendar.sh              # Next 14 days
 bash bin/export_calendar.sh --days 30    # Custom duration
 ```
 
+**Schedule Constraints (Automatic Workout Rescheduling)**
+
+The system supports **constraint calendars** that automatically reschedule running workouts when they conflict with unavailable days (e.g., spouse work schedule, childcare commitments).
+
+```bash
+# Add constraint calendar to config/calendar_sources.json
+{
+  "name": "Wife's Nursing Schedule",
+  "url": "https://app.nursegrid.com/calendars/...",
+  "enabled": true,
+  "type": "constraint"  # vs "training"
+}
+```
+
+**How it works:**
+1. During sync, system downloads both training calendars (FinalSurge) AND constraint calendars
+2. Detects conflicts: running workouts scheduled on constrained days
+3. Intelligently reschedules within the same week (Mon-Sun)
+4. Adds note to workout description explaining the move:
+   ```
+   --- RESCHEDULED ---
+   Originally scheduled: 2026-01-04
+   Moved to: 2026-01-03
+   Reason: Conflict with spouse work schedule (childcare needs)
+   ---
+   ```
+
+**Rescheduling Logic:**
+- Only reschedules **running workouts** (strength/mobility are flexible)
+- Prefers nearby days (minimal disruption)
+- Avoids moving to other constrained days
+- Stays within the same week (preserves weekly training structure)
+- Warns if no good alternative exists
 
 **View Daily Workouts**
 
@@ -494,6 +527,13 @@ running-coach/
 - Returns to work January 6, 2026
 - Has 3 hours/week of work-granted fitness time (typically morning sessions)
 - Prefers early morning workouts on workdays
+
+**Spouse Work Schedule (Childcare Constraint):**
+- Wife works as a nurse (12-hour shifts, 7am-7pm)
+- Starts back January 4, 2026 (after maternity leave)
+- Cannot workout on wife's work days due to childcare
+- Schedule integrated via ICS feed (NurseGrid calendar)
+- System automatically reschedules conflicting running workouts to other days in the same week
 
 ### Dietary Requirements
 - **Gluten-free** (required)

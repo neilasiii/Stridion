@@ -46,6 +46,12 @@ except ImportError:
     filter_future_events = None
 
 try:
+    from workout_scheduler import apply_schedule_constraints
+except ImportError:
+    # Workout scheduler is optional - workouts won't be rescheduled for conflicts
+    apply_schedule_constraints = None
+
+try:
     from ics_exporter import export_calendar
 except ImportError:
     # ICS exporter is optional
@@ -1565,6 +1571,9 @@ def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = Fal
     1. Calendar URLs from config/calendar_sources.json
     2. Local .ics files in data/calendar/ directory
 
+    Handles both training calendars (FinalSurge) and constraint calendars (spouse schedule).
+    Automatically reschedules workouts that conflict with constraint days.
+
     Args:
         garmin_workouts: List of Garmin workout templates (without dates)
         quiet: Suppress output
@@ -1593,16 +1602,21 @@ def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = Fal
             for calendar_source in enabled_urls:
                 url = calendar_source.get('url')
                 name = calendar_source.get('name', 'Unknown')
+                calendar_type = calendar_source.get('type', 'training')  # 'training' or 'constraint'
 
                 if not url:
                     continue
 
                 try:
                     if not quiet:
-                        print(f"  Fetching: {name}")
+                        print(f"  Fetching: {name} (type: {calendar_type})")
                         print(f"    URL: {url}")
 
                     events = parse_ics_url(url)
+
+                    # Tag events with calendar type
+                    for event in events:
+                        event['calendar_type'] = calendar_type
 
                     # Filter to include past 30 days + next 14 days (matches default sync window)
                     filtered_events = filter_future_events(events, days_ahead=14, days_behind=30)
@@ -1633,6 +1647,10 @@ def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = Fal
 
                 events = parse_ics_file(str(ics_file))
 
+                # Tag events with calendar type (local files default to training)
+                for event in events:
+                    event['calendar_type'] = 'training'
+
                 # Filter to include past 30 days + next 14 days (matches default sync window)
                 filtered_events = filter_future_events(events, days_ahead=14, days_behind=30)
 
@@ -1653,14 +1671,30 @@ def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = Fal
         print(f"  2. Save .ics file to: {ICS_CALENDAR_DIR}/")
         return []
 
-    # Merge ICS events with Garmin workout templates
-    if not quiet:
-        print(f"  Merging {len(all_events)} calendar events with Garmin workout templates...")
+    # Separate training events from constraint events
+    training_events = [e for e in all_events if e.get('calendar_type') == 'training']
+    constraint_events = [e for e in all_events if e.get('calendar_type') == 'constraint']
 
-    scheduled_workouts = merge_ics_with_garmin_workouts(all_events, garmin_workouts)
+    # Merge training events with Garmin workout templates
+    if not quiet and training_events:
+        print(f"  Merging {len(training_events)} training calendar events with Garmin workout templates...")
 
-    if not quiet:
+    scheduled_workouts = merge_ics_with_garmin_workouts(training_events, garmin_workouts)
+
+    if not quiet and scheduled_workouts:
         print(f"  Created {len(scheduled_workouts)} scheduled workouts with dates")
+
+    # Apply schedule constraints (reschedule workouts that conflict with constraint days)
+    if apply_schedule_constraints and constraint_events:
+        scheduled_workouts, warnings = apply_schedule_constraints(
+            scheduled_workouts,
+            all_events,  # Pass all events including constraints
+            quiet=quiet
+        )
+
+        # Log any warnings
+        for warning in warnings:
+            print(f"  {warning}", file=sys.stderr)
 
     return scheduled_workouts
 
