@@ -29,6 +29,7 @@ def deduplicate_workouts():
 
     seen = {}
     deduped = []
+    removal_log = []  # Track removed workouts with reasons
 
     for w in workouts:
         key = workout_key(w)
@@ -46,13 +47,33 @@ def deduplicate_workouts():
             priority = {'auto_generated': 3, 'ics_calendar+garmin_template': 2, 'ics_calendar': 1}
 
             if priority.get(source, 0) > priority.get(existing_source, 0):
-                # Replace with higher priority
+                # Replace with higher priority - log the existing (lower priority) removal
+                removal_log.append({
+                    'date': existing['scheduled_date'],
+                    'name': existing['name'],
+                    'source': existing_source,
+                    'reason': f"Replaced by higher priority ({source})"
+                })
                 deduped.remove(existing)
                 deduped.append(w)
                 seen[key] = w
+            else:
+                # Keep existing, log the duplicate removal
+                removal_log.append({
+                    'date': w['scheduled_date'],
+                    'name': w['name'],
+                    'source': source,
+                    'reason': f"Duplicate (kept {existing_source})"
+                })
 
     print(f"Deduplicated workout count: {len(deduped)}")
     print(f"Removed {len(workouts) - len(deduped)} duplicate entries")
+
+    # Print removal details for Discord sync log
+    if removal_log:
+        print("\nRemoved workouts:")
+        for entry in removal_log:
+            print(f"  • {entry['date']}: {entry['name']} - {entry['reason']}")
 
     # Update the data
     data['scheduled_workouts'] = deduped
