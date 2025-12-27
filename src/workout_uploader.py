@@ -356,6 +356,96 @@ def schedule_workout(client: Garmin, workout_id: int, schedule_date: str, quiet:
         raise
 
 
+def delete_workout(client: Garmin, workout_id: int, quiet: bool = False) -> bool:
+    """
+    Delete a workout from Garmin Connect.
+
+    Args:
+        client: Authenticated Garmin client
+        workout_id: Garmin workout ID to delete
+        quiet: Suppress output
+
+    Returns:
+        True if successful, False if failed
+
+    Note:
+        This deletes the workout definition AND removes it from the calendar.
+        Use with caution - deletion is permanent.
+
+    Example:
+        >>> client = get_garmin_client()
+        >>> delete_workout(client, 1234567890)
+        ✓ Successfully deleted workout 1234567890
+        True
+    """
+    if not quiet:
+        print(f"  Deleting workout {workout_id} from Garmin Connect...")
+
+    try:
+        # Delete the workout using the workout-service API
+        client.garth.delete(
+            "connectapi",
+            f"/workout-service/workout/{workout_id}",
+            api=True
+        )
+
+        if not quiet:
+            print(f"  ✓ Successfully deleted workout {workout_id}")
+
+        return True
+
+    except Exception as e:
+        if not quiet:
+            print(f"  ✗ Failed to delete workout {workout_id}: {e}", file=sys.stderr)
+        return False
+
+
+def unschedule_workout(client: Garmin, workout_id: int, schedule_date: str, quiet: bool = False) -> bool:
+    """
+    Remove a workout from the Garmin calendar without deleting the workout definition.
+
+    Args:
+        client: Authenticated Garmin client
+        workout_id: Garmin workout ID
+        schedule_date: Date in YYYY-MM-DD format
+        quiet: Suppress output
+
+    Returns:
+        True if successful, False if failed
+
+    Note:
+        This only removes the calendar schedule. The workout definition remains
+        and can be rescheduled to another date.
+
+    Example:
+        >>> client = get_garmin_client()
+        >>> unschedule_workout(client, 1234567890, "2025-12-10")
+        ✓ Successfully unscheduled workout from 2025-12-10
+        True
+    """
+    if not quiet:
+        print(f"  Unscheduling workout {workout_id} from {schedule_date}...")
+
+    try:
+        # Unschedule using DELETE on the schedule endpoint
+        client.garth.delete(
+            "connectapi",
+            f"/workout-service/schedule/{workout_id}",
+            api=True,
+            params={"date": schedule_date}
+        )
+
+        if not quiet:
+            print(f"  ✓ Successfully unscheduled workout from {schedule_date}")
+
+        return True
+
+    except Exception as e:
+        if not quiet:
+            print(f"  ✗ Failed to unschedule workout: {e}", file=sys.stderr)
+        return False
+
+
 def upload_workout_from_file(client: Garmin, file_path: str,
                              auto_clean: bool = True, quiet: bool = False) -> Dict[str, Any]:
     """
