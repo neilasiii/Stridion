@@ -47,9 +47,11 @@ except ImportError:
 
 try:
     from workout_scheduler import apply_schedule_constraints
+    from workout_uploader import delete_workout
 except ImportError:
     # Workout scheduler is optional - workouts won't be rescheduled for conflicts
     apply_schedule_constraints = None
+    delete_workout = None
 
 try:
     from ics_exporter import export_calendar
@@ -1563,7 +1565,7 @@ def fetch_activity_gps_details(client: Garmin, activity_id: str, quiet: bool = F
         return {}
 
 
-def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = False) -> List[Dict[str, Any]]:
+def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = False) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     """
     Import scheduled workout dates from ICS calendar files and URLs.
 
@@ -1579,11 +1581,13 @@ def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = Fal
         quiet: Suppress output
 
     Returns:
-        List of scheduled workouts with dates from ICS calendar
+        Tuple of (scheduled_workouts, reschedule_log)
+        - scheduled_workouts: List of workouts with dates from ICS calendar
+        - reschedule_log: List of reschedule operations (for Garmin cleanup)
     """
     if parse_ics_file is None:
         # ICS parser not available
-        return []
+        return [], []
 
     all_events = []
 
@@ -1669,7 +1673,7 @@ def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = Fal
         print(f"  1. Add calendar URL to: {CALENDAR_SOURCES_FILE}")
         print(f"     OR")
         print(f"  2. Save .ics file to: {ICS_CALENDAR_DIR}/")
-        return []
+        return [], []
 
     # Separate training events from constraint events
     training_events = [e for e in all_events if e.get('calendar_type') == 'training']
@@ -1685,8 +1689,9 @@ def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = Fal
         print(f"  Created {len(scheduled_workouts)} scheduled workouts with dates")
 
     # Apply schedule constraints (reschedule workouts that conflict with constraint days)
+    reschedule_log = []
     if apply_schedule_constraints and constraint_events:
-        scheduled_workouts, warnings = apply_schedule_constraints(
+        scheduled_workouts, warnings, reschedule_log = apply_schedule_constraints(
             scheduled_workouts,
             all_events,  # Pass all events including constraints
             quiet=quiet
@@ -1696,7 +1701,7 @@ def import_ics_calendar(garmin_workouts: List[Dict[str, Any]], quiet: bool = Fal
         for warning in warnings:
             print(f"  {warning}", file=sys.stderr)
 
-    return scheduled_workouts
+    return scheduled_workouts, reschedule_log
 
 
 def load_cache() -> Dict[str, Any]:
@@ -1989,7 +1994,58 @@ def main():
         new_progress_summary = fetch_progress_summary(client, start_date, end_date, args.quiet)
 
         # Import ICS calendar and merge with Garmin templates
-        new_scheduled_workouts = import_ics_calendar(garmin_workout_templates, args.quiet)
+        new_scheduled_workouts, reschedule_log = import_ics_calendar(garmin_workout_templates, args.quiet)
+
+        # Delete old Garmin workouts that were rescheduled
+        if reschedule_log and delete_workout:
+            # Load generated workouts log to find Garmin IDs
+            generated_workouts_file = Path(__file__).parent.parent / 'data' / 'generated_workouts.json'
+            generated_workouts = {}
+            if generated_workouts_file.exists():
+                try:
+                    with open(generated_workouts_file, 'r') as f:
+                        generated_workouts = json.load(f)
+                except Exception as e:
+                    if not args.quiet:
+                        print(f"  ⚠ Could not load generated workouts log: {e}")
+
+            if not args.quiet:
+                print(f"\n🗑️  Cleaning up rescheduled workouts from Garmin...")
+
+            for entry in reschedule_log:
+                original_date = entry['original_date']
+                workout_name = entry['workout_name']
+                domain = entry.get('domain', 'unknown')
+
+                # Try to find garmin_id from entry or generated_workouts log
+                garmin_id = entry.get('garmin_id')
+
+                if not garmin_id and domain == 'running':
+                    # Check generated workouts log for running workouts
+                    running_workouts = generated_workouts.get('running', {})
+                    if original_date in running_workouts:
+                        garmin_id = running_workouts[original_date].get('garmin_id')
+                        if not args.quiet and garmin_id:
+                            print(f"  📋 Found Garmin ID {garmin_id} for {workout_name} on {original_date}")
+
+                if garmin_id:
+                    # Delete the old workout from Garmin
+                    success = delete_workout(client, garmin_id, quiet=args.quiet)
+
+                    # Remove from generated_workouts log if successful
+                    if success and domain == 'running':
+                        if original_date in generated_workouts.get('running', {}):
+                            del generated_workouts['running'][original_date]
+                            # Save updated log
+                            try:
+                                with open(generated_workouts_file, 'w') as f:
+                                    json.dump(generated_workouts, f, indent=2)
+                            except Exception as e:
+                                if not args.quiet:
+                                    print(f"  ⚠ Could not update generated workouts log: {e}")
+                else:
+                    if not args.quiet:
+                        print(f"  ⚠ Skipping deletion for '{workout_name}' - no Garmin ID found")
 
         # If no ICS calendar available, use Garmin templates as-is (without dates)
         if not new_scheduled_workouts and garmin_workout_templates:

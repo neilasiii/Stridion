@@ -114,7 +114,7 @@ def find_best_alternative_day(original_date: str,
 def reschedule_workouts(workouts: List[Dict[str, Any]],
                        constraint_days: Set[str],
                        domains_to_reschedule: List[str] = None,
-                       quiet: bool = False) -> tuple[List[Dict[str, Any]], List[str]]:
+                       quiet: bool = False) -> tuple[List[Dict[str, Any]], List[str], List[Dict[str, Any]]]:
     """
     Reschedule workouts that conflict with constraint days.
 
@@ -126,15 +126,17 @@ def reschedule_workouts(workouts: List[Dict[str, Any]],
         quiet: Suppress output
 
     Returns:
-        Tuple of (rescheduled_workouts, warnings)
+        Tuple of (rescheduled_workouts, warnings, reschedule_log)
         - rescheduled_workouts: Updated workout list
         - warnings: List of warning messages for conflicts that couldn't be resolved
+        - reschedule_log: List of reschedule operations with old/new dates and garmin_id
     """
     if domains_to_reschedule is None:
         domains_to_reschedule = ['running']
 
     rescheduled_workouts = []
     warnings = []
+    reschedule_log = []
 
     # Build set of currently scheduled dates for each domain
     scheduled_dates_by_domain = {}
@@ -171,6 +173,16 @@ def reschedule_workouts(workouts: List[Dict[str, Any]],
                 # Reschedule the workout
                 original_date = scheduled_date
                 workout['scheduled_date'] = new_date
+
+                # Log the reschedule operation (for Garmin cleanup)
+                reschedule_entry = {
+                    'original_date': original_date,
+                    'new_date': new_date,
+                    'workout_name': workout.get('name', 'Unknown'),
+                    'garmin_id': workout.get('garmin_id'),  # May be None if not yet uploaded
+                    'domain': domain
+                }
+                reschedule_log.append(reschedule_entry)
 
                 # Update scheduled_datetime if present
                 if workout.get('scheduled_datetime'):
@@ -218,12 +230,12 @@ def reschedule_workouts(workouts: List[Dict[str, Any]],
 
         rescheduled_workouts.append(workout)
 
-    return rescheduled_workouts, warnings
+    return rescheduled_workouts, warnings, reschedule_log
 
 
 def apply_schedule_constraints(training_workouts: List[Dict[str, Any]],
                                all_calendar_events: List[Dict[str, Any]],
-                               quiet: bool = False) -> tuple[List[Dict[str, Any]], List[str]]:
+                               quiet: bool = False) -> tuple[List[Dict[str, Any]], List[str], List[Dict[str, Any]]]:
     """
     Main entry point: Apply schedule constraints to training workouts.
 
@@ -239,14 +251,17 @@ def apply_schedule_constraints(training_workouts: List[Dict[str, Any]],
         quiet: Suppress output
 
     Returns:
-        Tuple of (updated_workouts, warnings)
+        Tuple of (updated_workouts, warnings, reschedule_log)
+        - updated_workouts: Workouts with rescheduled dates
+        - warnings: List of warning messages
+        - reschedule_log: List of reschedule operations for Garmin cleanup
     """
     # Identify days with constraints
     constraint_days = identify_constraint_days(all_calendar_events)
 
     if not constraint_days:
         # No constraints, return workouts as-is
-        return training_workouts, []
+        return training_workouts, [], []
 
     if not quiet:
         print(f"\n🚧 Schedule Constraints Detected:")
@@ -261,14 +276,14 @@ def apply_schedule_constraints(training_workouts: List[Dict[str, Any]],
             print(f"   ... and {len(sorted_dates) - 5} more")
 
     # Reschedule conflicting workouts
-    updated_workouts, warnings = reschedule_workouts(
+    updated_workouts, warnings, reschedule_log = reschedule_workouts(
         training_workouts,
         constraint_days,
         domains_to_reschedule=['running'],  # Only reschedule running workouts
         quiet=quiet
     )
 
-    return updated_workouts, warnings
+    return updated_workouts, warnings, reschedule_log
 
 
 if __name__ == '__main__':
