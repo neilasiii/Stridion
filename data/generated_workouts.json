@@ -41,6 +41,36 @@
       "finalsurge_name": "Run: 30-45 min E",
       "workout_type": "easy",
       "generated_at": "2025-12-18T18:00:41.114400"
+    },
+    "2026-01-04": {
+      "garmin_id": 1421438003,
+      "finalsurge_name": "Run: 60-70 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-27T06:32:07.414233"
+    },
+    "2026-01-02": {
+      "garmin_id": 1421438006,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-27T06:32:07.629335"
+    },
+    "2025-12-31": {
+      "garmin_id": 1421438007,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-27T06:32:07.831358"
+    },
+    "2025-12-29": {
+      "garmin_id": 1421438008,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-27T06:32:08.010164"
+    },
+    "2026-01-03": {
+      "garmin_id": 1421699147,
+      "finalsurge_name": "Run: 60-70 min E",
+      "workout_type": "easy",
+      "generated_at": "2025-12-27T12:25:05.961793"
     }
   },
   "strength": {
@@ -52,13 +82,37 @@
       "intensity": "moderate",
       "generated_at": "2025-12-16T12:00:36.452234"
     },
-    "2025-12-27": {
-      "garmin_id": 1419606788,
-      "name": "2025-12-27 - Strength: Session C",
+    "2025-12-30": {
+      "garmin_id": 1421438022,
+      "name": "2025-12-30 - Strength: Session A",
+      "session_role": "A",
+      "focus_areas": "Key Focus: Goblet squat (4x8-10). Supporting: Reverse lunge, Half-kneeling press. Trunk: Dead bug",
+      "intensity": "full",
+      "generated_at": "2025-12-27T06:32:09.384496"
+    },
+    "2026-01-01": {
+      "garmin_id": 1421438035,
+      "name": "2026-01-01 - Strength: Session B",
+      "session_role": "B",
+      "focus_areas": "Key Focus: DB RDL (4x8-10). Supporting: Single-leg RDL, Chest-supported row. Trunk: Pallof press",
+      "intensity": "full",
+      "generated_at": "2025-12-27T06:32:09.638967"
+    },
+    "2026-01-03": {
+      "garmin_id": 1421438039,
+      "name": "2026-01-03 - Strength: Session C",
       "session_role": "C",
       "focus_areas": "Key Focus: RFESS (3x8/leg). Supporting: Step-ups, KB swings. Trunk: Suitcase carry",
       "intensity": "moderate",
-      "generated_at": "2025-12-25T00:00:34.004561"
+      "generated_at": "2025-12-27T06:32:09.897966"
+    },
+    "2025-12-27": {
+      "garmin_id": 1421700496,
+      "name": "2025-12-27 - Strength: Session C",
+      "session_role": "C",
+      "focus_areas": "Key Focus: Split squat (unilateral). Supporting: Step-ups, glute bridges. Upper: Push+Pull combo. Trunk: Anti-lateral flexion (side plank)",
+      "intensity": "moderate",
+      "generated_at": "2025-12-27T12:26:54.811668"
     }
   },
   "mobility": {},
@@ -72,14 +126,24 @@
       "generated_at": "2025-12-16T12:00:36.452321"
     },
     "2025-12-22": {
-      "running_fingerprint": "2025-12-26:Run: 45-50 min E:False|2025-12-28:Run: 40-55 min E:False",
+      "running_fingerprint": "2025-12-28:Run: 40-55 min E:False",
       "strength_dates": [
-        "2025-12-22",
-        "2025-12-24",
+        "2025-12-23",
+        "2025-12-25",
         "2025-12-27"
       ],
       "recovery_concern": false,
-      "generated_at": "2025-12-25T00:00:34.004590"
+      "generated_at": "2025-12-27T12:26:54.811696"
+    },
+    "2025-12-29": {
+      "running_fingerprint": "2025-12-29:Run: 50-55 min E:False|2025-12-31:Run: 50-55 min E:False|2026-01-02:Run: 50-55 min E:False|2026-01-04:Run: 60-70 min E:False",
+      "strength_dates": [
+        "2025-12-30",
+        "2026-01-01",
+        "2026-01-03"
+      ],
+      "recovery_concern": false,
+      "generated_at": "2025-12-27T06:32:09.897996"
     }
   }
 }
