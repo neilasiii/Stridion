@@ -632,14 +632,21 @@ async def sync_command(interaction: discord.Interaction):
                     elif line.strip() and not line.strip().startswith('•'):
                         in_supplemental_section = False
 
-        # Parse removed workouts
-        for line in sync_output.split('\n'):
-            if 'Removed:' in line or 'workouts removed:' in line:
-                # Extract dates from "Removed: 2025-12-15, 2025-12-16"
-                parts = line.split('Removed:', 1) if 'Removed:' in line else line.split('workouts removed:', 1)
-                if len(parts) > 1:
-                    dates = [d.strip() for d in parts[1].split(',')]
-                    removed_workouts.extend(dates)
+        # Parse removed workouts (from deduplicate_workouts.py output)
+        lines = sync_output.split('\n')
+        in_removal_section = False
+        for line in lines:
+            if 'Removed workouts:' in line:
+                in_removal_section = True
+                continue
+            if in_removal_section:
+                if line.strip().startswith('•'):
+                    # Format: "  • 2025-12-30: Workout Name - Reason"
+                    workout_detail = line.strip()[2:].strip()  # Remove bullet
+                    removed_workouts.append(workout_detail)
+                elif not line.strip() or 'Remaining workouts' in line:
+                    # End of removal section
+                    in_removal_section = False
 
         # Build notification content
         content_lines = []
@@ -657,8 +664,9 @@ async def sync_command(interaction: discord.Interaction):
             content_lines.extend(supplemental_workout_details)
 
         if removed_workouts:
-            removed_str = ", ".join(removed_workouts[:5])  # Limit to first 5
-            content_lines.append(f"\n🗑️ Workouts removed: {removed_str}")
+            content_lines.append("\n🗑️ Workouts removed:")
+            for removed in removed_workouts[:5]:  # Limit to first 5
+                content_lines.append(f"  → {removed}")
 
         # Create embed
         if content_lines:
@@ -1644,14 +1652,21 @@ async def periodic_sync_task():
                     elif line.strip() and not line.strip().startswith('•'):
                         in_supplemental_section = False
 
-        # Parse removed workouts
-        for line in sync_output.split('\n'):
-            if 'Removed:' in line or 'workouts removed:' in line:
-                # Extract dates from "Removed: 2025-12-15, 2025-12-16"
-                parts = line.split('Removed:', 1) if 'Removed:' in line else line.split('workouts removed:', 1)
-                if len(parts) > 1:
-                    dates = [d.strip() for d in parts[1].split(',')]
-                    removed_workouts.extend(dates)
+        # Parse removed workouts (from deduplicate_workouts.py output)
+        lines = sync_output.split('\n')
+        in_removal_section = False
+        for line in lines:
+            if 'Removed workouts:' in line:
+                in_removal_section = True
+                continue
+            if in_removal_section:
+                if line.strip().startswith('•'):
+                    # Format: "  • 2025-12-30: Workout Name - Reason"
+                    workout_detail = line.strip()[2:].strip()  # Remove bullet
+                    removed_workouts.append(workout_detail)
+                elif not line.strip() or 'Remaining workouts' in line:
+                    # End of removal section
+                    in_removal_section = False
 
         # Build notification content
         content_lines = []
@@ -1669,8 +1684,9 @@ async def periodic_sync_task():
             content_lines.extend(supplemental_workout_details)
 
         if removed_workouts:
-            removed_str = ", ".join(removed_workouts[:5])  # Limit to first 5
-            content_lines.append(f"\n🗑️ Workouts removed: {removed_str}")
+            content_lines.append("\n🗑️ Workouts removed:")
+            for removed in removed_workouts[:5]:  # Limit to first 5
+                content_lines.append(f"  → {removed}")
 
         # Create embed
         if content_lines:
