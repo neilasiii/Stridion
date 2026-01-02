@@ -12,10 +12,13 @@ Output:
 
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
+
+from environmental_adjustments import calculate_environmental_adjustment
 
 
 def load_health_data():
@@ -149,6 +152,100 @@ def get_upcoming_workouts(cache, days=5):
     return unique_upcoming
 
 
+def calculate_percentile(value, historical_values):
+    """
+    Calculate what percentile a value falls into.
+
+    Returns percentile (0-100) where higher = better performance.
+    """
+    if not value or not historical_values:
+        return None
+
+    # Filter out None values
+    valid_values = [v for v in historical_values if v is not None]
+    if not valid_values:
+        return None
+
+    # Count how many values are below current value
+    below_count = sum(1 for v in valid_values if v < value)
+    percentile = (below_count / len(valid_values)) * 100
+
+    return round(percentile, 0)
+
+
+def get_historical_context(cache, lookback_days=30):
+    """
+    Calculate historical percentiles and trends for recovery metrics.
+
+    Returns dict with percentile comparisons for each metric.
+    """
+    context = {}
+
+    # Sleep duration percentile
+    sleep_sessions = cache.get('sleep_sessions', [])[:lookback_days]
+    if len(sleep_sessions) >= 7:  # Need at least a week of data
+        current_sleep = sleep_sessions[0].get('total_duration_minutes', 0) / 60
+        historical_sleep = [s.get('total_duration_minutes', 0) / 60 for s in sleep_sessions[1:]]
+        context['sleep_duration_percentile'] = calculate_percentile(current_sleep, historical_sleep)
+        context['sleep_duration_avg'] = round(sum(historical_sleep) / len(historical_sleep), 1)
+
+    # Sleep score percentile
+    if len(sleep_sessions) >= 7:
+        current_score = sleep_sessions[0].get('sleep_score')
+        historical_scores = [s.get('sleep_score') for s in sleep_sessions[1:] if s.get('sleep_score')]
+        if current_score and historical_scores:
+            context['sleep_score_percentile'] = calculate_percentile(current_score, historical_scores)
+            context['sleep_score_avg'] = round(sum(historical_scores) / len(historical_scores), 1)
+
+    # Deep sleep percentile
+    if len(sleep_sessions) >= 7:
+        current_deep = sleep_sessions[0].get('deep_sleep_percentage', 0)
+        historical_deep = [s.get('deep_sleep_percentage', 0) for s in sleep_sessions[1:]]
+        context['deep_sleep_percentile'] = calculate_percentile(current_deep, historical_deep)
+        context['deep_sleep_avg'] = round(sum(historical_deep) / len(historical_deep), 1)
+
+    # HRV percentile
+    hrv_readings = cache.get('hrv_readings', [])[:lookback_days]
+    if len(hrv_readings) >= 7:
+        current_hrv = hrv_readings[0].get('last_night_avg')
+        historical_hrv = [h.get('last_night_avg') for h in hrv_readings[1:] if h.get('last_night_avg')]
+        if current_hrv and historical_hrv:
+            context['hrv_percentile'] = calculate_percentile(current_hrv, historical_hrv)
+            context['hrv_avg'] = round(sum(historical_hrv) / len(historical_hrv), 1)
+
+    # Body Battery percentile
+    battery_readings = cache.get('body_battery', [])[:lookback_days]
+    if len(battery_readings) >= 7:
+        current_bb = battery_readings[0].get('latest_level') or battery_readings[0].get('charged')
+        historical_bb = [b.get('latest_level') or b.get('charged') for b in battery_readings[1:]]
+        historical_bb = [v for v in historical_bb if v is not None]
+        if current_bb and historical_bb:
+            context['body_battery_percentile'] = calculate_percentile(current_bb, historical_bb)
+            context['body_battery_avg'] = round(sum(historical_bb) / len(historical_bb), 1)
+
+    # Training Readiness percentile
+    readiness_readings = cache.get('training_readiness', [])[:lookback_days]
+    if len(readiness_readings) >= 7:
+        current_readiness = readiness_readings[0].get('score')
+        historical_readiness = [r.get('score') for r in readiness_readings[1:] if r.get('score')]
+        if current_readiness and historical_readiness:
+            context['readiness_percentile'] = calculate_percentile(current_readiness, historical_readiness)
+            context['readiness_avg'] = round(sum(historical_readiness) / len(historical_readiness), 1)
+
+    # RHR comparison (lower is better, so invert percentile)
+    rhr_readings = cache.get('resting_hr_readings', [])[:lookback_days]
+    if len(rhr_readings) >= 7:
+        current_rhr = rhr_readings[0][1] if rhr_readings[0] else None
+        historical_rhr = [r[1] for r in rhr_readings[1:] if r and r[1]]
+        if current_rhr and historical_rhr:
+            # For RHR, lower is better, so invert the percentile
+            raw_percentile = calculate_percentile(current_rhr, historical_rhr)
+            context['rhr_percentile'] = 100 - raw_percentile if raw_percentile else None
+            context['rhr_avg'] = round(sum(historical_rhr) / len(historical_rhr), 1)
+
+    return context
+
+
 def get_recovery_summary(cache):
     """Extract key recovery metrics."""
     summary = {}
@@ -266,33 +363,79 @@ def get_recent_activities(cache, days=7):
     }
 
 
-def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None, upcoming_workouts=None):
+def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None, upcoming_workouts=None, historical_context=None):
     """Build the prompt for Claude Code."""
     today = datetime.now().strftime('%A, %B %d, %Y')
 
-    # Format recovery data
+    # Format recovery data with historical context
     recovery_text = []
 
     if 'sleep' in recovery:
         s = recovery['sleep']
-        recovery_text.append(f"Sleep: {s['duration_hours']}h, score {s['score']}/100, {s['deep_pct']}% deep")
+        sleep_line = f"Sleep: {s['duration_hours']}h, score {s['score']}/100, {s['deep_pct']}% deep"
+
+        # Add historical percentile if available
+        if historical_context:
+            percentiles = []
+            if historical_context.get('sleep_duration_percentile') is not None:
+                pct = historical_context['sleep_duration_percentile']
+                percentiles.append(f"duration {int(pct)}th percentile")
+            if historical_context.get('sleep_score_percentile') is not None:
+                pct = historical_context['sleep_score_percentile']
+                percentiles.append(f"score {int(pct)}th percentile")
+            if historical_context.get('deep_sleep_percentile') is not None:
+                pct = historical_context['deep_sleep_percentile']
+                percentiles.append(f"deep {int(pct)}th percentile")
+
+            if percentiles:
+                sleep_line += f" ({', '.join(percentiles)} vs 30-day history)"
+
+        recovery_text.append(sleep_line)
 
     if 'readiness' in recovery:
         r = recovery['readiness']
         rec_text = f", {r['recovery_hours']}h recovery needed" if r.get('recovery_hours') else ""
-        recovery_text.append(f"Training Readiness: {r['score']}/100 ({r['level']}){rec_text}")
+        readiness_line = f"Training Readiness: {r['score']}/100 ({r['level']}){rec_text}"
+
+        # Add percentile
+        if historical_context and historical_context.get('readiness_percentile') is not None:
+            pct = historical_context['readiness_percentile']
+            readiness_line += f" ({int(pct)}th percentile)"
+
+        recovery_text.append(readiness_line)
 
     if 'body_battery' in recovery:
-        recovery_text.append(f"Body Battery: {recovery['body_battery']}/100")
+        bb_line = f"Body Battery: {recovery['body_battery']}/100"
+
+        # Add percentile
+        if historical_context and historical_context.get('body_battery_percentile') is not None:
+            pct = historical_context['body_battery_percentile']
+            bb_line += f" ({int(pct)}th percentile)"
+
+        recovery_text.append(bb_line)
 
     if 'hrv' in recovery:
         h = recovery['hrv']
-        recovery_text.append(f"HRV: {h['value']}ms ({h['status']})")
+        hrv_line = f"HRV: {h['value']}ms ({h['status']})"
+
+        # Add percentile
+        if historical_context and historical_context.get('hrv_percentile') is not None:
+            pct = historical_context['hrv_percentile']
+            hrv_line += f" ({int(pct)}th percentile)"
+
+        recovery_text.append(hrv_line)
 
     if 'rhr' in recovery:
         r = recovery['rhr']
         elev = f" (+{r['elevation']} vs baseline)" if r.get('elevation') and r['elevation'] > 0 else ""
-        recovery_text.append(f"RHR: {r['current']} bpm{elev}")
+        rhr_line = f"RHR: {r['current']} bpm{elev}"
+
+        # Add percentile (remember: for RHR, higher percentile = better = lower RHR)
+        if historical_context and historical_context.get('rhr_percentile') is not None:
+            pct = historical_context['rhr_percentile']
+            rhr_line += f" ({int(pct)}th percentile)"
+
+        recovery_text.append(rhr_line)
 
     if 'stress' in recovery:
         recovery_text.append(f"Stress: avg {recovery['stress']['avg']}/100")
@@ -348,8 +491,17 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
                         break
         upcoming_text = "\n".join(upcoming_lines)
 
-    # Weather
+    # Weather with pace adjustment
     weather_text = weather if weather else "Weather data not available"
+
+    # Add pace adjustment if we have weather and can extract workout pace
+    pace_adjustment_text = None
+    if weather and workout:
+        workout_pace = extract_workout_pace(workout)
+        if workout_pace:
+            pace_adjustment_text = calculate_pace_adjustment(weather, workout_pace)
+            if pace_adjustment_text:
+                weather_text += pace_adjustment_text
 
     prompt = f"""Today is {today}.
 
@@ -379,13 +531,21 @@ You are an expert running coach. Based on the recovery metrics above, provide:
 2. If modifying, be SPECIFIC (e.g., "reduce 45min to 30min" or "keep easy pace, skip strides")
 3. Key reasoning based on the recovery data
 
+IMPORTANT CONTEXT - PERCENTILES:
+- Each recovery metric shows its percentile ranking vs the last 30 days
+- Percentiles show how today compares to recent history (higher = better)
+- Use this to contextualize metrics: "80th percentile" means better than 80% of recent days
+- A low absolute score that's still high percentile can be reassuring ("score is low but normal for you")
+- A high absolute score that's low percentile can be concerning ("score seems ok but lower than usual")
+- Consider both absolute values AND historical context in your recommendation
+
 OUTPUT FORMAT - You MUST follow this EXACTLY and output the ACTUAL content, not placeholders:
 
 NOTIFICATION:
 [Single line, max 200 chars. Format: "Original → Recommendation (key reason). Recovery metric"]
 Example: "45min E → 30min E (readiness 50). Battery 14/100"
 Example: "Rest day. Readiness LOW (46), battery depleted"
-Example: "40min E as planned. Recovery optimal"
+Example: "40min E as planned. Recovery optimal (90th %ile sleep)"
 
 FULL_REPORT:
 [Detailed markdown report with sections for Recovery Analysis, Workout Recommendation, and Rationale]
@@ -395,6 +555,7 @@ FULL_REPORT:
 CRITICAL RULES:
 - Use ONLY the metrics provided above. Never invent or estimate values.
 - If a metric is missing, acknowledge it.
+- ALWAYS consider percentiles when interpreting metrics - historical context matters
 - The NOTIFICATION line must be under 200 characters.
 - Be specific and actionable.
 - DO NOT use placeholders like "Generated above" or "[Report content provided above]" - output the COMPLETE report text directly."""
@@ -600,6 +761,131 @@ def get_weather():
     return None
 
 
+def parse_weather_data(weather_summary):
+    """
+    Parse weather summary string to extract structured data.
+
+    Returns dict with temp_f, humidity, feels_like_f or None if parsing fails.
+    """
+    if not weather_summary:
+        return None
+
+    try:
+        # Extract from format: "Current: 65°F (feels 60°F), Clear sky"
+        # "Humidity: 45%, Wind: 5 mph, UV: 2.5"
+        data = {}
+
+        # Temperature
+        temp_match = re.search(r'Current:\s*(\d+)°F', weather_summary)
+        if temp_match:
+            data['temp_f'] = float(temp_match.group(1))
+
+        # Feels like
+        feels_match = re.search(r'feels\s*(\d+)°F', weather_summary)
+        if feels_match:
+            data['feels_like_f'] = float(feels_match.group(1))
+
+        # Humidity
+        humidity_match = re.search(r'Humidity:\s*(\d+)%', weather_summary)
+        if humidity_match:
+            data['humidity'] = float(humidity_match.group(1))
+
+        # Only return if we got the essentials
+        if 'temp_f' in data and 'humidity' in data:
+            return data
+
+    except Exception as e:
+        print(f"Error parsing weather: {e}", file=sys.stderr)
+
+    return None
+
+
+def extract_workout_pace(workout):
+    """
+    Extract target pace from workout description.
+
+    Looks for pace indicators like "9:10/mi", "9:10 pace", etc.
+    Returns pace in seconds per mile or None.
+    """
+    if not workout:
+        return None
+
+    # Handle list of workouts - prioritize running workouts
+    workouts = workout if isinstance(workout, list) else [workout]
+
+    for w in workouts:
+        if w.get('domain') == 'running' or w.get('source') == 'ics_calendar':
+            desc = w.get('description', '') + ' ' + w.get('name', '')
+
+            # Look for pace patterns: 9:10, 9:10/mi, 9:10 pace
+            pace_patterns = [
+                r'(\d+):(\d+)\s*/mi',
+                r'(\d+):(\d+)\s*pace',
+                r'(\d+):(\d+)/mile',
+                r'@\s*(\d+):(\d+)',
+            ]
+
+            for pattern in pace_patterns:
+                match = re.search(pattern, desc, re.IGNORECASE)
+                if match:
+                    minutes = int(match.group(1))
+                    seconds = int(match.group(2))
+                    return minutes * 60 + seconds
+
+            # Look for pace zones - extract from current training status
+            # E pace, M pace, T pace, etc.
+            # We'll need VDOT paces for this - for now return None
+            # This could be enhanced to read from current_training_status.md
+
+    return None
+
+
+def calculate_pace_adjustment(weather_summary, pace_seconds_per_mile):
+    """
+    Calculate environmental pace adjustment for given workout pace.
+
+    Returns formatted adjustment string or None.
+    """
+    if not weather_summary or not pace_seconds_per_mile:
+        return None
+
+    weather_data = parse_weather_data(weather_summary)
+    if not weather_data:
+        return None
+
+    try:
+        adjustment = calculate_environmental_adjustment(
+            pace_seconds_per_mile=pace_seconds_per_mile,
+            temp_f=weather_data.get('temp_f'),
+            humidity=weather_data.get('humidity'),
+            use_heat_index=True
+        )
+
+        # Only include if there's meaningful adjustment (>2%)
+        if adjustment['total_slowdown_percent'] > 2:
+            lines = [
+                f"\nPace Adjustment Recommendation:",
+                f"  Prescribed: {adjustment['original_pace_str']}/mi",
+                f"  Adjusted for conditions: {adjustment['adjusted_pace_str']}/mi ({adjustment['total_slowdown_percent']}% slower)"
+            ]
+
+            # Add key factors
+            if 'heat_index' in adjustment['factors']:
+                hi = adjustment['factors']['heat_index']
+                lines.append(f"  Heat index: {hi['value']}°F")
+
+            # Add top recommendation if available
+            if adjustment['recommendations']:
+                lines.append(f"  → {adjustment['recommendations'][0]}")
+
+            return '\n'.join(lines)
+
+    except Exception as e:
+        print(f"Error calculating pace adjustment: {e}", file=sys.stderr)
+
+    return None
+
+
 def main():
     """Generate morning report."""
     import argparse
@@ -628,12 +914,13 @@ def main():
     recovery = get_recovery_summary(cache)
     activities = get_recent_activities(cache)
     athlete_context = load_athlete_context()
+    historical_context = get_historical_context(cache, lookback_days=30)
 
     # Get weather unless disabled
     weather = None if args.no_weather else get_weather()
 
     # Build prompt
-    prompt = build_ai_prompt(workout, recovery, activities, athlete_context, weather, upcoming_workouts)
+    prompt = build_ai_prompt(workout, recovery, activities, athlete_context, weather, upcoming_workouts, historical_context)
 
     # Call Claude
     response, error = call_claude_headless(prompt)

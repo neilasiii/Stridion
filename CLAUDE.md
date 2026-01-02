@@ -253,10 +253,17 @@ python3 src/morning_report.py --check-sleep      # Check if sleep data exists fo
 
 **What it does:**
 - Uses Claude Code headless to analyze recovery metrics and scheduled workout
+- **Historical Context:** Compares today's metrics to last 30 days (percentile rankings)
 - Recommends workout modifications based on readiness, body battery, HRV, sleep
 - Generates compact notification (<240 chars) for Android
 - Creates detailed markdown report with rationale
 - **AI Fallback:** Uses Gemini API if Claude unavailable, falls back to rule-based if both fail
+
+**Historical Percentile Rankings:**
+- All recovery metrics include percentile vs 30-day history (e.g., "HRV 3rd percentile")
+- Higher percentile = better performance (80th percentile = better than 80% of recent days)
+- Provides context: low absolute value at high percentile can be reassuring, high value at low percentile concerning
+- Covers: sleep duration/score/deep%, HRV, body battery, training readiness, RHR
 
 **Sleep-Aware Scheduling (Discord Bot):**
 - Automated morning reports start checking at **5:30 AM EST** and continue until ~10:00 AM
