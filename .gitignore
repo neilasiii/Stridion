@@ -72,3 +72,4 @@ Thumbs.db
 config/gemini_api.env
 config/location.env
 config/user_location.env
+data/strength_programs/current_program.json
