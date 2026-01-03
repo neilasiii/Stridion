@@ -29,6 +29,13 @@ from dataclasses import dataclass
 
 from workout_uploader import get_garmin_client, schedule_workout
 
+# Optional: Load streprogen integration if available
+try:
+    from streprogen_completion_tracker import CompletionTracker
+    STREPROGEN_AVAILABLE = True
+except ImportError:
+    STREPROGEN_AVAILABLE = False
+
 
 @dataclass
 class RunningWorkout:
@@ -951,6 +958,92 @@ def send_termux_notification(title: str, content: str, channel: str = "workout-g
         pass  # Silently fail if termux-notification not available
 
 
+def generate_strength_workout_from_streprogen(
+    date: str,
+    session_role: str = "A",
+    quiet: bool = False
+) -> Optional[SupplementalWorkout]:
+    """
+    Generate a strength workout from the active streprogen program.
+
+    Args:
+        date: Target date
+        session_role: Session type (A, B, or C)
+        quiet: Suppress output
+
+    Returns:
+        SupplementalWorkout if program exists, None otherwise
+    """
+    if not STREPROGEN_AVAILABLE:
+        return None
+
+    try:
+        # Load program
+        program_file = Path(__file__).parent.parent / "data" / "strength_programs" / "current_program.json"
+        if not program_file.exists():
+            return None
+
+        with open(program_file, 'r') as f:
+            program = json.load(f)
+
+        # Get smart adjustment for this session
+        tracker = CompletionTracker()
+        adjustment = tracker.get_smart_adjustment(session_role)
+        week = adjustment["week"]
+
+        if not quiet:
+            print(f"  📋 Using streprogen program: Week {week} Session {session_role}")
+            if adjustment["reason"] != "normal_progression":
+                print(f"     Adjustment: {adjustment['message']}")
+
+        # Get session data
+        session = program["sessions"].get(session_role)
+        if not session:
+            if not quiet:
+                print(f"  ✗ Session {session_role} not found in program")
+            return None
+
+        # Get workout for the specific week
+        weekly_progression = session.get("weekly_progression", [])
+        week_data = None
+        for w in weekly_progression:
+            if w["week"] == week:
+                week_data = w["workout"]
+                break
+
+        if not week_data:
+            if not quiet:
+                print(f"  ✗ Week {week} not found in session {session_role}")
+            return None
+
+        # Format workout description
+        description = f"**{session['name']} - Week {week}**\n\n"
+
+        for exercise in week_data["exercises"]:
+            ex_name = exercise["name"]
+            sets = exercise["sets"]
+            description += f"**{ex_name}**\n{sets}\n\n"
+
+        # Create workout object
+        workout = SupplementalWorkout(
+            date=date,
+            domain="strength",
+            name=f"{date} - Strength: {session['name']} (Week {week})",
+            description=description,
+            duration_min=45,  # Standard strength session duration
+            intensity="full",
+            focus_areas=session['name'],
+            session_role=session_role
+        )
+
+        return workout
+
+    except Exception as e:
+        if not quiet:
+            print(f"  ✗ Error loading streprogen program: {e}")
+        return None
+
+
 def generate_strength_workout_with_focus(
     date: str,
     focus_areas: str = None,
@@ -962,6 +1055,11 @@ def generate_strength_workout_with_focus(
     """
     Generate a strength workout for a specific date with AI-determined focus areas.
 
+    Tries in order:
+    1. Streprogen program (if available)
+    2. AI generation (if use_ai=True)
+    3. Template fallback
+
     Args:
         date: Target date
         focus_areas: AI-determined focus areas (e.g., "Primary: Squat. Secondary: Push.")
@@ -970,7 +1068,15 @@ def generate_strength_workout_with_focus(
         use_ai: If True, use Claude AI to generate; if False, use templates
         quiet: Suppress output
     """
-    # Try AI generation first
+    # Try streprogen program first (highest priority)
+    if STREPROGEN_AVAILABLE:
+        streprogen_workout = generate_strength_workout_from_streprogen(
+            date, session_role, quiet=quiet
+        )
+        if streprogen_workout:
+            return streprogen_workout
+
+    # Try AI generation second
     if use_ai:
         ai_workout = generate_strength_workout_ai(date, focus_areas, intensity, quiet=quiet)
         if ai_workout:

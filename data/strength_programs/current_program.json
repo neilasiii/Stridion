@@ -1,0 +1,446 @@
+{
+  "program_id": "2026-01-03_foundation",
+  "phase": "Foundation",
+  "start_date": "2026-01-03",
+  "end_date": "2026-01-31",
+  "current_week": 3,
+  "parameters": {
+    "duration_weeks": 4,
+    "intensity": 75,
+    "units": "kg"
+  },
+  "sessions": {
+    "A": {
+      "name": "Squat + Push",
+      "exercises": [
+        {
+          "name": "Goblet Squat",
+          "type": "dynamic",
+          "start_weight": 20,
+          "reps_range": [
+            6,
+            10
+          ],
+          "weekly_increase": 1.5
+        },
+        {
+          "name": "Push-ups",
+          "type": "dynamic",
+          "start_weight": 0,
+          "reps_range": [
+            8,
+            12
+          ],
+          "weekly_increase": 1.5
+        },
+        {
+          "name": "Dead Bug",
+          "type": "static",
+          "sets": 3,
+          "reps": 10
+        },
+        {
+          "name": "Calf Raises",
+          "type": "static",
+          "sets": 3,
+          "reps": 15
+        }
+      ],
+      "weekly_progression": [
+        {
+          "week": 1,
+          "workout": {
+            "week": 1,
+            "exercises": [
+              {
+                "name": "Goblet Squat",
+                "sets": "10 x 15kg 10 x 15kg 9 x 15kg"
+              },
+              {
+                "name": "Push-ups",
+                "sets": "10 x 0kg 10 x 0kg 9 x 0kg"
+              },
+              {
+                "name": "Dead Bug",
+                "sets": "3 x 10"
+              },
+              {
+                "name": "Calf Raises",
+                "sets": "3 x 15"
+              }
+            ]
+          }
+        },
+        {
+          "week": 2,
+          "workout": {
+            "week": 2,
+            "exercises": [
+              {
+                "name": "Goblet Squat",
+                "sets": "9 x 15kg 9 x 15kg 8 x 15kg"
+              },
+              {
+                "name": "Push-ups",
+                "sets": "9 x 0kg 9 x 0kg 8 x 0kg"
+              },
+              {
+                "name": "Dead Bug",
+                "sets": "3 x 10"
+              },
+              {
+                "name": "Calf Raises",
+                "sets": "3 x 15"
+              }
+            ]
+          }
+        },
+        {
+          "week": 3,
+          "workout": {
+            "week": 3,
+            "exercises": [
+              {
+                "name": "Goblet Squat",
+                "sets": "8 x 15kg 8 x 15kg 7 x 17.5kg"
+              },
+              {
+                "name": "Push-ups",
+                "sets": "8 x 0kg 8 x 0kg 8 x 0kg"
+              },
+              {
+                "name": "Dead Bug",
+                "sets": "3 x 10"
+              },
+              {
+                "name": "Calf Raises",
+                "sets": "3 x 15"
+              }
+            ]
+          }
+        },
+        {
+          "week": 4,
+          "workout": {
+            "week": 4,
+            "exercises": [
+              {
+                "name": "Goblet Squat",
+                "sets": "7 x 17.5kg 7 x 17.5kg 6 x 17.5kg"
+              },
+              {
+                "name": "Push-ups",
+                "sets": "9 x 0kg 8 x 0kg"
+              },
+              {
+                "name": "Dead Bug",
+                "sets": "3 x 10"
+              },
+              {
+                "name": "Calf Raises",
+                "sets": "3 x 15"
+              }
+            ]
+          }
+        }
+      ],
+      "rendered_program": "----------------------------------------------------------------\nProgram: Session A\n\nProgram parameters\n  duration: 4\n  reps_per_exercise: 25\n  intensity: 75\n  units: kg\n---------------------------------------------------------------- \nExercise information\n  Session A\n   Goblet Squat    20kg -> 21.2kg \n    reps: [6, 10]  weekly inc.: 1.5%\n   Push-ups         0kg ->   0kg  \n    reps: [8, 12]  weekly inc.: 1.5%\n   Dead Bug       3 x 10\n   Calf Raises    3 x 15\n----------------------------------------------------------------\nProgram\n Week 1\n  Session A\n   Goblet Squat   10 x 15kg   10 x 15kg   9 x 15kg      \n   Push-ups       10 x 0kg    10 x 0kg    9 x 0kg       \n   Dead Bug       3 x 10\n   Calf Raises    3 x 15\n\n Week 2\n  Session A\n   Goblet Squat   9 x 15kg    9 x 15kg    8 x 15kg      \n   Push-ups       9 x 0kg     9 x 0kg     8 x 0kg       \n   Dead Bug       3 x 10\n   Calf Raises    3 x 15\n\n Week 3\n  Session A\n   Goblet Squat   8 x 15kg    8 x 15kg    7 x 17.5kg    \n   Push-ups       8 x 0kg     8 x 0kg     8 x 0kg       \n   Dead Bug       3 x 10\n   Calf Raises    3 x 15\n\n Week 4\n  Session A\n   Goblet Squat   7 x 17.5kg  7 x 17.5kg  6 x 17.5kg    \n   Push-ups       9 x 0kg     8 x 0kg       \n   Dead Bug       3 x 10\n   Calf Raises    3 x 15\n\n----------------------------------------------------------------"
+    },
+    "B": {
+      "name": "Hinge + Pull",
+      "exercises": [
+        {
+          "name": "DB RDL",
+          "type": "dynamic",
+          "start_weight": 15,
+          "reps_range": [
+            6,
+            10
+          ],
+          "weekly_increase": 2.0
+        },
+        {
+          "name": "Chest-supported Row",
+          "type": "dynamic",
+          "start_weight": 10,
+          "reps_range": [
+            8,
+            12
+          ],
+          "weekly_increase": 1.5
+        },
+        {
+          "name": "Pallof Press",
+          "type": "static",
+          "sets": 3,
+          "reps": "10 each"
+        },
+        {
+          "name": "Bent-knee Calf Raise",
+          "type": "static",
+          "sets": 3,
+          "reps": 15
+        }
+      ],
+      "weekly_progression": [
+        {
+          "week": 1,
+          "workout": {
+            "week": 1,
+            "exercises": [
+              {
+                "name": "DB RDL",
+                "sets": "10 x 10kg 10 x 10kg 9 x 10kg"
+              },
+              {
+                "name": "Chest-supported Row",
+                "sets": "10 x 7.5kg 10 x 7.5kg 9 x 7.5kg"
+              },
+              {
+                "name": "Pallof Press",
+                "sets": "3 x 10 each"
+              },
+              {
+                "name": "Bent-knee Calf Raise",
+                "sets": "3 x 15"
+              }
+            ]
+          }
+        },
+        {
+          "week": 2,
+          "workout": {
+            "week": 2,
+            "exercises": [
+              {
+                "name": "DB RDL",
+                "sets": "9 x 12.5kg 9 x 12.5kg 8 x 12.5kg"
+              },
+              {
+                "name": "Chest-supported Row",
+                "sets": "9 x 7.5kg 9 x 7.5kg 8 x 7.5kg"
+              },
+              {
+                "name": "Pallof Press",
+                "sets": "3 x 10 each"
+              },
+              {
+                "name": "Bent-knee Calf Raise",
+                "sets": "3 x 15"
+              }
+            ]
+          }
+        },
+        {
+          "week": 3,
+          "workout": {
+            "week": 3,
+            "exercises": [
+              {
+                "name": "DB RDL",
+                "sets": "8 x 12.5kg 8 x 12.5kg 7 x 12.5kg"
+              },
+              {
+                "name": "Chest-supported Row",
+                "sets": "8 x 7.5kg 8 x 7.5kg 8 x 7.5kg"
+              },
+              {
+                "name": "Pallof Press",
+                "sets": "3 x 10 each"
+              },
+              {
+                "name": "Bent-knee Calf Raise",
+                "sets": "3 x 15"
+              }
+            ]
+          }
+        },
+        {
+          "week": 4,
+          "workout": {
+            "week": 4,
+            "exercises": [
+              {
+                "name": "DB RDL",
+                "sets": "7 x 12.5kg 7 x 12.5kg 6 x 12.5kg"
+              },
+              {
+                "name": "Chest-supported Row",
+                "sets": "9 x 7.5kg 8 x 7.5kg"
+              },
+              {
+                "name": "Pallof Press",
+                "sets": "3 x 10 each"
+              },
+              {
+                "name": "Bent-knee Calf Raise",
+                "sets": "3 x 15"
+              }
+            ]
+          }
+        }
+      ],
+      "rendered_program": "----------------------------------------------------------------\nProgram: Session B\n\nProgram parameters\n  duration: 4\n  reps_per_exercise: 25\n  intensity: 75\n  units: kg\n---------------------------------------------------------------- \nExercise information\n  Session B\n   DB RDL                  15kg -> 16.2kg \n    reps: [6, 10]  weekly inc.: 2%\n   Chest-supported Row     10kg -> 10.6kg \n    reps: [8, 12]  weekly inc.: 1.5%\n   Pallof Press           3 x 10 each\n   Bent-knee Calf Raise   3 x 15\n----------------------------------------------------------------\nProgram\n Week 1\n  Session B\n   DB RDL                 10 x 10kg   10 x 10kg   9 x 10kg      \n   Chest-supported Row    10 x 7.5kg  10 x 7.5kg  9 x 7.5kg     \n   Pallof Press           3 x 10 each\n   Bent-knee Calf Raise   3 x 15\n\n Week 2\n  Session B\n   DB RDL                 9 x 12.5kg  9 x 12.5kg  8 x 12.5kg    \n   Chest-supported Row    9 x 7.5kg   9 x 7.5kg   8 x 7.5kg     \n   Pallof Press           3 x 10 each\n   Bent-knee Calf Raise   3 x 15\n\n Week 3\n  Session B\n   DB RDL                 8 x 12.5kg  8 x 12.5kg  7 x 12.5kg    \n   Chest-supported Row    8 x 7.5kg   8 x 7.5kg   8 x 7.5kg     \n   Pallof Press           3 x 10 each\n   Bent-knee Calf Raise   3 x 15\n\n Week 4\n  Session B\n   DB RDL                 7 x 12.5kg  7 x 12.5kg  6 x 12.5kg    \n   Chest-supported Row    9 x 7.5kg   8 x 7.5kg     \n   Pallof Press           3 x 10 each\n   Bent-knee Calf Raise   3 x 15\n\n----------------------------------------------------------------"
+    },
+    "C": {
+      "name": "Unilateral + Velocity",
+      "exercises": [
+        {
+          "name": "Reverse Lunge",
+          "type": "dynamic",
+          "start_weight": 10,
+          "reps_range": [
+            6,
+            10
+          ],
+          "weekly_increase": 1.5
+        },
+        {
+          "name": "Step-ups",
+          "type": "dynamic",
+          "start_weight": 0,
+          "reps_range": [
+            8,
+            10
+          ],
+          "weekly_increase": 1.5
+        },
+        {
+          "name": "Suitcase Carry",
+          "type": "static",
+          "sets": 3,
+          "reps": "30s each"
+        },
+        {
+          "name": "Single-leg Calf Raise",
+          "type": "static",
+          "sets": 3,
+          "reps": "12 each"
+        }
+      ],
+      "weekly_progression": [
+        {
+          "week": 1,
+          "workout": {
+            "week": 1,
+            "exercises": [
+              {
+                "name": "Reverse Lunge",
+                "sets": "10 x 7.5kg 10 x 7.5kg 9 x 7.5kg"
+              },
+              {
+                "name": "Step-ups",
+                "sets": "10 x 0kg 10 x 0kg 9 x 0kg"
+              },
+              {
+                "name": "Suitcase Carry",
+                "sets": "3 x 30s each"
+              },
+              {
+                "name": "Single-leg Calf Raise",
+                "sets": "3 x 12 each"
+              }
+            ]
+          }
+        },
+        {
+          "week": 2,
+          "workout": {
+            "week": 2,
+            "exercises": [
+              {
+                "name": "Reverse Lunge",
+                "sets": "9 x 7.5kg 9 x 7.5kg 8 x 7.5kg"
+              },
+              {
+                "name": "Step-ups",
+                "sets": "9 x 0kg 9 x 0kg 8 x 0kg"
+              },
+              {
+                "name": "Suitcase Carry",
+                "sets": "3 x 30s each"
+              },
+              {
+                "name": "Single-leg Calf Raise",
+                "sets": "3 x 12 each"
+              }
+            ]
+          }
+        },
+        {
+          "week": 3,
+          "workout": {
+            "week": 3,
+            "exercises": [
+              {
+                "name": "Reverse Lunge",
+                "sets": "8 x 7.5kg 8 x 7.5kg 7 x 7.5kg"
+              },
+              {
+                "name": "Step-ups",
+                "sets": "8 x 0kg 8 x 0kg 8 x 0kg"
+              },
+              {
+                "name": "Suitcase Carry",
+                "sets": "3 x 30s each"
+              },
+              {
+                "name": "Single-leg Calf Raise",
+                "sets": "3 x 12 each"
+              }
+            ]
+          }
+        },
+        {
+          "week": 4,
+          "workout": {
+            "week": 4,
+            "exercises": [
+              {
+                "name": "Reverse Lunge",
+                "sets": "7 x 7.5kg 7 x 7.5kg 6 x 7.5kg"
+              },
+              {
+                "name": "Step-ups",
+                "sets": "9 x 0kg 8 x 0kg"
+              },
+              {
+                "name": "Suitcase Carry",
+                "sets": "3 x 30s each"
+              },
+              {
+                "name": "Single-leg Calf Raise",
+                "sets": "3 x 12 each"
+              }
+            ]
+          }
+        }
+      ],
+      "rendered_program": "----------------------------------------------------------------\nProgram: Session C\n\nProgram parameters\n  duration: 4\n  reps_per_exercise: 25\n  intensity: 75\n  units: kg\n---------------------------------------------------------------- \nExercise information\n  Session C\n   Reverse Lunge            10kg -> 10.6kg \n    reps: [6, 10]  weekly inc.: 1.5%\n   Step-ups                  0kg ->   0kg  \n    reps: [8, 10]  weekly inc.: 1.5%\n   Suitcase Carry          3 x 30s each\n   Single-leg Calf Raise   3 x 12 each\n----------------------------------------------------------------\nProgram\n Week 1\n  Session C\n   Reverse Lunge           10 x 7.5kg  10 x 7.5kg  9 x 7.5kg     \n   Step-ups                10 x 0kg    10 x 0kg    9 x 0kg       \n   Suitcase Carry          3 x 30s each\n   Single-leg Calf Raise   3 x 12 each\n\n Week 2\n  Session C\n   Reverse Lunge           9 x 7.5kg   9 x 7.5kg   8 x 7.5kg     \n   Step-ups                9 x 0kg     9 x 0kg     8 x 0kg       \n   Suitcase Carry          3 x 30s each\n   Single-leg Calf Raise   3 x 12 each\n\n Week 3\n  Session C\n   Reverse Lunge           8 x 7.5kg   8 x 7.5kg   7 x 7.5kg     \n   Step-ups                8 x 0kg     8 x 0kg     8 x 0kg       \n   Suitcase Carry          3 x 30s each\n   Single-leg Calf Raise   3 x 12 each\n\n Week 4\n  Session C\n   Reverse Lunge           7 x 7.5kg   7 x 7.5kg   6 x 7.5kg     \n   Step-ups                9 x 0kg     8 x 0kg       \n   Suitcase Carry          3 x 30s each\n   Single-leg Calf Raise   3 x 12 each\n\n----------------------------------------------------------------"
+    }
+  },
+  "weekly_workouts": [],
+  "completion_history": [
+    {
+      "date": "2026-01-03",
+      "session": "A",
+      "week": 1,
+      "completed": true,
+      "notes": "Felt strong",
+      "timestamp": "2026-01-03T08:39:13.975832"
+    },
+    {
+      "date": "2026-01-05",
+      "session": "A",
+      "week": 1,
+      "completed": true,
+      "notes": "",
+      "timestamp": "2026-01-03T08:40:54.330685"
+    }
+  ],
+  "adherence_metrics": {
+    "total_scheduled": 2,
+    "total_completed": 2,
+    "completion_rate": 1.0
+  }
+}
