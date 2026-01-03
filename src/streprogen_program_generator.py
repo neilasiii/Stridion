@@ -14,6 +14,8 @@ Usage:
 
 import json
 import argparse
+import re
+import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 import streprogen
@@ -24,8 +26,45 @@ CURRENT_PROGRAM_FILE = PROGRAM_DIR / "current_program.json"
 ARCHIVE_DIR = PROGRAM_DIR / "archive"
 
 
+def atomic_write_json(data: dict, target_path: Path) -> None:
+    """
+    Atomically write JSON data to file to prevent corruption from concurrent access.
+
+    Uses write-to-temp-then-rename pattern for atomicity.
+
+    Args:
+        data: Dictionary to write as JSON
+        target_path: Target file path
+    """
+    # Ensure parent directory exists
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write to temp file in same directory (same filesystem = atomic rename)
+    fd, temp_path = tempfile.mkstemp(
+        dir=target_path.parent,
+        prefix='.tmp_',
+        suffix='.json'
+    )
+    try:
+        with open(fd, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        # Atomic rename (on same filesystem)
+        Path(temp_path).rename(target_path)
+    except Exception:
+        # Clean up temp file on error
+        try:
+            Path(temp_path).unlink()
+        except Exception:
+            pass
+        raise
+
+
 class RunnerStrengthProgramGenerator:
     """Generate periodized strength programs for distance runners."""
+
+    # Valid program_id pattern: YYYY-MM-DD_alphanumeric
+    PROGRAM_ID_PATTERN = re.compile(r'^\d{4}-\d{2}-\d{2}_[a-z0-9_]+$')
 
     # Runner-specific exercise database
     EXERCISES = {
@@ -83,6 +122,24 @@ class RunnerStrengthProgramGenerator:
         self.intensity = intensity
         self.units = units
 
+    @staticmethod
+    def _validate_program_id(program_id: str) -> None:
+        """
+        Validate program_id to prevent path traversal attacks.
+
+        Raises:
+            ValueError: If program_id contains invalid characters or patterns
+        """
+        if not RunnerStrengthProgramGenerator.PROGRAM_ID_PATTERN.match(program_id):
+            raise ValueError(
+                f"Invalid program_id: '{program_id}'. "
+                "Must be format: YYYY-MM-DD_alphanumeric (e.g., '2026-01-03_foundation')"
+            )
+
+        # Additional safety: ensure no path traversal characters
+        if '..' in program_id or '/' in program_id or '\\' in program_id:
+            raise ValueError(f"Invalid program_id: '{program_id}' contains path traversal characters")
+
     def generate_program(self, phase="Foundation", start_date=None):
         """
         Generate a complete strength program.
@@ -100,6 +157,10 @@ class RunnerStrengthProgramGenerator:
             start_date = datetime.strptime(start_date, "%Y-%m-%d")
 
         program_id = f"{start_date.strftime('%Y-%m-%d')}_{phase.lower()}"
+
+        # Validate program_id to prevent path traversal
+        self._validate_program_id(program_id)
+
         end_date = start_date + timedelta(weeks=self.duration)
 
         # Generate each session type (A, B, C)
@@ -279,12 +340,20 @@ class RunnerStrengthProgramGenerator:
                 "exercises": current_exercises
             })
 
-        # Fill in any missing weeks with empty data
-        while len(workouts) < num_weeks:
-            workouts.append({
-                "week": len(workouts) + 1,
-                "exercises": []
-            })
+        # Validate we parsed all expected weeks
+        if len(workouts) < num_weeks:
+            raise ValueError(
+                f"Parsing failed: Expected {num_weeks} weeks but only parsed {len(workouts)}. "
+                f"This likely indicates streprogen output format changed or parsing logic is broken."
+            )
+
+        # Validate each week has exercises
+        for week_data in workouts:
+            if not week_data.get("exercises"):
+                raise ValueError(
+                    f"Parsing failed: Week {week_data['week']} has no exercises. "
+                    "This indicates parsing logic failed to extract workout data."
+                )
 
         return workouts
 
@@ -298,7 +367,7 @@ class RunnerStrengthProgramGenerator:
         }
 
     def save_program(self, program):
-        """Save program to current_program.json."""
+        """Save program to current_program.json using atomic write."""
         PROGRAM_DIR.mkdir(parents=True, exist_ok=True)
         ARCHIVE_DIR.mkdir(exist_ok=True)
 
@@ -306,9 +375,8 @@ class RunnerStrengthProgramGenerator:
         if CURRENT_PROGRAM_FILE.exists():
             self._archive_current_program()
 
-        # Save new program
-        with open(CURRENT_PROGRAM_FILE, 'w') as f:
-            json.dump(program, f, indent=2)
+        # Save new program atomically
+        atomic_write_json(program, CURRENT_PROGRAM_FILE)
 
         print(f"✓ Program saved: {program['program_id']}")
         print(f"  Phase: {program['phase']}")
@@ -317,15 +385,18 @@ class RunnerStrengthProgramGenerator:
         print(f"  End: {program['end_date']}")
 
     def _archive_current_program(self):
-        """Move current program to archive."""
+        """Move current program to archive using atomic write."""
         with open(CURRENT_PROGRAM_FILE, 'r') as f:
             current = json.load(f)
 
-        archive_file = ARCHIVE_DIR / f"{current['program_id']}.json"
-        with open(archive_file, 'w') as f:
-            json.dump(current, f, indent=2)
+        # Validate program_id before using it in file path
+        program_id = current.get('program_id', '')
+        self._validate_program_id(program_id)
 
-        print(f"✓ Archived previous program: {current['program_id']}")
+        archive_file = ARCHIVE_DIR / f"{program_id}.json"
+        atomic_write_json(current, archive_file)
+
+        print(f"✓ Archived previous program: {program_id}")
 
     def view_current_program(self):
         """Display current program summary."""

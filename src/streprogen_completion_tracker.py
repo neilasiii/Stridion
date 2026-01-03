@@ -13,6 +13,7 @@ Usage:
 
 import json
 import argparse
+import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -20,6 +21,45 @@ from pathlib import Path
 PROGRAM_DIR = Path(__file__).parent.parent / "data" / "strength_programs"
 CURRENT_PROGRAM_FILE = PROGRAM_DIR / "current_program.json"
 HEALTH_DATA_FILE = Path(__file__).parent.parent / "data" / "health" / "health_data_cache.json"
+
+# Constants
+MIN_STRENGTH_DURATION_MINUTES = 15  # Minimum duration to count as valid strength session
+HRV_LOW_THRESHOLD = 0.85  # HRV below 85% of baseline considered low
+MISS_RATE_REGENERATION_THRESHOLD = 0.3  # 30% miss rate triggers program regeneration
+
+
+def atomic_write_json(data: dict, target_path: Path) -> None:
+    """
+    Atomically write JSON data to file to prevent corruption from concurrent access.
+
+    Uses write-to-temp-then-rename pattern for atomicity.
+
+    Args:
+        data: Dictionary to write as JSON
+        target_path: Target file path
+    """
+    # Ensure parent directory exists
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write to temp file in same directory (same filesystem = atomic rename)
+    fd, temp_path = tempfile.mkstemp(
+        dir=target_path.parent,
+        prefix='.tmp_',
+        suffix='.json'
+    )
+    try:
+        with open(fd, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        # Atomic rename (on same filesystem)
+        Path(temp_path).rename(target_path)
+    except Exception:
+        # Clean up temp file on error
+        try:
+            Path(temp_path).unlink()
+        except Exception:
+            pass
+        raise
 
 
 class CompletionTracker:
@@ -38,9 +78,8 @@ class CompletionTracker:
             return json.load(f)
 
     def _save_program(self):
-        """Save program changes to JSON."""
-        with open(CURRENT_PROGRAM_FILE, 'w') as f:
-            json.dump(self.program, f, indent=2)
+        """Save program changes to JSON using atomic write."""
+        atomic_write_json(self.program, CURRENT_PROGRAM_FILE)
 
     def _load_health_data(self):
         """Load health data from cache."""
@@ -134,14 +173,33 @@ class CompletionTracker:
         activities = self.health_data.get("activities", [])
 
         for activity in activities:
-            activity_date = activity.get("startTimeLocal", "").split()[0]  # Extract date part
-            activity_type = activity.get("activityType", {}).get("typeKey", "")
+            # Safely extract date with error handling
+            start_time_local = activity.get("startTimeLocal", "")
+            if not start_time_local or not isinstance(start_time_local, str):
+                continue
+
+            # Extract date part (format: "YYYY-MM-DD HH:MM:SS")
+            date_parts = start_time_local.split()
+            if not date_parts:
+                continue
+            activity_date = date_parts[0]
+
+            # Safely extract activity type
+            activity_type_obj = activity.get("activityType")
+            if not activity_type_obj or not isinstance(activity_type_obj, dict):
+                continue
+            activity_type = activity_type_obj.get("typeKey", "")
 
             if activity_date == date and activity_type == "strength_training":
-                duration_min = activity.get("duration", 0) / 60  # Convert to minutes
+                # Safely get duration
+                duration = activity.get("duration", 0)
+                if not isinstance(duration, (int, float)):
+                    continue
 
-                # Consider it a valid strength session if >=15 minutes
-                if duration_min >= 15:
+                duration_min = duration / 60  # Convert to minutes
+
+                # Consider it a valid strength session if >= minimum duration
+                if duration_min >= MIN_STRENGTH_DURATION_MINUTES:
                     return True
 
         return False
@@ -150,32 +208,52 @@ class CompletionTracker:
         """
         Auto-detect completed workouts from Garmin data.
 
+        NOTE: This function can detect strength activities but cannot determine
+        which session type (A/B/C) they were. Use with caution.
+
         Args:
             start_date: Start date (YYYY-MM-DD), defaults to program start
             end_date: End date (YYYY-MM-DD), defaults to today
+
+        Returns:
+            List of detected activity dates that are not yet tracked
         """
         if start_date is None:
             start_date = self.program["start_date"]
         if end_date is None:
             end_date = datetime.now().strftime("%Y-%m-%d")
 
-        # Get all scheduled workouts in date range
-        # (This would require scheduled workout data which we haven't implemented yet)
-        # For now, just scan for any strength activities
-
         activities = self.health_data.get("activities", [])
-        detected_count = 0
+        detected_dates = []
 
         for activity in activities:
-            activity_date = activity.get("startTimeLocal", "").split()[0]
-            activity_type = activity.get("activityType", {}).get("typeKey", "")
+            # Safely extract date with error handling
+            start_time_local = activity.get("startTimeLocal", "")
+            if not start_time_local or not isinstance(start_time_local, str):
+                continue
+
+            date_parts = start_time_local.split()
+            if not date_parts:
+                continue
+            activity_date = date_parts[0]
+
+            # Safely extract activity type
+            activity_type_obj = activity.get("activityType")
+            if not activity_type_obj or not isinstance(activity_type_obj, dict):
+                continue
+            activity_type = activity_type_obj.get("typeKey", "")
 
             if (activity_type == "strength_training" and
                 start_date <= activity_date <= end_date):
 
-                duration_min = activity.get("duration", 0) / 60
+                # Safely get duration
+                duration = activity.get("duration", 0)
+                if not isinstance(duration, (int, float)):
+                    continue
 
-                if duration_min >= 15:
+                duration_min = duration / 60
+
+                if duration_min >= MIN_STRENGTH_DURATION_MINUTES:
                     # Check if already in history
                     already_tracked = False
                     for entry in self.program.get("completion_history", []):
@@ -184,14 +262,16 @@ class CompletionTracker:
                             break
 
                     if not already_tracked:
-                        # Auto-mark as complete (session type TBD - would need scheduling)
-                        print(f"  Detected: {activity_date} - Strength ({duration_min:.0f} min)")
-                        detected_count += 1
+                        detected_dates.append((activity_date, duration_min))
+                        print(f"  Detected: {activity_date} - Strength ({duration_min:.0f} min) [NOT TRACKED]")
 
-        if detected_count > 0:
-            print(f"\n✓ Detected {detected_count} untracked strength workouts")
+        if detected_dates:
+            print(f"\n✓ Detected {len(detected_dates)} untracked strength workouts")
+            print("   Use --mark-complete <DATE> <SESSION> to track them manually")
         else:
             print("✓ No new strength workouts detected")
+
+        return detected_dates
 
     def get_adherence_stats(self):
         """Calculate and return adherence statistics."""
@@ -258,6 +338,7 @@ class CompletionTracker:
         # Count missed workouts in last 2 weeks
         recent_history = [e for e in history if e["week"] >= current_week - 1]
         missed_count = len([e for e in recent_history if not e.get("completed", False)])
+        total_recent = len(recent_history)
 
         # Apply adjustment logic
         if last_completed_week is None:
@@ -285,12 +366,12 @@ class CompletionTracker:
                 "message": f"Using Week {intermediate} (missed 1 week)"
             }
 
-        if missed_count >= 4:
-            # High miss rate (>30% over 2 weeks @ 2sessions/week) - suggest regeneration
+        # Check if miss rate exceeds threshold (30% default)
+        if total_recent > 0 and (missed_count / total_recent) > MISS_RATE_REGENERATION_THRESHOLD:
             return {
                 "week": last_completed_week,
                 "reason": "high_miss_rate",
-                "message": "High miss rate detected. Consider regenerating program.",
+                "message": f"High miss rate detected ({missed_count}/{total_recent} = {(missed_count/total_recent):.0%}). Consider regenerating program.",
                 "action_required": "regenerate"
             }
 
