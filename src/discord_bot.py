@@ -13,8 +13,8 @@ from discord.ext import commands, tasks
 import subprocess
 import json
 import os
+import re
 import sys
-import uuid
 import logging
 from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
@@ -48,22 +48,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Cache for sync state tracking (before/after counts)
-sync_state_cache = {
-    "last_sync": None,
-    "activities": 0,
-    "sleep": 0,
-    "vo2": 0,
-    "weight": 0,
-    "rhr": 0,
-    "scheduled_workouts": 0
-}
-
-# Session management
-SESSION_TIMEOUT_HOURS = 24
-MAX_HISTORY_MESSAGES = 10  # Keep last 10 messages for context
-user_sessions = {}  # {user_id: {"session_id": str, "last_activity": datetime, "history": [{"role": str, "content": str}]}}
-user_locks = {}  # {user_id: asyncio.Lock} - prevent concurrent Claude calls for same user
 
 
 async def send_long_message(message_obj, content, max_length=2000):
@@ -114,6 +98,34 @@ async def send_long_message(message_obj, content, max_length=2000):
         # Send remaining chunks as regular messages
         for chunk in chunks[1:]:
             await message_obj.channel.send(chunk)
+
+
+def clamp(text: str, n: int) -> str:
+    """Truncate text to n chars, adding ellipsis if cut."""
+    return text if len(text) <= n else text[:n - 3] + "..."
+
+
+async def run_coach_cli(args: list, timeout: int = 180) -> tuple:
+    """
+    Run `python3 cli/coach.py <args>` as a subprocess.
+
+    Returns (returncode, stdout, stderr) — all strings.
+    """
+    proc = await asyncio.create_subprocess_exec(
+        sys.executable, str(PROJECT_ROOT / "cli" / "coach.py"), *args,
+        cwd=PROJECT_ROOT,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    try:
+        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
+    except asyncio.TimeoutError:
+        try:
+            proc.kill()
+        except ProcessLookupError:
+            pass
+        return 1, "", f"Timed out after {timeout}s"
+    return proc.returncode, stdout.decode(), stderr.decode()
 
 
 class RunningCoachBot(commands.Bot):
@@ -192,292 +204,6 @@ def call_ai_with_fallback(prompt, allowed_tools=None, timeout=180):
         return None, None
 
 
-async def call_claude_streaming(prompt, allowed_tools=None, timeout=600):
-    """
-    Call Claude Code in streaming mode (async generator).
-
-    Args:
-        prompt: The prompt to send
-        allowed_tools: Tools to allow Claude to use
-        timeout: Total timeout in seconds
-
-    Yields:
-        Chunks of text as they arrive from Claude
-    """
-    if not os.path.exists(CLAUDE_PATH):
-        return  # Will fall back to Gemini in caller
-
-    try:
-        args = [
-            CLAUDE_PATH, '-p', prompt,
-            '--output-format', 'stream-json',
-            '--verbose',
-            '--include-partial-messages'
-        ]
-
-        if allowed_tools:
-            args.extend(['--allowedTools', allowed_tools])
-
-        logger.info(f"[Streaming] Starting Claude with args: {' '.join(args[:5])}...")
-
-        # Start subprocess
-        process = await asyncio.create_subprocess_exec(
-            *args,
-            cwd=PROJECT_ROOT,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-
-        logger.info("[Streaming] Claude process started")
-
-        # Read stdout line by line as it streams (stream-json format)
-        chunks_received = 0
-        try:
-            while True:
-                # Wait for next line with timeout
-                # Use longer timeout to account for tool use (Claude reading files, etc)
-                # First chunk: 120s (startup + first API call)
-                # Subsequent: 120s (allows for tool execution between chunks)
-                timeout_duration = 120
-
-                line_bytes = await asyncio.wait_for(
-                    process.stdout.readline(),
-                    timeout=timeout_duration
-                )
-
-                if not line_bytes:
-                    # EOF reached
-                    logger.info(f"[Streaming] EOF reached after {chunks_received} chunks")
-                    break
-
-                # Parse JSON stream format
-                try:
-                    line_text = line_bytes.decode('utf-8').strip()
-                    if not line_text:
-                        continue
-
-                    chunk_data = json.loads(line_text)
-
-                    # Extract text content from stream-json format
-                    # Look for stream_event with content_block_delta
-                    if chunk_data.get('type') == 'stream_event':
-                        event = chunk_data.get('event', {})
-                        if event.get('type') == 'content_block_delta':
-                            delta = event.get('delta', {})
-                            if delta.get('type') == 'text_delta':
-                                text = delta.get('text', '')
-                                if text:
-                                    chunks_received += 1
-                                    yield text
-
-                except json.JSONDecodeError as e:
-                    # Skip invalid JSON lines
-                    logger.debug(f"[Streaming] JSON decode error: {e}")
-                    continue
-
-        except asyncio.TimeoutError:
-            logger.warning(f"[Streaming] Claude chunk timeout after {chunks_received} chunks (waited {timeout_duration}s)")
-            process.kill()
-            # Get stderr for debugging
-            stderr = await process.stderr.read()
-            stderr_text = stderr.decode('utf-8') if stderr else "No error output"
-            logger.warning(f"[Streaming] stderr on timeout: {stderr_text[:500]}")
-            return
-
-        # Wait for process to complete
-        await asyncio.wait_for(process.wait(), timeout=10)
-
-        logger.info(f"[Streaming] Claude process completed with returncode: {process.returncode}, chunks: {chunks_received}")
-
-        if process.returncode != 0:
-            # Get stderr for debugging
-            stderr = await process.stderr.read()
-            stderr_text = stderr.decode('utf-8') if stderr else "No error output"
-            logger.warning(f"[Streaming] Claude failed - returncode: {process.returncode}, stderr: {stderr_text[:500]}")
-
-    except Exception as e:
-        logger.error(f"[Streaming] Claude exception: {e}", exc_info=True)
-
-
-async def stream_to_discord(message_obj, prompt, allowed_tools=None, initial_text="Thinking..."):
-    """
-    Stream Claude response to Discord with live updates.
-
-    Args:
-        message_obj: Discord message object (for reply) or interaction (for followup)
-        prompt: The prompt to send to Claude
-        allowed_tools: Tools to allow Claude to use
-        initial_text: Initial message to show while waiting
-
-    Returns:
-        (final_response, provider) - provider is 'claude' or 'gemini'
-    """
-    # Determine if this is a message or interaction
-    is_interaction = hasattr(message_obj, 'followup')
-
-    # Send initial message
-    if is_interaction:
-        sent_message = await message_obj.followup.send(f"💭 {initial_text}")
-    else:
-        sent_message = await message_obj.reply(f"💭 {initial_text}")
-
-    # Try streaming from Claude
-    current_text = ""
-    last_update = asyncio.get_event_loop().time()
-    update_interval = 1.5  # Update every 1.5 seconds for more responsive feel
-    provider = None
-    chunk_count = 0
-    last_chunk_time = asyncio.get_event_loop().time()
-
-    try:
-        logger.info("[Streaming] Starting stream_to_discord")
-        async for chunk in call_claude_streaming(prompt, allowed_tools):
-            if chunk:
-                chunk_count += 1
-                current_text += chunk
-                last_chunk_time = asyncio.get_event_loop().time()
-
-                # Update Discord message periodically (respect rate limits)
-                now = asyncio.get_event_loop().time()
-                if now - last_update >= update_interval:
-                    # Truncate if too long for Discord
-                    display_text = current_text[:4000] if len(current_text) > 4000 else current_text
-
-                    try:
-                        await sent_message.edit(content=display_text)
-                        last_update = now
-                        logger.debug(f"[Streaming] Updated Discord message ({len(current_text)} chars, {chunk_count} chunks)")
-                    except discord.errors.HTTPException as e:
-                        logger.warning(f"[Streaming] Discord edit error: {e}")
-                        # Continue streaming even if edit fails
-
-        # Final update with complete response
-        if current_text:
-            display_text = current_text[:4000] if len(current_text) > 4000 else current_text
-            await sent_message.edit(content=display_text)
-            logger.info(f"[Streaming] Completed successfully - {len(current_text)} chars, {chunk_count} chunks")
-            return current_text, 'claude'
-        else:
-            logger.warning("[Streaming] No text received from Claude streaming")
-
-    except Exception as e:
-        logger.error(f"[Streaming] Error during streaming: {e}", exc_info=True)
-
-    # If streaming failed or no response, fall back to Gemini
-    logger.info("[Streaming] Falling back to Gemini (non-streaming)")
-
-    try:
-        await sent_message.edit(content="💭 Claude unavailable, using Gemini...")
-
-        sys.path.insert(0, str(PROJECT_ROOT / 'src'))
-        from gemini_client import call_gemini
-
-        response, error = call_gemini(prompt, max_tokens=4096)
-
-        if error or not response:
-            await sent_message.edit(content="❌ AI services unavailable. Both Claude and Gemini failed.")
-            return None, None
-
-        # Update with Gemini response
-        display_text = response[:4000] if len(response) > 4000 else response
-        display_text += "\n\n*Powered by Gemini (Claude unavailable)*"
-
-        await sent_message.edit(content=display_text)
-        return response, 'gemini'
-
-    except Exception as e:
-        logger.error(f"[Streaming] Gemini fallback failed: {e}")
-        await sent_message.edit(content="❌ AI services unavailable.")
-        return None, None
-
-
-# ============== Session Management Helpers ==============
-
-def get_or_create_session(user_id: int) -> str:
-    """Get existing session ID or create new one for user."""
-    now = datetime.now()
-
-    # Check if user has existing session
-    if user_id in user_sessions:
-        session_data = user_sessions[user_id]
-        last_activity = session_data["last_activity"]
-
-        # Check if session is expired
-        if now - last_activity > timedelta(hours=SESSION_TIMEOUT_HOURS):
-            # Session expired, create new one
-            session_id = str(uuid.uuid4())
-            user_sessions[user_id] = {
-                "session_id": session_id,
-                "last_activity": now,
-                "history": []
-            }
-            return session_id
-        else:
-            # Session still valid, update activity and return
-            session_data["last_activity"] = now
-            return session_data["session_id"]
-    else:
-        # No session exists, create new one
-        session_id = str(uuid.uuid4())
-        user_sessions[user_id] = {
-            "session_id": session_id,
-            "last_activity": now,
-            "history": []
-        }
-        return session_id
-
-
-def reset_session(user_id: int) -> str:
-    """Reset user's session and return new session ID."""
-    session_id = str(uuid.uuid4())
-    user_sessions[user_id] = {
-        "session_id": session_id,
-        "last_activity": datetime.now(),
-        "history": []
-    }
-    return session_id
-
-
-def add_to_history(user_id: int, role: str, content: str):
-    """Add a message to user's conversation history."""
-    if user_id in user_sessions:
-        history = user_sessions[user_id].get("history", [])
-        history.append({"role": role, "content": content})
-
-        # Keep only last MAX_HISTORY_MESSAGES
-        if len(history) > MAX_HISTORY_MESSAGES:
-            history = history[-MAX_HISTORY_MESSAGES:]
-
-        user_sessions[user_id]["history"] = history
-
-
-def get_history_context(user_id: int) -> str:
-    """Get conversation history as a context string."""
-    if user_id not in user_sessions:
-        return ""
-
-    history = user_sessions[user_id].get("history", [])
-    if not history:
-        return ""
-
-    # Format history as context
-    context_parts = ["Previous conversation context:"]
-    for msg in history:
-        role = "User" if msg["role"] == "user" else "Assistant"
-        context_parts.append(f"{role}: {msg['content']}")
-
-    return "\n".join(context_parts)
-
-
-def cleanup_expired_sessions():
-    """Remove sessions that have timed out."""
-    now = datetime.now()
-    expired_users = [
-        user_id for user_id, data in user_sessions.items()
-        if now - data["last_activity"] > timedelta(hours=SESSION_TIMEOUT_HOURS)
-    ]
-    for user_id in expired_users:
-        del user_sessions[user_id]
 
 
 # ============== Slash Commands ==============
@@ -1032,352 +758,315 @@ async def ask_command(interaction: discord.Interaction, question: str):
         await interaction.followup.send(f"❌ Error: {str(e)}")
 
 
-@bot.tree.command(name="reset", description="Start a fresh coaching conversation (resets session)")
-async def reset_command(interaction: discord.Interaction):
-    """Reset the user's coaching session."""
-    user_id = interaction.user.id
-    new_session_id = reset_session(user_id)
+# ============== Deprecated Coach Commands (stubs) ==============
 
-    embed = discord.Embed(
-        title="🔄 Session Reset",
-        description="Your coaching conversation has been reset. I won't remember our previous discussion.\n\nFeel free to start a new conversation!",
-        color=discord.Color.blue(),
-        timestamp=datetime.now()
-    )
-    embed.add_field(name="Session ID", value=f"`{new_session_id[:12]}...`", inline=False)
-    embed.set_footer(text=f"Sessions expire after {SESSION_TIMEOUT_HOURS} hours of inactivity")
-
-    await interaction.response.send_message(embed=embed)
-
-
-@bot.tree.command(name="sessions", description="View your active coaching session")
-async def sessions_command(interaction: discord.Interaction):
-    """Display user's session information."""
-    user_id = interaction.user.id
-
-    # Cleanup expired sessions first
-    cleanup_expired_sessions()
-
-    if user_id not in user_sessions:
-        embed = discord.Embed(
-            title="📋 No Active Session",
-            description="You don't have an active coaching session yet.\n\nSend a message in the #coach channel to start one!",
-            color=discord.Color.light_gray(),
-            timestamp=datetime.now()
-        )
-    else:
-        session_data = user_sessions[user_id]
-        session_id = session_data["session_id"]
-        last_activity = session_data["last_activity"]
-        age = datetime.now() - last_activity
-
-        # Calculate time until expiration
-        time_until_expiry = timedelta(hours=SESSION_TIMEOUT_HOURS) - age
-
-        embed = discord.Embed(
-            title="📋 Active Coaching Session",
-            description="Your conversation history is being maintained across messages in #coach.",
-            color=discord.Color.green(),
-            timestamp=datetime.now()
-        )
-        embed.add_field(name="Session ID", value=f"`{session_id[:12]}...`", inline=False)
-        embed.add_field(name="Last Activity", value=f"{int(age.total_seconds() / 60)} minutes ago", inline=True)
-        embed.add_field(name="Expires In", value=f"{int(time_until_expiry.total_seconds() / 3600)} hours", inline=True)
-        embed.set_footer(text="Use /reset to start a fresh conversation")
-
-    await interaction.response.send_message(embed=embed)
-
-
-# ============== Individual Coach Commands ==============
-
-@bot.tree.command(name="running", description="Ask the running coach a question")
+@bot.tree.command(name="running", description="[Deprecated] Use /ask or message the #coach channel")
 @app_commands.describe(question="Your running training question")
 async def running_coach_command(interaction: discord.Interaction, question: str):
-    """Ask the VDOT running coach specifically."""
-    await interaction.response.defer(thinking=True)
-
-    try:
-        # Add running coach context to prompt
-        coach_context = """You are the VDOT Running Coach from the running-coach system.
-Focus on running training, pacing, periodization, and race strategy using Jack Daniels VDOT methodology.
-Read data/athlete/ files and data/health/health_data_cache.json as needed."""
-
-        full_prompt = f"{coach_context}\n\nRunner's question: {question}"
-
-        response, provider = call_ai_with_fallback(
-            full_prompt,
-            allowed_tools="Bash(python3:*),Read,Grep,Glob"
-        )
-
-        if not response:
-            await interaction.followup.send("❌ AI services unavailable.")
-            return
-
-        response = response[:4000] if len(response) > 4000 else response
-
-        color = discord.Color.green() if provider == 'claude' else discord.Color.blue()
-        footer_text = f"🏃 Running Coach • {provider.capitalize()}"
-
-        embed = discord.Embed(
-            title="🏃 Running Coach",
-            description=response,
-            color=color,
-            timestamp=datetime.now()
-        )
-        embed.set_footer(text=footer_text)
-
-        await interaction.followup.send(embed=embed)
-
-    except Exception as e:
-        await interaction.followup.send(f"❌ Error: {str(e)}")
+    await interaction.response.send_message(
+        "ℹ️ Running-only mode enabled. Use `/ask` for AI questions or message the #coach channel with `ai: <your question>`.",
+        ephemeral=True,
+    )
 
 
-@bot.tree.command(name="strength", description="Ask the strength coach a question")
+@bot.tree.command(name="strength", description="[Deprecated] Strength coaching moved to agent system")
 @app_commands.describe(question="Your strength training question")
 async def strength_coach_command(interaction: discord.Interaction, question: str):
-    """Ask the strength coach specifically."""
-    await interaction.response.defer(thinking=True)
-
-    try:
-        coach_context = """You are the Strength Coach from the running-coach system.
-Focus on strength training for endurance runners, injury prevention, and runner-specific exercises.
-Read data/athlete/ files and data/health/health_data_cache.json as needed."""
-
-        full_prompt = f"{coach_context}\n\nRunner's question: {question}"
-
-        response, provider = call_ai_with_fallback(
-            full_prompt,
-            allowed_tools="Bash(python3:*),Read,Grep,Glob"
-        )
-
-        if not response:
-            await interaction.followup.send("❌ AI services unavailable.")
-            return
-
-        response = response[:4000] if len(response) > 4000 else response
-
-        color = discord.Color.orange() if provider == 'claude' else discord.Color.blue()
-        footer_text = f"💪 Strength Coach • {provider.capitalize()}"
-
-        embed = discord.Embed(
-            title="💪 Strength Coach",
-            description=response,
-            color=color,
-            timestamp=datetime.now()
-        )
-        embed.set_footer(text=footer_text)
-
-        await interaction.followup.send(embed=embed)
-
-    except Exception as e:
-        await interaction.followup.send(f"❌ Error: {str(e)}")
+    await interaction.response.send_message(
+        "ℹ️ Running-only mode enabled. Strength programming is now handled by the agent system. Use `/coach_today` to see today's plan.",
+        ephemeral=True,
+    )
 
 
-@bot.tree.command(name="mobility", description="Ask the mobility coach a question")
+@bot.tree.command(name="mobility", description="[Deprecated] Mobility coaching moved to agent system")
 @app_commands.describe(question="Your mobility/recovery question")
 async def mobility_coach_command(interaction: discord.Interaction, question: str):
-    """Ask the mobility coach specifically."""
-    await interaction.response.defer(thinking=True)
-
-    try:
-        coach_context = """You are the Mobility Coach from the running-coach system.
-Focus on mobility work, flexibility, recovery protocols, and injury prevention for distance runners.
-Read data/athlete/ files and data/health/health_data_cache.json as needed."""
-
-        full_prompt = f"{coach_context}\n\nRunner's question: {question}"
-
-        response, provider = call_ai_with_fallback(
-            full_prompt,
-            allowed_tools="Bash(python3:*),Read,Grep,Glob"
-        )
-
-        if not response:
-            await interaction.followup.send("❌ AI services unavailable.")
-            return
-
-        response = response[:4000] if len(response) > 4000 else response
-
-        color = discord.Color.purple() if provider == 'claude' else discord.Color.blue()
-        footer_text = f"🧘 Mobility Coach • {provider.capitalize()}"
-
-        embed = discord.Embed(
-            title="🧘 Mobility Coach",
-            description=response,
-            color=color,
-            timestamp=datetime.now()
-        )
-        embed.set_footer(text=footer_text)
-
-        await interaction.followup.send(embed=embed)
-
-    except Exception as e:
-        await interaction.followup.send(f"❌ Error: {str(e)}")
+    await interaction.response.send_message(
+        "ℹ️ Running-only mode enabled. Mobility work is now handled by the agent system. Use `/coach_today` to see today's plan.",
+        ephemeral=True,
+    )
 
 
-@bot.tree.command(name="nutrition", description="Ask the nutrition coach a question")
+@bot.tree.command(name="nutrition", description="[Deprecated] Nutrition coaching moved to agent system")
 @app_commands.describe(question="Your nutrition/fueling question")
 async def nutrition_coach_command(interaction: discord.Interaction, question: str):
-    """Ask the nutrition coach specifically."""
+    await interaction.response.send_message(
+        "ℹ️ Running-only mode enabled. Nutrition guidance is now handled by the agent system. Use `/coach_today` to see today's plan.",
+        ephemeral=True,
+    )
+
+
+# ============== CLI-Routed Coach Commands ==============
+
+@bot.tree.command(name="coach_today", description="Show today's planned workout from the internal plan")
+async def coach_today_command(interaction: discord.Interaction):
+    """Route to: coach brief --today"""
     await interaction.response.defer(thinking=True)
-
-    try:
-        coach_context = """You are the Nutrition Coach from the running-coach system.
-Focus on endurance nutrition, race fueling, daily nutrition, and recovery nutrition for runners.
-Remember: Athlete is gluten-free and dairy-free.
-Read data/athlete/ files and data/health/health_data_cache.json as needed."""
-
-        full_prompt = f"{coach_context}\n\nRunner's question: {question}"
-
-        response, provider = call_ai_with_fallback(
-            full_prompt,
-            allowed_tools="Bash(python3:*),Read,Grep,Glob"
-        )
-
-        if not response:
-            await interaction.followup.send("❌ AI services unavailable.")
-            return
-
-        response = response[:4000] if len(response) > 4000 else response
-
-        color = discord.Color.gold() if provider == 'claude' else discord.Color.blue()
-        footer_text = f"🍎 Nutrition Coach • {provider.capitalize()}"
-
+    rc, stdout, stderr = await run_coach_cli(["brief", "--today"])
+    if rc == 0 and stdout.strip():
         embed = discord.Embed(
-            title="🍎 Nutrition Coach",
-            description=response,
-            color=color,
-            timestamp=datetime.now()
+            title="📋 Today's Workout",
+            description=f"```\n{clamp(stdout.strip(), 3900)}\n```",
+            color=discord.Color.green(),
+            timestamp=datetime.now(),
         )
-        embed.set_footer(text=footer_text)
+    else:
+        msg = stderr.strip() or stdout.strip() or "No output"
+        embed = discord.Embed(
+            title="⚠️ coach brief --today",
+            description=f"```\n{clamp(msg, 1800)}\n```",
+            color=discord.Color.orange(),
+            timestamp=datetime.now(),
+        )
+    await interaction.followup.send(embed=embed)
 
-        await interaction.followup.send(embed=embed)
 
-    except Exception as e:
-        await interaction.followup.send(f"❌ Error: {str(e)}")
+@bot.tree.command(name="coach_sync", description="Sync Garmin health data via the internal coach CLI")
+async def coach_sync_command(interaction: discord.Interaction):
+    """Route to: coach sync"""
+    await interaction.response.defer(thinking=True)
+    rc, stdout, stderr = await run_coach_cli(["sync"], timeout=300)
+    if rc == 0:
+        embed = discord.Embed(
+            title="✓ Coach Sync Complete",
+            description=f"```\n{clamp(stdout.strip(), 1800)}\n```",
+            color=discord.Color.green(),
+            timestamp=datetime.now(),
+        )
+    else:
+        msg = stderr.strip() or stdout.strip() or "Unknown error"
+        embed = discord.Embed(
+            title="❌ Coach Sync Failed",
+            description=f"```\n{clamp(msg, 1800)}\n```",
+            color=discord.Color.red(),
+            timestamp=datetime.now(),
+        )
+    await interaction.followup.send(embed=embed)
+
+
+@bot.tree.command(name="coach_plan", description="Generate a new training week via the Brain LLM")
+async def coach_plan_command(interaction: discord.Interaction):
+    """Route to: coach plan --week"""
+    await interaction.response.defer(thinking=True)
+    rc, stdout, stderr = await run_coach_cli(["plan", "--week"], timeout=300)
+    if rc == 0:
+        embed = discord.Embed(
+            title="✓ Plan Generated",
+            description=f"```\n{clamp(stdout.strip(), 3900)}\n```",
+            color=discord.Color.blue(),
+            timestamp=datetime.now(),
+        )
+    else:
+        msg = stderr.strip() or stdout.strip() or "Unknown error"
+        embed = discord.Embed(
+            title="❌ Plan Generation Failed",
+            description=f"```\n{clamp(msg, 1800)}\n```",
+            color=discord.Color.red(),
+            timestamp=datetime.now(),
+        )
+    await interaction.followup.send(embed=embed)
+
+
+@bot.tree.command(name="coach_export", description="Preview Garmin export from the internal plan (dry run)")
+async def coach_export_command(interaction: discord.Interaction):
+    """Route to: coach export-garmin (dry run by default)"""
+    await interaction.response.defer(thinking=True)
+    rc, stdout, stderr = await run_coach_cli(["export-garmin"], timeout=120)
+    msg = stdout.strip() or stderr.strip() or "No output"
+    color = discord.Color.green() if rc == 0 else discord.Color.orange()
+    embed = discord.Embed(
+        title="📤 Garmin Export Preview",
+        description=f"```\n{clamp(msg, 3900)}\n```",
+        color=color,
+        timestamp=datetime.now(),
+    )
+    await interaction.followup.send(embed=embed)
+
+
+@bot.tree.command(name="coach_status", description="Show agent lock state and recent task runs")
+async def coach_status_command(interaction: discord.Interaction):
+    """Route to: coach agent status"""
+    await interaction.response.defer(thinking=True)
+    rc, stdout, stderr = await run_coach_cli(["agent", "status"])
+    msg = stdout.strip() or stderr.strip() or "No output"
+    color = discord.Color.green() if rc == 0 else discord.Color.orange()
+    embed = discord.Embed(
+        title="🔧 Agent Status",
+        description=f"```\n{clamp(msg, 3900)}\n```",
+        color=color,
+        timestamp=datetime.now(),
+    )
+    await interaction.followup.send(embed=embed)
+
+
+@bot.tree.command(name="coach_memory", description="Search the coach memory (plan days + events)")
+@app_commands.describe(query="Search term")
+async def coach_memory_command(interaction: discord.Interaction, query: str):
+    """Route to: coach memory search <query>"""
+    await interaction.response.defer(thinking=True)
+    rc, stdout, stderr = await run_coach_cli(["memory", "search", query])
+    msg = stdout.strip() or stderr.strip() or "No results"
+    color = discord.Color.blue() if rc == 0 else discord.Color.orange()
+    embed = discord.Embed(
+        title=f"🔍 Memory: {clamp(query, 60)}",
+        description=f"```\n{clamp(msg, 3900)}\n```",
+        color=color,
+        timestamp=datetime.now(),
+    )
+    await interaction.followup.send(embed=embed)
+
+
+@bot.tree.command(name="coach_note", description="Save a note to the coach inbox (constraint, injury, schedule change)")
+@app_commands.describe(note="The note to save (e.g. 'No workout Sunday — family commitment')")
+async def coach_note_command(interaction: discord.Interaction, note: str):
+    """Write a plain-text note to vault/inbox/ and attempt immediate ingestion."""
+    await interaction.response.defer(thinking=True)
+    try:
+        inbox_dir = PROJECT_ROOT / "vault" / "inbox"
+        inbox_dir.mkdir(parents=True, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        note_file = inbox_dir / f"discord_{ts}.md"
+        note_file.write_text(
+            f"# Discord Note — {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n{note}\n"
+        )
+
+        # Attempt to ingest immediately (best-effort)
+        ingested = False
+        rc, _, err = await run_coach_cli(["memory", "ingest-inbox"], timeout=60)
+        if rc == 0:
+            ingested = True
+        else:
+            # CLI lacks subcommand — fall back to direct import
+            logger.debug("ingest-inbox CLI unavailable (%s), using fallback", err.strip()[:100])
+            try:
+                proc = await asyncio.create_subprocess_exec(
+                    sys.executable, "-c",
+                    "import sys; sys.path.insert(0, '.'); "
+                    "from memory.vault import ingest_inbox_notes; "
+                    "r = ingest_inbox_notes(); print(len(r))",
+                    cwd=PROJECT_ROOT,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                )
+                out, _ = await asyncio.wait_for(proc.communicate(), timeout=30)
+                ingested = proc.returncode == 0
+            except Exception as fallback_exc:
+                logger.warning("ingest fallback failed: %s", fallback_exc)
+
+        ingest_note = "Ingested immediately." if ingested else "Will be ingested on next heartbeat."
+        embed = discord.Embed(
+            title="📝 Note Saved",
+            description=f"Saved to inbox: `{note_file.name}`\n{ingest_note}",
+            color=discord.Color.green(),
+            timestamp=datetime.now(),
+        )
+        embed.add_field(name="Content", value=clamp(note, 800), inline=False)
+    except Exception as exc:
+        embed = discord.Embed(
+            title="❌ Note Save Failed",
+            description=clamp(str(exc), 500),
+            color=discord.Color.red(),
+            timestamp=datetime.now(),
+        )
+    await interaction.followup.send(embed=embed)
 
 
 # ============== Conversational Coaching ==============
 
 @bot.event
 async def on_message(message: discord.Message):
-    """Handle messages in #coach channel for conversational coaching."""
-    # Ignore bot's own messages
+    """
+    Handle messages in #coach channel with deterministic keyword routing.
+
+    Routing rules (checked in order):
+      - Ignore bot's own messages and command prefixes.
+      - "ai: <text>"  → call Claude/Gemini with the text (LLM opt-in).
+      - "sync" keyword → coach sync.
+      - "brief" / "today" / "workout" keyword → coach brief --today.
+      - "plan" keyword → coach plan --week (calls Brain LLM).
+      - "status" / "agent" keyword → coach agent status.
+      - anything else → help message listing available commands.
+    """
     if message.author == bot.user:
         return
-
-    # Only respond in #coach channel
     if message.channel.id != CHANNELS["coach"]:
         return
-
-    # Ignore commands
     if message.content.startswith("/") or message.content.startswith("!"):
         return
 
-    # Get or create lock for this user
-    user_id = message.author.id
-    if user_id not in user_locks:
-        user_locks[user_id] = asyncio.Lock()
+    content = message.content.strip()
+    lower = content.lower()
 
-    # Acquire lock to prevent concurrent Claude calls for same session
-    async with user_locks[user_id]:
-        async with message.channel.typing():
-            try:
-                # Get or create session for this user
-                session_id = get_or_create_session(user_id)
-
-                # Try Claude without session management - build history manually
-                # This avoids the "session already in use" error
-                response = None
-                provider = None
-
-                if os.path.exists(CLAUDE_PATH):
-                    try:
-                        # Build prompt with conversation history
-                        history_context = get_history_context(user_id)
-                        if history_context:
-                            full_prompt = f"{history_context}\n\nCurrent message: {message.content}"
-                        else:
-                            full_prompt = message.content
-
-                        # Use async subprocess to avoid blocking event loop
-                        process = await asyncio.create_subprocess_exec(
-                            CLAUDE_PATH, "-p", full_prompt,
-                            "--allowedTools", "Bash(python3:*),Read,Grep,Glob,Write,Edit",
-                            "--output-format", "text",
-                            cwd=PROJECT_ROOT,
-                            stdout=asyncio.subprocess.PIPE,
-                            stderr=asyncio.subprocess.PIPE
-                        )
-
-                        # Use longer timeout for complex code tasks (10 minutes)
-                        stdout, stderr = await asyncio.wait_for(
-                            process.communicate(),
-                            timeout=600
-                        )
-
-                        stdout_text = stdout.decode('utf-8') if stdout else ""
-                        stderr_text = stderr.decode('utf-8') if stderr else ""
-
-                        logger.info(f"[AI Debug] Conversational Claude returncode: {process.returncode}, stdout_len: {len(stdout_text)}, stderr: {stderr_text[:200] if stderr_text else 'None'}")
-
-                        if process.returncode == 0 and stdout_text.strip():
-                            response = stdout_text.strip()
-                            provider = 'claude'
-                        else:
-                            logger.warning(f"[AI Debug] Conversational Claude failed - returncode: {process.returncode}, stdout empty: {not stdout_text.strip()}")
-                    except asyncio.TimeoutError:
-                        logger.error(f"[AI Debug] Conversational Claude timeout (600s)")
-                    except Exception as e:
-                        logger.error(f"[AI Debug] Conversational Claude exception: {e}")
-
-                # Fallback to Gemini if Claude failed
-                if not response:
-                    try:
-                        sys.path.insert(0, str(PROJECT_ROOT / 'src'))
-                        from gemini_client import call_gemini
-
-                        # Build manual history for Gemini (no session support)
-                        history_context = get_history_context(user_id)
-                        if history_context:
-                            gemini_prompt = f"{history_context}\n\nCurrent question: {message.content}"
-                        else:
-                            gemini_prompt = message.content
-
-                        gemini_response, error = call_gemini(gemini_prompt, max_tokens=2048)
-
-                        if gemini_response and not error:
-                            response = gemini_response
-                            provider = 'gemini'
-                        else:
-                            logger.warning(f"[AI Debug] Gemini fallback error: {error}")
-                    except Exception as e:
-                        logger.error(f"[AI Debug] Gemini fallback exception: {e}")
-
+    async with message.channel.typing():
+        try:
+            # ── LLM opt-in via "ai:" prefix ────────────────────────────────
+            if lower.startswith("ai:"):
+                prompt = content[3:].strip()
+                if not prompt:
+                    await message.reply("Usage: `ai: <your question>`")
+                    return
+                response, provider = call_ai_with_fallback(
+                    prompt,
+                    allowed_tools="Bash(python3:*),Read,Grep,Glob",
+                )
                 if not response:
                     await message.reply("❌ AI services unavailable. Both Claude and Gemini failed.")
                     return
-
-                # Add to conversation history
-                add_to_history(user_id, "user", message.content)
-                add_to_history(user_id, "assistant", response)
-
-                # Add provider indicator for Gemini
-                if provider == 'gemini':
+                if provider == "gemini":
                     response = f"{response}\n\n*Powered by Gemini (Claude unavailable)*"
-
-                # Use send_long_message to automatically split if needed
                 await send_long_message(message, response)
+                return
 
-            except Exception as e:
-                await message.reply(f"❌ Error: {str(e)}")
+            # ── Keyword routing → CLI ───────────────────────────────────────
+            if re.search(r'\bsync\b', lower):
+                rc, stdout, stderr = await run_coach_cli(["sync"], timeout=300)
+                out = stdout.strip() or stderr.strip() or "Done"
+                await message.reply(f"```\n{clamp(out, 1800)}\n```")
+                return
+
+            if re.search(r'\b(brief|today|workout)\b', lower):
+                rc, stdout, stderr = await run_coach_cli(["brief", "--today"])
+                out = stdout.strip() or stderr.strip() or "No plan found"
+                await message.reply(f"```\n{clamp(out, 1800)}\n```")
+                return
+
+            if re.search(r'\bplan\b', lower):
+                rc, stdout, stderr = await run_coach_cli(["plan", "--week"], timeout=240)
+                out = stdout.strip() or stderr.strip() or "No output"
+                if rc == 0:
+                    await message.reply(f"```\n{clamp(out, 1800)}\n```")
+                else:
+                    await message.reply(
+                        f"Plan generation failed (rc={rc}). "
+                        f"Use `/coach_plan` if this persists.\n"
+                        f"```\n{clamp(out, 1000)}\n```"
+                    )
+                return
+
+            if re.search(r'\b(status|agent)\b', lower):
+                rc, stdout, stderr = await run_coach_cli(["agent", "status"])
+                out = stdout.strip() or stderr.strip() or "No status"
+                await message.reply(f"```\n{clamp(out, 1800)}\n```")
+                return
+
+            # ── Default: help ───────────────────────────────────────────────
+            await message.reply(
+                "Use slash commands or prefix with `ai:` for LLM:\n"
+                "• `/coach_today` — today's planned workout\n"
+                "• `/coach_sync` — sync Garmin data\n"
+                "• `/coach_plan` — generate new week plan\n"
+                "• `/coach_export` — preview Garmin export\n"
+                "• `/coach_status` — agent status\n"
+                "• `/coach_memory <query>` — search memory\n"
+                "• `/coach_note <text>` — save a note\n"
+                "• `ai: <question>` — ask the AI coach"
+            )
+
+        except Exception as exc:
+            await message.reply(f"❌ Error: {exc}")
 
 
 # ============== Scheduled Tasks ==============
-
-@tasks.loop(hours=1)
-async def cleanup_sessions_task():
-    """Periodically clean up expired sessions."""
-    cleanup_expired_sessions()
 
 
 async def check_sleep_and_sync(retry_intervals=None):
@@ -1478,6 +1167,7 @@ async def check_sleep_and_sync(retry_intervals=None):
 
 @tasks.loop(time=time(hour=5, minute=30, tzinfo=EST))  # 5:30 AM EST
 async def morning_report_task():
+    # TODO: migrate to run_coach_cli once morning_report is exposed via cli/coach.py
     """Send daily morning report (waits for sleep data with retries from 5:30 AM to ~10:00 AM)."""
     channel = bot.get_channel(CHANNELS["morning_report"])
     if not channel:
@@ -1557,232 +1247,41 @@ async def morning_report_task():
         await channel.send(f"❌ Morning report failed: {str(e)}")
 
 
-@tasks.loop(time=[time(hour=0, minute=0, tzinfo=EST), time(hour=6, minute=0, tzinfo=EST), time(hour=12, minute=0, tzinfo=EST), time(hour=18, minute=0, tzinfo=EST)])  # Every 6 hours: 12:00 AM, 6:00 AM, 12:00 PM, 6:00 PM EST
+@tasks.loop(time=[time(hour=0, minute=0, tzinfo=EST), time(hour=6, minute=0, tzinfo=EST), time(hour=12, minute=0, tzinfo=EST), time(hour=18, minute=0, tzinfo=EST)])
 async def periodic_sync_task():
-    """Periodic Garmin sync with summary notification (Termux-style format)."""
+    """Periodic Garmin sync via coach CLI, posted to #sync-log."""
     channel = bot.get_channel(CHANNELS["sync_log"])
     if not channel:
-        print(f"Warning: Sync log channel {CHANNELS['sync_log']} not found")
+        logger.warning("Sync log channel %s not found", CHANNELS["sync_log"])
         return
 
     try:
-        # Capture BEFORE state from cache
-        cache_file = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
-        before_counts = {}
-
-        if cache_file.exists():
-            try:
-                with open(cache_file) as f:
-                    cache = json.load(f)
-                    before_counts = {
-                        'activities': len(cache.get('activities', [])),
-                        'sleep': len(cache.get('sleep_sessions', [])),
-                        'vo2': len(cache.get('vo2_max_readings', [])),
-                        'weight': len(cache.get('weight_readings', [])),
-                        'rhr': len(cache.get('resting_hr_readings', [])),
-                        'scheduled_workouts': len(cache.get('scheduled_workouts', []))
-                    }
-            except:
-                before_counts = {'activities': 0, 'sleep': 0, 'vo2': 0, 'weight': 0, 'rhr': 0, 'scheduled_workouts': 0}
-        else:
-            before_counts = {'activities': 0, 'sleep': 0, 'vo2': 0, 'weight': 0, 'rhr': 0, 'scheduled_workouts': 0}
-
-        # Run sync asynchronously
-        proc = await asyncio.create_subprocess_exec(
-            "bash", "bin/sync_garmin_data.sh",
-            cwd=PROJECT_ROOT,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=300)
-
-        if proc.returncode != 0:
-            raise Exception(f"Sync failed with exit code {proc.returncode}")
-
-        sync_output = stdout.decode() if stdout else ""
-
-        # Capture AFTER state and calculate NEW items
-        after_counts = {}
-        new_data_details = []
-
-        if cache_file.exists():
-            try:
-                with open(cache_file) as f:
-                    cache = json.load(f)
-
-                    after_counts = {
-                        'activities': len(cache.get('activities', [])),
-                        'sleep': len(cache.get('sleep_sessions', [])),
-                        'vo2': len(cache.get('vo2_max_readings', [])),
-                        'weight': len(cache.get('weight_readings', [])),
-                        'rhr': len(cache.get('resting_hr_readings', [])),
-                        'scheduled_workouts': len(cache.get('scheduled_workouts', []))
-                    }
-
-                    # Analyze NEW activities
-                    new_activity_count = after_counts['activities'] - before_counts['activities']
-                    if new_activity_count > 0:
-                        activities = cache.get('activities', [])
-                        new_activities = activities[:new_activity_count]
-
-                        running = [a for a in new_activities if a.get('activity_type') == 'RUNNING']
-                        walking = [a for a in new_activities if a.get('activity_type') == 'WALKING']
-                        strength = [a for a in new_activities if a.get('activity_type') == 'STRENGTH']
-
-                        if running:
-                            total_miles = sum(a.get('distance_miles', 0) for a in running)
-                            total_hours = sum(a.get('duration_seconds', 0) for a in running) / 3600
-                            new_data_details.append(f"🏃 Run: {len(running)} runs, {total_miles:.1f} mi, {total_hours:.1f} hrs")
-
-                        if walking:
-                            total_miles = sum(a.get('distance_miles', 0) for a in walking)
-                            new_data_details.append(f"🚶 Walk: {len(walking)} walks, {total_miles:.1f} mi")
-
-                        if strength:
-                            new_data_details.append(f"💪 Strength: {len(strength)} sessions")
-
-                    # Analyze NEW sleep
-                    new_sleep_count = after_counts['sleep'] - before_counts['sleep']
-                    if new_sleep_count > 0:
-                        new_data_details.append(f"😴 Sleep: {new_sleep_count} nights")
-
-                    # Analyze NEW VO2 max
-                    new_vo2_count = after_counts['vo2'] - before_counts['vo2']
-                    if new_vo2_count > 0:
-                        vo2_readings = cache.get('vo2_max_readings', [])
-                        if vo2_readings:
-                            latest_vo2 = vo2_readings[0].get('vo2_max')
-                            if latest_vo2:
-                                new_data_details.append(f"📈 VO2: {latest_vo2:.1f} ml/kg/min")
-
-                    # Analyze NEW weight
-                    new_weight_count = after_counts['weight'] - before_counts['weight']
-                    if new_weight_count > 0:
-                        weight_readings = cache.get('weight_readings', [])
-                        if weight_readings:
-                            latest_weight = weight_readings[0].get('weight_lbs')
-                            if latest_weight:
-                                new_data_details.append(f"⚖️ Weight: {latest_weight:.1f} lbs")
-
-                    # Analyze NEW RHR
-                    new_rhr_count = after_counts['rhr'] - before_counts['rhr']
-                    if new_rhr_count > 0:
-                        rhr_readings = cache.get('resting_hr_readings', [])
-                        if rhr_readings and rhr_readings[0]:
-                            latest_rhr = rhr_readings[0][1]
-                            new_data_details.append(f"❤️ RHR: {latest_rhr} bpm")
-
-            except Exception as e:
-                print(f"Error analyzing cache: {e}")
-
-        # Extract workout generation info from sync output
-        running_workout_details = []
-        supplemental_workout_details = []
-        removed_workouts = []
-
-        # Parse running workouts
-        if "Successfully created workouts:" in sync_output:
-            lines = sync_output.split('\n')
-            in_workout_section = False
-            for line in lines:
-                if "Successfully created workouts:" in line:
-                    in_workout_section = True
-                    continue
-                if in_workout_section:
-                    if line.strip().startswith('•'):
-                        workout = line.strip()[2:].split(' (ID:')[0].strip()
-                        running_workout_details.append(f"  → {workout}")
-                    elif line.strip() and not line.strip().startswith('•'):
-                        in_workout_section = False
-
-        # Parse supplemental workouts
-        if "Successfully created supplemental workouts:" in sync_output:
-            lines = sync_output.split('\n')
-            in_supplemental_section = False
-            for line in lines:
-                if "Successfully created supplemental workouts:" in line:
-                    in_supplemental_section = True
-                    continue
-                if in_supplemental_section:
-                    if line.strip().startswith('•'):
-                        workout = line.strip()[2:].split(' (ID:')[0].strip()
-                        supplemental_workout_details.append(f"  → {workout}")
-                    elif line.strip() and not line.strip().startswith('•'):
-                        in_supplemental_section = False
-
-        # Parse removed workouts (from deduplicate_workouts.py output)
-        lines = sync_output.split('\n')
-        in_removal_section = False
-        for line in lines:
-            if 'Removed workouts:' in line:
-                in_removal_section = True
-                continue
-            if in_removal_section:
-                if line.strip().startswith('•'):
-                    # Format: "  • 2025-12-30: Workout Name - Reason"
-                    workout_detail = line.strip()[2:].strip()  # Remove bullet
-                    removed_workouts.append(workout_detail)
-                elif not line.strip() or 'Remaining workouts' in line:
-                    # End of removal section
-                    in_removal_section = False
-
-        # Build notification content
-        content_lines = []
-
-        # Add new data details
-        content_lines.extend(new_data_details)
-
-        # Add workout generation notifications
-        if running_workout_details:
-            content_lines.append("\n🏃 Running workouts scheduled:")
-            content_lines.extend(running_workout_details)
-
-        if supplemental_workout_details:
-            content_lines.append("\n💪 Strength workouts scheduled:")
-            content_lines.extend(supplemental_workout_details)
-
-        if removed_workouts:
-            content_lines.append("\n🗑️ Workouts removed:")
-            for removed in removed_workouts[:5]:  # Limit to first 5
-                content_lines.append(f"  → {removed}")
-
-        # Create embed
-        if content_lines:
-            content_text = '\n'.join(content_lines)
+        rc, stdout, stderr = await run_coach_cli(["sync"], timeout=300)
+        if rc == 0:
+            summary = clamp(stdout.strip() or "No output", 1800)
             embed = discord.Embed(
                 title="✓ Garmin Sync Complete",
-                description=content_text,
+                description=f"```\n{summary}\n```",
                 color=discord.Color.green(),
-                timestamp=datetime.now()
+                timestamp=datetime.now(),
             )
         else:
-            # No new data
+            msg = clamp(stderr.strip() or stdout.strip() or "Unknown error", 1800)
             embed = discord.Embed(
-                title="🔄 Sync Complete",
-                description="No new data",
-                color=discord.Color.blue(),
-                timestamp=datetime.now()
+                title="❌ Sync Failed",
+                description=f"```\n{msg}\n```",
+                color=discord.Color.red(),
+                timestamp=datetime.now(),
             )
-
         await channel.send(embed=embed)
-
-    except asyncio.TimeoutError:
-        embed = discord.Embed(
-            title="⚠️ Sync Timeout",
-            description="Sync took longer than 5 minutes",
-            color=discord.Color.orange(),
-            timestamp=datetime.now()
-        )
-        await channel.send(embed=embed)
-    except Exception as e:
-        print(f"Periodic sync error: {e}")
-        embed = discord.Embed(
-            title="❌ Sync Failed",
-            description=f"Error: {str(e)}",
+    except Exception as exc:
+        logger.error("Periodic sync error: %s", exc)
+        await channel.send(embed=discord.Embed(
+            title="❌ Sync Error",
+            description=str(exc),
             color=discord.Color.red(),
-            timestamp=datetime.now()
-        )
-        await channel.send(embed=embed)
+            timestamp=datetime.now(),
+        ))
 
 
 @tasks.loop(time=time(hour=7, minute=0, tzinfo=EST))  # 7:00 AM EST
@@ -1841,7 +1340,6 @@ async def daily_workouts_task():
         await channel.send(f"❌ Failed to load workouts: {str(e)}")
 
 
-@cleanup_sessions_task.before_loop
 @morning_report_task.before_loop
 @periodic_sync_task.before_loop
 @daily_workouts_task.before_loop
@@ -1878,9 +1376,6 @@ async def on_ready():
             print(f"✗ Failed to sync commands: {e}")
 
     # Start scheduled tasks
-    if not cleanup_sessions_task.is_running():
-        cleanup_sessions_task.start()
-        print("✓ Session cleanup task started")
     if not morning_report_task.is_running():
         morning_report_task.start()
         print("✓ Morning report task started")
