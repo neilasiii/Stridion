@@ -100,32 +100,36 @@ if [ "$AUTO_WORKOUTS" = true ] && [ -z "$CHECK_ONLY" ]; then
         echo "$WORKOUT_OUTPUT" >&2
     fi
 
-    # Generate supplemental workouts (strength/mobility) based on FinalSurge schedule
-    # This is non-critical - don't fail the whole sync if AI generation has issues
-    echo ""
-    echo "Checking for supplemental workouts to generate..."
+    # DISABLED: Supplemental workout generation (strength/mobility)
+    # User requested this feature be disabled
+    # To re-enable, uncomment the code block below
 
-    # Temporarily disable exit-on-error for supplemental generation
-    set +e
-    SUPP_OUTPUT=$("$PYTHON" "$PROJECT_ROOT/src/supplemental_workout_generator.py" --skip-mobility 2>&1)
-    SUPP_EXIT=$?
-    set -e
-
-    if [ $SUPP_EXIT -eq 0 ]; then
-        echo "$SUPP_OUTPUT"
-
-        if echo "$SUPP_OUTPUT" | grep -q "Successfully created supplemental"; then
-            echo ""
-            echo "💪 New strength/mobility workouts created and scheduled!"
-        fi
-    elif [ $SUPP_EXIT -eq 134 ]; then
-        # Exit code 134 = SIGABRT, likely AI out of tokens/context
-        echo "⚠ AI workout generation was interrupted (possibly out of tokens)" >&2
-        echo "  Garmin sync completed successfully, but strength workouts not generated" >&2
-        echo "$SUPP_OUTPUT" >&2
-        # Don't propagate this error - sync itself succeeded
-    else
-        echo "⚠ Warning: Supplemental workout generation encountered an issue" >&2
-        echo "$SUPP_OUTPUT" >&2
-    fi
+    # # Generate supplemental workouts (strength/mobility) based on FinalSurge schedule
+    # # This is non-critical - don't fail the whole sync if AI generation has issues
+    # echo ""
+    # echo "Checking for supplemental workouts to generate..."
+    #
+    # # Temporarily disable exit-on-error for supplemental generation
+    # set +e
+    # SUPP_OUTPUT=$("$PYTHON" "$PROJECT_ROOT/src/supplemental_workout_generator.py" --skip-mobility 2>&1)
+    # SUPP_EXIT=$?
+    # set -e
+    #
+    # if [ $SUPP_EXIT -eq 0 ]; then
+    #     echo "$SUPP_OUTPUT"
+    #
+    #     if echo "$SUPP_OUTPUT" | grep -q "Successfully created supplemental"; then
+    #         echo ""
+    #         echo "💪 New strength/mobility workouts created and scheduled!"
+    #     fi
+    # elif [ $SUPP_EXIT -eq 134 ]; then
+    #     # Exit code 134 = SIGABRT, likely AI out of tokens/context
+    #     echo "⚠ AI workout generation was interrupted (possibly out of tokens)" >&2
+    #     echo "  Garmin sync completed successfully, but strength workouts not generated" >&2
+    #     echo "$SUPP_OUTPUT" >&2
+    #     # Don't propagate this error - sync itself succeeded
+    # else
+    #     echo "⚠ Warning: Supplemental workout generation encountered an issue" >&2
+    #     echo "$SUPP_OUTPUT" >&2
+    # fi
 fi

@@ -2049,48 +2049,52 @@ def main():
                     if not args.quiet:
                         print(f"  ⚠ Skipping deletion for '{workout_name}' - no Garmin ID found")
 
-            # Regenerate strength workouts for affected weeks
-            if reschedule_log and generate_week_supplemental_workouts:
-                if not args.quiet:
-                    print(f"\n💪 Regenerating strength workouts for affected weeks...")
-
-                # Determine which weeks were affected by reschedules
-                affected_weeks = set()
-                for entry in reschedule_log:
-                    if entry.get('domain') == 'running':
-                        # Get week start (Monday) for both original and new dates
-                        for date_str in [entry['original_date'], entry['new_date']]:
-                            date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
-                            # Get Monday of this week
-                            week_start = date_obj - timedelta(days=date_obj.weekday())
-                            affected_weeks.add(week_start)
-
-                # Regenerate strength for each affected week
-                for week_start in sorted(affected_weeks):
-                    if not args.quiet:
-                        print(f"\n  📅 Week of {week_start.strftime('%Y-%m-%d')} (Monday):")
-
-                    try:
-                        # Call the generator with force regeneration
-                        # This will delete old strength workouts and create new ones
-                        created = generate_week_supplemental_workouts(
-                            week_start=datetime.combine(week_start, datetime.min.time()),
-                            check_only=False,  # Actually create workouts
-                            quiet=args.quiet,
-                            skip_mobility=True,  # Only regenerate strength
-                            use_ai=True,
-                            force_regen=True  # Force regeneration even if already exists
-                        )
-
-                        if not args.quiet:
-                            if created:
-                                print(f"  ✓ Regenerated {len(created)} strength workout(s)")
-                            else:
-                                print(f"  ℹ No strength workouts needed for this week")
-
-                    except Exception as e:
-                        if not args.quiet:
-                            print(f"  ⚠ Failed to regenerate strength for week {week_start}: {e}", file=sys.stderr)
+            # DISABLED: Automatic strength workout regeneration after reschedules
+            # User requested this feature be disabled (all automatic strength generation disabled)
+            # To re-enable, uncomment the code block below
+            #
+            # # Regenerate strength workouts for affected weeks
+            # if reschedule_log and generate_week_supplemental_workouts:
+            #     if not args.quiet:
+            #         print(f"\n💪 Regenerating strength workouts for affected weeks...")
+            #
+            #     # Determine which weeks were affected by reschedules
+            #     affected_weeks = set()
+            #     for entry in reschedule_log:
+            #         if entry.get('domain') == 'running':
+            #             # Get week start (Monday) for both original and new dates
+            #             for date_str in [entry['original_date'], entry['new_date']]:
+            #                 date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+            #                 # Get Monday of this week
+            #                 week_start = date_obj - timedelta(days=date_obj.weekday())
+            #                 affected_weeks.add(week_start)
+            #
+            #     # Regenerate strength for each affected week
+            #     for week_start in sorted(affected_weeks):
+            #         if not args.quiet:
+            #             print(f"\n  📅 Week of {week_start.strftime('%Y-%m-%d')} (Monday):")
+            #
+            #         try:
+            #             # Call the generator with force regeneration
+            #             # This will delete old strength workouts and create new ones
+            #             created = generate_week_supplemental_workouts(
+            #                 week_start=datetime.combine(week_start, datetime.min.time()),
+            #                 check_only=False,  # Actually create workouts
+            #                 quiet=args.quiet,
+            #                 skip_mobility=True,  # Only regenerate strength
+            #                 use_ai=True,
+            #                 force_regen=True  # Force regeneration even if already exists
+            #             )
+            #
+            #             if not args.quiet:
+            #                 if created:
+            #                     print(f"  ✓ Regenerated {len(created)} strength workout(s)")
+            #                 else:
+            #                     print(f"  ℹ No strength workouts needed for this week")
+            #
+            #         except Exception as e:
+            #             if not args.quiet:
+            #                 print(f"  ⚠ Failed to regenerate strength for week {week_start}: {e}", file=sys.stderr)
 
         # If no ICS calendar available, use Garmin templates as-is (without dates)
         if not new_scheduled_workouts and garmin_workout_templates:

@@ -167,7 +167,7 @@ def create_executable_step(
     }
 
     # Add pace target if specified
-    if pace_type and step_type in ("interval",):  # Only add pace to work intervals
+    if pace_type and step_type in ("interval", "warmup", "cooldown", "recovery"):
         slower_ms, faster_ms = get_pace_values(pace_type)
         step["targetType"] = {
             "workoutTargetTypeId": 6,
@@ -221,7 +221,7 @@ def create_repeat_group(
             step_order=2,
             step_type="recovery",
             duration_seconds=recovery_step.duration_seconds,
-            pace_type=None  # No pace target on recovery
+            pace_type=recovery_step.pace_type or 'E'  # Use parser's pace (typically Easy)
         ))
 
     return {
@@ -273,7 +273,7 @@ def generate_garmin_workout(parsed: ParsedWorkout, workout_name: str, coach_desc
             step_order=step_order,
             step_type="warmup",
             duration_seconds=parsed.warmup.duration_seconds,
-            pace_type=None  # No pace target on warmup
+            pace_type='E'  # Warmup at Easy pace
         ))
         step_order += 1
 
@@ -302,7 +302,7 @@ def generate_garmin_workout(parsed: ParsedWorkout, workout_name: str, coach_desc
             step_order=step_order,
             step_type="cooldown",
             duration_seconds=parsed.cooldown.duration_seconds,
-            pace_type=None  # No pace target on cooldown
+            pace_type='E'  # Cooldown at Easy pace
         ))
 
     workout = {
@@ -340,6 +340,18 @@ def generate_workout_name(date: str, parsed: ParsedWorkout) -> str:
     if parsed.workout_type == 'easy':
         return f"{date} - Easy Run {duration_min}min"
     elif parsed.workout_type == 'tempo':
+        # For tempo workouts, use the tempo step duration in the name
+        for step in parsed.main_steps:
+            if isinstance(step, WorkoutStep) and step.pace_type == 'T':
+                tempo_secs = step.duration_seconds
+                if tempo_secs:
+                    tempo_min = tempo_secs // 60
+                    tempo_sec = tempo_secs % 60
+                    if tempo_sec > 0:
+                        return f"{date} - {tempo_min}:{tempo_sec:02d} Tempo"
+                    else:
+                        return f"{date} - {tempo_min}min Tempo"
+        # Fallback to total duration if no tempo step found
         return f"{date} - Tempo {duration_min}min"
     elif parsed.workout_type == 'intervals':
         # Check if this is primarily an easy run with strides added
@@ -371,13 +383,43 @@ def generate_workout_name(date: str, parsed: ParsedWorkout) -> str:
         return f"{date} - Run {duration_min}min"
 
 
-def find_new_workouts(health_cache: Dict[str, Any], generated_log: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Find FinalSurge workouts that haven't been generated yet."""
+def find_new_workouts(health_cache: Dict[str, Any], generated_log: Dict[str, Any], client=None) -> List[Dict[str, Any]]:
+    """
+    Find FinalSurge workouts that haven't been generated yet.
+
+    Args:
+        health_cache: Health data cache with scheduled_workouts
+        generated_log: Local log of previously generated workouts
+        client: Optional Garmin client for checking existing workouts on Garmin Connect
+
+    Returns:
+        List of FinalSurge workouts that need to be generated
+    """
     new_workouts = []
     scheduled_workouts = health_cache.get("scheduled_workouts", [])
 
     # Check running section for already-generated workouts
     running_log = generated_log.get("running", {})
+
+    # If client provided, fetch existing Garmin workouts to check for duplicates
+    existing_garmin_workouts = {}
+    if client:
+        try:
+            # Get all scheduled workouts from Garmin (limit 100 to cover upcoming schedule)
+            garmin_workouts = client.get_workouts(0, 100)
+
+            # Build a set of (date, workout_name) tuples for quick lookup
+            # We'll match on date and check if the name is similar
+            for gw in garmin_workouts:
+                date = gw.get('scheduledDate')
+                name = gw.get('workoutName', '')
+                if date and name:
+                    if date not in existing_garmin_workouts:
+                        existing_garmin_workouts[date] = []
+                    existing_garmin_workouts[date].append(name.lower())
+        except Exception as e:
+            # If we can't fetch from Garmin, just rely on local log
+            print(f"⚠ Warning: Could not fetch existing Garmin workouts: {e}", file=sys.stderr)
 
     for workout in scheduled_workouts:
         # Only process FinalSurge workouts (source: ics_calendar)
@@ -389,6 +431,26 @@ def find_new_workouts(health_cache: Dict[str, Any], generated_log: Dict[str, Any
         # Skip if already generated (check running section)
         if scheduled_date in running_log:
             continue
+
+        # Skip if already exists on Garmin Connect
+        # Check if there's a workout with a similar name on the same date
+        if scheduled_date in existing_garmin_workouts:
+            workout_name = workout.get("name", "").lower()
+            # Check for keywords that would indicate this workout was already generated
+            # (easy run, intervals, tempo, etc.)
+            existing_names = existing_garmin_workouts[scheduled_date]
+
+            # Simple heuristic: if there's already a running workout on this date, skip it
+            # Running workouts typically contain: "easy run", "intervals", "tempo", etc.
+            running_keywords = ["easy run", "intervals", "tempo", "mixed pace", "strides"]
+            has_running_workout = any(
+                any(keyword in existing_name for keyword in running_keywords)
+                for existing_name in existing_names
+            )
+
+            if has_running_workout:
+                print(f"⚠ Skipping {scheduled_date}: Workout already exists on Garmin Connect")
+                continue
 
         # Skip if in the past (more than 1 day old)
         workout_date = datetime.strptime(scheduled_date, "%Y-%m-%d")
@@ -425,8 +487,18 @@ def generate_and_upload_workouts(check_only: bool = False, quiet: bool = False) 
     health_cache = load_health_cache()
     generated_log = load_generated_workouts_log()
 
-    # Find new workouts
-    new_workouts = find_new_workouts(health_cache, generated_log)
+    # Authenticate with Garmin early to check for existing workouts
+    # This prevents creating duplicates if the local log is out of sync
+    client = None
+    try:
+        client = get_garmin_client(quiet=True)
+    except Exception as e:
+        if not quiet:
+            print(f"⚠ Warning: Could not authenticate with Garmin for deduplication check: {e}", file=sys.stderr)
+            print("  Will rely on local log only (may create duplicates if log is stale)", file=sys.stderr)
+
+    # Find new workouts (passing client for Garmin-side deduplication)
+    new_workouts = find_new_workouts(health_cache, generated_log, client=client)
 
     if not new_workouts:
         if not quiet:
@@ -464,8 +536,9 @@ def generate_and_upload_workouts(check_only: bool = False, quiet: bool = False) 
             })
         return results
 
-    # Authenticate with Garmin
-    client = get_garmin_client(quiet=quiet)
+    # Authenticate with Garmin (reuse client if already authenticated for deduplication)
+    if client is None:
+        client = get_garmin_client(quiet=quiet)
 
     created_workouts = []
 

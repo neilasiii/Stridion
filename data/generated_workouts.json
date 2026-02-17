@@ -1,143 +1,232 @@
 {
   "running": {
-    "2025-12-21": {
-      "garmin_id": 1412514207,
-      "finalsurge_name": "Run: 40-55 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-16T06:16:57.632391"
-    },
-    "2025-12-19": {
-      "garmin_id": 1412514210,
-      "finalsurge_name": "Run: 30-45 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-16T06:16:58.195169"
-    },
-    "2025-12-17": {
-      "garmin_id": 1412514211,
-      "finalsurge_name": "Run: 30-45 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-16T06:16:58.380236"
-    },
-    "2025-12-28": {
-      "garmin_id": 1414281400,
-      "finalsurge_name": "Run: 40-55 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-18T18:00:40.542668"
-    },
-    "2025-12-26": {
-      "garmin_id": 1414281409,
-      "finalsurge_name": "Run: 45-50 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-18T18:00:40.732295"
-    },
-    "2025-12-24": {
-      "garmin_id": 1414281412,
-      "finalsurge_name": "Run: 45-50 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-18T18:00:40.919096"
-    },
-    "2025-12-22": {
-      "garmin_id": 1414281413,
-      "finalsurge_name": "Run: 30-45 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-18T18:00:41.114400"
-    },
-    "2026-01-02": {
-      "garmin_id": 1421438006,
-      "finalsurge_name": "Run: 50-55 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-27T06:32:07.629335"
-    },
-    "2025-12-31": {
-      "garmin_id": 1421438007,
-      "finalsurge_name": "Run: 50-55 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-27T06:32:07.831358"
-    },
-    "2025-12-29": {
-      "garmin_id": 1421438008,
-      "finalsurge_name": "Run: 50-55 min E",
-      "workout_type": "easy",
-      "generated_at": "2025-12-27T06:32:08.010164"
-    },
-    "2026-01-03": {
-      "garmin_id": 1421699147,
+    "2026-01-17": {
+      "garmin_id": 1437182383,
       "finalsurge_name": "Run: 60-70 min E",
       "workout_type": "easy",
-      "generated_at": "2025-12-27T12:25:05.961793"
+      "generated_at": "2026-01-10T18:16:53.798659"
+    },
+    "2026-01-14": {
+      "garmin_id": 1437182387,
+      "finalsurge_name": "Run: 10 min warm up 4x5 min @ tempo on 1 min easy jog 10 min warm down",
+      "workout_type": "intervals",
+      "generated_at": "2026-01-10T18:16:54.065132"
+    },
+    "2026-01-13": {
+      "garmin_id": 1437182389,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-10T18:16:54.277655"
+    },
+    "2026-01-12": {
+      "garmin_id": 1437182396,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-10T18:16:54.564816"
+    },
+    "2026-01-10": {
+      "garmin_id": 1437182402,
+      "finalsurge_name": "Run: 50-75 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-10T18:16:54.753896"
+    },
+    "2026-01-24": {
+      "garmin_id": 1443741274,
+      "finalsurge_name": "Run: 60-70 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-16T12:00:40.968873"
+    },
+    "2026-01-21": {
+      "garmin_id": 1443741277,
+      "finalsurge_name": "Run: 10 min warm up 2x10 min @ tempo on 2 min easy jog recovery 10 min warm down",
+      "workout_type": "intervals",
+      "generated_at": "2026-01-16T12:00:41.181616"
+    },
+    "2026-01-22": {
+      "garmin_id": 1443741283,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-16T12:00:41.431779"
+    },
+    "2026-01-19": {
+      "garmin_id": 1443741287,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-16T12:00:41.632808"
+    },
+    "2026-01-18": {
+      "garmin_id": 1444850268,
+      "finalsurge_name": "Run: 60-70 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-17T18:00:39.253637"
+    },
+    "2026-01-31": {
+      "garmin_id": 1451488556,
+      "finalsurge_name": "Run: 65-75 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-23T18:00:53.681455"
+    },
+    "2026-01-30": {
+      "garmin_id": 1451488564,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-23T18:00:53.862684"
+    },
+    "2026-01-26": {
+      "garmin_id": 1451488577,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-23T18:00:54.228469"
+    },
+    "2026-01-28": {
+      "garmin_id": 1451520726,
+      "finalsurge_name": "Run: 10 min warm up 17:30 @ tempo 10 min warm down",
+      "workout_type": "tempo",
+      "generated_at": "2026-01-23T18:56:21.276381"
+    },
+    "2026-01-27": {
+      "garmin_id": 1455560875,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-01-27T00:00:41.511752"
+    },
+    "2026-02-07": {
+      "garmin_id": 1459853737,
+      "finalsurge_name": "Run: 75-85 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-01T00:00:34.561484"
+    },
+    "2026-02-06": {
+      "garmin_id": 1459853738,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-01T00:00:34.754298"
+    },
+    "2026-02-04": {
+      "garmin_id": 1459853739,
+      "finalsurge_name": "Run: 20 min warm up 2x12:30 min@  tempo on 2 min easy jog  10 min warm down",
+      "workout_type": "intervals",
+      "generated_at": "2026-02-01T00:00:34.948351"
+    },
+    "2026-02-03": {
+      "garmin_id": 1459853740,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-01T00:00:35.169996"
+    },
+    "2026-02-02": {
+      "garmin_id": 1460083069,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-01T05:30:43.125582"
+    },
+    "2026-02-15": {
+      "garmin_id": 1466096390,
+      "finalsurge_name": "Run: 75-85 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-06T12:00:43.055986"
+    },
+    "2026-02-11": {
+      "garmin_id": 1466096398,
+      "finalsurge_name": "Run: 20 min warm up 8x60 sec @ 5k/ 40 sec E pace 10 min warm down",
+      "workout_type": "intervals",
+      "generated_at": "2026-02-06T12:00:43.312629"
+    },
+    "2026-02-10": {
+      "garmin_id": 1466096404,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-06T12:00:43.531063"
+    },
+    "2026-02-09": {
+      "garmin_id": 1466096408,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-06T12:00:43.775658"
+    },
+    "2026-02-13": {
+      "garmin_id": 1472883546,
+      "finalsurge_name": "Run: 20 min warm up 8x60 sec @ 5k/ 40 sec E pace 10 min warm down",
+      "workout_type": "intervals",
+      "generated_at": "2026-02-13T00:00:34.233229"
+    },
+    "2026-02-21": {
+      "garmin_id": 1473285052,
+      "finalsurge_name": "Run: 80-90 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-13T12:00:36.125269"
+    },
+    "2026-02-20": {
+      "garmin_id": 1473285056,
+      "finalsurge_name": "Run: 20 min warm up 10x60 sec @ 5k/ 60 sec E pace 10 min warm down",
+      "workout_type": "intervals",
+      "generated_at": "2026-02-13T12:00:36.372090"
+    },
+    "2026-02-17": {
+      "garmin_id": 1473285061,
+      "finalsurge_name": "Run: 50-55 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-13T12:00:36.600826"
+    },
+    "2026-02-18": {
+      "garmin_id": 1473285062,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-13T12:00:36.824493"
+    },
+    "2026-02-16": {
+      "garmin_id": 1474441479,
+      "finalsurge_name": "Run: 50-60 min E",
+      "workout_type": "easy",
+      "generated_at": "2026-02-15T00:00:32.095014"
     }
   },
   "strength": {
-    "2025-12-20": {
-      "garmin_id": 1412726075,
-      "name": "2025-12-20 - Strength: Session A",
-      "session_role": "A",
-      "focus_areas": "Key Focus: Goblet squat (4x8-10). Supporting: Reverse lunge, Half-kneeling press. Trunk: Dead bug",
-      "intensity": "moderate",
-      "generated_at": "2025-12-16T12:00:36.452234"
-    },
-    "2025-12-27": {
-      "garmin_id": 1421700496,
-      "name": "2025-12-27 - Strength: Session C",
+    "2026-02-01": {
+      "garmin_id": 1457971379,
+      "name": "2026-02-01 - Strength: Unilateral + Velocity (Week 1)",
       "session_role": "C",
-      "focus_areas": "Key Focus: Split squat (unilateral). Supporting: Step-ups, glute bridges. Upper: Push+Pull combo. Trunk: Anti-lateral flexion (side plank)",
-      "intensity": "moderate",
-      "generated_at": "2025-12-27T12:26:54.811668"
-    },
-    "2025-12-30": {
-      "garmin_id": 1421719825,
-      "name": "2025-12-30 - Strength: Session A",
-      "session_role": "A",
-      "focus_areas": "Key Focus: Goblet Squat. Supporting: Reverse Lunge, DB RDL. Upper: Half-kneeling DB Press. Trunk: Pallof Press.",
+      "focus_areas": "Unilateral + Velocity",
       "intensity": "full",
-      "generated_at": "2025-12-27T12:51:50.656550"
+      "generated_at": "2026-01-29T18:00:41.187207"
     },
-    "2026-01-01": {
-      "garmin_id": 1421719827,
-      "name": "2026-01-01 - Strength: Session A",
+    "2026-02-12": {
+      "garmin_id": 1466902883,
+      "name": "2026-02-12 - Strength: Squat + Push (Week 1)",
       "session_role": "A",
-      "focus_areas": "Key Focus: DB RDL. Supporting: Single-leg RDL (light). Upper: Pull (DB Row). Trunk: Anti-rotation (Pallof, Dead Bug).",
+      "focus_areas": "Squat + Push",
       "intensity": "full",
-      "generated_at": "2025-12-27T12:51:50.917998"
+      "generated_at": "2026-02-07T12:00:36.710003"
     },
-    "2026-01-04": {
-      "garmin_id": 1421719829,
-      "name": "2026-01-04 - Strength: Session A",
-      "session_role": "A",
-      "focus_areas": "Key Focus: Split Squat. Supporting: Speed Goblet Squat. Upper: Push + Pull combo. Trunk: Anti-lateral flexion (Suitcase Carry).",
+    "2026-02-14": {
+      "garmin_id": 1466902887,
+      "name": "2026-02-14 - Strength: Hinge + Pull (Week 1)",
+      "session_role": "B",
+      "focus_areas": "Hinge + Pull",
       "intensity": "full",
-      "generated_at": "2025-12-27T12:51:51.203902"
+      "generated_at": "2026-02-07T12:00:36.946880"
     }
   },
   "mobility": {},
   "week_snapshots": {
-    "2025-12-15": {
-      "running_fingerprint": "2025-12-15:Run: 30-45 min E:False|2025-12-17:Run: 30-45 min E:False|2025-12-17:Run: 30-45 min E:False|2025-12-19:Run: 30-45 min E:False|2025-12-19:Run: 30-45 min E:False|2025-12-21:Run: 40-55 min E:False",
+    "2026-01-26": {
+      "running_fingerprint": "2026-01-30:Run: 50-55 min E:False|2026-01-31:Run: 65-75 min E:False",
       "strength_dates": [
-        "2025-12-20"
+        "2026-01-26",
+        "2026-01-28",
+        "2026-02-01"
       ],
       "recovery_concern": false,
-      "generated_at": "2025-12-16T12:00:36.452321"
+      "generated_at": "2026-01-29T18:00:41.187237"
     },
-    "2025-12-22": {
-      "running_fingerprint": "2025-12-28:Run: 40-55 min E:False",
+    "2026-02-09": {
+      "running_fingerprint": "2026-02-09:Run: 50-60 min E:False|2026-02-10:Run: 50-55 min E:False|2026-02-11:Run: 20 min warm up 8x60 sec @ 5k/ 40 sec E pace 10 min warm down:True|2026-02-15:Run: 75-85 min E:False",
       "strength_dates": [
-        "2025-12-23",
-        "2025-12-25",
-        "2025-12-27"
+        "2026-02-12",
+        "2026-02-14"
       ],
       "recovery_concern": false,
-      "generated_at": "2025-12-27T12:26:54.811696"
-    },
-    "2025-12-29": {
-      "running_fingerprint": "2025-12-29:Run: 50-55 min E:False|2025-12-31:Run: 50-55 min E:False|2026-01-02:Run: 50-55 min E:False|2026-01-03:Run: 60-70 min E:False",
-      "strength_dates": [
-        "2025-12-30",
-        "2026-01-01",
-        "2026-01-04"
-      ],
-      "recovery_concern": false,
-      "generated_at": "2025-12-27T12:51:51.203934"
+      "generated_at": "2026-02-07T12:00:36.946915"
     }
   }
 }

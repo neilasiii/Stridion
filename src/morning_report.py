@@ -368,11 +368,47 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
     today = datetime.now().strftime('%A, %B %d, %Y')
 
     # Format recovery data with historical context
+    # PRIORITY ORDERING: HRV and Body Battery first (most reliable recovery indicators)
     recovery_text = []
+
+    # PRIMARY RECOVERY INDICATORS (most reliable)
+    if 'hrv' in recovery:
+        h = recovery['hrv']
+        hrv_line = f"HRV: {h['value']}ms ({h['status']}) [PRIMARY INDICATOR]"
+
+        # Add percentile
+        if historical_context and historical_context.get('hrv_percentile') is not None:
+            pct = historical_context['hrv_percentile']
+            hrv_line += f" ({int(pct)}th percentile)"
+
+        recovery_text.append(hrv_line)
+
+    if 'body_battery' in recovery:
+        bb_line = f"Body Battery: {recovery['body_battery']}/100 [PRIMARY INDICATOR]"
+
+        # Add percentile
+        if historical_context and historical_context.get('body_battery_percentile') is not None:
+            pct = historical_context['body_battery_percentile']
+            bb_line += f" ({int(pct)}th percentile)"
+
+        recovery_text.append(bb_line)
+
+    # SECONDARY RECOVERY INDICATORS
+    if 'readiness' in recovery:
+        r = recovery['readiness']
+        rec_text = f", {r['recovery_hours']}h recovery needed" if r.get('recovery_hours') else ""
+        readiness_line = f"Training Readiness: {r['score']}/100 ({r['level']}){rec_text}"
+
+        # Add percentile
+        if historical_context and historical_context.get('readiness_percentile') is not None:
+            pct = historical_context['readiness_percentile']
+            readiness_line += f" ({int(pct)}th percentile)"
+
+        recovery_text.append(readiness_line)
 
     if 'sleep' in recovery:
         s = recovery['sleep']
-        sleep_line = f"Sleep: {s['duration_hours']}h, score {s['score']}/100, {s['deep_pct']}% deep"
+        sleep_line = f"Sleep: {s['duration_hours']}h, score {s['score']}/100, {s['deep_pct']}% deep [REFERENCE ONLY - score unreliable with newborn]"
 
         # Add historical percentile if available
         if historical_context:
@@ -391,39 +427,6 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
                 sleep_line += f" ({', '.join(percentiles)} vs 30-day history)"
 
         recovery_text.append(sleep_line)
-
-    if 'readiness' in recovery:
-        r = recovery['readiness']
-        rec_text = f", {r['recovery_hours']}h recovery needed" if r.get('recovery_hours') else ""
-        readiness_line = f"Training Readiness: {r['score']}/100 ({r['level']}){rec_text}"
-
-        # Add percentile
-        if historical_context and historical_context.get('readiness_percentile') is not None:
-            pct = historical_context['readiness_percentile']
-            readiness_line += f" ({int(pct)}th percentile)"
-
-        recovery_text.append(readiness_line)
-
-    if 'body_battery' in recovery:
-        bb_line = f"Body Battery: {recovery['body_battery']}/100"
-
-        # Add percentile
-        if historical_context and historical_context.get('body_battery_percentile') is not None:
-            pct = historical_context['body_battery_percentile']
-            bb_line += f" ({int(pct)}th percentile)"
-
-        recovery_text.append(bb_line)
-
-    if 'hrv' in recovery:
-        h = recovery['hrv']
-        hrv_line = f"HRV: {h['value']}ms ({h['status']})"
-
-        # Add percentile
-        if historical_context and historical_context.get('hrv_percentile') is not None:
-            pct = historical_context['hrv_percentile']
-            hrv_line += f" ({int(pct)}th percentile)"
-
-        recovery_text.append(hrv_line)
 
     if 'rhr' in recovery:
         r = recovery['rhr']
@@ -531,6 +534,15 @@ You are an expert running coach. Based on the recovery metrics above, provide:
 2. If modifying, be SPECIFIC (e.g., "reduce 45min to 30min" or "keep easy pace, skip strides")
 3. Key reasoning based on the recovery data
 
+CRITICAL - METRIC PRIORITIZATION:
+- **HRV and Body Battery are PRIMARY INDICATORS** - these are the most reliable recovery metrics
+- **Sleep score is REFERENCE ONLY** - Garmin's algorithm is unreliable with newborn interruptions
+  * Sleep DURATION matters (hours of sleep)
+  * Sleep SCORE does not accurately reflect recovery (penalizes feeding interruptions too heavily)
+  * A low sleep score with 8+ hours of actual sleep is BETTER recovery than high sleep score with 5 hours
+- When metrics conflict, TRUST HRV and Body Battery over sleep score
+- Example: If HRV is excellent (80th+ percentile) and body battery is strong (70+), but sleep score is low due to interruptions, prioritize the positive HRV/battery readings
+
 IMPORTANT CONTEXT - PERCENTILES:
 - Each recovery metric shows its percentile ranking vs the last 30 days
 - Percentiles show how today compares to recent history (higher = better)
@@ -545,10 +557,23 @@ NOTIFICATION:
 [Single line, max 200 chars. Format: "Original → Recommendation (key reason). Recovery metric"]
 Example: "45min E → 30min E (readiness 50). Battery 14/100"
 Example: "Rest day. Readiness LOW (46), battery depleted"
-Example: "40min E as planned. Recovery optimal (90th %ile sleep)"
+Example: "40min E as planned. Recovery excellent"
 
 FULL_REPORT:
 [Detailed markdown report with sections for Recovery Analysis, Workout Recommendation, and Rationale]
+
+IMPORTANT - LANGUAGE REQUIREMENTS:
+- DO NOT use percentile numbers in your report (e.g., "80th percentile", "3rd percentile")
+- INSTEAD use descriptive language based on percentile ranges:
+  * 80-100th: "excellent", "outstanding", "best in weeks"
+  * 60-79th: "above average", "good", "strong"
+  * 40-59th: "average", "typical", "normal for you"
+  * 20-39th: "below average", "suboptimal", "lower than usual"
+  * 0-19th: "poor", "concerning", "well below your norm", "worst in weeks"
+- Examples:
+  * "Despite excellent body battery..." (instead of "100th percentile body battery")
+  * "HRV is concerning and well below your norm" (instead of "3rd percentile")
+  * "Sleep duration was above average" (instead of "72nd percentile")
 
 ---
 
@@ -556,6 +581,7 @@ CRITICAL RULES:
 - Use ONLY the metrics provided above. Never invent or estimate values.
 - If a metric is missing, acknowledge it.
 - ALWAYS consider percentiles when interpreting metrics - historical context matters
+- Convert percentiles to descriptive language - NEVER use percentile numbers in the report
 - The NOTIFICATION line must be under 200 characters.
 - Be specific and actionable.
 - DO NOT use placeholders like "Generated above" or "[Report content provided above]" - output the COMPLETE report text directly."""
@@ -649,32 +675,52 @@ def parse_ai_response(response):
 def generate_fallback_report(workout, recovery, activities):
     """Generate a rule-based report if AI fails."""
     # Determine recommendation based on recovery metrics
+    # PRIORITY: HRV and Body Battery > Readiness > Sleep duration (ignore sleep score)
     concerns = []
     severity = 0  # 0=good, 1=caution, 2=modify, 3=rest
 
+    # PRIMARY INDICATORS (highest priority)
+    # Check HRV
+    if 'hrv' in recovery:
+        hrv_val = recovery['hrv'].get('value')
+        hrv_status = recovery['hrv'].get('status', '')
+        if hrv_status and 'unbalanced' in hrv_status.lower():
+            concerns.append(f"HRV unbalanced")
+            severity = max(severity, 3)
+        elif hrv_status and 'low' in hrv_status.lower():
+            concerns.append(f"HRV low")
+            severity = max(severity, 2)
+
+    # Check body battery (primary indicator)
+    if 'body_battery' in recovery:
+        bb = recovery['body_battery']
+        if bb and bb < 20:
+            concerns.append(f"battery {bb}")
+            severity = max(severity, 3)
+        elif bb and bb < 40:
+            concerns.append(f"battery {bb}")
+            severity = max(severity, 2)
+
+    # SECONDARY INDICATORS
     # Check readiness
     if 'readiness' in recovery:
         score = recovery['readiness']['score']
         if score and score < 40:
             concerns.append(f"readiness {score}")
-            severity = max(severity, 3)
+            severity = max(severity, 2)  # Reduced from 3
         elif score and score < 60:
             concerns.append(f"readiness {score}")
-            severity = max(severity, 2)
+            severity = max(severity, 1)  # Reduced from 2
 
-    # Check body battery
-    if 'body_battery' in recovery:
-        bb = recovery['body_battery']
-        if bb and bb < 20:
-            concerns.append(f"battery {bb}")
-            severity = max(severity, 2)
-
-    # Check sleep
+    # Check sleep DURATION only (ignore score - unreliable with newborn)
     if 'sleep' in recovery:
         hours = recovery['sleep']['duration_hours']
-        if hours and hours < 6:
+        if hours and hours < 5:
             concerns.append(f"sleep {hours}h")
             severity = max(severity, 2)
+        elif hours and hours < 6:
+            concerns.append(f"sleep {hours}h")
+            severity = max(severity, 1)
 
     # Check RHR elevation
     if 'rhr' in recovery and recovery['rhr'].get('elevation'):

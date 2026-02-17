@@ -3560,3 +3560,9 @@ AI error: Claude exit code 1: , using fallback
 [2025-12-13 09:01:12] Sending notification...
 [2025-12-13 09:01:12] Notification sent
 [2025-12-13 09:01:12] === Morning Report Complete ===
+[2026-01-07 05:41:20] === Morning Report Started ===
+[2026-01-07 05:41:20] Generating AI report...
+[2026-01-07 05:41:49] Report generated successfully
+[2026-01-07 05:41:49] Notification: 8x40s @ 5k → 6x40s @ 5k (short sleep, HRV unbalanced). Readiness 54 MODERATE, Battery 91
+[2026-01-07 05:41:49] Sending notification...
+[2026-01-07 05:41:49] === Morning Report Complete ===

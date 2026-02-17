@@ -109,7 +109,7 @@ class RunnerStrengthProgramGenerator:
         }
     }
 
-    def __init__(self, duration_weeks=4, intensity=75, units="kg"):
+    def __init__(self, duration_weeks=4, intensity=75, units="lb"):
         """
         Initialize program generator.
 

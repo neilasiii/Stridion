@@ -1,7 +1,3297 @@
 {
-  "last_updated": "2025-12-27T17:51:51.206091+00:00",
-  "last_sync_date": "2025-12-27",
+  "last_updated": "2026-02-15T23:00:34.928772+00:00",
+  "last_sync_date": "2026-02-15",
   "activities": [
+    {
+      "activity_id": 21879252444,
+      "date": "2026-02-15T12:56:33",
+      "activity_name": "Altamonte Springs - 2026-02-16 - Easy Run 60min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3421.85205078125,
+      "distance_miles": 5.65832,
+      "calories": 681.0,
+      "avg_heart_rate": 146.0,
+      "max_heart_rate": 163.0,
+      "avg_speed": 5.952497,
+      "pace_per_mile": 10.079117,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.657748,
+          "duration_seconds": 3421.852,
+          "avg_heart_rate": 146.0,
+          "max_heart_rate": 163.0,
+          "avg_speed_mph": 5.952497,
+          "pace_per_mile": 10.080136,
+          "avg_cadence": 145.09375,
+          "avg_power": 307.0,
+          "calories": 681.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 861.925,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 2064.159,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 422.949,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 179
+        }
+      ]
+    },
+    {
+      "activity_id": 21878140546,
+      "date": "2026-02-15T10:50:09",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 2691.014892578125,
+      "distance_miles": 2.312731,
+      "calories": 239.0,
+      "avg_heart_rate": 86.0,
+      "max_heart_rate": 113.0,
+      "avg_speed": 3.093688,
+      "pace_per_mile": 19.392768,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 169
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 179
+        }
+      ]
+    },
+    {
+      "activity_id": 21859505296,
+      "date": "2026-02-13T15:00:10",
+      "activity_name": "Altamonte Springs - 2026-02-15 - Easy Run 100min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 6026.373046875,
+      "distance_miles": 10.016001,
+      "calories": 1217.0,
+      "avg_heart_rate": 152.0,
+      "max_heart_rate": 168.0,
+      "avg_speed": 5.983814,
+      "pace_per_mile": 10.02791,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 10.015702,
+          "duration_seconds": 6026.373,
+          "avg_heart_rate": 152.0,
+          "max_heart_rate": 168.0,
+          "avg_speed_mph": 5.983814,
+          "pace_per_mile": 10.028209,
+          "avg_cadence": 145.484375,
+          "avg_power": 302.0,
+          "calories": 1217.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 647.345,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 2878.99,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 2439.372,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21857717016,
+      "date": "2026-02-13T11:45:21",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 2757.77587890625,
+      "distance_miles": 2.246934,
+      "calories": 235.0,
+      "avg_heart_rate": 84.0,
+      "max_heart_rate": 113.0,
+      "avg_speed": 2.932628,
+      "pace_per_mile": 20.455848,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 170
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21850439671,
+      "date": "2026-02-12T17:55:21",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 852.5440063476562,
+      "distance_miles": 0.687642,
+      "calories": 70.0,
+      "avg_heart_rate": 85.0,
+      "max_heart_rate": 101.0,
+      "avg_speed": 2.903548,
+      "pace_per_mile": 20.663461,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 170
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21823955139,
+      "date": "2026-02-10T07:20:52",
+      "activity_name": "Orange County - 2026-02-10 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3301.492919921875,
+      "distance_miles": 5.317783,
+      "calories": 598.0,
+      "avg_heart_rate": 127.0,
+      "max_heart_rate": 147.0,
+      "avg_speed": 5.798148,
+      "pace_per_mile": 10.347336,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.317627,
+          "duration_seconds": 3301.493,
+          "avg_heart_rate": 127.0,
+          "max_heart_rate": 147.0,
+          "avg_speed_mph": 5.798148,
+          "pace_per_mile": 10.347639,
+          "avg_cadence": 144.0,
+          "avg_power": 292.0,
+          "calories": 598.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2631.259,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 162.999,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 179
+        }
+      ]
+    },
+    {
+      "activity_id": 21813110542,
+      "date": "2026-02-09T07:24:49",
+      "activity_name": "Orange County - 2026-02-09 - Easy Run 60min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3602.6220703125,
+      "distance_miles": 5.821604,
+      "calories": 622.0,
+      "avg_heart_rate": 115.0,
+      "max_heart_rate": 128.0,
+      "avg_speed": 5.818281,
+      "pace_per_mile": 10.313944,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.821442,
+          "duration_seconds": 3602.622,
+          "avg_heart_rate": 115.0,
+          "max_heart_rate": 128.0,
+          "avg_speed_mph": 5.818281,
+          "pace_per_mile": 10.314231,
+          "avg_cadence": 145.515625,
+          "avg_power": 293.0,
+          "calories": 622.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 3007.793,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 179
+        }
+      ]
+    },
+    {
+      "activity_id": 21805627942,
+      "date": "2026-02-08T11:18:18",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 793.6790161132812,
+      "distance_miles": 0.708868,
+      "calories": 71.0,
+      "avg_heart_rate": 80.0,
+      "max_heart_rate": 95.0,
+      "avg_speed": 3.214483,
+      "pace_per_mile": 18.660708,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 169
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 179
+        }
+      ]
+    },
+    {
+      "activity_id": 21797392323,
+      "date": "2026-02-07T15:17:48",
+      "activity_name": "Altamonte Springs - 2026-02-07 - Easy Run 85min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 5104.31787109375,
+      "distance_miles": 8.430779,
+      "calories": 984.0,
+      "avg_heart_rate": 138.0,
+      "max_heart_rate": 152.0,
+      "avg_speed": 5.945787,
+      "pace_per_mile": 10.090641,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 8.430593,
+          "duration_seconds": 5104.318,
+          "avg_heart_rate": 138.0,
+          "max_heart_rate": 152.0,
+          "avg_speed_mph": 5.945787,
+          "pace_per_mile": 10.090864,
+          "avg_cadence": 145.90625,
+          "avg_power": 304.0,
+          "calories": 984.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2535.254,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 2455.35,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 179
+        }
+      ]
+    },
+    {
+      "activity_id": 21762116041,
+      "date": "2026-02-04T07:55:33",
+      "activity_name": "Orange County - 2026-02-04 - 2x12min Intervals",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3541.823974609375,
+      "distance_miles": 6.096971,
+      "calories": 701.0,
+      "avg_heart_rate": 135.0,
+      "max_heart_rate": 161.0,
+      "avg_speed": 6.196324,
+      "pace_per_mile": 9.681922,
+      "splits": [
+        {
+          "type": "INTERVAL_WARMUP",
+          "distance_miles": 1.915661,
+          "duration_seconds": 1200.0,
+          "avg_heart_rate": 128.0,
+          "max_heart_rate": 144.0,
+          "avg_speed_mph": 5.746699,
+          "pace_per_mile": 10.44026,
+          "avg_cadence": 144.125,
+          "avg_power": 290.0,
+          "calories": 220.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 1.45661,
+          "duration_seconds": 750.0,
+          "avg_heart_rate": 151.0,
+          "max_heart_rate": 161.0,
+          "avg_speed_mph": 6.992674,
+          "pace_per_mile": 8.581572,
+          "avg_cadence": 151.828125,
+          "avg_power": 359.0,
+          "calories": 168.0
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.167367,
+          "duration_seconds": 120.0,
+          "avg_heart_rate": 141.0,
+          "max_heart_rate": 157.0,
+          "avg_speed_mph": 5.02193,
+          "pace_per_mile": 11.949805,
+          "avg_cadence": 131.28125,
+          "avg_power": 232.0,
+          "calories": 23.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 1.466763,
+          "duration_seconds": 750.0,
+          "avg_heart_rate": 143.0,
+          "max_heart_rate": 151.0,
+          "avg_speed_mph": 7.03965,
+          "pace_per_mile": 8.522169,
+          "avg_cadence": 153.484375,
+          "avg_power": 353.0,
+          "calories": 156.0
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.141685,
+          "duration_seconds": 120.0,
+          "avg_heart_rate": 125.0,
+          "max_heart_rate": 145.0,
+          "avg_speed_mph": 4.250186,
+          "pace_per_mile": 14.115779,
+          "avg_cadence": 119.578125,
+          "avg_power": 177.0,
+          "calories": 16.0
+        },
+        {
+          "type": "INTERVAL_COOLDOWN",
+          "distance_miles": 0.948842,
+          "duration_seconds": 601.81,
+          "avg_heart_rate": 121.0,
+          "max_heart_rate": 128.0,
+          "avg_speed_mph": 5.675117,
+          "pace_per_mile": 10.570951,
+          "avg_cadence": 147.875,
+          "avg_power": 282.0,
+          "calories": 118.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1891.525,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1363.948,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 190.988,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21756139415,
+      "date": "2026-02-03T16:17:26",
+      "activity_name": "Altamonte Springs - 2026-02-06 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3309.382080078125,
+      "distance_miles": 5.43672,
+      "calories": 620.0,
+      "avg_heart_rate": 134.0,
+      "max_heart_rate": 146.0,
+      "avg_speed": 5.914469,
+      "pace_per_mile": 10.145156,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.436632,
+          "duration_seconds": 3309.382,
+          "avg_heart_rate": 134.0,
+          "max_heart_rate": 146.0,
+          "avg_speed_mph": 5.914469,
+          "pace_per_mile": 10.145318,
+          "avg_cadence": 146.21875,
+          "avg_power": 298.0,
+          "calories": 620.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2967.425,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 279.997,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21745798401,
+      "date": "2026-02-02T17:29:18",
+      "activity_name": "Altamonte Springs - 2026-02-02 - Easy Run 60min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3603.5859375,
+      "distance_miles": 5.809276,
+      "calories": 719.0,
+      "avg_heart_rate": 151.0,
+      "max_heart_rate": 167.0,
+      "avg_speed": 5.802623,
+      "pace_per_mile": 10.338598,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.809052,
+          "duration_seconds": 3603.586,
+          "avg_heart_rate": 151.0,
+          "max_heart_rate": 167.0,
+          "avg_speed_mph": 5.802623,
+          "pace_per_mile": 10.338996,
+          "avg_cadence": 145.59375,
+          "avg_power": 295.0,
+          "calories": 719.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 527.282,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1986.442,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 1050.482,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21719846097,
+      "date": "2026-01-31T06:21:20",
+      "activity_name": "Altamonte Springs - 2026-01-31 - Easy Run 75min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4508.23291015625,
+      "distance_miles": 7.261306,
+      "calories": 836.0,
+      "avg_heart_rate": 129.0,
+      "max_heart_rate": 145.0,
+      "avg_speed": 5.798148,
+      "pace_per_mile": 10.347617,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 7.261051,
+          "duration_seconds": 4508.233,
+          "avg_heart_rate": 129.0,
+          "max_heart_rate": 145.0,
+          "avg_speed_mph": 5.798148,
+          "pace_per_mile": 10.347981,
+          "avg_cadence": 145.625,
+          "avg_power": 294.0,
+          "calories": 836.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 4302.362,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 43.0,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21705335339,
+      "date": "2026-01-29T15:47:00",
+      "activity_name": "Lee County - 2026-01-30 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3306.2490234375,
+      "distance_miles": 5.423136,
+      "calories": 661.0,
+      "avg_heart_rate": 146.0,
+      "max_heart_rate": 160.0,
+      "avg_speed": 5.905522,
+      "pace_per_mile": 10.160938,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.423118,
+          "duration_seconds": 3306.249,
+          "avg_heart_rate": 146.0,
+          "max_heart_rate": 160.0,
+          "avg_speed_mph": 5.905522,
+          "pace_per_mile": 10.160973,
+          "avg_cadence": 146.921875,
+          "avg_power": 297.0,
+          "calories": 661.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 646.416,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 2477.426,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 139.996,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21691749088,
+      "date": "2026-01-28T10:08:31",
+      "activity_name": "Lee County - 2026-01-28 - 17:30 Tempo",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2254.531982421875,
+      "distance_miles": 4.129413,
+      "calories": 498.0,
+      "avg_heart_rate": 155.0,
+      "max_heart_rate": 173.0,
+      "avg_speed": 6.594499,
+      "pace_per_mile": 9.099485,
+      "splits": [
+        {
+          "type": "INTERVAL_WARMUP",
+          "distance_miles": 0.99872,
+          "duration_seconds": 600.0,
+          "avg_heart_rate": 138.0,
+          "max_heart_rate": 150.0,
+          "avg_speed_mph": 5.992762,
+          "pace_per_mile": 10.012817,
+          "avg_cadence": 146.734375,
+          "avg_power": 315.0,
+          "calories": 120.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 2.101607,
+          "duration_seconds": 1050.0,
+          "avg_heart_rate": 163.0,
+          "max_heart_rate": 172.0,
+          "avg_speed_mph": 7.205184,
+          "pace_per_mile": 8.326962,
+          "avg_cadence": 154.421875,
+          "avg_power": 365.0,
+          "calories": 250.0
+        },
+        {
+          "type": "INTERVAL_COOLDOWN",
+          "distance_miles": 1.029062,
+          "duration_seconds": 604.518,
+          "avg_heart_rate": 157.0,
+          "max_heart_rate": 173.0,
+          "avg_speed_mph": 6.129216,
+          "pace_per_mile": 9.790765,
+          "avg_cadence": 149.921875,
+          "avg_power": 315.0,
+          "calories": 128.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 282.0,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 720.489,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 1184.972,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 38.989,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21685233658,
+      "date": "2026-01-27T16:43:50",
+      "activity_name": "Lee County - 2026-01-27 - Easy Run 60min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3670.64697265625,
+      "distance_miles": 6.016175,
+      "calories": 700.0,
+      "avg_heart_rate": 137.0,
+      "max_heart_rate": 149.0,
+      "avg_speed": 5.901048,
+      "pace_per_mile": 10.168829,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 6.016162,
+          "duration_seconds": 3670.647,
+          "avg_heart_rate": 137.0,
+          "max_heart_rate": 149.0,
+          "avg_speed_mph": 5.901048,
+          "pace_per_mile": 10.16885,
+          "avg_cadence": 147.40625,
+          "avg_power": 300.0,
+          "calories": 700.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2710.336,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 901.558,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21661664453,
+      "date": "2026-01-25T09:52:35",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 2337.041015625,
+      "distance_miles": 1.898008,
+      "calories": 198.0,
+      "avg_heart_rate": 84.0,
+      "max_heart_rate": 114.0,
+      "avg_speed": 2.923681,
+      "pace_per_mile": 20.521876,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 170
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21651451340,
+      "date": "2026-01-24T09:54:12",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 3080.533935546875,
+      "distance_miles": 2.554935,
+      "calories": 264.0,
+      "avg_heart_rate": 95.0,
+      "max_heart_rate": 119.0,
+      "avg_speed": 2.986315,
+      "pace_per_mile": 20.095315,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 58.012,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 170
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21649315034,
+      "date": "2026-01-24T06:32:02",
+      "activity_name": "Altamonte Springs - 2026-01-24 - Easy Run 70min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4262.958984375,
+      "distance_miles": 6.951676,
+      "calories": 832.0,
+      "avg_heart_rate": 142.0,
+      "max_heart_rate": 159.0,
+      "avg_speed": 5.869731,
+      "pace_per_mile": 10.220458,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 6.951533,
+          "duration_seconds": 4262.959,
+          "avg_heart_rate": 142.0,
+          "max_heart_rate": 159.0,
+          "avg_speed_mph": 5.869731,
+          "pace_per_mile": 10.220669,
+          "avg_cadence": 147.40625,
+          "avg_power": 298.0,
+          "calories": 832.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1282.584,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 2864.721,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 53.002,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21629403023,
+      "date": "2026-01-22T07:13:29",
+      "activity_name": "Orange County - 2026-01-24 - Easy Run 70min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4207.07080078125,
+      "distance_miles": 6.801713,
+      "calories": 787.0,
+      "avg_heart_rate": 130.0,
+      "max_heart_rate": 140.0,
+      "avg_speed": 5.820518,
+      "pace_per_mile": 10.30885,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 6.801571,
+          "duration_seconds": 4207.071,
+          "avg_heart_rate": 130.0,
+          "max_heart_rate": 140.0,
+          "avg_speed_mph": 5.820518,
+          "pace_per_mile": 10.309067,
+          "avg_cadence": 145.375,
+          "avg_power": 292.0,
+          "calories": 787.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 4051.546,
+          "zone_low_boundary_bpm": 113
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 141
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 157
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 171
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21618708557,
+      "date": "2026-01-21T07:34:20",
+      "activity_name": "Orange County - 2026-01-21 - 2x10min Intervals",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2646.512939453125,
+      "distance_miles": 4.717617,
+      "calories": 531.0,
+      "avg_heart_rate": 136.0,
+      "max_heart_rate": 151.0,
+      "avg_speed": 6.417781,
+      "pace_per_mile": 9.349752,
+      "splits": [
+        {
+          "type": "INTERVAL_WARMUP",
+          "distance_miles": 0.980147,
+          "duration_seconds": 600.0,
+          "avg_heart_rate": 130.0,
+          "max_heart_rate": 143.0,
+          "avg_speed_mph": 5.880915,
+          "pace_per_mile": 10.20255,
+          "avg_cadence": 146.28125,
+          "avg_power": 293.0,
+          "calories": 113.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 1.170132,
+          "duration_seconds": 600.0,
+          "avg_heart_rate": 144.0,
+          "max_heart_rate": 151.0,
+          "avg_speed_mph": 7.021755,
+          "pace_per_mile": 8.546045,
+          "avg_cadence": 154.359375,
+          "avg_power": 354.0,
+          "calories": 129.0
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.193234,
+          "duration_seconds": 120.0,
+          "avg_heart_rate": 136.0,
+          "max_heart_rate": 143.0,
+          "avg_speed_mph": 5.798148,
+          "pace_per_mile": 10.350119,
+          "avg_cadence": 147.03125,
+          "avg_power": 294.0,
+          "calories": 23.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 1.183081,
+          "duration_seconds": 600.0,
+          "avg_heart_rate": 142.0,
+          "max_heart_rate": 147.0,
+          "avg_speed_mph": 7.097811,
+          "pace_per_mile": 8.452505,
+          "avg_cadence": 154.5,
+          "avg_power": 362.0,
+          "calories": 123.0
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.199057,
+          "duration_seconds": 120.0,
+          "avg_heart_rate": 135.0,
+          "max_heart_rate": 143.0,
+          "avg_speed_mph": 5.97263,
+          "pace_per_mile": 10.047386,
+          "avg_cadence": 148.796875,
+          "avg_power": 314.0,
+          "calories": 23.0
+        },
+        {
+          "type": "INTERVAL_COOLDOWN",
+          "distance_miles": 0.991941,
+          "duration_seconds": 606.499,
+          "avg_heart_rate": 128.0,
+          "max_heart_rate": 134.0,
+          "avg_speed_mph": 5.887626,
+          "pace_per_mile": 10.190444,
+          "avg_cadence": 146.21875,
+          "avg_power": 303.0,
+          "calories": 121.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1732.0,
+          "zone_low_boundary_bpm": 114
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 858.944,
+          "zone_low_boundary_bpm": 142
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 158
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 172
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 182
+        }
+      ]
+    },
+    {
+      "activity_id": 21608358202,
+      "date": "2026-01-20T08:48:48",
+      "activity_name": "Strength",
+      "activity_type": "STRENGTH",
+      "duration_seconds": 2700.447021484375,
+      "distance_miles": 0.0,
+      "calories": 264.0,
+      "avg_heart_rate": 110.0,
+      "max_heart_rate": 142.0,
+      "avg_speed": 0.0,
+      "pace_per_mile": 0,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 891.0,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 170
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21587077197,
+      "date": "2026-01-18T07:14:03",
+      "activity_name": "Lee County - 2026-01-18 - Easy Run 70min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4208.84814453125,
+      "distance_miles": 6.842706,
+      "calories": 817.0,
+      "avg_heart_rate": 144.0,
+      "max_heart_rate": 161.0,
+      "avg_speed": 5.851835,
+      "pace_per_mile": 10.251423,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 6.842706,
+          "duration_seconds": 4208.848,
+          "avg_heart_rate": 144.0,
+          "max_heart_rate": 161.0,
+          "avg_speed_mph": 5.851835,
+          "pace_per_mile": 10.251422,
+          "avg_cadence": 147.625,
+          "avg_power": 295.0,
+          "calories": 817.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1258.166,
+          "zone_low_boundary_bpm": 114
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 2885.804,
+          "zone_low_boundary_bpm": 142
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 24.001,
+          "zone_low_boundary_bpm": 158
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 172
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 182
+        }
+      ]
+    },
+    {
+      "activity_id": 21556015519,
+      "date": "2026-01-15T09:32:55",
+      "activity_name": "Strength",
+      "activity_type": "STRENGTH",
+      "duration_seconds": 2242.406005859375,
+      "distance_miles": 0.0,
+      "calories": 236.0,
+      "avg_heart_rate": 111.0,
+      "max_heart_rate": 150.0,
+      "avg_speed": 0.0,
+      "pace_per_mile": 0,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 798.167,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 69.0,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 170
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 180
+        }
+      ]
+    },
+    {
+      "activity_id": 21544040877,
+      "date": "2026-01-14T07:13:10",
+      "activity_name": "Orange County - 2026-01-14 - 4x5min Intervals",
+      "activity_type": "RUNNING",
+      "duration_seconds": 2652.5869140625,
+      "distance_miles": 4.718002,
+      "calories": 556.0,
+      "avg_heart_rate": 149.0,
+      "max_heart_rate": 166.0,
+      "avg_speed": 6.402122,
+      "pace_per_mile": 9.370445,
+      "splits": [
+        {
+          "type": "INTERVAL_WARMUP",
+          "distance_miles": 0.963264,
+          "duration_seconds": 600.0,
+          "avg_heart_rate": 129.0,
+          "max_heart_rate": 143.0,
+          "avg_speed_mph": 5.780253,
+          "pace_per_mile": 10.381365,
+          "avg_cadence": 145.59375,
+          "avg_power": 297.0,
+          "calories": 110.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.586837,
+          "duration_seconds": 300.0,
+          "avg_heart_rate": 155.0,
+          "max_heart_rate": 162.0,
+          "avg_speed_mph": 7.041887,
+          "pace_per_mile": 8.520256,
+          "avg_cadence": 155.15625,
+          "avg_power": 364.0,
+          "calories": 68.0
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.098245,
+          "duration_seconds": 60.0,
+          "avg_heart_rate": 154.0,
+          "max_heart_rate": 156.0,
+          "avg_speed_mph": 5.894337,
+          "pace_per_mile": 10.17861,
+          "avg_cadence": 148.546875,
+          "avg_power": 314.0,
+          "calories": 13.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.59054,
+          "duration_seconds": 300.0,
+          "avg_heart_rate": 158.0,
+          "max_heart_rate": 163.0,
+          "avg_speed_mph": 7.086626,
+          "pace_per_mile": 8.466824,
+          "avg_cadence": 155.296875,
+          "avg_power": 361.0,
+          "calories": 68.0
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.099382,
+          "duration_seconds": 60.0,
+          "avg_heart_rate": 159.0,
+          "max_heart_rate": 162.0,
+          "avg_speed_mph": 5.963682,
+          "pace_per_mile": 10.062148,
+          "avg_cadence": 149.359375,
+          "avg_power": 307.0,
+          "calories": 13.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.585283,
+          "duration_seconds": 300.0,
+          "avg_heart_rate": 160.0,
+          "max_heart_rate": 166.0,
+          "avg_speed_mph": 7.023992,
+          "pace_per_mile": 8.54287,
+          "avg_cadence": 155.296875,
+          "avg_power": 349.0,
+          "calories": 68.0
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.096723,
+          "duration_seconds": 60.0,
+          "avg_heart_rate": 157.0,
+          "max_heart_rate": 162.0,
+          "avg_speed_mph": 5.802623,
+          "pace_per_mile": 10.338815,
+          "avg_cadence": 148.671875,
+          "avg_power": 298.0,
+          "calories": 13.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.58867,
+          "duration_seconds": 300.0,
+          "avg_heart_rate": 161.0,
+          "max_heart_rate": 164.0,
+          "avg_speed_mph": 7.064257,
+          "pace_per_mile": 8.493725,
+          "avg_cadence": 155.328125,
+          "avg_power": 350.0,
+          "calories": 68.0
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.103682,
+          "duration_seconds": 60.0,
+          "avg_heart_rate": 160.0,
+          "max_heart_rate": 162.0,
+          "avg_speed_mph": 6.22093,
+          "pace_per_mile": 9.644852,
+          "avg_cadence": 137.140625,
+          "avg_power": 288.0,
+          "calories": 13.0
+        },
+        {
+          "type": "INTERVAL_COOLDOWN",
+          "distance_miles": 1.005381,
+          "duration_seconds": 612.571,
+          "avg_heart_rate": 147.0,
+          "max_heart_rate": 160.0,
+          "avg_speed_mph": 5.907759,
+          "pace_per_mile": 10.154872,
+          "avg_cadence": 149.890625,
+          "avg_power": 297.0,
+          "calories": 120.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 761.178,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1160.316,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 677.281,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21533087090,
+      "date": "2026-01-13T07:28:16",
+      "activity_name": "Orange County - 2026-01-13 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3305.681884765625,
+      "distance_miles": 5.397598,
+      "calories": 580.0,
+      "avg_heart_rate": 126.0,
+      "max_heart_rate": 141.0,
+      "avg_speed": 5.878678,
+      "pace_per_mile": 10.207262,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.397449,
+          "duration_seconds": 3305.682,
+          "avg_heart_rate": 126.0,
+          "max_heart_rate": 141.0,
+          "avg_speed_mph": 5.878678,
+          "pace_per_mile": 10.207545,
+          "avg_cadence": 146.4375,
+          "avg_power": 295.0,
+          "calories": 580.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2994.028,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 173
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 183
+        }
+      ]
+    },
+    {
+      "activity_id": 21522122612,
+      "date": "2026-01-12T07:19:53",
+      "activity_name": "Orange County - 2026-01-12 - Easy Run 60min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3610.532958984375,
+      "distance_miles": 5.892702,
+      "calories": 632.0,
+      "avg_heart_rate": 123.0,
+      "max_heart_rate": 154.0,
+      "avg_speed": 5.876442,
+      "pace_per_mile": 10.211878,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.892515,
+          "duration_seconds": 3610.533,
+          "avg_heart_rate": 123.0,
+          "max_heart_rate": 154.0,
+          "avg_speed_mph": 5.874204,
+          "pace_per_mile": 10.212202,
+          "avg_cadence": 145.515625,
+          "avg_power": 296.0,
+          "calories": 632.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2949.515,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 185.374,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 173
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 183
+        }
+      ]
+    },
+    {
+      "activity_id": 21506425809,
+      "date": "2026-01-10T15:41:49",
+      "activity_name": "Altamonte Springs - 2026-01-10 - Easy Run 75min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4479.34423828125,
+      "distance_miles": 7.321231,
+      "calories": 872.0,
+      "avg_heart_rate": 145.0,
+      "max_heart_rate": 168.0,
+      "avg_speed": 5.883152,
+      "pace_per_mile": 10.197157,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 7.321076,
+          "duration_seconds": 4479.344,
+          "avg_heart_rate": 145.0,
+          "max_heart_rate": 168.0,
+          "avg_speed_mph": 5.883152,
+          "pace_per_mile": 10.197372,
+          "avg_cadence": 146.21875,
+          "avg_power": 298.0,
+          "calories": 872.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1623.107,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 2573.48,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 169.989,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21494638782,
+      "date": "2026-01-09T13:46:32",
+      "activity_name": "Altamonte Springs Walking",
+      "activity_type": "WALKING",
+      "duration_seconds": 268.4639892578125,
+      "distance_miles": 0.242012,
+      "calories": 29.0,
+      "avg_heart_rate": 121.0,
+      "max_heart_rate": 133.0,
+      "avg_speed": 3.2458,
+      "pace_per_mile": 18.488319,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 207.465,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 162
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 172
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 182
+        }
+      ]
+    },
+    {
+      "activity_id": 21494556093,
+      "date": "2026-01-09T12:42:50",
+      "activity_name": "Altamonte Springs - 2026-01-09 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3312.260009765625,
+      "distance_miles": 5.413443,
+      "calories": 664.0,
+      "avg_heart_rate": 153.0,
+      "max_heart_rate": 166.0,
+      "avg_speed": 5.883152,
+      "pace_per_mile": 10.197638,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.413287,
+          "duration_seconds": 3312.26,
+          "avg_heart_rate": 153.0,
+          "max_heart_rate": 166.0,
+          "avg_speed_mph": 5.883152,
+          "pace_per_mile": 10.197931,
+          "avg_cadence": 145.78125,
+          "avg_power": 294.0,
+          "calories": 664.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 454.096,
+          "zone_low_boundary_bpm": 115
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1710.943,
+          "zone_low_boundary_bpm": 143
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 1098.792,
+          "zone_low_boundary_bpm": 159
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 173
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 183
+        }
+      ]
+    },
+    {
+      "activity_id": 21471413891,
+      "date": "2026-01-07T07:46:07",
+      "activity_name": "Orange County - 2026-01-07 - 8x40s Intervals",
+      "activity_type": "RUNNING",
+      "duration_seconds": 1848.6280517578125,
+      "distance_miles": 3.252849,
+      "calories": 382.0,
+      "avg_heart_rate": 148.0,
+      "max_heart_rate": 171.0,
+      "avg_speed": 6.335014,
+      "pace_per_mile": 9.471841,
+      "splits": [
+        {
+          "type": "INTERVAL_WARMUP",
+          "distance_miles": 1.005915,
+          "duration_seconds": 600.0,
+          "avg_heart_rate": 129.0,
+          "max_heart_rate": 145.0,
+          "avg_speed_mph": 6.035264,
+          "pace_per_mile": 9.941193,
+          "avg_cadence": 146.46875,
+          "avg_power": 294.0,
+          "calories": 111.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.080219,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 148.0,
+          "max_heart_rate": 153.0,
+          "avg_speed_mph": 7.218605,
+          "pace_per_mile": 8.31056,
+          "avg_cadence": 154.328125,
+          "avg_power": 342.0,
+          "calories": 8.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.068581,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 147.0,
+          "max_heart_rate": 154.0,
+          "avg_speed_mph": 6.171718,
+          "pace_per_mile": 9.720878,
+          "avg_cadence": 131.3125,
+          "avg_power": 267.0,
+          "calories": 8.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.084911,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 143.0,
+          "max_heart_rate": 150.0,
+          "avg_speed_mph": 7.641387,
+          "pace_per_mile": 7.851397,
+          "avg_cadence": 154.46875,
+          "avg_power": 354.0,
+          "calories": 8.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.072732,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 152.0,
+          "max_heart_rate": 154.0,
+          "avg_speed_mph": 6.545287,
+          "pace_per_mile": 9.166111,
+          "avg_cadence": 151.46875,
+          "avg_power": 354.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.08368,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 155.0,
+          "max_heart_rate": 158.0,
+          "avg_speed_mph": 7.531777,
+          "pace_per_mile": 7.966833,
+          "avg_cadence": 154.296875,
+          "avg_power": 360.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.071638,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 160.0,
+          "max_heart_rate": 162.0,
+          "avg_speed_mph": 6.446861,
+          "pace_per_mile": 9.30604,
+          "avg_cadence": 151.796875,
+          "avg_power": 343.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.082928,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 159.0,
+          "max_heart_rate": 161.0,
+          "avg_speed_mph": 7.464669,
+          "pace_per_mile": 8.039063,
+          "avg_cadence": 154.46875,
+          "avg_power": 350.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.073254,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 163.0,
+          "max_heart_rate": 165.0,
+          "avg_speed_mph": 6.592262,
+          "pace_per_mile": 9.1008,
+          "avg_cadence": 152.0,
+          "avg_power": 359.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.08483,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 163.0,
+          "max_heart_rate": 166.0,
+          "avg_speed_mph": 7.634676,
+          "pace_per_mile": 7.858873,
+          "avg_cadence": 155.09375,
+          "avg_power": 380.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.067817,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 166.0,
+          "max_heart_rate": 169.0,
+          "avg_speed_mph": 6.104609,
+          "pace_per_mile": 9.830432,
+          "avg_cadence": 149.921875,
+          "avg_power": 348.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.087141,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 165.0,
+          "max_heart_rate": 170.0,
+          "avg_speed_mph": 7.842712,
+          "pace_per_mile": 7.650409,
+          "avg_cadence": 156.25,
+          "avg_power": 390.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.066164,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 167.0,
+          "max_heart_rate": 169.0,
+          "avg_speed_mph": 5.954734,
+          "pace_per_mile": 10.076008,
+          "avg_cadence": 136.5625,
+          "avg_power": 323.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.085047,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 165.0,
+          "max_heart_rate": 166.0,
+          "avg_speed_mph": 7.654809,
+          "pace_per_mile": 7.838776,
+          "avg_cadence": 155.890625,
+          "avg_power": 381.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.067574,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 167.0,
+          "max_heart_rate": 169.0,
+          "avg_speed_mph": 6.08224,
+          "pace_per_mile": 9.865686,
+          "avg_cadence": 149.765625,
+          "avg_power": 344.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.085097,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 165.0,
+          "max_heart_rate": 168.0,
+          "avg_speed_mph": 7.659283,
+          "pace_per_mile": 7.834197,
+          "avg_cadence": 155.421875,
+          "avg_power": 367.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.067127,
+          "duration_seconds": 40.0,
+          "avg_heart_rate": 168.0,
+          "max_heart_rate": 171.0,
+          "avg_speed_mph": 6.041975,
+          "pace_per_mile": 9.931439,
+          "avg_cadence": 149.671875,
+          "avg_power": 322.0,
+          "calories": 9.0
+        },
+        {
+          "type": "INTERVAL_COOLDOWN",
+          "distance_miles": 1.018188,
+          "duration_seconds": 608.612,
+          "avg_heart_rate": 155.0,
+          "max_heart_rate": 163.0,
+          "avg_speed_mph": 6.021842,
+          "pace_per_mile": 9.962342,
+          "avg_cadence": 146.9375,
+          "avg_power": 297.0,
+          "calories": 127.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 541.99,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 770.658,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 463.259,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21460656195,
+      "date": "2026-01-06T07:17:23",
+      "activity_name": "Strength",
+      "activity_type": "STRENGTH",
+      "duration_seconds": 2435.0810546875,
+      "distance_miles": 0.0,
+      "calories": 180.0,
+      "avg_heart_rate": 98.0,
+      "max_heart_rate": 142.0,
+      "avg_speed": 0.0,
+      "pace_per_mile": 0,
+      "splits": [],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 206.001,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 162
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 172
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 182
+        }
+      ]
+    },
+    {
+      "activity_id": 21450280943,
+      "date": "2026-01-05T07:33:20",
+      "activity_name": "Orange County - 2026-01-05 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3304.157958984375,
+      "distance_miles": 5.454609,
+      "calories": 617.0,
+      "avg_heart_rate": 137.0,
+      "max_heart_rate": 152.0,
+      "avg_speed": 5.94355,
+      "pace_per_mile": 10.095921,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.454472,
+          "duration_seconds": 3304.158,
+          "avg_heart_rate": 137.0,
+          "max_heart_rate": 152.0,
+          "avg_speed_mph": 5.94355,
+          "pace_per_mile": 10.096174,
+          "avg_cadence": 146.203125,
+          "avg_power": 294.0,
+          "calories": 617.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2677.858,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 554.823,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21434411468,
+      "date": "2026-01-03T15:03:08",
+      "activity_name": "Altamonte Springs - 2026-01-12 - Easy Run 70min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 4208.01904296875,
+      "distance_miles": 6.854002,
+      "calories": 783.0,
+      "avg_heart_rate": 140.0,
+      "max_heart_rate": 154.0,
+      "avg_speed": 5.86302,
+      "pace_per_mile": 10.232511,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 6.853766,
+          "duration_seconds": 4208.019,
+          "avg_heart_rate": 140.0,
+          "max_heart_rate": 154.0,
+          "avg_speed_mph": 5.86302,
+          "pace_per_mile": 10.232863,
+          "avg_cadence": 146.0,
+          "avg_power": 296.0,
+          "calories": 783.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 2445.46,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1636.454,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21407834705,
+      "date": "2025-12-31T22:12:08",
+      "activity_name": "Relax and Focus (Short)",
+      "activity_type": "BREATHWORK",
+      "duration_seconds": 334.0,
+      "distance_miles": 0.0,
+      "calories": 0,
+      "avg_heart_rate": 76.0,
+      "max_heart_rate": 81.0,
+      "avg_speed": 0.0,
+      "pace_per_mile": 0,
+      "splits": [
+        {
+          "type": "INTERVAL_WARMUP",
+          "distance_miles": 0.0,
+          "duration_seconds": 30.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 80.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 75.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 71.0,
+          "max_heart_rate": 74.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 75.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 80.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 80.0,
+          "max_heart_rate": 81.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 74.0,
+          "max_heart_rate": 74.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 75.0,
+          "max_heart_rate": 75.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 75.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 70.0,
+          "max_heart_rate": 73.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 80.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 80.0,
+          "max_heart_rate": 80.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 80.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 73.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 71.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 70.0,
+          "max_heart_rate": 73.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 71.0,
+          "max_heart_rate": 72.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 75.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 80.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 73.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 73.0,
+          "max_heart_rate": 74.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 77.0,
+          "max_heart_rate": 78.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 72.0,
+          "max_heart_rate": 74.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 73.0,
+          "max_heart_rate": 74.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 75.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 76.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 71.0,
+          "max_heart_rate": 74.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 70.0,
+          "max_heart_rate": 73.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 75.0,
+          "max_heart_rate": 75.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 75.0,
+          "max_heart_rate": 76.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 71.0,
+          "max_heart_rate": 73.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 73.0,
+          "max_heart_rate": 77.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 79.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 0.0,
+          "duration_seconds": 4.0,
+          "avg_heart_rate": 78.0,
+          "max_heart_rate": 79.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        },
+        {
+          "type": "INTERVAL_RECOVERY",
+          "distance_miles": 0.0,
+          "duration_seconds": 3.991,
+          "avg_heart_rate": 70.0,
+          "max_heart_rate": 75.0,
+          "avg_speed_mph": null,
+          "pace_per_mile": null,
+          "avg_cadence": null,
+          "avg_power": null,
+          "calories": null
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 117
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 145
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 162
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 172
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 182
+        }
+      ]
+    },
+    {
+      "activity_id": 21407135524,
+      "date": "2025-12-31T18:18:40",
+      "activity_name": "Lee County - 2025-12-31 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 1949.4320068359375,
+      "distance_miles": 3.190451,
+      "calories": 329.0,
+      "avg_heart_rate": 116.0,
+      "max_heart_rate": 134.0,
+      "avg_speed": 5.8921,
+      "pace_per_mile": 10.183681,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 3.190451,
+          "duration_seconds": 1949.432,
+          "avg_heart_rate": 116.0,
+          "max_heart_rate": 134.0,
+          "avg_speed_mph": 5.8921,
+          "pace_per_mile": 10.183681,
+          "avg_cadence": 147.265625,
+          "avg_power": 289.0,
+          "calories": 329.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1121.109,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21395873080,
+      "date": "2025-12-30T13:00:37",
+      "activity_name": "Lee County - 2025-12-30 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3305.375,
+      "distance_miles": 5.434035,
+      "calories": 654.0,
+      "avg_heart_rate": 152.0,
+      "max_heart_rate": 165.0,
+      "avg_speed": 5.918943,
+      "pace_per_mile": 10.137878,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.434016,
+          "duration_seconds": 3305.375,
+          "avg_heart_rate": 152.0,
+          "max_heart_rate": 165.0,
+          "avg_speed_mph": 5.918943,
+          "pace_per_mile": 10.137913,
+          "avg_cadence": 146.0625,
+          "avg_power": 300.0,
+          "calories": 654.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 677.512,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1700.464,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 873.988,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
+    {
+      "activity_id": 21378692022,
+      "date": "2025-12-28T17:33:15",
+      "activity_name": "Lee County - 2025-12-28 - Easy Run 55min",
+      "activity_type": "RUNNING",
+      "duration_seconds": 3307.12109375,
+      "distance_miles": 5.379882,
+      "calories": 617.0,
+      "avg_heart_rate": 140.0,
+      "max_heart_rate": 161.0,
+      "avg_speed": 5.856309,
+      "pace_per_mile": 10.245333,
+      "splits": [
+        {
+          "type": "INTERVAL_ACTIVE",
+          "distance_miles": 5.379876,
+          "duration_seconds": 3307.121,
+          "avg_heart_rate": 140.0,
+          "max_heart_rate": 161.0,
+          "avg_speed_mph": 5.856309,
+          "pace_per_mile": 10.245344,
+          "avg_cadence": 146.15625,
+          "avg_power": 291.0,
+          "calories": 617.0
+        }
+      ],
+      "hr_zones": [
+        {
+          "zone_number": 1,
+          "time_in_zone_seconds": 1428.216,
+          "zone_low_boundary_bpm": 116
+        },
+        {
+          "zone_number": 2,
+          "time_in_zone_seconds": 1699.743,
+          "zone_low_boundary_bpm": 144
+        },
+        {
+          "zone_number": 3,
+          "time_in_zone_seconds": 7.355,
+          "zone_low_boundary_bpm": 160
+        },
+        {
+          "zone_number": 4,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 174
+        },
+        {
+          "zone_number": 5,
+          "time_in_zone_seconds": 0.0,
+          "zone_low_boundary_bpm": 184
+        }
+      ]
+    },
     {
       "activity_id": 21359569594,
       "date": "2025-12-26T17:57:05",
@@ -25784,6 +29074,506 @@
   ],
   "sleep_sessions": [
     {
+      "date": "2026-02-15",
+      "total_duration_minutes": 537.0,
+      "light_sleep_minutes": 341.0,
+      "deep_sleep_minutes": 121.0,
+      "rem_sleep_minutes": 75.0,
+      "awake_minutes": 58.0,
+      "sleep_score": 74,
+      "deep_sleep_percentage": 22.53
+    },
+    {
+      "date": "2026-02-14",
+      "total_duration_minutes": 381.0,
+      "light_sleep_minutes": 301.0,
+      "deep_sleep_minutes": 55.0,
+      "rem_sleep_minutes": 25.0,
+      "awake_minutes": 55.0,
+      "sleep_score": 62,
+      "deep_sleep_percentage": 14.44
+    },
+    {
+      "date": "2026-02-13",
+      "total_duration_minutes": 503.0,
+      "light_sleep_minutes": 397.0,
+      "deep_sleep_minutes": 52.0,
+      "rem_sleep_minutes": 54.0,
+      "awake_minutes": 112.0,
+      "sleep_score": 52,
+      "deep_sleep_percentage": 10.34
+    },
+    {
+      "date": "2026-02-12",
+      "total_duration_minutes": 516.7,
+      "light_sleep_minutes": 398.0,
+      "deep_sleep_minutes": 44.0,
+      "rem_sleep_minutes": 75.0,
+      "awake_minutes": 108.0,
+      "sleep_score": 58,
+      "deep_sleep_percentage": 8.51
+    },
+    {
+      "date": "2026-02-11",
+      "total_duration_minutes": 459.0,
+      "light_sleep_minutes": 291.0,
+      "deep_sleep_minutes": 108.0,
+      "rem_sleep_minutes": 60.0,
+      "awake_minutes": 73.0,
+      "sleep_score": 69,
+      "deep_sleep_percentage": 23.53
+    },
+    {
+      "date": "2026-02-10",
+      "total_duration_minutes": 419.0,
+      "light_sleep_minutes": 227.0,
+      "deep_sleep_minutes": 93.0,
+      "rem_sleep_minutes": 99.0,
+      "awake_minutes": 50.0,
+      "sleep_score": 78,
+      "deep_sleep_percentage": 22.2
+    },
+    {
+      "date": "2026-02-09",
+      "total_duration_minutes": 278.0,
+      "light_sleep_minutes": 191.0,
+      "deep_sleep_minutes": 69.0,
+      "rem_sleep_minutes": 18.0,
+      "awake_minutes": 20.0,
+      "sleep_score": 54,
+      "deep_sleep_percentage": 24.82
+    },
+    {
+      "date": "2026-02-08",
+      "total_duration_minutes": 499.0,
+      "light_sleep_minutes": 402.0,
+      "deep_sleep_minutes": 53.0,
+      "rem_sleep_minutes": 44.0,
+      "awake_minutes": 105.0,
+      "sleep_score": 56,
+      "deep_sleep_percentage": 10.62
+    },
+    {
+      "date": "2026-02-07",
+      "total_duration_minutes": 512.0,
+      "light_sleep_minutes": 406.0,
+      "deep_sleep_minutes": 55.0,
+      "rem_sleep_minutes": 51.0,
+      "awake_minutes": 62.0,
+      "sleep_score": 62,
+      "deep_sleep_percentage": 10.74
+    },
+    {
+      "date": "2026-02-06",
+      "total_duration_minutes": 522.0,
+      "light_sleep_minutes": 373.0,
+      "deep_sleep_minutes": 123.0,
+      "rem_sleep_minutes": 26.0,
+      "awake_minutes": 55.0,
+      "sleep_score": 64,
+      "deep_sleep_percentage": 23.56
+    },
+    {
+      "date": "2026-02-05",
+      "total_duration_minutes": 524.9,
+      "light_sleep_minutes": 406.0,
+      "deep_sleep_minutes": 44.0,
+      "rem_sleep_minutes": 75.0,
+      "awake_minutes": 92.0,
+      "sleep_score": 58,
+      "deep_sleep_percentage": 8.38
+    },
+    {
+      "date": "2026-02-04",
+      "total_duration_minutes": 390.0,
+      "light_sleep_minutes": 242.0,
+      "deep_sleep_minutes": 89.0,
+      "rem_sleep_minutes": 59.0,
+      "awake_minutes": 70.0,
+      "sleep_score": 69,
+      "deep_sleep_percentage": 22.82
+    },
+    {
+      "date": "2026-02-03",
+      "total_duration_minutes": 432.0,
+      "light_sleep_minutes": 334.0,
+      "deep_sleep_minutes": 60.0,
+      "rem_sleep_minutes": 38.0,
+      "awake_minutes": 126.0,
+      "sleep_score": 49,
+      "deep_sleep_percentage": 13.89
+    },
+    {
+      "date": "2026-02-02",
+      "total_duration_minutes": 424.0,
+      "light_sleep_minutes": 320.0,
+      "deep_sleep_minutes": 66.0,
+      "rem_sleep_minutes": 38.0,
+      "awake_minutes": 79.0,
+      "sleep_score": 58,
+      "deep_sleep_percentage": 15.57
+    },
+    {
+      "date": "2026-02-01",
+      "total_duration_minutes": 546.9,
+      "light_sleep_minutes": 404.0,
+      "deep_sleep_minutes": 68.0,
+      "rem_sleep_minutes": 75.0,
+      "awake_minutes": 111.0,
+      "sleep_score": 69,
+      "deep_sleep_percentage": 12.43
+    },
+    {
+      "date": "2026-01-31",
+      "total_duration_minutes": 421.0,
+      "light_sleep_minutes": 310.0,
+      "deep_sleep_minutes": 54.0,
+      "rem_sleep_minutes": 57.0,
+      "awake_minutes": 13.0,
+      "sleep_score": 77,
+      "deep_sleep_percentage": 12.83
+    },
+    {
+      "date": "2026-01-30",
+      "total_duration_minutes": 454.0,
+      "light_sleep_minutes": 340.0,
+      "deep_sleep_minutes": 80.0,
+      "rem_sleep_minutes": 34.0,
+      "awake_minutes": 118.0,
+      "sleep_score": 50,
+      "deep_sleep_percentage": 17.62
+    },
+    {
+      "date": "2026-01-29",
+      "total_duration_minutes": 487.0,
+      "light_sleep_minutes": 409.0,
+      "deep_sleep_minutes": 53.0,
+      "rem_sleep_minutes": 25.0,
+      "awake_minutes": 112.0,
+      "sleep_score": 48,
+      "deep_sleep_percentage": 10.88
+    },
+    {
+      "date": "2026-01-28",
+      "total_duration_minutes": 449.0,
+      "light_sleep_minutes": 290.0,
+      "deep_sleep_minutes": 119.0,
+      "rem_sleep_minutes": 40.0,
+      "awake_minutes": 100.0,
+      "sleep_score": 51,
+      "deep_sleep_percentage": 26.5
+    },
+    {
+      "date": "2026-01-27",
+      "total_duration_minutes": 438.0,
+      "light_sleep_minutes": 280.0,
+      "deep_sleep_minutes": 104.0,
+      "rem_sleep_minutes": 54.0,
+      "awake_minutes": 131.0,
+      "sleep_score": 54,
+      "deep_sleep_percentage": 23.74
+    },
+    {
+      "date": "2026-01-26",
+      "total_duration_minutes": 448.0,
+      "light_sleep_minutes": 339.0,
+      "deep_sleep_minutes": 54.0,
+      "rem_sleep_minutes": 55.0,
+      "awake_minutes": 93.0,
+      "sleep_score": 64,
+      "deep_sleep_percentage": 12.05
+    },
+    {
+      "date": "2026-01-25",
+      "total_duration_minutes": 515.0,
+      "light_sleep_minutes": 374.0,
+      "deep_sleep_minutes": 74.0,
+      "rem_sleep_minutes": 67.0,
+      "awake_minutes": 98.0,
+      "sleep_score": 68,
+      "deep_sleep_percentage": 14.37
+    },
+    {
+      "date": "2026-01-24",
+      "total_duration_minutes": 392.0,
+      "light_sleep_minutes": 279.0,
+      "deep_sleep_minutes": 71.0,
+      "rem_sleep_minutes": 42.0,
+      "awake_minutes": 56.0,
+      "sleep_score": 68,
+      "deep_sleep_percentage": 18.11
+    },
+    {
+      "date": "2026-01-23",
+      "total_duration_minutes": 468.0,
+      "light_sleep_minutes": 360.0,
+      "deep_sleep_minutes": 53.0,
+      "rem_sleep_minutes": 55.0,
+      "awake_minutes": 119.0,
+      "sleep_score": 52,
+      "deep_sleep_percentage": 11.32
+    },
+    {
+      "date": "2026-01-22",
+      "total_duration_minutes": 379.0,
+      "light_sleep_minutes": 216.0,
+      "deep_sleep_minutes": 100.0,
+      "rem_sleep_minutes": 63.0,
+      "awake_minutes": 62.0,
+      "sleep_score": 72,
+      "deep_sleep_percentage": 26.39
+    },
+    {
+      "date": "2026-01-21",
+      "total_duration_minutes": 380.0,
+      "light_sleep_minutes": 285.0,
+      "deep_sleep_minutes": 38.0,
+      "rem_sleep_minutes": 57.0,
+      "awake_minutes": 72.0,
+      "sleep_score": 64,
+      "deep_sleep_percentage": 10.0
+    },
+    {
+      "date": "2026-01-20",
+      "total_duration_minutes": 491.0,
+      "light_sleep_minutes": 368.0,
+      "deep_sleep_minutes": 67.0,
+      "rem_sleep_minutes": 56.0,
+      "awake_minutes": 105.0,
+      "sleep_score": 66,
+      "deep_sleep_percentage": 13.65
+    },
+    {
+      "date": "2026-01-19",
+      "total_duration_minutes": 481.7,
+      "light_sleep_minutes": 309.0,
+      "deep_sleep_minutes": 83.0,
+      "rem_sleep_minutes": 90.0,
+      "awake_minutes": 107.0,
+      "sleep_score": 60,
+      "deep_sleep_percentage": 17.22
+    },
+    {
+      "date": "2026-01-18",
+      "total_duration_minutes": 389.0,
+      "light_sleep_minutes": 249.0,
+      "deep_sleep_minutes": 96.0,
+      "rem_sleep_minutes": 44.0,
+      "awake_minutes": 115.0,
+      "sleep_score": 64,
+      "deep_sleep_percentage": 24.68
+    },
+    {
+      "date": "2026-01-17",
+      "total_duration_minutes": 416.0,
+      "light_sleep_minutes": 239.0,
+      "deep_sleep_minutes": 120.0,
+      "rem_sleep_minutes": 57.0,
+      "awake_minutes": 117.0,
+      "sleep_score": 51,
+      "deep_sleep_percentage": 28.85
+    },
+    {
+      "date": "2026-01-16",
+      "total_duration_minutes": 438.0,
+      "light_sleep_minutes": 303.0,
+      "deep_sleep_minutes": 79.0,
+      "rem_sleep_minutes": 56.0,
+      "awake_minutes": 81.0,
+      "sleep_score": 61,
+      "deep_sleep_percentage": 18.04
+    },
+    {
+      "date": "2026-01-15",
+      "total_duration_minutes": 486.6,
+      "light_sleep_minutes": 328.0,
+      "deep_sleep_minutes": 77.0,
+      "rem_sleep_minutes": 82.0,
+      "awake_minutes": 114.0,
+      "sleep_score": 54,
+      "deep_sleep_percentage": 15.81
+    },
+    {
+      "date": "2026-01-14",
+      "total_duration_minutes": 393.0,
+      "light_sleep_minutes": 211.0,
+      "deep_sleep_minutes": 123.0,
+      "rem_sleep_minutes": 59.0,
+      "awake_minutes": 49.0,
+      "sleep_score": 75,
+      "deep_sleep_percentage": 31.3
+    },
+    {
+      "date": "2026-01-13",
+      "total_duration_minutes": 366.0,
+      "light_sleep_minutes": 290.0,
+      "deep_sleep_minutes": 41.0,
+      "rem_sleep_minutes": 35.0,
+      "awake_minutes": 79.0,
+      "sleep_score": 57,
+      "deep_sleep_percentage": 11.2
+    },
+    {
+      "date": "2026-01-12",
+      "total_duration_minutes": 404.7,
+      "light_sleep_minutes": 233.0,
+      "deep_sleep_minutes": 71.0,
+      "rem_sleep_minutes": 101.0,
+      "awake_minutes": 48.0,
+      "sleep_score": 77,
+      "deep_sleep_percentage": 17.53
+    },
+    {
+      "date": "2026-01-11",
+      "total_duration_minutes": 458.0,
+      "light_sleep_minutes": 314.0,
+      "deep_sleep_minutes": 95.0,
+      "rem_sleep_minutes": 49.0,
+      "awake_minutes": 181.0,
+      "sleep_score": 52,
+      "deep_sleep_percentage": 20.74
+    },
+    {
+      "date": "2026-01-10",
+      "total_duration_minutes": 417.0,
+      "light_sleep_minutes": 302.0,
+      "deep_sleep_minutes": 56.0,
+      "rem_sleep_minutes": 59.0,
+      "awake_minutes": 136.0,
+      "sleep_score": 63,
+      "deep_sleep_percentage": 13.43
+    },
+    {
+      "date": "2026-01-09",
+      "total_duration_minutes": 491.0,
+      "light_sleep_minutes": 371.0,
+      "deep_sleep_minutes": 84.0,
+      "rem_sleep_minutes": 36.0,
+      "awake_minutes": 124.0,
+      "sleep_score": 50,
+      "deep_sleep_percentage": 17.11
+    },
+    {
+      "date": "2026-01-08",
+      "total_duration_minutes": 520.0,
+      "light_sleep_minutes": 330.0,
+      "deep_sleep_minutes": 95.0,
+      "rem_sleep_minutes": 95.0,
+      "awake_minutes": 139.0,
+      "sleep_score": 54,
+      "deep_sleep_percentage": 18.27
+    },
+    {
+      "date": "2026-01-07",
+      "total_duration_minutes": 374.0,
+      "light_sleep_minutes": 256.0,
+      "deep_sleep_minutes": 83.0,
+      "rem_sleep_minutes": 35.0,
+      "awake_minutes": 76.0,
+      "sleep_score": 67,
+      "deep_sleep_percentage": 22.19
+    },
+    {
+      "date": "2026-01-06",
+      "total_duration_minutes": 394.0,
+      "light_sleep_minutes": 256.0,
+      "deep_sleep_minutes": 84.0,
+      "rem_sleep_minutes": 54.0,
+      "awake_minutes": 67.0,
+      "sleep_score": 69,
+      "deep_sleep_percentage": 21.32
+    },
+    {
+      "date": "2026-01-05",
+      "total_duration_minutes": 312.0,
+      "light_sleep_minutes": 209.0,
+      "deep_sleep_minutes": 59.0,
+      "rem_sleep_minutes": 44.0,
+      "awake_minutes": 6.0,
+      "sleep_score": 65,
+      "deep_sleep_percentage": 18.91
+    },
+    {
+      "date": "2026-01-04",
+      "total_duration_minutes": 480.0,
+      "light_sleep_minutes": 345.0,
+      "deep_sleep_minutes": 98.0,
+      "rem_sleep_minutes": 37.0,
+      "awake_minutes": 84.0,
+      "sleep_score": 60,
+      "deep_sleep_percentage": 20.42
+    },
+    {
+      "date": "2026-01-03",
+      "total_duration_minutes": 499.0,
+      "light_sleep_minutes": 385.0,
+      "deep_sleep_minutes": 35.0,
+      "rem_sleep_minutes": 79.0,
+      "awake_minutes": 68.0,
+      "sleep_score": 73,
+      "deep_sleep_percentage": 7.01
+    },
+    {
+      "date": "2026-01-02",
+      "total_duration_minutes": 490.0,
+      "light_sleep_minutes": 342.0,
+      "deep_sleep_minutes": 61.0,
+      "rem_sleep_minutes": 87.0,
+      "awake_minutes": 119.0,
+      "sleep_score": 53,
+      "deep_sleep_percentage": 12.45
+    },
+    {
+      "date": "2026-01-01",
+      "total_duration_minutes": 296.0,
+      "light_sleep_minutes": 265.0,
+      "deep_sleep_minutes": 31.0,
+      "rem_sleep_minutes": 0.0,
+      "awake_minutes": 94.0,
+      "sleep_score": 46,
+      "deep_sleep_percentage": 10.47
+    },
+    {
+      "date": "2025-12-31",
+      "total_duration_minutes": 422.0,
+      "light_sleep_minutes": 327.0,
+      "deep_sleep_minutes": 31.0,
+      "rem_sleep_minutes": 64.0,
+      "awake_minutes": 139.0,
+      "sleep_score": 61,
+      "deep_sleep_percentage": 7.35
+    },
+    {
+      "date": "2025-12-30",
+      "total_duration_minutes": 412.0,
+      "light_sleep_minutes": 310.0,
+      "deep_sleep_minutes": 66.0,
+      "rem_sleep_minutes": 36.0,
+      "awake_minutes": 130.0,
+      "sleep_score": 56,
+      "deep_sleep_percentage": 16.02
+    },
+    {
+      "date": "2025-12-29",
+      "total_duration_minutes": 499.7,
+      "light_sleep_minutes": 353.0,
+      "deep_sleep_minutes": 101.0,
+      "rem_sleep_minutes": 46.0,
+      "awake_minutes": 153.0,
+      "sleep_score": 58,
+      "deep_sleep_percentage": 20.2
+    },
+    {
+      "date": "2025-12-28",
+      "total_duration_minutes": 485.0,
+      "light_sleep_minutes": 393.0,
+      "deep_sleep_minutes": 53.0,
+      "rem_sleep_minutes": 39.0,
+      "awake_minutes": 103.0,
+      "sleep_score": 55,
+      "deep_sleep_percentage": 10.93
+    },
+    {
       "date": "2025-12-27",
       "total_duration_minutes": 513.0,
       "light_sleep_minutes": 367.0,
@@ -29816,6 +33606,94 @@
   ],
   "vo2_max_readings": [
     {
+      "date": "2026-02-15T00:00:00",
+      "vo2_max": 50.5
+    },
+    {
+      "date": "2026-02-13T00:00:00",
+      "vo2_max": 50.6
+    },
+    {
+      "date": "2026-02-10T00:00:00",
+      "vo2_max": 50.8
+    },
+    {
+      "date": "2026-02-07T00:00:00",
+      "vo2_max": 50.8
+    },
+    {
+      "date": "2026-02-04T00:00:00",
+      "vo2_max": 51.0
+    },
+    {
+      "date": "2026-02-03T00:00:00",
+      "vo2_max": 50.3
+    },
+    {
+      "date": "2026-02-02T00:00:00",
+      "vo2_max": 50.4
+    },
+    {
+      "date": "2026-01-29T00:00:00",
+      "vo2_max": 50.4
+    },
+    {
+      "date": "2026-01-28T00:00:00",
+      "vo2_max": 50.6
+    },
+    {
+      "date": "2026-01-27T00:00:00",
+      "vo2_max": 50.5
+    },
+    {
+      "date": "2026-01-24T00:00:00",
+      "vo2_max": 50.6
+    },
+    {
+      "date": "2026-01-21T00:00:00",
+      "vo2_max": 50.8
+    },
+    {
+      "date": "2026-01-18T00:00:00",
+      "vo2_max": 49.9
+    },
+    {
+      "date": "2026-01-14T00:00:00",
+      "vo2_max": 50.1
+    },
+    {
+      "date": "2026-01-12T00:00:00",
+      "vo2_max": 49.9
+    },
+    {
+      "date": "2026-01-10T00:00:00",
+      "vo2_max": 49.8
+    },
+    {
+      "date": "2026-01-09T00:00:00",
+      "vo2_max": 49.9
+    },
+    {
+      "date": "2026-01-07T00:00:00",
+      "vo2_max": 49.8
+    },
+    {
+      "date": "2026-01-05T00:00:00",
+      "vo2_max": 49.6
+    },
+    {
+      "date": "2026-01-03T00:00:00",
+      "vo2_max": 49.5
+    },
+    {
+      "date": "2025-12-30T00:00:00",
+      "vo2_max": 49.4
+    },
+    {
+      "date": "2025-12-28T00:00:00",
+      "vo2_max": 49.4
+    },
+    {
       "date": "2025-12-26T00:00:00",
       "vo2_max": 49.6
     },
@@ -29881,6 +33759,36 @@
     }
   ],
   "weight_readings": [
+    {
+      "timestamp": "2026-01-13T13:57:16.723000+00:00",
+      "weight_lbs": 172.17896,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2026-01-11T13:27:08+00:00",
+      "weight_lbs": 172.17896,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2026-01-10T13:45:28+00:00",
+      "weight_lbs": 173.08065,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2026-01-10T01:05:52+00:00",
+      "weight_lbs": 177.27605,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
+    {
+      "timestamp": "2026-01-10T01:00:43+00:00",
+      "weight_lbs": 177.77209,
+      "body_fat_percentage": null,
+      "skeletal_muscle_percentage": null
+    },
     {
       "timestamp": "2025-12-08T13:27:02.825000+00:00",
       "weight_lbs": 170.79887,
@@ -30417,6 +34325,206 @@
     }
   ],
   "resting_hr_readings": [
+    [
+      "2026-02-15T12:00:00",
+      47
+    ],
+    [
+      "2026-02-14T12:00:00",
+      47
+    ],
+    [
+      "2026-02-13T12:00:00",
+      44
+    ],
+    [
+      "2026-02-12T12:00:00",
+      46
+    ],
+    [
+      "2026-02-11T12:00:00",
+      48
+    ],
+    [
+      "2026-02-10T12:00:00",
+      46
+    ],
+    [
+      "2026-02-09T12:00:00",
+      45
+    ],
+    [
+      "2026-02-08T12:00:00",
+      48
+    ],
+    [
+      "2026-02-07T12:00:00",
+      45
+    ],
+    [
+      "2026-02-06T12:00:00",
+      46
+    ],
+    [
+      "2026-02-05T12:00:00",
+      50
+    ],
+    [
+      "2026-02-04T12:00:00",
+      48
+    ],
+    [
+      "2026-02-03T12:00:00",
+      48
+    ],
+    [
+      "2026-02-02T12:00:00",
+      48
+    ],
+    [
+      "2026-02-01T12:00:00",
+      47
+    ],
+    [
+      "2026-01-31T12:00:00",
+      48
+    ],
+    [
+      "2026-01-30T12:00:00",
+      49
+    ],
+    [
+      "2026-01-29T12:00:00",
+      49
+    ],
+    [
+      "2026-01-28T12:00:00",
+      49
+    ],
+    [
+      "2026-01-27T12:00:00",
+      44
+    ],
+    [
+      "2026-01-26T12:00:00",
+      48
+    ],
+    [
+      "2026-01-25T12:00:00",
+      49
+    ],
+    [
+      "2026-01-24T12:00:00",
+      49
+    ],
+    [
+      "2026-01-23T12:00:00",
+      48
+    ],
+    [
+      "2026-01-22T12:00:00",
+      46
+    ],
+    [
+      "2026-01-21T12:00:00",
+      47
+    ],
+    [
+      "2026-01-20T12:00:00",
+      49
+    ],
+    [
+      "2026-01-19T12:00:00",
+      46
+    ],
+    [
+      "2026-01-18T12:00:00",
+      47
+    ],
+    [
+      "2026-01-17T12:00:00",
+      45
+    ],
+    [
+      "2026-01-16T12:00:00",
+      48
+    ],
+    [
+      "2026-01-15T12:00:00",
+      46
+    ],
+    [
+      "2026-01-14T12:00:00",
+      46
+    ],
+    [
+      "2026-01-13T12:00:00",
+      50
+    ],
+    [
+      "2026-01-12T12:00:00",
+      45
+    ],
+    [
+      "2026-01-11T12:00:00",
+      46
+    ],
+    [
+      "2026-01-10T12:00:00",
+      51
+    ],
+    [
+      "2026-01-09T12:00:00",
+      48
+    ],
+    [
+      "2026-01-08T12:00:00",
+      48
+    ],
+    [
+      "2026-01-07T12:00:00",
+      47
+    ],
+    [
+      "2026-01-06T12:00:00",
+      46
+    ],
+    [
+      "2026-01-05T12:00:00",
+      47
+    ],
+    [
+      "2026-01-04T12:00:00",
+      47
+    ],
+    [
+      "2026-01-03T12:00:00",
+      49
+    ],
+    [
+      "2026-01-02T12:00:00",
+      49
+    ],
+    [
+      "2026-01-01T12:00:00",
+      51
+    ],
+    [
+      "2025-12-31T12:00:00",
+      46
+    ],
+    [
+      "2025-12-30T12:00:00",
+      47
+    ],
+    [
+      "2025-12-29T12:00:00",
+      47
+    ],
+    [
+      "2025-12-28T12:00:00",
+      48
+    ],
     [
       "2025-12-27T12:00:00",
       46
@@ -32039,6 +36147,506 @@
     ]
   ],
   "hrv_readings": [
+    {
+      "date": "2026-02-15",
+      "weekly_avg": 70,
+      "last_night_avg": 67,
+      "last_night_5min_high": 90,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-14",
+      "weekly_avg": 69,
+      "last_night_avg": 69,
+      "last_night_5min_high": 103,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-13",
+      "weekly_avg": 70,
+      "last_night_avg": 70,
+      "last_night_5min_high": 95,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-12",
+      "weekly_avg": 69,
+      "last_night_avg": 70,
+      "last_night_5min_high": 104,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-11",
+      "weekly_avg": 68,
+      "last_night_avg": 67,
+      "last_night_5min_high": 96,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-10",
+      "weekly_avg": 69,
+      "last_night_avg": 73,
+      "last_night_5min_high": 102,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 73
+    },
+    {
+      "date": "2026-02-09",
+      "weekly_avg": 66,
+      "last_night_avg": 75,
+      "last_night_5min_high": 101,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-08",
+      "weekly_avg": 65,
+      "last_night_avg": 62,
+      "last_night_5min_high": 95,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-07",
+      "weekly_avg": 67,
+      "last_night_avg": 71,
+      "last_night_5min_high": 99,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 73
+    },
+    {
+      "date": "2026-02-06",
+      "weekly_avg": 66,
+      "last_night_avg": 67,
+      "last_night_5min_high": 90,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-05",
+      "weekly_avg": 64,
+      "last_night_avg": 61,
+      "last_night_5min_high": 86,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-04",
+      "weekly_avg": 65,
+      "last_night_avg": 74,
+      "last_night_5min_high": 106,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-03",
+      "weekly_avg": 64,
+      "last_night_avg": 57,
+      "last_night_5min_high": 88,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-02",
+      "weekly_avg": 65,
+      "last_night_avg": 67,
+      "last_night_5min_high": 92,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-02-01",
+      "weekly_avg": 65,
+      "last_night_avg": 71,
+      "last_night_5min_high": 92,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-31",
+      "weekly_avg": 65,
+      "last_night_avg": 65,
+      "last_night_5min_high": 89,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-30",
+      "weekly_avg": 64,
+      "last_night_avg": 57,
+      "last_night_5min_high": 82,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-29",
+      "weekly_avg": 66,
+      "last_night_avg": 68,
+      "last_night_5min_high": 89,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-28",
+      "weekly_avg": 67,
+      "last_night_avg": 63,
+      "last_night_5min_high": 88,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-27",
+      "weekly_avg": 68,
+      "last_night_avg": 67,
+      "last_night_5min_high": 90,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-26",
+      "weekly_avg": 67,
+      "last_night_avg": 64,
+      "last_night_5min_high": 92,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-25",
+      "weekly_avg": 66,
+      "last_night_avg": 73,
+      "last_night_5min_high": 91,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-24",
+      "weekly_avg": 64,
+      "last_night_avg": 59,
+      "last_night_5min_high": 81,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-23",
+      "weekly_avg": 64,
+      "last_night_avg": 68,
+      "last_night_5min_high": 91,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-22",
+      "weekly_avg": 63,
+      "last_night_avg": 75,
+      "last_night_5min_high": 99,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-21",
+      "weekly_avg": 63,
+      "last_night_avg": 68,
+      "last_night_5min_high": 93,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-20",
+      "weekly_avg": 62,
+      "last_night_avg": 60,
+      "last_night_5min_high": 85,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-19",
+      "weekly_avg": 62,
+      "last_night_avg": 61,
+      "last_night_5min_high": 90,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-18",
+      "weekly_avg": 63,
+      "last_night_avg": 57,
+      "last_night_5min_high": 81,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-17",
+      "weekly_avg": 64,
+      "last_night_avg": 59,
+      "last_night_5min_high": 87,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-16",
+      "weekly_avg": 64,
+      "last_night_avg": 65,
+      "last_night_5min_high": 87,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-15",
+      "weekly_avg": 64,
+      "last_night_avg": 71,
+      "last_night_5min_high": 92,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-14",
+      "weekly_avg": 63,
+      "last_night_avg": 65,
+      "last_night_5min_high": 88,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-13",
+      "weekly_avg": 64,
+      "last_night_avg": 58,
+      "last_night_5min_high": 82,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-12",
+      "weekly_avg": 64,
+      "last_night_avg": 71,
+      "last_night_5min_high": 91,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-11",
+      "weekly_avg": 64,
+      "last_night_avg": 59,
+      "last_night_5min_high": 88,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-10",
+      "weekly_avg": 65,
+      "last_night_avg": 60,
+      "last_night_5min_high": 81,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-09",
+      "weekly_avg": 66,
+      "last_night_avg": 63,
+      "last_night_5min_high": 84,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-08",
+      "weekly_avg": 65,
+      "last_night_avg": 66,
+      "last_night_5min_high": 92,
+      "status": "BALANCED",
+      "baseline_low_upper": 59,
+      "baseline_balanced_low": 62,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-07",
+      "weekly_avg": 62,
+      "last_night_avg": 70,
+      "last_night_5min_high": 92,
+      "status": "UNBALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-06",
+      "weekly_avg": 60,
+      "last_night_avg": 59,
+      "last_night_5min_high": 82,
+      "status": "LOW",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 75
+    },
+    {
+      "date": "2026-01-05",
+      "weekly_avg": 62,
+      "last_night_avg": 72,
+      "last_night_5min_high": 85,
+      "status": "UNBALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-04",
+      "weekly_avg": 62,
+      "last_night_avg": 63,
+      "last_night_5min_high": 82,
+      "status": "UNBALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-03",
+      "weekly_avg": 63,
+      "last_night_avg": 67,
+      "last_night_5min_high": 105,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-02",
+      "weekly_avg": 63,
+      "last_night_avg": 58,
+      "last_night_5min_high": 89,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2026-01-01",
+      "weekly_avg": 64,
+      "last_night_avg": 48,
+      "last_night_5min_high": 66,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-31",
+      "weekly_avg": 66,
+      "last_night_avg": 58,
+      "last_night_5min_high": 84,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-30",
+      "weekly_avg": 67,
+      "last_night_avg": 73,
+      "last_night_5min_high": 101,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-29",
+      "weekly_avg": 65,
+      "last_night_avg": 71,
+      "last_night_5min_high": 109,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
+    {
+      "date": "2025-12-28",
+      "weekly_avg": 64,
+      "last_night_avg": 69,
+      "last_night_5min_high": 96,
+      "status": "BALANCED",
+      "baseline_low_upper": 60,
+      "baseline_balanced_low": 63,
+      "baseline_balanced_upper": 74
+    },
     {
       "date": "2025-12-27",
       "weekly_avg": 64,
@@ -36092,6 +40700,506 @@
   ],
   "training_readiness": [
     {
+      "date": "2026-02-15",
+      "score": 44,
+      "level": "LOW",
+      "recovery_time": 1363,
+      "sleep_score": 74,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 364
+    },
+    {
+      "date": "2026-02-14",
+      "score": 33,
+      "level": "LOW",
+      "recovery_time": 1432,
+      "sleep_score": 62,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 290
+    },
+    {
+      "date": "2026-02-13",
+      "score": 17,
+      "level": "POOR",
+      "recovery_time": 2304,
+      "sleep_score": 52,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 349
+    },
+    {
+      "date": "2026-02-12",
+      "score": 63,
+      "level": "MODERATE",
+      "recovery_time": 1,
+      "sleep_score": 58,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 199
+    },
+    {
+      "date": "2026-02-11",
+      "score": 69,
+      "level": "MODERATE",
+      "recovery_time": 1,
+      "sleep_score": 69,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 255
+    },
+    {
+      "date": "2026-02-10",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 609,
+      "sleep_score": 78,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 314
+    },
+    {
+      "date": "2026-02-09",
+      "score": 34,
+      "level": "LOW",
+      "recovery_time": 874,
+      "sleep_score": 54,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 309
+    },
+    {
+      "date": "2026-02-08",
+      "score": 42,
+      "level": "LOW",
+      "recovery_time": 461,
+      "sleep_score": 56,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 308
+    },
+    {
+      "date": "2026-02-07",
+      "score": 38,
+      "level": "LOW",
+      "recovery_time": 1478,
+      "sleep_score": 62,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 372
+    },
+    {
+      "date": "2026-02-06",
+      "score": 56,
+      "level": "MODERATE",
+      "recovery_time": 1,
+      "sleep_score": 64,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 308
+    },
+    {
+      "date": "2026-02-05",
+      "score": 45,
+      "level": "LOW",
+      "recovery_time": 30,
+      "sleep_score": 58,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 386
+    },
+    {
+      "date": "2026-02-04",
+      "score": 36,
+      "level": "LOW",
+      "recovery_time": 1396,
+      "sleep_score": 69,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 464
+    },
+    {
+      "date": "2026-02-03",
+      "score": 21,
+      "level": "POOR",
+      "recovery_time": 1171,
+      "sleep_score": 49,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 406
+    },
+    {
+      "date": "2026-02-02",
+      "score": 43,
+      "level": "LOW",
+      "recovery_time": 1393,
+      "sleep_score": 58,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 391
+    },
+    {
+      "date": "2026-02-01",
+      "score": 64,
+      "level": "MODERATE",
+      "recovery_time": 1,
+      "sleep_score": 69,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 332
+    },
+    {
+      "date": "2026-01-31",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 1022,
+      "sleep_score": 77,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 401
+    },
+    {
+      "date": "2026-01-30",
+      "score": 25,
+      "level": "LOW",
+      "recovery_time": 526,
+      "sleep_score": 50,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 368
+    },
+    {
+      "date": "2026-01-29",
+      "score": 20,
+      "level": "POOR",
+      "recovery_time": 1357,
+      "sleep_score": 48,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 439
+    },
+    {
+      "date": "2026-01-28",
+      "score": 25,
+      "level": "LOW",
+      "recovery_time": 1445,
+      "sleep_score": 51,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 390
+    },
+    {
+      "date": "2026-01-27",
+      "score": 37,
+      "level": "LOW",
+      "recovery_time": 1293,
+      "sleep_score": 54,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 309
+    },
+    {
+      "date": "2026-01-26",
+      "score": 64,
+      "level": "MODERATE",
+      "recovery_time": 1,
+      "sleep_score": 64,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 260
+    },
+    {
+      "date": "2026-01-25",
+      "score": 60,
+      "level": "MODERATE",
+      "recovery_time": 1,
+      "sleep_score": 68,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 309
+    },
+    {
+      "date": "2026-01-24",
+      "score": 37,
+      "level": "LOW",
+      "recovery_time": 1319,
+      "sleep_score": 68,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 354
+    },
+    {
+      "date": "2026-01-23",
+      "score": 42,
+      "level": "LOW",
+      "recovery_time": 116,
+      "sleep_score": 52,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 266
+    },
+    {
+      "date": "2026-01-22",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 768,
+      "sleep_score": 72,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 325
+    },
+    {
+      "date": "2026-01-21",
+      "score": 36,
+      "level": "LOW",
+      "recovery_time": 1313,
+      "sleep_score": 64,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 281
+    },
+    {
+      "date": "2026-01-20",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 1,
+      "sleep_score": 66,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 224
+    },
+    {
+      "date": "2026-01-19",
+      "score": 43,
+      "level": "LOW",
+      "recovery_time": 80,
+      "sleep_score": 60,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 268
+    },
+    {
+      "date": "2026-01-18",
+      "score": 31,
+      "level": "LOW",
+      "recovery_time": 1489,
+      "sleep_score": 64,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 340
+    },
+    {
+      "date": "2026-01-17",
+      "score": 32,
+      "level": "LOW",
+      "recovery_time": 131,
+      "sleep_score": 51,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 275
+    },
+    {
+      "date": "2026-01-16",
+      "score": 47,
+      "level": "LOW",
+      "recovery_time": 1,
+      "sleep_score": 61,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 346
+    },
+    {
+      "date": "2026-01-15",
+      "score": 40,
+      "level": "LOW",
+      "recovery_time": 129,
+      "sleep_score": 54,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 417
+    },
+    {
+      "date": "2026-01-14",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 376,
+      "sleep_score": 75,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 468
+    },
+    {
+      "date": "2026-01-13",
+      "score": 36,
+      "level": "LOW",
+      "recovery_time": 1087,
+      "sleep_score": 57,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 391
+    },
+    {
+      "date": "2026-01-12",
+      "score": 51,
+      "level": "MODERATE",
+      "recovery_time": 520,
+      "sleep_score": 77,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 385
+    },
+    {
+      "date": "2026-01-11",
+      "score": 25,
+      "level": "LOW",
+      "recovery_time": 425,
+      "sleep_score": 52,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 366
+    },
+    {
+      "date": "2026-01-10",
+      "score": 27,
+      "level": "LOW",
+      "recovery_time": 1473,
+      "sleep_score": 63,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 428
+    },
+    {
+      "date": "2026-01-09",
+      "score": 25,
+      "level": "LOW",
+      "recovery_time": 992,
+      "sleep_score": 50,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 341
+    },
+    {
+      "date": "2026-01-08",
+      "score": 46,
+      "level": "LOW",
+      "recovery_time": 87,
+      "sleep_score": 54,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 256
+    },
+    {
+      "date": "2026-01-07",
+      "score": 50,
+      "level": "MODERATE",
+      "recovery_time": 330,
+      "sleep_score": 67,
+      "hrv_feedback": "MODERATE",
+      "stress_feedback": "GOOD",
+      "acute_load": 307
+    },
+    {
+      "date": "2026-01-06",
+      "score": 40,
+      "level": "LOW",
+      "recovery_time": 16,
+      "sleep_score": 69,
+      "hrv_feedback": "POOR",
+      "stress_feedback": "GOOD",
+      "acute_load": 250
+    },
+    {
+      "date": "2026-01-05",
+      "score": 34,
+      "level": "LOW",
+      "recovery_time": 1280,
+      "sleep_score": 65,
+      "hrv_feedback": "MODERATE",
+      "stress_feedback": "GOOD",
+      "acute_load": 291
+    },
+    {
+      "date": "2026-01-04",
+      "score": 42,
+      "level": "LOW",
+      "recovery_time": 483,
+      "sleep_score": 60,
+      "hrv_feedback": "MODERATE",
+      "stress_feedback": "GOOD",
+      "acute_load": 239
+    },
+    {
+      "date": "2026-01-03",
+      "score": 36,
+      "level": "LOW",
+      "recovery_time": 1396,
+      "sleep_score": 73,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 289
+    },
+    {
+      "date": "2026-01-02",
+      "score": 31,
+      "level": "LOW",
+      "recovery_time": 102,
+      "sleep_score": 53,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 215
+    },
+    {
+      "date": "2026-01-01",
+      "score": 38,
+      "level": "LOW",
+      "recovery_time": 186,
+      "sleep_score": 46,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 261
+    },
+    {
+      "date": "2025-12-31",
+      "score": 42,
+      "level": "LOW",
+      "recovery_time": 555,
+      "sleep_score": 61,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 315
+    },
+    {
+      "date": "2025-12-30",
+      "score": 28,
+      "level": "LOW",
+      "recovery_time": 1472,
+      "sleep_score": 56,
+      "hrv_feedback": "VERY_GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 330
+    },
+    {
+      "date": "2025-12-29",
+      "score": 37,
+      "level": "LOW",
+      "recovery_time": 573,
+      "sleep_score": 58,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 250
+    },
+    {
+      "date": "2025-12-28",
+      "score": 25,
+      "level": "LOW",
+      "recovery_time": 1245,
+      "sleep_score": 55,
+      "hrv_feedback": "GOOD",
+      "stress_feedback": "GOOD",
+      "acute_load": 307
+    },
+    {
       "date": "2025-12-27",
       "score": 28,
       "level": "LOW",
@@ -40144,9 +45252,259 @@
   ],
   "stress_readings": [
     {
-      "date": "2025-12-27",
+      "date": "2026-02-15",
+      "avg_stress": 22,
+      "max_stress": 99
+    },
+    {
+      "date": "2026-02-14",
+      "avg_stress": 22,
+      "max_stress": 97
+    },
+    {
+      "date": "2026-02-13",
+      "avg_stress": 27,
+      "max_stress": 99
+    },
+    {
+      "date": "2026-02-12",
+      "avg_stress": 27,
+      "max_stress": 96
+    },
+    {
+      "date": "2026-02-11",
+      "avg_stress": 25,
+      "max_stress": 97
+    },
+    {
+      "date": "2026-02-10",
+      "avg_stress": 26,
+      "max_stress": 92
+    },
+    {
+      "date": "2026-02-09",
+      "avg_stress": 14,
+      "max_stress": 90
+    },
+    {
+      "date": "2026-02-08",
+      "avg_stress": 21,
+      "max_stress": 97
+    },
+    {
+      "date": "2026-02-07",
+      "avg_stress": 23,
+      "max_stress": 98
+    },
+    {
+      "date": "2026-02-06",
+      "avg_stress": 23,
+      "max_stress": 99
+    },
+    {
+      "date": "2026-02-05",
+      "avg_stress": 26,
+      "max_stress": 98
+    },
+    {
+      "date": "2026-02-04",
+      "avg_stress": 21,
+      "max_stress": 81
+    },
+    {
+      "date": "2026-02-03",
+      "avg_stress": 27,
+      "max_stress": 99
+    },
+    {
+      "date": "2026-02-02",
+      "avg_stress": 28,
+      "max_stress": 93
+    },
+    {
+      "date": "2026-02-01",
+      "avg_stress": 20,
+      "max_stress": 85
+    },
+    {
+      "date": "2026-01-31",
+      "avg_stress": 18,
+      "max_stress": 96
+    },
+    {
+      "date": "2026-01-30",
+      "avg_stress": 23,
+      "max_stress": 81
+    },
+    {
+      "date": "2026-01-29",
+      "avg_stress": 29,
+      "max_stress": 98
+    },
+    {
+      "date": "2026-01-28",
+      "avg_stress": 23,
+      "max_stress": 97
+    },
+    {
+      "date": "2026-01-27",
+      "avg_stress": 20,
+      "max_stress": 98
+    },
+    {
+      "date": "2026-01-26",
+      "avg_stress": 27,
+      "max_stress": 91
+    },
+    {
+      "date": "2026-01-25",
+      "avg_stress": 21,
+      "max_stress": 86
+    },
+    {
+      "date": "2026-01-24",
+      "avg_stress": 23,
+      "max_stress": 92
+    },
+    {
+      "date": "2026-01-23",
+      "avg_stress": 28,
+      "max_stress": 94
+    },
+    {
+      "date": "2026-01-22",
+      "avg_stress": 22,
+      "max_stress": 90
+    },
+    {
+      "date": "2026-01-21",
+      "avg_stress": 18,
+      "max_stress": 77
+    },
+    {
+      "date": "2026-01-20",
+      "avg_stress": 20,
+      "max_stress": 82
+    },
+    {
+      "date": "2026-01-19",
+      "avg_stress": 18,
+      "max_stress": 93
+    },
+    {
+      "date": "2026-01-18",
+      "avg_stress": 24,
+      "max_stress": 84
+    },
+    {
+      "date": "2026-01-17",
+      "avg_stress": 23,
+      "max_stress": 98
+    },
+    {
+      "date": "2026-01-16",
+      "avg_stress": 25,
+      "max_stress": 97
+    },
+    {
+      "date": "2026-01-15",
+      "avg_stress": 19,
+      "max_stress": 98
+    },
+    {
+      "date": "2026-01-14",
+      "avg_stress": 19,
+      "max_stress": 84
+    },
+    {
+      "date": "2026-01-13",
+      "avg_stress": 22,
+      "max_stress": 86
+    },
+    {
+      "date": "2026-01-12",
+      "avg_stress": 22,
+      "max_stress": 85
+    },
+    {
+      "date": "2026-01-11",
       "avg_stress": 15,
-      "max_stress": 80
+      "max_stress": 91
+    },
+    {
+      "date": "2026-01-10",
+      "avg_stress": 21,
+      "max_stress": 90
+    },
+    {
+      "date": "2026-01-09",
+      "avg_stress": 26,
+      "max_stress": 88
+    },
+    {
+      "date": "2026-01-08",
+      "avg_stress": 25,
+      "max_stress": 90
+    },
+    {
+      "date": "2026-01-07",
+      "avg_stress": 20,
+      "max_stress": 88
+    },
+    {
+      "date": "2026-01-06",
+      "avg_stress": 20,
+      "max_stress": 87
+    },
+    {
+      "date": "2026-01-05",
+      "avg_stress": 24,
+      "max_stress": 90
+    },
+    {
+      "date": "2026-01-04",
+      "avg_stress": 23,
+      "max_stress": 86
+    },
+    {
+      "date": "2026-01-03",
+      "avg_stress": 21,
+      "max_stress": 97
+    },
+    {
+      "date": "2026-01-02",
+      "avg_stress": 24,
+      "max_stress": 90
+    },
+    {
+      "date": "2026-01-01",
+      "avg_stress": 32,
+      "max_stress": 91
+    },
+    {
+      "date": "2025-12-31",
+      "avg_stress": 30,
+      "max_stress": 98
+    },
+    {
+      "date": "2025-12-30",
+      "avg_stress": 28,
+      "max_stress": 93
+    },
+    {
+      "date": "2025-12-29",
+      "avg_stress": 19,
+      "max_stress": 81
+    },
+    {
+      "date": "2025-12-28",
+      "avg_stress": 27,
+      "max_stress": 96
+    },
+    {
+      "date": "2025-12-27",
+      "avg_stress": 21,
+      "max_stress": 90
     },
     {
       "date": "2025-12-26",
@@ -42170,6 +47528,306 @@
     }
   ],
   "spo2_readings": [
+    {
+      "date": "2026-02-15",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-02-14",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 83,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-02-13",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-12",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-11",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-10",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-09",
+      "avg_spo2": 96.0,
+      "lowest_spo2": 89,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-08",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-02-07",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-06",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-05",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 84,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-04",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-03",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-02",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-02-01",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-31",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-30",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-29",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-28",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-27",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-26",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 97.0
+    },
+    {
+      "date": "2026-01-25",
+      "avg_spo2": 96.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 97.0
+    },
+    {
+      "date": "2026-01-24",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 90,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-23",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-22",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 97.0
+    },
+    {
+      "date": "2026-01-21",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 89,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-20",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-19",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-18",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-17",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-16",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-15",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-14",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-13",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 88,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-12",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-11",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-10",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-09",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 84,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-08",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-07",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-06",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-05",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2026-01-04",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-03",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2026-01-02",
+      "avg_spo2": 93.0,
+      "lowest_spo2": 83,
+      "avg_sleep_spo2": 94.0
+    },
+    {
+      "date": "2026-01-01",
+      "avg_spo2": 94.0,
+      "lowest_spo2": 83,
+      "avg_sleep_spo2": 95.0
+    },
+    {
+      "date": "2025-12-31",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 87,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2025-12-30",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 86,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2025-12-29",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
+    {
+      "date": "2025-12-28",
+      "avg_spo2": 95.0,
+      "lowest_spo2": 85,
+      "avg_sleep_spo2": 96.0
+    },
     {
       "date": "2025-12-27",
       "avg_spo2": 95.0,
@@ -44603,11 +50261,361 @@
   ],
   "body_battery": [
     {
-      "date": "2025-12-27",
-      "charged": 51,
-      "drained": 30,
+      "date": "2026-02-15",
+      "charged": 53,
+      "drained": 58,
+      "latest_level": 42,
+      "latest_timestamp": 1771188840000
+    },
+    {
+      "date": "2026-02-14",
+      "charged": 71,
+      "drained": 56,
+      "latest_level": 27,
+      "latest_timestamp": 1771122960000
+    },
+    {
+      "date": "2026-02-13",
+      "charged": 67,
+      "drained": 81,
+      "latest_level": 14,
+      "latest_timestamp": 1771037100000
+    },
+    {
+      "date": "2026-02-12",
+      "charged": 63,
+      "drained": 70,
+      "latest_level": 45,
+      "latest_timestamp": 1770958080000
+    },
+    {
+      "date": "2026-02-11",
+      "charged": 72,
+      "drained": 57,
+      "latest_level": 53,
+      "latest_timestamp": 1770872220000
+    },
+    {
+      "date": "2026-02-10",
+      "charged": 39,
+      "drained": 73,
+      "latest_level": 26,
+      "latest_timestamp": 1770778080000
+    },
+    {
+      "date": "2026-02-09",
+      "charged": 65,
+      "drained": 55,
       "latest_level": 71,
-      "latest_timestamp": 1766857140000
+      "latest_timestamp": 1770699420000
+    },
+    {
+      "date": "2026-02-08",
+      "charged": 75,
+      "drained": 50,
+      "latest_level": 43,
+      "latest_timestamp": 1770602580000
+    },
+    {
+      "date": "2026-02-07",
+      "charged": 57,
+      "drained": 71,
+      "latest_level": 29,
+      "latest_timestamp": 1770517440000
+    },
+    {
+      "date": "2026-02-06",
+      "charged": 72,
+      "drained": 63,
+      "latest_level": 40,
+      "latest_timestamp": 1770432840000
+    },
+    {
+      "date": "2026-02-05",
+      "charged": 56,
+      "drained": 61,
+      "latest_level": 28,
+      "latest_timestamp": 1770345540000
+    },
+    {
+      "date": "2026-02-04",
+      "charged": 63,
+      "drained": 63,
+      "latest_level": 47,
+      "latest_timestamp": 1770267420000
+    },
+    {
+      "date": "2026-02-03",
+      "charged": 72,
+      "drained": 50,
+      "latest_level": 46,
+      "latest_timestamp": 1770180840000
+    },
+    {
+      "date": "2026-02-02",
+      "charged": 52,
+      "drained": 80,
+      "latest_level": 15,
+      "latest_timestamp": 1770088500000
+    },
+    {
+      "date": "2026-02-01",
+      "charged": 43,
+      "drained": 56,
+      "latest_level": 44,
+      "latest_timestamp": 1769999220000
+    },
+    {
+      "date": "2026-01-31",
+      "charged": 78,
+      "drained": 62,
+      "latest_level": 65,
+      "latest_timestamp": 1769921820000
+    },
+    {
+      "date": "2026-01-30",
+      "charged": 68,
+      "drained": 46,
+      "latest_level": 49,
+      "latest_timestamp": 1769835240000
+    },
+    {
+      "date": "2026-01-29",
+      "charged": 58,
+      "drained": 78,
+      "latest_level": 19,
+      "latest_timestamp": 1769741640000
+    },
+    {
+      "date": "2026-01-28",
+      "charged": 68,
+      "drained": 68,
+      "latest_level": 28,
+      "latest_timestamp": 1769653260000
+    },
+    {
+      "date": "2026-01-27",
+      "charged": 69,
+      "drained": 67,
+      "latest_level": 30,
+      "latest_timestamp": 1769565420000
+    },
+    {
+      "date": "2026-01-26",
+      "charged": 65,
+      "drained": 67,
+      "latest_level": 44,
+      "latest_timestamp": 1769489640000
+    },
+    {
+      "date": "2026-01-25",
+      "charged": 53,
+      "drained": 63,
+      "latest_level": 39,
+      "latest_timestamp": 1769396580000
+    },
+    {
+      "date": "2026-01-24",
+      "charged": 80,
+      "drained": 60,
+      "latest_level": 56,
+      "latest_timestamp": 1769317020000
+    },
+    {
+      "date": "2026-01-23",
+      "charged": 56,
+      "drained": 69,
+      "latest_level": 23,
+      "latest_timestamp": 1769221620000
+    },
+    {
+      "date": "2026-01-22",
+      "charged": 54,
+      "drained": 69,
+      "latest_level": 50,
+      "latest_timestamp": 1769143500000
+    },
+    {
+      "date": "2026-01-21",
+      "charged": 67,
+      "drained": 62,
+      "latest_level": 64,
+      "latest_timestamp": 1769057640000
+    },
+    {
+      "date": "2026-01-20",
+      "charged": 56,
+      "drained": 64,
+      "latest_level": 39,
+      "latest_timestamp": 1768960800000
+    },
+    {
+      "date": "2026-01-19",
+      "charged": 80,
+      "drained": 57,
+      "latest_level": 67,
+      "latest_timestamp": 1768885020000
+    },
+    {
+      "date": "2026-01-18",
+      "charged": 63,
+      "drained": 68,
+      "latest_level": 44,
+      "latest_timestamp": 1768798620000
+    },
+    {
+      "date": "2026-01-17",
+      "charged": 71,
+      "drained": 61,
+      "latest_level": 32,
+      "latest_timestamp": 1768701600000
+    },
+    {
+      "date": "2026-01-16",
+      "charged": 57,
+      "drained": 76,
+      "latest_level": 23,
+      "latest_timestamp": 1768616460000
+    },
+    {
+      "date": "2026-01-15",
+      "charged": 52,
+      "drained": 64,
+      "latest_level": 57,
+      "latest_timestamp": 1768539240000
+    },
+    {
+      "date": "2026-01-14",
+      "charged": 70,
+      "drained": 57,
+      "latest_level": 68,
+      "latest_timestamp": 1768453020000
+    },
+    {
+      "date": "2026-01-13",
+      "charged": 63,
+      "drained": 58,
+      "latest_level": 56,
+      "latest_timestamp": 1768366620000
+    },
+    {
+      "date": "2026-01-12",
+      "charged": 41,
+      "drained": 66,
+      "latest_level": 33,
+      "latest_timestamp": 1768269600000
+    },
+    {
+      "date": "2026-01-11",
+      "charged": 76,
+      "drained": 45,
+      "latest_level": 74,
+      "latest_timestamp": 1768193640000
+    },
+    {
+      "date": "2026-01-10",
+      "charged": 69,
+      "drained": 63,
+      "latest_level": 24,
+      "latest_timestamp": 1768096440000
+    },
+    {
+      "date": "2026-01-09",
+      "charged": 57,
+      "drained": 71,
+      "latest_level": 24,
+      "latest_timestamp": 1768011660000
+    },
+    {
+      "date": "2026-01-08",
+      "charged": 58,
+      "drained": 73,
+      "latest_level": 51,
+      "latest_timestamp": 1767934620000
+    },
+    {
+      "date": "2026-01-07",
+      "charged": 63,
+      "drained": 62,
+      "latest_level": 66,
+      "latest_timestamp": 1767848220000
+    },
+    {
+      "date": "2026-01-06",
+      "charged": 67,
+      "drained": 48,
+      "latest_level": 65,
+      "latest_timestamp": 1767761820000
+    },
+    {
+      "date": "2026-01-05",
+      "charged": 61,
+      "drained": 76,
+      "latest_level": 46,
+      "latest_timestamp": 1767675420000
+    },
+    {
+      "date": "2026-01-04",
+      "charged": 71,
+      "drained": 65,
+      "latest_level": 60,
+      "latest_timestamp": 1767588840000
+    },
+    {
+      "date": "2026-01-03",
+      "charged": 73,
+      "drained": 70,
+      "latest_level": 55,
+      "latest_timestamp": 1767502620000
+    },
+    {
+      "date": "2026-01-02",
+      "charged": 89,
+      "drained": 55,
+      "latest_level": 52,
+      "latest_timestamp": 1767415680000
+    },
+    {
+      "date": "2026-01-01",
+      "charged": 42,
+      "drained": 36,
+      "latest_level": 17,
+      "latest_timestamp": 1767329820000
+    },
+    {
+      "date": "2025-12-31",
+      "charged": 48,
+      "drained": 60,
+      "latest_level": 11,
+      "latest_timestamp": 1767243420000
+    },
+    {
+      "date": "2025-12-30",
+      "charged": 48,
+      "drained": 82,
+      "latest_level": 19,
+      "latest_timestamp": 1767151080000
+    },
+    {
+      "date": "2025-12-29",
+      "charged": 71,
+      "drained": 58,
+      "latest_level": 42,
+      "latest_timestamp": 1767059280000
+    },
+    {
+      "date": "2025-12-28",
+      "charged": 70,
+      "drained": 80,
+      "latest_level": 43,
+      "latest_timestamp": 1766984220000
+    },
+    {
+      "date": "2025-12-27",
+      "charged": 68,
+      "drained": 65,
+      "latest_level": 38,
+      "latest_timestamp": 1766887200000
     },
     {
       "date": "2025-12-26",
@@ -46833,23 +52841,23 @@
     }
   ],
   "race_predictions": {
-    "date": "2025-12-27",
-    "time_5k": 1476,
-    "time_10k": 3119,
-    "time_half_marathon": 7004,
-    "time_marathon": 15497
+    "date": "2026-02-15",
+    "time_5k": 1437,
+    "time_10k": 3062,
+    "time_half_marathon": 6976,
+    "time_marathon": 15538
   },
   "training_status": {
-    "date": "2025-12-27",
+    "date": "2026-02-15",
     "vo2_max": {
-      "date": "2025-12-26",
+      "date": "2026-02-15",
       "value": 50.0,
-      "precise_value": 49.6
+      "precise_value": 50.5
     },
     "training_load": {
-      "date": "2025-12-27",
-      "aerobic_low": 916.2507,
-      "aerobic_high": 0.0,
+      "date": "2026-02-15",
+      "aerobic_low": 1226.6658,
+      "aerobic_high": 109.56465,
       "anaerobic": 0.0,
       "feedback": "AEROBIC_HIGH_SHORTAGE"
     },
@@ -46857,119 +52865,9 @@
   },
   "scheduled_workouts": [
     {
-      "scheduled_date": "2025-12-09",
-      "name": "2025-12-09 - Strength: Full Body Foundation",
-      "description": "2025-12-09 - Strength: Full Body Foundation (35 min)\n\nWARMUP:\nLeg swings 10 each, bodyweight squats x10, glute bridges x10, band pull-aparts x12\n\nMAIN WORK:\n- Goblet Squat: 3x10\n  (RPE 7)\n- Single-Leg RDL: 3x8 each\n  (slow eccentric)\n- Reverse Lunge: 3x10 each\n  (pause at bottom)\n- Bent-Over Dumbbell Row: 3x10\n  (RPE 7)\n- Band-Resisted Glute Bridge: 2x15\n  (pause at top)\n- Dumbbell Bicep Curl: 2x12\n  (controlled)\n\nCORE:\nDead bug 2x10, plank 2x40s, pallof press 2x8 each\n\nNOTES:\nFocus on control and stability with single-leg work",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1406772173
-    },
-    {
-      "scheduled_date": "2025-12-08",
-      "name": "2025-12-08 - Mobility: Comprehensive",
-      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
-      "source": "auto_generated",
-      "domain": "mobility",
-      "duration_min": 30,
-      "garmin_id": 1406772178
-    },
-    {
-      "scheduled_date": "2025-12-11",
-      "name": "2025-12-11 - Mobility: Comprehensive",
-      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
-      "source": "auto_generated",
-      "domain": "mobility",
-      "duration_min": 30,
-      "garmin_id": 1406772184
-    },
-    {
-      "scheduled_date": "2025-12-13",
-      "name": "2025-12-13 - Mobility: Comprehensive",
-      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
-      "source": "auto_generated",
-      "domain": "mobility",
-      "duration_min": 30,
-      "garmin_id": 1406772190
-    },
-    {
-      "scheduled_date": "2025-12-16",
-      "name": "2025-12-16 - Mobility: Comprehensive",
-      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
-      "source": "auto_generated",
-      "domain": "mobility",
-      "duration_min": 30,
-      "garmin_id": 1409157491
-    },
-    {
-      "scheduled_date": "2025-12-18",
-      "name": "2025-12-18 - Mobility: Comprehensive",
-      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s",
-      "source": "auto_generated",
-      "domain": "mobility",
-      "duration_min": 30,
-      "garmin_id": 1409157513
-    },
-    {
-      "scheduled_date": "2025-12-20",
-      "name": "2025-12-20 - Strength: Session A",
-      "description": "[HOLD | Foundation | Session A] (25-30 min)\nSquat + Push emphasis\n\nWARMUP:\nLeg swings 10ea, BW squats x10, glute bridges x10\n\nKEY FOCUS:\n- Goblet Squat: 3x8, rest 90s (RPE 6-7, tempo 3-1-1)\n  Progression: Maintain load, refine depth\n\nSUPPORTING:\n- Push-ups: 3x10, rest 60s (trunk rigidity)\n- DB RDL: 2x8, rest 60s (posterior chain)\n\nACCESSORY:\n- Calf Raises (straight): 2x15\n- Plank: 2x30s (anti-extension)\n\nNOTES: Moderate session. Minimal soreness expected.",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 30,
-      "garmin_id": 1412726075
-    },
-    {
-      "scheduled_date": "2025-12-27",
-      "name": "2025-12-27 - Strength: Session C",
-      "description": "[HOLD | Foundation | Session C] (25-30 min)\nUnilateral + Calves + Trunk\n\nWARMUP:\nAnkle circles 10ea, lunges x6ea, leg swings 8ea\n\nKEY FOCUS:\n- Reverse Lunge: 3x8 each, rest 90s (RPE 6-7)\n  Progression: Maintain load, refine balance\n\nSUPPORTING:\n- Step-ups: 2x8 each, rest 60s (single-leg strength)\n- Half-kneeling DB Press: 2x8 each (trunk stability)\n\nACCESSORY:\n- Calf Raises (straight): 2x15\n- Calf Raises (bent): 2x12\n- Farmer Carry: 2x30s (trunk + grip)\n\nNOTES: Single-leg stability focus.",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 30,
-      "garmin_id": 1421700496
-    },
-    {
-      "scheduled_date": "2025-12-30",
-      "name": "2025-12-30 - Strength: Session A",
-      "description": "2025-12-30 - Strength: Session A [BUILD | Foundation | Session A] (35 min)\n\nWARMUP:\nCat-cow x10, Bird-dog x8/side, Goblet squat x10 (light), Glute bridge x12\n\nKEY FOCUS:\n- Goblet Squat: 4x8-10, rest 90-120s\n  (RPE 6-7, tempo 3-1-1 (3s down, 1s pause, 1s up), DB at chest)\n  Progression: Add 1 rep/set when RPE <7 across all sets, then +5-10lb DB\n\nSUPPORTING:\n- Reverse Lunge (alternating): 3x8/leg, rest 60-90s\n  (Single-leg stability, stance phase strength)\n- DB RDL: 3x10, rest 60-90s\n  (Hamstring/glute endurance, propulsion power)\n- Half-kneeling DB Press: 3x8/arm, rest 60s\n  (Trunk stability + arm drive mechanics)\n\nACCESSORY:\n- Pallof Press (band): 2x10/side\n  (Anti-rotation, controlled tempo)\n- Calf Raise (DB held): 2x15\n  (2s pause at top, full ROM)\n\nNOTES:\nExpected soreness: minimal glutes/quads. Scale key focus to RPE 6 if runs Mon/Wed feel heavy. 48+ hrs before next easy run.",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1421716810
-    },
-    {
-      "scheduled_date": "2026-01-01",
-      "name": "2026-01-01 - Strength: Session A",
-      "description": "2026-01-01 - Strength: Session A [BUILD | Foundation | Session A] (35 min)\n\nWARMUP:\nGlute bridge x10, Bird dog x8/side, Bodyweight RDL x8, Arm circles x10/dir\n\nKEY FOCUS:\n- DB Romanian Deadlift: 4x8-10, rest 90-120s\n  (RPE 6-8, tempo 3-1-1, hinge at hips, soft knees)\n  Progression: Add 1 rep/set when RPE <7, then +5lbs\n\nSUPPORTING:\n- Single-leg RDL (light DB): 3x8/leg, rest 60-90s\n  (Hip stability, prevents IT band issues)\n- Chest-supported DB row: 3x10-12, rest 60s\n  (Posture in late-race fatigue)\n- Half-kneeling Pallof press: 3x10/side, rest 45s\n  (Anti-rotation for trunk stability)\n\nACCESSORY:\n- Standing calf raise: 2x15\n  (Control 2s up, 2s down)\n- Dead bug: 2x10/side\n  (Slow, maintain low back contact)\n\nNOTES:\nExpected soreness: minimal glutes/hamstrings. Scale if Friday run feels heavy. Good placement before weekend easy runs.",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1421716813
-    },
-    {
-      "scheduled_date": "2026-01-04",
-      "name": "2026-01-04 - Strength: Session A",
-      "description": "2026-01-04 - Strength: Session A [BUILD | Foundation | Session A] (35 min)\n\nWARMUP:\nGlute bridge x10, Bodyweight split squat x6/leg, Band pull-apart x15, World's greatest stretch x4/side\n\nKEY FOCUS:\n- DB Split Squat (rear foot elevated 4-6\"): 4x8-10/leg, rest 90-120s\n  (RPE 7-8, tempo 3-1-1 (3s down). Torso upright, front knee tracking over toes.)\n  Progression: Add 1 rep/leg when RPE <7, then +2.5-5lb/hand\n\nSUPPORTING:\n- Speed Goblet Squat (light): 3x12, rest 60s\n  (Power, hip extension speed)\n- Half-kneeling DB Press: 3x8-10/side, rest 60-90s\n  (Arm drive, trunk stability)\n- Chest-supported DB Row: 3x10-12, rest 60s\n  (Posture, late-race resilience)\n\nACCESSORY:\n- Suitcase Carry: 2x40m/side\n  (Anti-lateral flexion, trunk rigidity)\n- Calf Raises (slow eccentric): 2x15\n  (3s down, Achilles health)\n\nNOTES:\nExpected soreness: minimal glutes/quads. 48h before Sat long run. Scale supporting work if easy runs feel heavy.",
-      "source": "auto_generated",
-      "domain": "strength",
-      "duration_min": 35,
-      "garmin_id": 1421716819
-    },
-    {
-      "scheduled_date": "2026-01-03",
+      "scheduled_date": "2026-02-22",
       "scheduled_datetime": null,
-      "name": "Run: 60-70 min E",
-      "description": "Workout: Run\n\n--- RESCHEDULED ---\nOriginally scheduled: 2026-01-04\nMoved to: 2026-01-03\nReason: Conflict with spouse work schedule (childcare needs)\n---",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "running"
-    },
-    {
-      "scheduled_date": "2026-01-02",
-      "scheduled_datetime": null,
-      "name": "Run: 50-55 min E",
+      "name": "Run: 10 min warm up Hm 10 min warm down",
       "description": "Workout: Run",
       "duration_seconds": null,
       "location": null,
@@ -46978,9 +52876,9 @@
       "domain": "running"
     },
     {
-      "scheduled_date": "2025-12-31",
+      "scheduled_date": "2026-02-20",
       "scheduled_datetime": null,
-      "name": "Run: 50-55 min E",
+      "name": "Run: 20 min E",
       "description": "Workout: Run",
       "duration_seconds": null,
       "location": null,
@@ -46989,9 +52887,9 @@
       "domain": "running"
     },
     {
-      "scheduled_date": "2025-12-29",
+      "scheduled_date": "2026-02-18",
       "scheduled_datetime": null,
-      "name": "Run: 50-55 min E",
+      "name": "Run: 30 min E",
       "description": "Workout: Run",
       "duration_seconds": null,
       "location": null,
@@ -47000,9 +52898,9 @@
       "domain": "running"
     },
     {
-      "scheduled_date": "2025-12-28",
+      "scheduled_date": "2026-02-17",
       "scheduled_datetime": null,
-      "name": "Run: 40-55 min E",
+      "name": "Run: 20 min warm up 4x4 min @ tempo  on 1 min easy jog 10 min warm down",
       "description": "Workout: Run",
       "duration_seconds": null,
       "location": null,
@@ -47011,163 +52909,36 @@
       "domain": "running"
     },
     {
-      "scheduled_date": "2025-12-19",
-      "scheduled_datetime": null,
-      "name": "Run: 30-45 min E",
-      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
-      "duration_seconds": null,
+      "scheduled_date": "2026-02-15",
+      "scheduled_datetime": "2026-02-15T15:50:09",
+      "name": "Walk",
+      "description": "Workout: Walk",
+      "duration_seconds": 3600,
       "location": null,
-      "all_day": true,
+      "all_day": false,
       "source": "ics_calendar",
-      "domain": "running"
+      "domain": "unknown"
     },
     {
-      "scheduled_date": "2025-12-18",
-      "scheduled_datetime": null,
-      "name": "2025-12-18 - Strength: Session B",
-      "description": "2025-12-18 - Strength: Session B [BUILD | Foundation | Session B] (35 min)\n\nWARMUP:\nBird dog 2x8/side\\, Glute bridge 12\\, Cossack squat 8/side\\, Band pull-apart 15\n\nKEY FOCUS:\n- Single-Leg RDL (DB): 3x8/leg\\, rest 90-120s\n  (RPE 6-7\\, tempo 3-1-1. Hinge focus\\, maintain neutral spine)\n  Progression: Add 1 rep/leg when RPE <6\\, then +2.5-5 lbs\n\nSUPPORTING:\n- DB RDL (bilateral): 3x10\\, rest 75s\n  (Posterior chain strength\\, complements SL RDL)\n- Chest-supported DB row: 3x10\\, rest 60s\n  (Posture\\, late-race upper body resilience)\n\nACCESSORY:\n- Dead bug: 3x8/side\n  (Anti-extension trunk control\\, 3-sec holds)\n- Calf raises: 2x15\n  (Eccentric control\\, 2-sec lower)\n\nNOTES:\nExpected soreness: minimal hamstring/glute. Complements 12/9 lower body session. Scale if Friday easy run feels heavy.\\\n\\\nSource: auto_generated",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar+garmin_template",
-      "domain": "strength",
-      "workout_id": 1409435342,
-      "sport_type": "strength_training",
-      "workout_provider": null
-    },
-    {
-      "scheduled_date": "2025-12-18",
-      "scheduled_datetime": null,
-      "name": "2025-12-18 - Mobility: Comprehensive",
-      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s\\\n\\\nSource: auto_generated",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "mobility"
-    },
-    {
-      "scheduled_date": "2025-12-17",
-      "scheduled_datetime": null,
-      "name": "Run: 30-45 min E",
-      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "running"
-    },
-    {
-      "scheduled_date": "2025-12-16",
-      "scheduled_datetime": null,
-      "name": "2025-12-16 - Strength: Session A",
-      "description": "2025-12-16 - Strength: Session A [BUILD | Foundation | Session A] (35 min)\n\nWARMUP:\nCat-cow x8\\, Glute bridge x10\\, Goblet squat x10 light\\, Band pull-apart x15\n\nKEY FOCUS:\n- Goblet Squat: 3x8-10\\, rest 90-120s\n  (RPE 6-8\\, tempo 3-1-1 (3s down\\, 1s pause\\, 1s up))\n  Progression: Add 1 rep/set when RPE <7\\, then +5lbs\n\nSUPPORTING:\n- Split Squat ISO Hold: 3x20s/leg\\, rest 60-90s\n  (Single-leg stability\\, propulsion strength)\n- Half-Kneeling DB Press: 3x8\\, rest 60s\n  (Trunk stability during arm drive)\n- Chest-Supported DB Row: 3x10\\, rest 60s\n  (Posture maintenance\\, late-race resilience)\n\nACCESSORY:\n- Pallof Press (anti-rotation): 2x10/side\n  (Band tension\\, control tempo)\n- Single-leg Calf Raise: 2x12/leg\n  (Pause at top\\, eccentric control)\n\nNOTES:\nExpected soreness: minimal. Easy runs Wed/Fri should feel fresh. Scale volume if runs feel heavy.\\\n\\\nSource: auto_generated",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar+garmin_template",
-      "domain": "strength",
-      "workout_id": 1409435341,
-      "sport_type": "strength_training",
-      "workout_provider": null
-    },
-    {
-      "scheduled_date": "2025-12-16",
-      "scheduled_datetime": null,
-      "name": "2025-12-16 - Mobility: Comprehensive",
-      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s\\\n\\\nSource: auto_generated",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "mobility"
-    },
-    {
-      "scheduled_date": "2025-12-15",
-      "scheduled_datetime": null,
-      "name": "Run: 30-45 min E",
-      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "running"
-    },
-    {
-      "scheduled_date": "2025-12-14",
-      "scheduled_datetime": null,
-      "name": "Run: 45 min E",
-      "description": "Workout: Run\\\n\\\nSource: ics_calendar",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "running"
-    },
-    {
-      "scheduled_date": "2025-12-13",
-      "scheduled_datetime": null,
-      "name": "2025-12-13 - Mobility: Comprehensive",
-      "description": "Comprehensive Mobility (25-30 min)\n\nFOAM ROLL (8 min):\n- Calves: 60s each\n- Hamstrings: 60s each\n- Glutes: 60s each\n- IT Band/Quads: 60s each\n\nHIP MOBILITY (10 min):\n- 90/90 Stretch: 60s each side\n- Pigeon Pose: 60s each side\n- Hip Flexor Stretch: 60s each side\n- Frog Stretch: 60s\n\nLOWER LEG (5 min):\n- Ankle Circles: 10 each direction per ankle\n- Calf Stretch (straight + bent knee): 45s each\n- Toe Yoga: 2 min\n\nSPINE (5 min):\n- Cat-Cow: 10 reps\n- Thread the Needle: 8 each side\n- Child's Pose: 60s\\\n\\\nSource: auto_generated",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "mobility"
-    },
-    {
-      "scheduled_date": "2025-12-13",
-      "scheduled_datetime": null,
-      "name": "2025-12-13 - Strength: Full Body",
-      "description": "2025-12-13 - Strength: Full Body (30 min)\n\nWARMUP:\nleg swings 10 each\\, glute bridges x10\\, bird dogs x8\\, clamshells x10\n\nMAIN WORK:\n- Single-leg RDL: 3x8/side\n  (RPE 6)\n- Bulgarian split squat: 3x10/side\n  (controlled tempo)\n- Hip thrust: 3x12\n  (2-sec hold at top)\n- Band pull-apart: 2x15\n  (RPE 5)\n- Dumbbell row: 2x10/side\n  (RPE 6)\n\nCORE:\nDead bug 2x10\\, side plank 2x20s\\, pallof press 2x8\n\nNOTES:\nEmphasizes posterior chain and single-leg stability without repeating recent lower body work\\\n\\\nSource: auto_generated",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "strength"
-    },
-    {
-      "scheduled_date": "2025-12-05",
-      "scheduled_datetime": null,
-      "name": "Run: 2-3 x 20-30 min easy runs this week",
+      "scheduled_date": "2026-02-15",
+      "scheduled_datetime": "2026-02-15T17:56:33",
+      "name": "Run: 50-60 min E",
       "description": "Workout: Run",
-      "duration_seconds": null,
+      "duration_seconds": 3600,
       "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "running"
-    },
-    {
-      "scheduled_date": "2025-12-03",
-      "scheduled_datetime": null,
-      "name": "Run: 2-3 x 20-30 min easy runs this week",
-      "description": "Workout: Run",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
-      "source": "ics_calendar",
-      "domain": "running"
-    },
-    {
-      "scheduled_date": "2025-12-01",
-      "scheduled_datetime": null,
-      "name": "Run: 2-3 x 20-30 min easy runs this week",
-      "description": "Workout: Run",
-      "duration_seconds": null,
-      "location": null,
-      "all_day": true,
+      "all_day": false,
       "source": "ics_calendar",
       "domain": "running"
     }
   ],
   "lactate_threshold": {
-    "date": "2025-12-04T11:08:31.604",
-    "threshold_heart_rate_bpm": 178,
-    "threshold_speed_mps": 0.33611017,
-    "threshold_speed_mph": 0.7518582836798,
-    "functional_threshold_power": 361,
-    "power_to_weight_ratio": 4.659687891265344,
-    "weight_kg": 77.473
+    "date": "2026-01-21T08:20:04.280",
+    "threshold_heart_rate_bpm": 176,
+    "threshold_speed_mps": 0.34166571,
+    "threshold_speed_mph": 0.7642856933274,
+    "functional_threshold_power": 376,
+    "power_to_weight_ratio": 4.814402233063163,
+    "weight_kg": 78.099
   },
   "gear_stats": [
     {
@@ -47179,7 +52950,7 @@
       "date_retired": null,
       "is_active": true,
       "total_distance_meters": 431315.3163141211,
-      "total_activities": 55,
+      "total_activities": 56,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-07-03T14:23:12.0",
@@ -47223,12 +52994,27 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 11292.3203125,
-      "total_activities": 1,
+      "total_distance_meters": 67915.4814453125,
+      "total_activities": 3,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-11-05T18:49:41.0",
       "updated_date": "2025-11-05T18:49:41.0"
+    },
+    {
+      "uuid": "16c10740d48d4ed3a1342955c2e0962e",
+      "display_name": null,
+      "model_name": "Brooks Adrenaline GTS 25",
+      "gear_type": "Shoes",
+      "date_begun": null,
+      "date_retired": null,
+      "is_active": true,
+      "total_distance_meters": 167850.31091308594,
+      "total_activities": 21,
+      "max_distance_single_activity": null,
+      "notification_distance_meters": null,
+      "created_date": "2026-01-21T13:43:51.0",
+      "updated_date": "2026-01-21T13:44:07.0"
     },
     {
       "uuid": "09ff90121f424714adcd6d373c3eaa02",
@@ -47238,8 +53024,8 @@
       "date_begun": null,
       "date_retired": null,
       "is_active": true,
-      "total_distance_meters": 581016.777923584,
-      "total_activities": 72,
+      "total_distance_meters": 629634.0274658203,
+      "total_activities": 83,
       "max_distance_single_activity": null,
       "notification_distance_meters": null,
       "created_date": "2025-09-13T13:41:08.0",
@@ -47263,8 +53049,308 @@
   ],
   "daily_steps": [
     {
+      "date": "2026-02-15",
+      "total_steps": 15367,
+      "goal_steps": 11280,
+      "goal_met": true
+    },
+    {
+      "date": "2026-02-14",
+      "total_steps": 5520,
+      "goal_steps": 11910,
+      "goal_met": false
+    },
+    {
+      "date": "2026-02-13",
+      "total_steps": 23744,
+      "goal_steps": 10590,
+      "goal_met": true
+    },
+    {
+      "date": "2026-02-12",
+      "total_steps": 5707,
+      "goal_steps": 11810,
+      "goal_met": false
+    },
+    {
+      "date": "2026-02-11",
+      "total_steps": 5248,
+      "goal_steps": 12530,
+      "goal_met": false
+    },
+    {
+      "date": "2026-02-10",
+      "total_steps": 14282,
+      "goal_steps": 12090,
+      "goal_met": true
+    },
+    {
+      "date": "2026-02-09",
+      "total_steps": 13672,
+      "goal_steps": 11910,
+      "goal_met": true
+    },
+    {
+      "date": "2026-02-08",
+      "total_steps": 7325,
+      "goal_steps": 12420,
+      "goal_met": false
+    },
+    {
+      "date": "2026-02-07",
+      "total_steps": 16596,
+      "goal_steps": 11950,
+      "goal_met": true
+    },
+    {
+      "date": "2026-02-06",
+      "total_steps": 6937,
+      "goal_steps": 13200,
+      "goal_met": false
+    },
+    {
+      "date": "2026-02-05",
+      "total_steps": 6577,
+      "goal_steps": 13930,
+      "goal_met": false
+    },
+    {
+      "date": "2026-02-04",
+      "total_steps": 14686,
+      "goal_steps": 13740,
+      "goal_met": true
+    },
+    {
+      "date": "2026-02-03",
+      "total_steps": 15245,
+      "goal_steps": 13360,
+      "goal_met": true
+    },
+    {
+      "date": "2026-02-02",
+      "total_steps": 17167,
+      "goal_steps": 12930,
+      "goal_met": true
+    },
+    {
+      "date": "2026-02-01",
+      "total_steps": 8134,
+      "goal_steps": 13460,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-31",
+      "total_steps": 18593,
+      "goal_steps": 12890,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-30",
+      "total_steps": 9262,
+      "goal_steps": 13290,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-29",
+      "total_steps": 14485,
+      "goal_steps": 12980,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-28",
+      "total_steps": 16328,
+      "goal_steps": 12140,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-27",
+      "total_steps": 19542,
+      "goal_steps": 11310,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-26",
+      "total_steps": 8303,
+      "goal_steps": 12060,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-25",
+      "total_steps": 8349,
+      "goal_steps": 12470,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-24",
+      "total_steps": 18704,
+      "goal_steps": 11770,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-23",
+      "total_steps": 8241,
+      "goal_steps": 12160,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-22",
+      "total_steps": 17599,
+      "goal_steps": 10790,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-21",
+      "total_steps": 12435,
+      "goal_steps": 10600,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-20",
+      "total_steps": 6972,
+      "goal_steps": 11500,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-19",
+      "total_steps": 8211,
+      "goal_steps": 11860,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-18",
+      "total_steps": 17893,
+      "goal_steps": 11190,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-17",
+      "total_steps": 7430,
+      "goal_steps": 12120,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-16",
+      "total_steps": 10557,
+      "goal_steps": 12500,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-15",
+      "total_steps": 9515,
+      "goal_steps": 13240,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-14",
+      "total_steps": 12636,
+      "goal_steps": 13300,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-13",
+      "total_steps": 14684,
+      "goal_steps": 12950,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-12",
+      "total_steps": 15711,
+      "goal_steps": 12640,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-11",
+      "total_steps": 7471,
+      "goal_steps": 13210,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-10",
+      "total_steps": 18177,
+      "goal_steps": 11960,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-09",
+      "total_steps": 14209,
+      "goal_steps": 11710,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-08",
+      "total_steps": 8418,
+      "goal_steps": 12530,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-07",
+      "total_steps": 10420,
+      "goal_steps": 13050,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-06",
+      "total_steps": 5825,
+      "goal_steps": 13850,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-05",
+      "total_steps": 15118,
+      "goal_steps": 13710,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-04",
+      "total_steps": 7922,
+      "goal_steps": 14350,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-03",
+      "total_steps": 17236,
+      "goal_steps": 14020,
+      "goal_met": true
+    },
+    {
+      "date": "2026-01-02",
+      "total_steps": 9785,
+      "goal_steps": 15070,
+      "goal_met": false
+    },
+    {
+      "date": "2026-01-01",
+      "total_steps": 10485,
+      "goal_steps": 15580,
+      "goal_met": false
+    },
+    {
+      "date": "2025-12-31",
+      "total_steps": 21215,
+      "goal_steps": 14170,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-30",
+      "total_steps": 17787,
+      "goal_steps": 13760,
+      "goal_met": true
+    },
+    {
+      "date": "2025-12-29",
+      "total_steps": 10812,
+      "goal_steps": 14080,
+      "goal_met": false
+    },
+    {
+      "date": "2025-12-28",
+      "total_steps": 18206,
+      "goal_steps": 13620,
+      "goal_met": true
+    },
+    {
       "date": "2025-12-27",
-      "total_steps": 4038,
+      "total_steps": 8484,
       "goal_steps": 14190,
       "goal_met": false
     },
@@ -47876,8 +53962,8 @@
     }
   ],
   "progress_summary": {
-    "start_date": "2025-11-27",
-    "end_date": "2025-12-27",
+    "start_date": "2026-01-16",
+    "end_date": "2026-02-15",
     "acute_training_load": null,
     "chronic_training_load": null,
     "training_stress_balance": null,
