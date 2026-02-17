@@ -179,6 +179,108 @@ def cmd_memory(args) -> int:
     return 1
 
 
+# ── agent ─────────────────────────────────────────────────────────────────────
+
+def cmd_agent(args) -> int:
+    subcmd = getattr(args, "agent_command", None)
+    if subcmd == "status":
+        return _agent_status()
+    if subcmd == "run-once":
+        return _agent_run_once()
+    print("Unknown agent subcommand", file=sys.stderr)
+    return 1
+
+
+def _agent_status() -> int:
+    import sqlite3
+    from memory.db import DB_PATH, init_db
+    from agent.lock import get_lock_state
+
+    init_db()
+
+    # Lock state
+    lock = get_lock_state()
+    if lock is None:
+        print("Lock:  FREE")
+    elif lock.get("expired"):
+        print(f"Lock:  EXPIRED (was held by {lock['owner']} until {lock['expires_at']})")
+    else:
+        print(f"Lock:  HELD by {lock['owner']}  expires {lock['expires_at']}")
+
+    print()
+
+    # Recent task_runs
+    conn = sqlite3.connect(str(DB_PATH))
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT task, started_at, finished_at, status, details_json "
+        "FROM task_runs ORDER BY started_at DESC LIMIT 15"
+    ).fetchall()
+
+    if rows:
+        print(f"{'Task':<22} {'Started':<20} {'Status':<10} Details")
+        print("─" * 80)
+        for r in rows:
+            details = ""
+            if r["details_json"]:
+                try:
+                    d = json.loads(r["details_json"])
+                    # Extract a short summary
+                    if "summary" in d:
+                        details = str(d["summary"])[:40]
+                    elif "error" in d:
+                        details = f"ERROR: {d['error'][:40]}"
+                    elif "new_plan_id" in d and d["new_plan_id"]:
+                        details = f"new_plan={d['new_plan_id']}"
+                    elif "hash_changed" in d:
+                        details = f"hash_changed={d['hash_changed']} hooks={d.get('hooks_run', [])}"
+                except Exception:
+                    pass
+            started = (r["started_at"] or "")[:16]
+            print(f"  {r['task']:<20} {started:<20} {r['status']:<10} {details}")
+    else:
+        print("No task_runs recorded yet.")
+
+    # State keys summary
+    print()
+    state_keys = [
+        "runner_last_context_hash",
+        "runner_last_daily_rollover",
+        "runner_lock",
+    ]
+    state_rows = conn.execute(
+        f"SELECT key, value FROM state WHERE key IN ({','.join('?'*len(state_keys))})",
+        state_keys,
+    ).fetchall()
+    if state_rows:
+        print("State:")
+        for r in state_rows:
+            val = r["value"]
+            if len(val) > 60:
+                val = val[:60] + "…"
+            print(f"  {r['key']:<35} {val}")
+
+    conn.close()
+    return 0
+
+
+def _agent_run_once() -> int:
+    """Run one complete heartbeat cycle."""
+    from agent.runner import run_cycle
+
+    print("Running one agent heartbeat cycle…")
+    result = run_cycle()
+    print()
+    print(f"  lock_acquired:       {result['lock_acquired']}")
+    print(f"  sync_success:        {result['sync_success']}")
+    print(f"  hash_changed:        {result['hash_changed']}")
+    print(f"  hooks_run:           {result['hooks_run']}")
+    print(f"  readiness_triggered: {result['readiness_triggered']}")
+    print(f"  needs_replan:        {result['needs_replan']}")
+    print(f"  new_context_hash:    {result['new_context_hash']}")
+    return 0
+
+
 def _memory_search(query: str) -> int:
     import sqlite3
     from memory.db import DB_PATH, init_db
@@ -273,6 +375,13 @@ def main() -> int:
     p_search = mem_sub.add_parser("search", help="Full-text search events and plan days")
     p_search.add_argument("query", help="Search term")
     p_mem.set_defaults(func=cmd_memory)
+
+    # agent
+    p_agent = sub.add_parser("agent", help="Heartbeat agent controls")
+    agent_sub = p_agent.add_subparsers(dest="agent_command", required=True)
+    agent_sub.add_parser("status",   help="Show lock state + recent task_runs")
+    agent_sub.add_parser("run-once", help="Run one heartbeat cycle")
+    p_agent.set_defaults(func=cmd_agent)
 
     args = parser.parse_args()
     rc = args.func(args)

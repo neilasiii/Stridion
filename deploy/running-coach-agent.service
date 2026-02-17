@@ -1,0 +1,49 @@
+# systemd unit for the running coach heartbeat agent.
+#
+# Install:
+#   sudo cp deploy/running-coach-agent.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable running-coach-agent
+#   sudo systemctl start running-coach-agent
+#
+# Logs:
+#   journalctl -u running-coach-agent -f
+#
+# The agent loops every 15 minutes, runs a daily deep run at 4am, and
+# acquires a SQLite lock so it is safe alongside the Discord bot service.
+
+[Unit]
+Description=Running Coach Heartbeat Agent
+After=network.target
+# Start after the Discord bot so they don't race on first sync
+After=running-coach-bot.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=coach
+WorkingDirectory=/home/coach/running-coach
+
+# Use absolute python3 path to ensure correct venv/interpreter
+ExecStart=/usr/bin/python3 /home/coach/running-coach/agent/runner.py
+
+# Restart on crash; don't restart if we exit 0 (clean shutdown)
+Restart=on-failure
+RestartSec=30s
+
+# Give the process time to finish its current cycle on stop
+TimeoutStopSec=90s
+KillMode=mixed
+KillSignal=SIGTERM
+
+# Environment — add any secrets here or point to an EnvironmentFile
+# EnvironmentFile=/home/coach/running-coach/config/agent.env
+Environment=PYTHONUNBUFFERED=1
+
+# Limit log spam; the runner uses structured logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=running-coach-agent
+
+[Install]
+WantedBy=multi-user.target
