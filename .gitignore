@@ -73,3 +73,12 @@ config/gemini_api.env
 config/location.env
 config/user_location.env
 data/strength_programs/current_program.json
+
+# Memory OS — SQLite database (persistent state, not versioned)
+data/coach.sqlite
+
+# Vault processed inbox notes (ephemeral, ingested into SQLite)
+vault/inbox/processed/
+
+# Vault daily notes (generated content, not versioned)
+vault/daily/

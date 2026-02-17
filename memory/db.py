@@ -1,0 +1,519 @@
+"""
+SQLite-backed persistent storage for the running coach Memory OS.
+
+Tables:
+  athlete_profile  - key/value athlete context
+  events           - immutable event log with idempotency keys
+  state            - mutable key/value (last sync, active plan id, etc.)
+  metrics          - daily health metric rollups (one row per day)
+  plans            - versioned training plans (never overwritten)
+  plan_days        - per-day plan prescriptions
+  task_runs        - heartbeat / cron task audit log
+
+All writes are idempotent. Plans are append-only (new plan_id per version).
+"""
+
+import json
+import hashlib
+import uuid
+import sqlite3
+from datetime import date, datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+
+PROJECT_ROOT = Path(__file__).parent.parent
+DB_PATH = PROJECT_ROOT / "data" / "coach.sqlite"
+
+
+# ── Connection ─────────────────────────────────────────────────────────────────
+
+def _connect(db_path: Path = DB_PATH) -> sqlite3.Connection:
+    db_path = Path(db_path)
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA foreign_keys=ON")
+    return conn
+
+
+# ── Schema ─────────────────────────────────────────────────────────────────────
+
+_DDL = """
+CREATE TABLE IF NOT EXISTS athlete_profile (
+    key        TEXT PRIMARY KEY,
+    value_json TEXT NOT NULL,
+    updated_at DATETIME NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS events (
+    id           TEXT PRIMARY KEY,
+    type         TEXT NOT NULL,
+    ts           DATETIME NOT NULL,
+    payload_json TEXT NOT NULL,
+    source       TEXT NOT NULL DEFAULT 'system',
+    hash         TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS events_type_ts ON events(type, ts);
+CREATE INDEX IF NOT EXISTS events_ts      ON events(ts);
+
+CREATE TABLE IF NOT EXISTS state (
+    key        TEXT PRIMARY KEY,
+    value      TEXT NOT NULL,
+    updated_at DATETIME NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS metrics (
+    day          DATE PRIMARY KEY,
+    payload_json TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS plans (
+    plan_id      TEXT PRIMARY KEY,
+    start_date   DATE     NOT NULL,
+    end_date     DATE     NOT NULL,
+    created_at   DATETIME NOT NULL DEFAULT (datetime('now')),
+    context_hash TEXT,
+    status       TEXT NOT NULL DEFAULT 'draft',
+    plan_json    TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS plans_status ON plans(status);
+CREATE INDEX IF NOT EXISTS plans_dates  ON plans(start_date, end_date);
+
+CREATE TABLE IF NOT EXISTS plan_days (
+    plan_id      TEXT NOT NULL,
+    day          DATE NOT NULL,
+    intent       TEXT,
+    workout_json TEXT,
+    PRIMARY KEY (plan_id, day),
+    FOREIGN KEY (plan_id) REFERENCES plans(plan_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS plan_days_day ON plan_days(day);
+
+CREATE TABLE IF NOT EXISTS task_runs (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    task         TEXT    NOT NULL,
+    started_at   DATETIME NOT NULL,
+    finished_at  DATETIME,
+    status       TEXT NOT NULL,
+    details_json TEXT
+);
+
+CREATE INDEX IF NOT EXISTS task_runs_task ON task_runs(task, started_at);
+"""
+
+
+def init_db(db_path: Path = DB_PATH) -> None:
+    """Create all tables. Safe to call multiple times (idempotent)."""
+    conn = _connect(db_path)
+    try:
+        conn.executescript(_DDL)
+        conn.commit()
+    finally:
+        conn.close()
+
+
+# ── Athlete Profile ─────────────────────────────────────────────────────────────
+
+def upsert_athlete_profile(key: str, value: Any, db_path: Path = DB_PATH) -> None:
+    """Store or update a named athlete profile value."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """INSERT INTO athlete_profile(key, value_json, updated_at)
+               VALUES (?, ?, datetime('now'))
+               ON CONFLICT(key) DO UPDATE SET
+                 value_json = excluded.value_json,
+                 updated_at = excluded.updated_at""",
+            (key, json.dumps(value)),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_athlete_profile(key: str, db_path: Path = DB_PATH) -> Optional[Any]:
+    """Retrieve an athlete profile value by key. Returns None if absent."""
+    conn = _connect(db_path)
+    try:
+        row = conn.execute(
+            "SELECT value_json FROM athlete_profile WHERE key = ?", (key,)
+        ).fetchone()
+        return json.loads(row["value_json"]) if row else None
+    finally:
+        conn.close()
+
+
+# ── Events ──────────────────────────────────────────────────────────────────────
+
+def _make_event_id(event_type: str, payload: Dict, ts: str) -> str:
+    """Stable deterministic 32-char hex id for event idempotency."""
+    raw = f"{event_type}:{ts}:{json.dumps(payload, sort_keys=True)}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:32]
+
+
+def insert_event(
+    event_type: str,
+    payload: Dict,
+    source: str = "system",
+    ts: Optional[datetime] = None,
+    stable_id: Optional[str] = None,
+    db_path: Path = DB_PATH,
+) -> str:
+    """
+    Insert an event. Returns the event id.
+    Duplicate events are silently ignored.
+
+    stable_id: if provided, used as the idempotency key directly (for
+      content-addressable events like constraints where the timestamp is
+      arbitrary). If absent, id is derived from type+ts+payload.
+    """
+    ts_val = ts or datetime.utcnow()
+    ts_str = ts_val.isoformat()
+    event_id = stable_id or _make_event_id(event_type, payload, ts_str)
+    payload_str = json.dumps(payload, sort_keys=True)
+
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """INSERT OR IGNORE INTO events(id, type, ts, payload_json, source, hash)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (event_id, event_type, ts_str, payload_str, source, event_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+    return event_id
+
+
+def query_events(
+    event_type: Optional[str] = None,
+    since: Optional[datetime] = None,
+    until: Optional[datetime] = None,
+    source: Optional[str] = None,
+    limit: int = 100,
+    db_path: Path = DB_PATH,
+) -> List[Dict]:
+    """Query events with optional filters. Returns list of row dicts."""
+    wheres: List[str] = []
+    params: List[Any] = []
+
+    if event_type:
+        wheres.append("type = ?")
+        params.append(event_type)
+    if since:
+        wheres.append("ts >= ?")
+        params.append(since.isoformat())
+    if until:
+        wheres.append("ts <= ?")
+        params.append(until.isoformat())
+    if source:
+        wheres.append("source = ?")
+        params.append(source)
+
+    where_clause = ("WHERE " + " AND ".join(wheres)) if wheres else ""
+    params.append(limit)
+
+    conn = _connect(db_path)
+    try:
+        rows = conn.execute(
+            f"SELECT * FROM events {where_clause} ORDER BY ts DESC LIMIT ?", params
+        ).fetchall()
+        return [dict(r) for r in rows]
+    finally:
+        conn.close()
+
+
+# ── State ────────────────────────────────────────────────────────────────────────
+
+def set_state(key: str, value: str, db_path: Path = DB_PATH) -> None:
+    """Set a mutable state value."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """INSERT INTO state(key, value, updated_at) VALUES(?, ?, datetime('now'))
+               ON CONFLICT(key) DO UPDATE SET
+                 value      = excluded.value,
+                 updated_at = excluded.updated_at""",
+            (key, value),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_state(
+    key: str, default: Optional[str] = None, db_path: Path = DB_PATH
+) -> Optional[str]:
+    """Get a state value, or default if absent."""
+    conn = _connect(db_path)
+    try:
+        row = conn.execute(
+            "SELECT value FROM state WHERE key = ?", (key,)
+        ).fetchone()
+        return row["value"] if row else default
+    finally:
+        conn.close()
+
+
+# ── Metrics ──────────────────────────────────────────────────────────────────────
+
+def upsert_metrics(day: date, payload: Dict, db_path: Path = DB_PATH) -> None:
+    """Upsert daily health metric rollup for a given calendar date."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """INSERT INTO metrics(day, payload_json) VALUES(?, ?)
+               ON CONFLICT(day) DO UPDATE SET payload_json = excluded.payload_json""",
+            (day.isoformat(), json.dumps(payload)),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_metrics_range(
+    start: date, end: date, db_path: Path = DB_PATH
+) -> List[Dict]:
+    """Return daily metric rows between start and end (inclusive)."""
+    conn = _connect(db_path)
+    try:
+        rows = conn.execute(
+            "SELECT day, payload_json FROM metrics WHERE day BETWEEN ? AND ? ORDER BY day",
+            (start.isoformat(), end.isoformat()),
+        ).fetchall()
+        return [{"day": r["day"], **json.loads(r["payload_json"])} for r in rows]
+    finally:
+        conn.close()
+
+
+# ── Plans ─────────────────────────────────────────────────────────────────────────
+
+def _new_plan_id(start_date: date, context_hash: Optional[str] = None) -> str:
+    """Generate a human-readable, unique plan id."""
+    suffix = (context_hash[:8] if context_hash else uuid.uuid4().hex[:8])
+    return f"{start_date.strftime('%Y%m%d')}-{suffix}"
+
+
+def insert_plan(
+    start_date: date,
+    end_date: date,
+    plan_json: Dict,
+    context_hash: Optional[str] = None,
+    status: str = "draft",
+    db_path: Path = DB_PATH,
+) -> str:
+    """
+    Create a new versioned plan. NEVER overwrites existing plans.
+    Returns the new plan_id.
+
+    Versioning guarantee: each call produces a distinct plan_id even if
+    context_hash collides (uuid4 fallback ensures uniqueness).
+    """
+    plan_id = _new_plan_id(start_date, context_hash)
+    conn = _connect(db_path)
+    try:
+        # Guarantee uniqueness if id collides (astronomically rare but safe)
+        while conn.execute(
+            "SELECT 1 FROM plans WHERE plan_id = ?", (plan_id,)
+        ).fetchone():
+            plan_id = f"{start_date.strftime('%Y%m%d')}-{uuid.uuid4().hex[:8]}"
+
+        conn.execute(
+            """INSERT INTO plans(plan_id, start_date, end_date, context_hash, status, plan_json)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (
+                plan_id,
+                start_date.isoformat(),
+                end_date.isoformat(),
+                context_hash,
+                status,
+                json.dumps(plan_json),
+            ),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+    return plan_id
+
+
+def insert_plan_days(
+    plan_id: str, days: List[Dict], db_path: Path = DB_PATH
+) -> None:
+    """
+    Insert (or replace) day rows for a plan.
+
+    Each dict in days must contain:
+      day          - date or ISO string  "YYYY-MM-DD"
+      intent       - str  e.g. "Easy 60 min"
+      workout_json - dict  structured workout description
+    """
+    def _day_str(d: Any) -> str:
+        return d.isoformat() if isinstance(d, date) else str(d)
+
+    conn = _connect(db_path)
+    try:
+        conn.executemany(
+            """INSERT OR REPLACE INTO plan_days(plan_id, day, intent, workout_json)
+               VALUES (?, ?, ?, ?)""",
+            [
+                (
+                    plan_id,
+                    _day_str(row["day"]),
+                    row.get("intent", ""),
+                    json.dumps(row.get("workout_json") or {}),
+                )
+                for row in days
+            ],
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def set_active_plan(plan_id: str, db_path: Path = DB_PATH) -> None:
+    """
+    Promote plan_id to 'active'. Archives any previously active plan.
+    Also stores active_plan_id in state table for fast lookup.
+    """
+    conn = _connect(db_path)
+    try:
+        conn.execute("UPDATE plans SET status = 'archived' WHERE status = 'active'")
+        conn.execute(
+            "UPDATE plans SET status = 'active' WHERE plan_id = ?", (plan_id,)
+        )
+        conn.execute(
+            """INSERT INTO state(key, value, updated_at) VALUES('active_plan_id', ?, datetime('now'))
+               ON CONFLICT(key) DO UPDATE SET
+                 value      = excluded.value,
+                 updated_at = excluded.updated_at""",
+            (plan_id,),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_active_plan(
+    start: Optional[date] = None,
+    end: Optional[date] = None,
+    db_path: Path = DB_PATH,
+) -> Optional[Dict]:
+    """
+    Return the active plan with its day rows, optionally filtered by date range.
+    Returns None if no active plan exists.
+    """
+    conn = _connect(db_path)
+    try:
+        plan_row = conn.execute(
+            "SELECT * FROM plans WHERE status = 'active' ORDER BY created_at DESC LIMIT 1"
+        ).fetchone()
+        if not plan_row:
+            return None
+
+        plan_id = plan_row["plan_id"]
+        day_wheres: List[str] = ["plan_id = ?"]
+        day_params: List[Any] = [plan_id]
+
+        if start:
+            day_wheres.append("day >= ?")
+            day_params.append(start.isoformat())
+        if end:
+            day_wheres.append("day <= ?")
+            day_params.append(end.isoformat())
+
+        days = conn.execute(
+            f"SELECT * FROM plan_days WHERE {' AND '.join(day_wheres)} ORDER BY day",
+            day_params,
+        ).fetchall()
+
+        return {
+            "plan_id":      plan_row["plan_id"],
+            "start_date":   plan_row["start_date"],
+            "end_date":     plan_row["end_date"],
+            "created_at":   plan_row["created_at"],
+            "context_hash": plan_row["context_hash"],
+            "status":       plan_row["status"],
+            "plan":         json.loads(plan_row["plan_json"]),
+            "days": [
+                {
+                    "day":     d["day"],
+                    "intent":  d["intent"],
+                    "workout": json.loads(d["workout_json"]) if d["workout_json"] else {},
+                }
+                for d in days
+            ],
+        }
+    finally:
+        conn.close()
+
+
+def list_plans(
+    status: Optional[str] = None,
+    limit: int = 20,
+    db_path: Path = DB_PATH,
+) -> List[Dict]:
+    """List plans ordered by creation date descending."""
+    conn = _connect(db_path)
+    try:
+        where = "WHERE status = ?" if status else ""
+        params: List[Any] = ([status] if status else []) + [limit]
+        rows = conn.execute(
+            f"SELECT plan_id, start_date, end_date, created_at, status, context_hash "
+            f"FROM plans {where} ORDER BY created_at DESC LIMIT ?",
+            params,
+        ).fetchall()
+        return [dict(r) for r in rows]
+    finally:
+        conn.close()
+
+
+# ── Task Runs ────────────────────────────────────────────────────────────────────
+
+def log_task_start(task: str, db_path: Path = DB_PATH) -> int:
+    """Log task start. Returns row id for later finish update."""
+    conn = _connect(db_path)
+    try:
+        cur = conn.execute(
+            "INSERT INTO task_runs(task, started_at, status) VALUES(?, datetime('now'), 'running')",
+            (task,),
+        )
+        conn.commit()
+        return cur.lastrowid
+    finally:
+        conn.close()
+
+
+def log_task_finish(
+    row_id: int,
+    status: str,
+    details: Optional[Dict] = None,
+    db_path: Path = DB_PATH,
+) -> None:
+    """Update a task_run row with completion info."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            "UPDATE task_runs SET finished_at = datetime('now'), status = ?, details_json = ? WHERE id = ?",
+            (status, json.dumps(details) if details else None, row_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_last_task_run(task: str, db_path: Path = DB_PATH) -> Optional[Dict]:
+    """Return the most recent task_run record for a given task name."""
+    conn = _connect(db_path)
+    try:
+        row = conn.execute(
+            "SELECT * FROM task_runs WHERE task = ? ORDER BY started_at DESC LIMIT 1",
+            (task,),
+        ).fetchone()
+        return dict(row) if row else None
+    finally:
+        conn.close()
