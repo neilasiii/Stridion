@@ -66,27 +66,57 @@ def format_running_workout(workout):
     duration_min = workout.get('duration_min', 0)
     duration_sec = workout.get('duration_seconds', 0)
 
-    # Parse duration from name if not in metadata (e.g., "Run: 45 min E")
+    # Parse duration from name if not in metadata
     if not duration_min and not duration_sec:
         import re
-        duration_match = re.search(r'(\d+)\s*min', name.lower())
-        if duration_match:
-            duration_min = int(duration_match.group(1))
+        # For structured workouts (e.g., "10 min warm up 8x40 sec @ 5k 10 min warm down")
+        # Sum all the time components
+        min_matches = re.findall(r'(\d+)\s*min', name.lower())
+        if min_matches:
+            # If multiple time components, sum them (warmup + workout + cooldown)
+            duration_min = sum(int(m) for m in min_matches)
+
+        # If there are intervals (e.g., "8x40 sec"), estimate their time
+        interval_match = re.search(r'(\d+)x(\d+)\s*sec', name.lower())
+        if interval_match and duration_min:
+            reps = int(interval_match.group(1))
+            interval_sec = int(interval_match.group(2))
+            # Total interval time (work + recovery, assuming equal recovery)
+            interval_time_min = (reps * interval_sec * 2) / 60  # x2 for recovery
+            duration_min += int(interval_time_min)
 
     # Extract workout type from name
+    # CRITICAL: Check for quality workouts FIRST (intervals, 5k pace, reps)
+    # before checking for "easy" - prevents misclassifying interval workouts
     workout_type = "Run"
-    if "easy" in name.lower() or " e" in name.lower() or name.endswith(" E"):
-        workout_type = "Easy Run"
-    elif "tempo" in name.lower() or " t" in name.lower():
-        workout_type = "Tempo Run"
-    elif "interval" in name.lower() or " i" in name.lower():
-        workout_type = "Interval Run"
-    elif "long" in name.lower() or " l" in name.lower():
-        workout_type = "Long Run"
-    elif "marathon" in name.lower() or " m" in name.lower():
-        workout_type = "Marathon Pace Run"
+
+    # Check for intervals/reps first (e.g., "8x40 sec", "5x1000m")
+    import re
+    has_intervals = bool(re.search(r'\d+x\d+', name.lower()))
+
+    # Check for quality paces (5k, 10k, threshold, tempo, interval)
+    has_quality_pace = any(pace in name.lower() for pace in ['5k', '10k', 'threshold', '@ t ', 'tempo', '@ i '])
+
+    if has_intervals or has_quality_pace:
+        # This is a quality/speed workout
+        if "5k" in name.lower():
+            workout_type = "Speed Intervals (5k Pace)"
+        elif "10k" in name.lower():
+            workout_type = "Speed Intervals (10k Pace)"
+        elif "tempo" in name.lower() or " t" in name.lower() or "threshold" in name.lower():
+            workout_type = "Tempo Run"
+        elif "interval" in name.lower() or " i" in name.lower():
+            workout_type = "Interval Run"
+        else:
+            workout_type = "Speed Work"
     elif "strides" in name.lower():
         workout_type = "Easy Run with Strides"
+    elif "long" in name.lower() or " l" in name.lower():
+        workout_type = "Long Run"
+    elif "marathon" in name.lower() or " m " in name.lower() or name.endswith(" M"):
+        workout_type = "Marathon Pace Run"
+    elif "easy" in name.lower() or " e " in name.lower() or name.endswith(" E"):
+        workout_type = "Easy Run"
 
     output = f"## 🏃 {workout_type}\n"
 

@@ -721,7 +721,22 @@ async def report_command(interaction: discord.Interaction):
         )
 
         if result.returncode == 0:
-            report = result.stdout[:4000]  # Discord embed limit
+            # Filter out MOTD banner (Debian LXC Container message)
+            import re
+            ansi_escape = re.compile(r'\x1b\[[0-9;]*[mGKHF]')
+            report_clean = ansi_escape.sub('', result.stdout)
+
+            # Remove MOTD lines
+            lines = report_clean.split('\n')
+            filtered_lines = []
+            for line in lines:
+                # Skip MOTD banner lines
+                if 'Debian LXC Container' in line or 'Provided by:' in line or \
+                   'GitHub:' in line or 'Hostname:' in line or 'IP Address:' in line:
+                    continue
+                filtered_lines.append(line)
+
+            report = '\n'.join(filtered_lines).strip()[:4000]  # Discord embed limit
 
             embed = discord.Embed(
                 title="🌅 Morning Training Report",
@@ -890,20 +905,44 @@ async def location_command(interaction: discord.Interaction, location: str):
             # City name - use geocoding API to get coordinates
             try:
                 # Use Open-Meteo geocoding (free, no API key)
+                # NOTE: This API works best with just city names, not "City, State" format
+                # Try the original query first, then fall back to city-only
                 import urllib.parse
-                encoded_city = urllib.parse.quote(location)
+                import re
 
-                proc = await asyncio.create_subprocess_exec(
-                    "curl", "-s", f"https://geocoding-api.open-meteo.com/v1/search?name={encoded_city}&count=1&language=en&format=json",
-                    stdout=asyncio.subprocess.PIPE,
-                    stderr=asyncio.subprocess.PIPE
-                )
-                stdout, _ = await asyncio.wait_for(proc.communicate(), timeout=10)
+                queries_to_try = [location]
 
-                geo_data = json.loads(stdout.decode())
+                # If location contains state abbreviation or full state name, also try without it
+                # Patterns: "City, ST" or "City ST" or "City, State Name"
+                state_pattern = r'^(.+?)[\s,]+(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming)[\s,]*$'
+                match = re.match(state_pattern, location, re.IGNORECASE)
+                if match:
+                    city_only = match.group(1).strip()
+                    if city_only not in queries_to_try:
+                        queries_to_try.append(city_only)
 
-                if not geo_data.get('results'):
-                    await interaction.followup.send(f"❌ Location '{location}' not found. Try being more specific (e.g., 'Miami, FL' or use coordinates).")
+                geo_data = None
+                for query in queries_to_try:
+                    encoded_city = urllib.parse.quote(query)
+                    proc = await asyncio.create_subprocess_exec(
+                        "curl", "-s", f"https://geocoding-api.open-meteo.com/v1/search?name={encoded_city}&count=1&language=en&format=json",
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE
+                    )
+                    stdout, _ = await asyncio.wait_for(proc.communicate(), timeout=10)
+                    geo_data = json.loads(stdout.decode())
+
+                    if geo_data.get('results'):
+                        break  # Found results!
+
+                if not geo_data or not geo_data.get('results'):
+                    await interaction.followup.send(
+                        f"❌ Location '{location}' not found.\n\n"
+                        "**Tips:**\n"
+                        "• Try just the city name: `Altamonte Springs`\n"
+                        "• Or use coordinates: `28.6611,-81.3937`\n"
+                        "• Avoid state abbreviations in the city name"
+                    )
                     return
 
                 result = geo_data['results'][0]
@@ -1482,7 +1521,26 @@ async def morning_report_task():
         stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=120)
 
         if proc.returncode == 0 and stdout:
-            report = stdout.decode()[:4000]
+            # Filter out MOTD banner (Debian LXC Container message)
+            report_raw = stdout.decode()
+            # Remove ANSI color codes
+            import re
+            ansi_escape = re.compile(r'\x1b\[[0-9;]*[mGKHF]')
+            report_clean = ansi_escape.sub('', report_raw)
+
+            # Remove MOTD lines
+            lines = report_clean.split('\n')
+            filtered_lines = []
+            skip_motd = False
+            for line in lines:
+                # Skip MOTD banner lines
+                if 'Debian LXC Container' in line or 'Provided by:' in line or \
+                   'GitHub:' in line or 'Hostname:' in line or 'IP Address:' in line:
+                    continue
+                filtered_lines.append(line)
+
+            report = '\n'.join(filtered_lines).strip()[:4000]
+
             embed = discord.Embed(
                 title="🌅 Morning Training Report",
                 description=report,

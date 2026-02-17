@@ -87,14 +87,19 @@ bash bin/smart_sync.sh --force            # Force sync (new workout reported)
 **Automatic Workout Generation:**
 - When syncing, system automatically detects new FinalSurge workouts
 - Generates corresponding Garmin **running** workouts with coach-prescribed paces
-- Generates **strength** workouts (2x/week) scheduled around quality running sessions
 - Uploads and schedules all workouts to Garmin Connect calendar
 - Tracks generated workouts in `data/generated_workouts.json` to prevent duplicates
 - Only generates workouts for upcoming dates (skips past workouts >1 day old)
 
-**Supplemental Workout Generation (Strength/Mobility):**
+**NOTE:** All automatic strength/mobility workout generation is **DISABLED**, including:
+- Regular sync auto-generation (commented out in `bin/sync_garmin_data.sh`)
+- Reschedule-triggered regeneration (commented out in `src/garmin_sync.py`)
+- Running workouts are still auto-generated from FinalSurge
+- Manual generation via `src/supplemental_workout_generator.py` still available if needed
+
+**Manual Supplemental Workout Generation (if needed):**
 ```bash
-# Generate strength workouts for current week (runs automatically during sync)
+# Generate strength workouts manually for current week
 python3 src/supplemental_workout_generator.py
 
 # Preview what would be generated
@@ -103,11 +108,11 @@ python3 src/supplemental_workout_generator.py --check-only
 # Generate for specific week
 python3 src/supplemental_workout_generator.py --week-start 2025-12-09
 
-# Include mobility sessions (disabled by default in sync)
+# Include mobility sessions
 python3 src/supplemental_workout_generator.py  # (without --skip-mobility)
 ```
 
-**How supplemental generation works:**
+**How manual supplemental generation works:**
 1. Analyzes FinalSurge running schedule for the week
 2. Identifies quality sessions (tempo, intervals, long runs)
 3. Places strength 48+ hours before quality running

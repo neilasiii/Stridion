@@ -281,8 +281,12 @@ def _parse_repeat_block(text: str) -> Optional[RepeatBlock]:
         if parsed_pace:
             pace_type = parsed_pace
 
-    # Look for recovery: "on X sec/min [easy jog] recovery"
+    # Look for recovery in two formats:
+    # 1. "on X sec/min [easy jog] recovery"
+    # 2. "/ X sec @ E pace" (FinalSurge format)
     recovery_step = None
+
+    # Try "on" format first
     recovery_match = re.search(r'on\s+(\d+(?::\d+)?)\s*(sec|min)\s*(?:easy\s*)?(?:jog\s*)?(?:recovery)?', remaining, re.IGNORECASE)
     if recovery_match:
         recovery_value = recovery_match.group(1)
@@ -294,6 +298,21 @@ def _parse_repeat_block(text: str) -> Optional[RepeatBlock]:
             pace_type='E',
             description=f"{recovery_value} {recovery_unit} recovery"
         )
+    else:
+        # Try slash format: "/ 40 sec @ E pace"
+        slash_recovery_match = re.search(r'/\s*(\d+(?::\d+)?)\s*(sec|min)\s*(?:@\s*)?([EMT]|easy|E\s+pace)?', remaining, re.IGNORECASE)
+        if slash_recovery_match:
+            recovery_value = slash_recovery_match.group(1)
+            recovery_unit = slash_recovery_match.group(2)
+            recovery_pace_str = slash_recovery_match.group(3) or 'E'
+            recovery_pace = parse_pace_type(recovery_pace_str)
+            recovery_duration = parse_time_to_seconds(f"{recovery_value} {recovery_unit}")
+            recovery_step = WorkoutStep(
+                step_type='recovery',
+                duration_seconds=recovery_duration,
+                pace_type=recovery_pace or 'E',
+                description=f"{recovery_value} {recovery_unit} recovery"
+            )
 
     # Create work step
     work_step = WorkoutStep(
@@ -327,14 +346,18 @@ def _parse_simple_run(text: str) -> Optional[WorkoutStep]:
     )
 
     if match:
-        duration = parse_time_to_seconds(f"{match.group(1)} min")
+        time_str = match.group(1)
+        # Only append 'min' if it's not already in MM:SS format
+        if ':' not in time_str:
+            time_str = f"{time_str} min"
+        duration = parse_time_to_seconds(time_str)
         pace = parse_pace_type(match.group(2))
 
         return WorkoutStep(
             step_type='interval',
             duration_seconds=duration,
             pace_type=pace or 'E',
-            description=f"{match.group(1)} min @ {pace or 'E'}"
+            description=f"{match.group(1)} @ {pace or 'E'}"
         )
 
     return None
@@ -346,9 +369,11 @@ def _parse_sequential_segments(text: str) -> List[WorkoutStep | RepeatBlock]:
     text = text.strip()
 
     # First check for repeat blocks - include recovery in the match
-    # Pattern matches: NxDURATION [strides] [@ pace] [on RECOVERY]
-    # Note: pace words limited to not match "on"
-    repeat_pattern = r'(\d+)\s*x\s*(\d+(?::\d+)?)\s*(sec|min|m|meters?)?\s*(strides)?\s*(?:@\s*\w+(?:\s+(?:effort|pace))?)?\s*(?:on\s+\d+(?::\d+)?\s*(?:sec|min)\s*(?:easy\s*)?(?:jog\s*)?(?:recovery)?)?'
+    # Pattern matches: NxDURATION [strides] [@ pace] [on RECOVERY or / RECOVERY]
+    # Supports two recovery formats:
+    # 1. "on X sec/min [easy jog] recovery"
+    # 2. "/ X sec @ E pace" (FinalSurge format)
+    repeat_pattern = r'(\d+)\s*x\s*(\d+(?::\d+)?)\s*(sec|min|m|meters?)?\s*(strides)?\s*(?:@\s*\w+(?:\s+(?:effort|pace))?)?\s*(?:(?:on\s+\d+(?::\d+)?\s*(?:sec|min)\s*(?:easy\s*)?(?:jog\s*)?(?:recovery)?)|(?:/\s*\d+(?::\d+)?\s*(?:sec|min)\s*(?:@\s*)?(?:\w+(?:\s+pace)?)?))?'
     repeat_match = re.search(repeat_pattern, text, re.IGNORECASE)
 
     if repeat_match:
@@ -374,14 +399,18 @@ def _parse_sequential_segments(text: str) -> List[WorkoutStep | RepeatBlock]:
     matches = list(re.finditer(pattern, text, re.IGNORECASE))
 
     for match in matches:
-        duration = parse_time_to_seconds(f"{match.group(1)} min")
+        time_str = match.group(1)
+        # Only append 'min' if it's not already in MM:SS format
+        if ':' not in time_str:
+            time_str = f"{time_str} min"
+        duration = parse_time_to_seconds(time_str)
         pace = parse_pace_type(match.group(2))
 
         step = WorkoutStep(
             step_type='interval',
             duration_seconds=duration,
             pace_type=pace or 'E',
-            description=f"{match.group(1)} min @ {pace or 'E'}"
+            description=f"{match.group(1)} @ {pace or 'E'}"
         )
         results.append(step)
 
