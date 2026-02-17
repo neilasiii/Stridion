@@ -3,7 +3,7 @@
 Tests for stride validation, rewrite, and rendering enforcement.
 
 Covers:
-  1. Rep ≥ 45 s (≥ 1 min in schema units) fails validation
+  1. On easy+strides days, interval-like reps with duration_min ≥ 1 (≥ 60 s) are invalid stride reps
   2. Total stride time > 5 min fails validation
   3. 4min x4 cannot be classified as strides
   4. Rewrite produces valid stride structure
@@ -60,7 +60,7 @@ def _make_main_reps(duration_min: int, reps: int) -> dict:
     }
 
 
-# ── 1. Rep ≥ 45 s fails validation ───────────────────────────────────────────
+# ── 1. Interval-like reps with duration_min ≥ 1 are invalid stride reps ──────
 
 class TestRepDurationValidation:
     def test_1min_rep_fails(self):

@@ -13,8 +13,8 @@ Hard limits
 Schema constraint
 -----------------
 The Brain schema stores duration_min in whole minutes (ge=1 = 60 s minimum).
-Any interval step with duration_min ≥ 1 therefore CANNOT represent strides —
-it is a tempo/interval rep of ≥ 60 seconds.  validate_strides() catches this.
+On easy+strides days, any interval-like rep (duration_min ≥ 1) is invalid as a
+stride rep and triggers rewrite — 60 s already exceeds the 40 s stride cap.
 
 Rewrite
 -------
@@ -65,8 +65,8 @@ def validate_strides(steps: List[Dict[str, Any]]) -> Tuple[bool, str]:
     be presented as stride work.  Only "interval" steps and reps > 1 "main"
     steps are evaluated; warmup/cooldown/plain-main are skipped.
 
-    Any step with duration_min ≥ 1 (= 60 s) automatically fails — the schema
-    minimum is 1 minute, which already exceeds the 40-second stride cap.
+    On easy+strides days, any interval-like rep with duration_min ≥ 1 (= 60 s)
+    is invalid as a stride rep — 60 s already exceeds the 40 s stride cap.
     """
     candidates = [
         s for s in steps
@@ -82,7 +82,7 @@ def validate_strides(steps: List[Dict[str, Any]]) -> Tuple[bool, str]:
         dur_sec = dur_min * 60
         reps    = s.get("reps") or 1
 
-        # ≥ 1 min is always a violation — too long to be a stride
+        # On easy+strides days, any interval-like rep ≥ 1 min is invalid as a stride rep
         if dur_min >= 1:
             return False, (
                 f"rep duration {dur_min}min ({dur_sec}s) > {STRIDE_REP_MAX_SEC}s max — "
@@ -121,7 +121,7 @@ def rewrite_strides(
 
     Preserves warmup and cooldown.  All "interval" steps are removed.
     The replacement "main" step carries CANONICAL_NOTE so the renderer can
-    emit "N min E + 6x20 sec strides @ 5k effort on 40 sec easy jog recovery".
+    emit "N min E + 6x20 sec strides @ ~5K effort on 60 sec easy jog recovery".
 
     duration_min stays ≥ 1 throughout (schema constraint).
     """
