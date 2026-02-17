@@ -198,13 +198,13 @@ def _render_easy_strides(duration_min: int) -> str:
     cannot be stored in WorkoutStep.duration_min (schema ge=1), so the
     canonical text is the only reliable representation.
 
-    Example: "45 min E + 6x20 sec strides @ 5k effort on 40 sec easy jog recovery"
+    Example: "45 min E + 6x20 sec strides @ ~5K effort on 60 sec easy jog recovery"
     """
-    from brain.stride_rules import CANONICAL_REPS, CANONICAL_REP_SEC
+    from brain.stride_rules import CANONICAL_REPS, CANONICAL_REP_SEC, CANONICAL_RECOVERY_SEC
     return (
         f"{duration_min} min E + "
         f"{CANONICAL_REPS}x{CANONICAL_REP_SEC} sec strides "
-        f"@ 5k effort on 40 sec easy jog recovery"
+        f"@ ~5K effort on {CANONICAL_RECOVERY_SEC} sec easy jog recovery"
     )
 
 
