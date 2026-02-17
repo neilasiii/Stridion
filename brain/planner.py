@@ -248,22 +248,26 @@ def _try_strict_extract(text: str) -> Optional[str]:
 
 def _brace_search_last(text: str) -> str:
     """
-    Last-resort extraction: find the LAST balanced JSON object in text.
-    Using rfind("{") avoids picking up example JSON objects that appear
-    earlier in the output (e.g. in schema hints the LLM echoes back).
-    Raises ValueError if no balanced object found.
+    Last-resort extraction: find the LAST top-level balanced JSON object.
+
+    Scans BACKWARD from the last '}' to its matching '{'.  This correctly
+    handles nested braces (rfind('{') would land inside a nested object and
+    return a fragment, not the root object).
+
+    Raises ValueError if no balanced object is found.
     """
-    last = text.rfind("{")
-    if last == -1:
+    last_close = text.rfind("}")
+    if last_close == -1:
         raise ValueError(f"No JSON object found in output:\n{text[:300]}")
     depth = 0
-    for i, ch in enumerate(text[last:]):
-        if ch == "{":
+    for i in range(last_close, -1, -1):
+        ch = text[i]
+        if ch == "}":
             depth += 1
-        elif ch == "}":
+        elif ch == "{":
             depth -= 1
             if depth == 0:
-                return text[last : last + i + 1]
+                return text[i : last_close + 1]
     raise ValueError(f"Unbalanced JSON braces in output:\n{text[:300]}")
 
 
@@ -459,6 +463,18 @@ def plan_week(
     # ── Call LLM ──────────────────────────────────────────────────────────
     raw = _call_llm(_SYSTEM_PLAN_WEEK, user_prompt)
     decision = _parse_and_validate_plan(raw, ctx_hash, _SYSTEM_PLAN_WEEK)
+
+    # ── Enforce DATA QUALITY safety flag deterministically ─────────────────
+    # The LLM prompt asks for this flag, but we cannot rely on the LLM.
+    # Append it here unconditionally when the condition is true.
+    dq = context_packet.get("data_quality", {})
+    _low_conf = (
+        dq.get("readiness_confidence") == "low"
+        or not dq.get("has_health_cache", True)
+    )
+    if _low_conf and "low_readiness_confidence" not in decision.safety_flags:
+        decision.safety_flags.append("low_readiness_confidence")
+        log.info("Enforced low_readiness_confidence safety flag")
 
     # ── Persist ───────────────────────────────────────────────────────────
     plan_id = insert_plan(
