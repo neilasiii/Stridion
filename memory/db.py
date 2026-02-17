@@ -412,16 +412,18 @@ def set_active_plan(plan_id: str, db_path: Path = DB_PATH) -> None:
             "UPDATE plans SET status = 'active' WHERE plan_id = ?", (plan_id,)
         )
 
-        # 5) Write plan_activated event — inline to stay in the same transaction
+        # 5) Write plan_activated event — inline to stay in the same transaction.
+        #    Use uuid4 as the event_id so every activation is unconditionally
+        #    recorded (no INSERT OR IGNORE silently dropping a duplicate hash).
         event_payload = {
             "plan_id":          plan_id,
             "previous_plan_id": previous_plan_id,
             "activated_at":     ts,
         }
         event_payload_str = json.dumps(event_payload, sort_keys=True)
-        event_id = _make_event_id("plan_activated", event_payload, ts)
+        event_id = uuid.uuid4().hex  # guaranteed unique — never dropped
         conn.execute(
-            """INSERT OR IGNORE INTO events(id, type, ts, payload_json, source, hash)
+            """INSERT INTO events(id, type, ts, payload_json, source, hash)
                VALUES (?, 'plan_activated', ?, ?, 'system', ?)""",
             (event_id, ts, event_payload_str, event_id),
         )
