@@ -942,7 +942,10 @@ async def coach_note_command(interaction: discord.Interaction, note: str):
                 proc = await asyncio.create_subprocess_exec(
                     sys.executable, "-c",
                     "import sys; sys.path.insert(0, '.'); "
-                    "from memory.vault import ingest_inbox_notes; "
+                    "try:\n"
+                    "  from memory import ingest_inbox_notes\n"
+                    "except ImportError:\n"
+                    "  from memory.vault import ingest_inbox_notes\n"
                     "r = ingest_inbox_notes(); print(len(r))",
                     cwd=PROJECT_ROOT,
                     stdout=asyncio.subprocess.PIPE,
@@ -983,7 +986,7 @@ async def on_message(message: discord.Message):
       - "ai: <text>"  → call Claude/Gemini with the text (LLM opt-in).
       - "sync" keyword → coach sync.
       - "brief" / "today" / "workout" keyword → coach brief --today.
-      - "plan" keyword → coach plan --week (calls Brain LLM).
+      - message is exactly "plan" or starts with "plan " → coach plan --week (calls Brain LLM).
       - "status" / "agent" keyword → coach agent status.
       - anything else → help message listing available commands.
     """
@@ -1030,7 +1033,7 @@ async def on_message(message: discord.Message):
                 await message.reply(f"```\n{clamp(out, 1800)}\n```")
                 return
 
-            if re.search(r'\bplan\b', lower):
+            if lower == "plan" or lower.startswith("plan "):
                 rc, stdout, stderr = await run_coach_cli(["plan", "--week"], timeout=240)
                 out = stdout.strip() or stderr.strip() or "No output"
                 if rc == 0:
