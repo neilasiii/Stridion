@@ -31,22 +31,40 @@ def run(force: bool = False) -> dict:
     if force:
         cmd.append("--force")
 
+    from memory.db import init_db, insert_event, log_task_start, log_task_finish
+
+    init_db()
+    run_id = log_task_start("garmin_sync")
+
     log.info("Running Garmin sync: %s", " ".join(cmd))
-    result = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        cwd=str(PROJECT_ROOT),
-        timeout=180,
-    )
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            cwd=str(PROJECT_ROOT),
+            timeout=180,
+        )
+    except subprocess.TimeoutExpired as exc:
+        log_task_finish(
+            run_id, "failed",
+            details={"error": "timeout", "timeout_sec": 180},
+        )
+        raise RuntimeError("garmin_sync timed out after 180s") from exc
 
     success = result.returncode == 0
     summary = (result.stdout if success else result.stderr).strip()[:500]
 
-    # Record sync event in SQLite (idempotency: each run gets a unique ts-derived id)
-    from memory.db import init_db, insert_event
+    if success:
+        log_task_finish(run_id, "success", details={"summary": summary[:200]})
+    else:
+        log.warning("Garmin sync failed rc=%d stderr: %s", result.returncode, result.stderr[:300])
+        log_task_finish(
+            run_id, "failed",
+            details={"returncode": result.returncode, "stderr": result.stderr[:500]},
+        )
 
-    init_db()
+    # Append-only event log (each run unique via ts-derived id)
     event_id = insert_event(
         event_type="garmin_sync",
         payload={
@@ -58,9 +76,7 @@ def run(force: bool = False) -> dict:
         source="skills.garmin_sync",
     )
 
-    log.info("Garmin sync rc=%d event_id=%s", result.returncode, event_id[:8])
-    if not success:
-        log.warning("Garmin sync stderr: %s", result.stderr[:300])
+    log.info("Garmin sync rc=%d event_id=%s task_run_id=%d", result.returncode, event_id[:8], run_id)
 
     return {
         "success": success,

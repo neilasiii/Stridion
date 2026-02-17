@@ -4,9 +4,11 @@ Skills wrapper: publish internal plan workouts to Garmin Connect.
 Uses the sacred upload path (src/auto_workout_generator + src/workout_uploader)
 as black boxes. Does NOT write to data/generated_workouts.json.
 
-Idempotency is tracked in SQLite events (type="garmin_publish_internal").
-Reads data/generated_workouts.json to detect dates already published by the
-FinalSurge auto-generator (avoids double-upload), but never writes to it.
+Dedupe authority (non-negotiable):
+  data/generated_workouts.json is the SOLE authoritative gate for "this date is
+  already on Garmin Connect". A date present in that log is skipped unconditionally.
+  SQLite (type="garmin_publish_internal") records publish attempts/results for
+  audit purposes only — it NEVER causes a workout to be skipped.
 
 Authority rule (non-negotiable):
   Source is always the internal SQLite plan. FinalSurge/ICS is not read here.
@@ -29,40 +31,23 @@ log = logging.getLogger("skills.publish_to_garmin")
 _GENERATED_LOG = PROJECT_ROOT / "data" / "generated_workouts.json"
 
 
-def _already_published_finalsurge(target_date: str) -> bool:
-    """Return True if data/generated_workouts.json already has a running entry for date."""
+def _date_in_generated_log(target_date: str) -> bool:
+    """
+    Return True if data/generated_workouts.json has a running entry for target_date.
+
+    This is the ONLY authoritative dedupe gate.  If this returns True the workout
+    is already on Garmin Connect (published by the auto_workout_generator sacred path)
+    and must not be uploaded again.
+    """
     if not _GENERATED_LOG.exists():
         return False
     try:
         with open(_GENERATED_LOG) as f:
             data = json.load(f)
         return target_date in data.get("running", {})
-    except Exception:
+    except Exception as exc:
+        log.warning("Could not read generated_workouts.json: %s — assuming date not present", exc)
         return False
-
-
-def _already_published_internal(target_date: str, db_path=None) -> bool:
-    """Return True if SQLite already has a garmin_publish_internal event for this date."""
-    try:
-        from memory.db import query_events, DB_PATH as _DEFAULT_DB
-
-        events = query_events(
-            event_type="garmin_publish_internal",
-            db_path=db_path or _DEFAULT_DB,
-            limit=200,
-        )
-        for ev in events:
-            payload = ev.get("payload", {})
-            if isinstance(payload, str):
-                try:
-                    payload = json.loads(payload)
-                except Exception:
-                    pass
-            if payload.get("date") == target_date:
-                return True
-    except Exception:
-        pass
-    return False
 
 
 def publish(
@@ -116,18 +101,27 @@ def publish(
             continue
 
         if dt < today:
+            log.debug("SKIP %s: past date", wo_date)
             skipped.append({"date": wo_date, "reason": "past date"})
             continue
         if dt > cutoff:
+            log.debug("SKIP %s: beyond %d-day window", wo_date, days)
             skipped.append({"date": wo_date, "reason": f"beyond {days}-day window"})
             continue
 
-        # Idempotency checks
-        if _already_published_internal(wo_date, db_path):
-            skipped.append({"date": wo_date, "reason": "already published (internal)"})
-            continue
-        if _already_published_finalsurge(wo_date):
-            skipped.append({"date": wo_date, "reason": "already published by FinalSurge generator"})
+        # Sole authoritative dedupe gate: generated_workouts.json.
+        # SQLite garmin_publish_internal events are audit records only; they do
+        # NOT gate uploads (generated_workouts.json may disagree after re-runs).
+        if _date_in_generated_log(wo_date):
+            log.info(
+                "SKIP %s: date found in generated_workouts.json — "
+                "a Garmin running workout already exists for this date",
+                wo_date,
+            )
+            skipped.append({
+                "date": wo_date,
+                "reason": "date in generated_workouts.json (Garmin workout already exists)",
+            })
             continue
 
         prepared.append(wo)
