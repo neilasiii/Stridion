@@ -48,6 +48,9 @@ data/*.log
 data/ai_validation.log
 *.log
 
+# gitleaks scan reports (may contain redacted metadata, keep local only)
+.gitleaks-*.json
+
 # Generated HTML reports (regenerated on demand)
 data/morning_report_detailed.html
 data/test_morning_report.html
