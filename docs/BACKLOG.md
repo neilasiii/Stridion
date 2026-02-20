@@ -1,6 +1,6 @@
 # Backlog — running-coach refactor
 
-_Last updated: 2026-02-20 (batch run: B11-001, B11-002 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
+_Last updated: 2026-02-20 (batch run: B11-001, B11-002, B11-006 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
 
 ---
 
@@ -43,7 +43,7 @@ If any gate fails, stop and report. Do NOT continue to the implementation.
 | B11-003 | Archive orphaned src/ files | Cleanup | `src/discord_bot_streaming.py`, `src/test_streprogen.py`, `src/coach_service/` (entire dir) | Files moved to `archive/` dir; `pytest tests/` passes; no imports broken | L | S | **TODO** | — | Zero callers for all three; `coach_service/` has zero imports |
 | B11-004 | Delete pre-Memory OS planned workout stack | Cleanup | `src/planned_workout_manager.py`, `src/planned_workout_cli.py`, `src/extract_baseline_plan.py`, `bin/planned_workouts.sh` | Files deleted; `pytest tests/` passes; no callers exist | M | S | **TODO** | B11-003 | Verify `bin/planned_workouts.sh` is the only external caller before deleting |
 | B11-005 | Move root-level test files into tests/ | Cleanup | `test_ai_call.py`, `test_location_fix.py`, `test_location_geocoding.py`, `test_session.py` | Files moved to `tests/`; `pytest tests/` passes; root dir clean | L | S | **TODO** | B11-001 | Root-level test files are not discovered by pytest.ini |
-| B11-006 | Fix smart_sync.sh Termux shebang | Bug fix | `bin/smart_sync.sh` | Line 1 changed to `#!/usr/bin/env bash`; smoke test `bash bin/smart_sync.sh` still works | L | S | **TODO** | — | Harmless for `bash bin/smart_sync.sh` but breaks `./bin/smart_sync.sh` direct execution |
+| B11-006 | Fix smart_sync.sh Termux shebang | Bug fix | `bin/smart_sync.sh` | Line 1 changed to `#!/usr/bin/env bash`; smoke test `bash bin/smart_sync.sh` still works | L | S | **DONE** | — | Fixed 2026-02-20; was `#!/data/data/com.termux/...`; now `#!/usr/bin/env bash`; bash -n syntax OK |
 | B11-007 | Add `--days` and `--check-only` to `coach sync` | Enhancement | `cli/coach.py`, `skills/garmin_sync.py` | `coach sync --days 7` and `coach sync --check-only` work; tests pass | M | M | **TODO** | — | Currently only available by running `src/garmin_sync.py` directly |
 | B11-008 | Move cache-age check from bash into Python | Refactor | `skills/garmin_sync.py`, `bin/smart_sync.sh` | `skills/garmin_sync.run(max_age_minutes=30)` implements age check natively; `smart_sync.sh` kept as thin shim calling `coach sync`; test added | M | M | **TODO** | B11-007 | Eliminates shell fork overhead for cache-hit path; makes skill unit-testable |
 | B11-009 | Cap `memory/retrieval.py` to last-N activities | Performance | `memory/retrieval.py` | Context packet loads only last 14 days of activities (not full cache); test verifies token count drops; brain behavior unchanged | M | M | **TODO** | — | Full health cache loaded on every LLM call; high token cost risk |
@@ -81,3 +81,4 @@ _(moved here after status = DONE)_
 | — | Phase 11 audit docs created | 2026-02-20 | `docs/PHASE_11_AUDIT.md`, `docs/BACKLOG.md`, `docs/BACKLOG_RUNNER_PROMPT.md` |
 | B11-001 | Delete broken security tests | 2026-02-20 | `git rm tests/test_security.py`; 59 tests pass |
 | B11-002 | Delete one-off bin cleanup scripts | 2026-02-20 | Removed 4 untracked bin/ scripts; zero callers; 59 tests pass |
+| B11-006 | Fix smart_sync.sh Termux shebang | 2026-02-20 | Line 1 → `#!/usr/bin/env bash`; `bash -n` syntax OK; 59 tests pass |

@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 #
 # smart_sync.sh - Intelligent Garmin data sync that checks cache age
 #
