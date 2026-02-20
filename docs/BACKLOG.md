@@ -1,6 +1,6 @@
 # Backlog — running-coach refactor
 
-_Last updated: 2026-02-20 (Phase 11 audit). See `docs/PHASE_11_AUDIT.md` for full rationale._
+_Last updated: 2026-02-20 (Phase 11.1 — added B11-017, B11-018). See `docs/PHASE_11_AUDIT.md` for full rationale._
 
 ---
 
@@ -54,6 +54,8 @@ If any gate fails, stop and report. Do NOT continue to the implementation.
 | B11-014 | Update `memory/retrieval.py` to read daily_metrics from SQLite | Migration | `memory/retrieval.py` | Context packet reads recovery metrics from `daily_metrics` table; falls back to JSON cache if table empty; unit test added | H | M | **TODO** | B11-012 | Stage 2 — read from SQLite. Test with empty table (fallback path) and populated table |
 | B11-015 | Archive bin/delete_all_workouts.py with safety gate | Safety | `bin/delete_all_workouts.py` | Script moved to `archive/`; or wrapped with `--confirm` prompt before any Garmin API calls | M | S | **TODO** | — | Currently deletes all Garmin workouts with zero confirmation; catastrophic if run accidentally |
 | B11-016 | Migrate morning_report to `coach morning-report` CLI subcommand | Architecture | `cli/coach.py`, `src/morning_report.py` | `coach morning-report` command works; `src/discord_bot.py` updated to call `coach morning-report` instead of `python3 src/morning_report.py`; tests pass | H | L | **TODO** | — | Aligns morning_report with CLI-first design; eliminates inconsistency where bot calls src/ directly |
+| B11-017 | Audit and document actual heartbeat mechanism | Documentation | `docs/HEARTBEAT.md`, possibly `src/discord_bot.py`, `agent/runner.py`, systemd units | `docs/HEARTBEAT.md` created describing: (1) where sync runs (bot loop vs systemd vs cron), (2) frequency, (3) lock coordination, (4) how to change interval; verified against actual code + systemd state | L | S | **TODO** | — | Clarifies 15-minute expectation vs reality; prevents future confusion about stale cache behavior |
+| B11-018 | Make schedule output mobile-first by default | UX | `cli/coach.py`, `src/discord_bot.py`, possibly schedule formatter | `/coach_schedule` defaults to compact/mobile format; long lines wrapped; no horizontal scrolling needed on mobile; table format still available via `--format table` | L | S | **TODO** | — | Mobile is primary interface; current aligned table format degrades on Discord mobile |
 
 ---
 
