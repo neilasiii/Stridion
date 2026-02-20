@@ -1,6 +1,6 @@
 # Backlog — running-coach refactor
 
-_Last updated: 2026-02-20 (batch run: B11-001–003, B11-005–006, B11-015, B11-017 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
+_Last updated: 2026-02-20 (batch run: B11-001–003, B11-005–006, B11-009, B11-015, B11-017 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
 
 ---
 
@@ -46,7 +46,7 @@ If any gate fails, stop and report. Do NOT continue to the implementation.
 | B11-006 | Fix smart_sync.sh Termux shebang | Bug fix | `bin/smart_sync.sh` | Line 1 changed to `#!/usr/bin/env bash`; smoke test `bash bin/smart_sync.sh` still works | L | S | **DONE** | — | Fixed 2026-02-20; was `#!/data/data/com.termux/...`; now `#!/usr/bin/env bash`; bash -n syntax OK |
 | B11-007 | Add `--days` and `--check-only` to `coach sync` | Enhancement | `cli/coach.py`, `skills/garmin_sync.py` | `coach sync --days 7` and `coach sync --check-only` work; tests pass | M | M | **TODO** | — | Currently only available by running `src/garmin_sync.py` directly |
 | B11-008 | Move cache-age check from bash into Python | Refactor | `skills/garmin_sync.py`, `bin/smart_sync.sh` | `skills/garmin_sync.run(max_age_minutes=30)` implements age check natively; `smart_sync.sh` kept as thin shim calling `coach sync`; test added | M | M | **TODO** | B11-007 | Eliminates shell fork overhead for cache-hit path; makes skill unit-testable |
-| B11-009 | Cap `memory/retrieval.py` to last-N activities | Performance | `memory/retrieval.py` | Context packet loads only last 14 days of activities (not full cache); test verifies token count drops; brain behavior unchanged | M | M | **TODO** | — | Full health cache loaded on every LLM call; high token cost risk |
+| B11-009 | Cap `memory/retrieval.py` to last-N activities | Performance | `memory/retrieval.py` | Context packet loads only last 14 days of activities (not full cache); test verifies token count drops; brain behavior unchanged | M | M | **DONE** | — | Capped in `build_context_packet()` 2026-02-20; `tests/test_retrieval.py` added (4 tests pass); 63 tests pass |
 | B11-010 | Add `daily_metrics` table to SQLite schema | Schema | `memory/db.py` | `daily_metrics` table created via `init_db()`; migration is additive (no existing data dropped); `pytest tests/` passes | M | M | **TODO** | — | Required for Stage 1 of SQLite migration |
 | B11-011 | Add `activities` table to SQLite schema | Schema | `memory/db.py` | `activities` table created via `init_db()`; migration additive; `pytest tests/` passes | M | M | **TODO** | B11-010 | Required for Stage 1 |
 | B11-012 | Wire post-sync SQLite ingest (daily metrics) | Integration | `skills/garmin_sync.py`, `memory/db.py` | After successful sync, `daily_metrics` rows inserted/updated for synced date range; smoke test shows rows present after `coach sync` | M | M | **TODO** | B11-010, B11-008 | Stage 1 write-through; JSON cache still primary read path |
@@ -86,3 +86,4 @@ _(moved here after status = DONE)_
 | B11-015 | Archive delete_all_workouts.py with safety gate | 2026-02-20 | Added `--confirm` required guard; exits safely without it; 59 tests pass |
 | B11-017 | Audit and document heartbeat mechanism | 2026-02-20 | Created `docs/HEARTBEAT.md`; 9 sections; verified against code + service file |
 | B11-006 | Fix smart_sync.sh Termux shebang | 2026-02-20 | Line 1 → `#!/usr/bin/env bash`; `bash -n` syntax OK; 59 tests pass |
+| B11-009 | Cap `memory/retrieval.py` to last-N activities | 2026-02-20 | Activities trimmed to `days_back` in `build_context_packet()`; `tests/test_retrieval.py` (4 tests); 63 tests pass |

@@ -55,8 +55,8 @@ data/ai_validation.log
 data/morning_report_detailed.html
 data/test_morning_report.html
 
-# Test files
-test_*.py
+# Test files (root-level standalone scripts only; tests/ dir is not ignored)
+/test_*.py
 
 # Python
 __pycache__/

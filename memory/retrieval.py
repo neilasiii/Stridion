@@ -446,6 +446,17 @@ def build_context_packet(
     health = _load_health_cache()
     today  = date.today()
 
+    # Cap the activities list to days_back before any rollup.
+    # Avoids iterating full 60-day history when only 14 days are needed.
+    # Other health sections (sleep, HRV, etc.) are already date-filtered
+    # inside _rollup_readiness so they don't need trimming here.
+    if "activities" in health:
+        _act_cutoff = (today - timedelta(days=days_back)).isoformat()
+        health["activities"] = [
+            a for a in health["activities"]
+            if a.get("startTimeLocal", "") >= _act_cutoff
+        ]
+
     # Athlete snapshot (lightweight — just key scalars)
     vo2_raw = health.get("vo2_max")
     vdot_approx = None
