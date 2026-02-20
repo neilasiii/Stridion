@@ -5,10 +5,12 @@ Tables:
   athlete_profile  - key/value athlete context
   events           - immutable event log with idempotency keys
   state            - mutable key/value (last sync, active plan id, etc.)
-  metrics          - daily health metric rollups (one row per day)
+  metrics          - daily health metric rollups (one row per day, legacy)
   plans            - versioned training plans (never overwritten)
   plan_days        - per-day plan prescriptions
   task_runs        - heartbeat / cron task audit log
+  sync_runs        - Garmin sync provenance / freshness log
+  daily_metrics    - structured daily health metrics (typed columns + raw JSON)
 
 All writes are idempotent. Plans are append-only (new plan_id per version).
 """
@@ -117,6 +119,20 @@ CREATE TABLE IF NOT EXISTS sync_runs (
 );
 
 CREATE INDEX IF NOT EXISTS sync_runs_started ON sync_runs(started_at);
+
+CREATE TABLE IF NOT EXISTS daily_metrics (
+    day              DATE PRIMARY KEY,
+    hrv_rmssd        REAL,
+    resting_hr       REAL,
+    sleep_score      REAL,
+    sleep_duration_h REAL,
+    body_battery     REAL,
+    training_readiness REAL,
+    stress_avg       REAL,
+    raw_json         TEXT NOT NULL DEFAULT '{}'
+);
+
+CREATE INDEX IF NOT EXISTS daily_metrics_day ON daily_metrics(day);
 """
 
 
@@ -674,5 +690,70 @@ def get_last_sync_run(
                 "SELECT * FROM sync_runs ORDER BY started_at DESC LIMIT 1"
             ).fetchone()
         return dict(row) if row else None
+    finally:
+        conn.close()
+
+
+# ── Daily Metrics ──────────────────────────────────────────────────────────────
+
+def upsert_daily_metrics(
+    day: date,
+    hrv_rmssd: Optional[float] = None,
+    resting_hr: Optional[float] = None,
+    sleep_score: Optional[float] = None,
+    sleep_duration_h: Optional[float] = None,
+    body_battery: Optional[float] = None,
+    training_readiness: Optional[float] = None,
+    stress_avg: Optional[float] = None,
+    raw: Optional[Dict] = None,
+    db_path: Path = DB_PATH,
+) -> None:
+    """Insert or update a daily_metrics row for a given date."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """INSERT INTO daily_metrics(
+                   day, hrv_rmssd, resting_hr, sleep_score, sleep_duration_h,
+                   body_battery, training_readiness, stress_avg, raw_json
+               ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(day) DO UPDATE SET
+                   hrv_rmssd          = excluded.hrv_rmssd,
+                   resting_hr         = excluded.resting_hr,
+                   sleep_score        = excluded.sleep_score,
+                   sleep_duration_h   = excluded.sleep_duration_h,
+                   body_battery       = excluded.body_battery,
+                   training_readiness = excluded.training_readiness,
+                   stress_avg         = excluded.stress_avg,
+                   raw_json           = excluded.raw_json""",
+            (
+                day.isoformat(),
+                hrv_rmssd,
+                resting_hr,
+                sleep_score,
+                sleep_duration_h,
+                body_battery,
+                training_readiness,
+                stress_avg,
+                json.dumps(raw or {}),
+            ),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_daily_metrics(
+    start: date,
+    end: date,
+    db_path: Path = DB_PATH,
+) -> List[Dict]:
+    """Return daily_metrics rows between start and end (inclusive), ordered by date."""
+    conn = _connect(db_path)
+    try:
+        rows = conn.execute(
+            "SELECT * FROM daily_metrics WHERE day BETWEEN ? AND ? ORDER BY day",
+            (start.isoformat(), end.isoformat()),
+        ).fetchall()
+        return [dict(r) for r in rows]
     finally:
         conn.close()
