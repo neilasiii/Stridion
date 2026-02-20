@@ -1,6 +1,6 @@
 # Backlog — running-coach refactor
 
-_Last updated: 2026-02-20 (batch run: B11-001–003, B11-005, B11-006, B11-015 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
+_Last updated: 2026-02-20 (batch run: B11-001–003, B11-005–006, B11-015, B11-017 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
 
 ---
 
@@ -54,7 +54,7 @@ If any gate fails, stop and report. Do NOT continue to the implementation.
 | B11-014 | Update `memory/retrieval.py` to read daily_metrics from SQLite | Migration | `memory/retrieval.py` | Context packet reads recovery metrics from `daily_metrics` table; falls back to JSON cache if table empty; unit test added | H | M | **TODO** | B11-012 | Stage 2 — read from SQLite. Test with empty table (fallback path) and populated table |
 | B11-015 | Archive bin/delete_all_workouts.py with safety gate | Safety | `bin/delete_all_workouts.py` | Script moved to `archive/`; or wrapped with `--confirm` prompt before any Garmin API calls | M | S | **DONE** | — | Added `--confirm` required flag 2026-02-20; exits safely without it; docstring updated; 59 tests pass |
 | B11-016 | Migrate morning_report to `coach morning-report` CLI subcommand | Architecture | `cli/coach.py`, `src/morning_report.py` | `coach morning-report` command works; `src/discord_bot.py` updated to call `coach morning-report` instead of `python3 src/morning_report.py`; tests pass | H | L | **TODO** | — | Aligns morning_report with CLI-first design; eliminates inconsistency where bot calls src/ directly |
-| B11-017 | Audit and document actual heartbeat mechanism | Documentation | `docs/HEARTBEAT.md`, possibly `src/discord_bot.py`, `agent/runner.py`, systemd units | `docs/HEARTBEAT.md` created describing: (1) where sync runs (bot loop vs systemd vs cron), (2) frequency, (3) lock coordination, (4) how to change interval; verified against actual code + systemd state | L | S | **TODO** | — | Clarifies 15-minute expectation vs reality; prevents future confusion about stale cache behavior |
+| B11-017 | Audit and document actual heartbeat mechanism | Documentation | `docs/HEARTBEAT.md`, possibly `src/discord_bot.py`, `agent/runner.py`, systemd units | `docs/HEARTBEAT.md` created describing: (1) where sync runs (bot loop vs systemd vs cron), (2) frequency, (3) lock coordination, (4) how to change interval; verified against actual code + systemd state | L | S | **DONE** | — | Created `docs/HEARTBEAT.md` 2026-02-20; verified against runner.py, lock.py, service file; 9 sections |
 | B11-018 | Make schedule output mobile-first by default | UX | `cli/coach.py`, `src/discord_bot.py`, possibly schedule formatter | `/coach_schedule` defaults to compact/mobile format; long lines wrapped; no horizontal scrolling needed on mobile; table format still available via `--format table` | L | S | **TODO** | — | Mobile is primary interface; current aligned table format degrades on Discord mobile |
 | B11-019 | Add `sync_runs` table + freshness visibility | Observability / Sync provenance | `memory/db.py`, `skills/garmin_sync.py`, `cli/coach.py`, `src/discord_bot.py` (and tests as needed) | (1) New SQLite table `sync_runs` created by `init_db()` (additive; no existing tables altered/dropped). (2) Every `coach sync` writes a row with: `started_at`, `finished_at`, `status`, `source`, `days_requested`, `days_synced`, `error_summary` (nullable), `run_id`. (3) `coach agent status` displays: last successful sync timestamp, age in minutes, last run status + error summary if failed. (4) Discord `/coach_status` embed includes same freshness fields. (5) Tests added for table creation + at least one "sync run recorded" path (mocking ok). | M | M | **TODO** | — | Unblocks safe JSON→SQLite migration by removing guesswork about staleness/heartbeat. Freshness must be derived from `sync_runs` success timestamps, not file mtime. |
 
@@ -84,4 +84,5 @@ _(moved here after status = DONE)_
 | B11-003 | Archive orphaned src/ files | 2026-02-20 | `git mv` to `archive/src/`; zero callers; 59 tests pass |
 | B11-005 | Move root-level test files into tests/ | 2026-02-20 | Moved 4 files; added `tests/conftest.py` collect_ignore; 59 tests pass |
 | B11-015 | Archive delete_all_workouts.py with safety gate | 2026-02-20 | Added `--confirm` required guard; exits safely without it; 59 tests pass |
+| B11-017 | Audit and document heartbeat mechanism | 2026-02-20 | Created `docs/HEARTBEAT.md`; 9 sections; verified against code + service file |
 | B11-006 | Fix smart_sync.sh Termux shebang | 2026-02-20 | Line 1 → `#!/usr/bin/env bash`; `bash -n` syntax OK; 59 tests pass |
