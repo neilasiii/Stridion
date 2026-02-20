@@ -333,6 +333,166 @@ def _fmt_md(sched: dict) -> str:
     return "\n".join(lines)
 
 
+# ── db sanity ─────────────────────────────────────────────────────────────────
+
+def cmd_db(args) -> int:
+    subcmd = getattr(args, "db_command", None)
+    if subcmd == "sanity":
+        return _db_sanity()
+    print("Unknown db subcommand", file=sys.stderr)
+    return 1
+
+
+def _db_sanity() -> int:
+    import sqlite3
+    from datetime import datetime, timedelta
+    from memory.db import DB_PATH, init_db, get_last_sync_run
+    from memory.retrieval import _rollup_readiness_from_sqlite
+
+    init_db()
+
+    today     = date.today()
+    week_ago  = (today - timedelta(days=7)).isoformat()
+    today_str = today.isoformat()
+
+    conn = sqlite3.connect(str(DB_PATH))
+    conn.row_factory = sqlite3.Row
+    issues = []
+
+    print(f"DB: {DB_PATH}")
+    print()
+
+    # Last successful sync
+    last_ok = get_last_sync_run(status="success")
+    if last_ok:
+        ts_str = last_ok["finished_at"] or last_ok["started_at"]
+        try:
+            ts      = datetime.fromisoformat(ts_str)
+            age_min = int((datetime.utcnow() - ts).total_seconds() / 60)
+            age_str = f"{age_min} min ago"
+            if age_min > 60:
+                issues.append(f"last sync {age_min}min ago (>60min threshold)")
+        except Exception:
+            age_str = ts_str
+        print(f"Sync:  last success {age_str}  (source={last_ok.get('source','?')})")
+    else:
+        print("Sync:  no successful sync recorded")
+        issues.append("no sync recorded")
+
+    print()
+
+    # daily_metrics
+    dm_count  = conn.execute(
+        "SELECT COUNT(*) FROM daily_metrics WHERE day >= ?", (week_ago,)
+    ).fetchone()[0]
+    dm_latest = conn.execute("SELECT MAX(day) FROM daily_metrics").fetchone()[0]
+    has_today = conn.execute(
+        "SELECT 1 FROM daily_metrics WHERE day = ?", (today_str,)
+    ).fetchone()
+    today_flag = "" if has_today else "  ← today missing"
+    print(f"daily_metrics (7d):  {dm_count} rows  latest {dm_latest or 'none'}{today_flag}")
+    if not has_today:
+        issues.append("today missing from daily_metrics")
+
+    # activities
+    act_count  = conn.execute(
+        "SELECT COUNT(*) FROM activities WHERE activity_date >= ?", (week_ago,)
+    ).fetchone()[0]
+    act_latest = conn.execute("SELECT MAX(activity_date) FROM activities").fetchone()[0]
+    print(f"activities (7d):     {act_count} rows  latest {act_latest or 'none'}")
+
+    print()
+    conn.close()
+
+    # Retrieval source
+    rt = _rollup_readiness_from_sqlite(7, DB_PATH)
+    if rt is not None:
+        print("Retrieval: source=sqlite")
+    else:
+        print("Retrieval: source=json_fallback")
+        issues.append("retrieval falling back to JSON")
+
+    print()
+
+    if issues:
+        print(f"Status: DEGRADED ({'; '.join(issues)})")
+        return 1
+    print("Status: HEALTHY")
+    return 0
+
+
+# ── parity ────────────────────────────────────────────────────────────────────
+
+def cmd_parity(args) -> int:
+    day_str = args.day
+    try:
+        target = date.fromisoformat(day_str)
+    except ValueError:
+        print(f"Error: invalid date {day_str!r} (expected YYYY-MM-DD)", file=sys.stderr)
+        return 1
+
+    from memory.db import DB_PATH, init_db, get_daily_metrics
+    from memory.retrieval import HEALTH_CACHE
+
+    init_db()
+
+    # SQLite row for that day
+    rows = get_daily_metrics(target, target)
+    sq   = rows[0] if rows else None
+
+    # JSON cache
+    json_cache   = None
+    json_missing = False
+    try:
+        with HEALTH_CACHE.open(encoding="utf-8") as f:
+            json_cache = json.load(f)
+    except FileNotFoundError:
+        print("JSON cache: file not found")
+        json_missing = True
+    except Exception as exc:
+        print(f"JSON cache: unreadable ({exc})")
+        json_missing = True
+
+    def _find(lst, date_key, day):
+        return next((r for r in lst if str(r.get(date_key, ""))[:10] == day), None)
+
+    if json_cache:
+        tr_e  = _find(json_cache.get("training_readiness", []), "date", day_str)
+        bb_e  = _find(json_cache.get("body_battery",        []), "date", day_str)
+        hrv_e = _find(json_cache.get("hrv_readings",        []), "date", day_str)
+        j_tr  = tr_e["score"]          if tr_e  else None
+        j_bb  = bb_e["latest_level"]   if bb_e  else None
+        j_hrv = hrv_e["last_night_avg"] if hrv_e else None
+    else:
+        j_tr = j_bb = j_hrv = None
+
+    s_tr  = sq["training_readiness"] if sq else None
+    s_bb  = sq["body_battery"]       if sq else None
+    s_hrv = sq["hrv_rmssd"]          if sq else None
+
+    metrics = [
+        ("training_readiness", s_tr,  j_tr),
+        ("body_battery_max",   s_bb,  j_bb),
+        ("hrv",                s_hrv, j_hrv),
+    ]
+
+    mismatch = False
+    for name, s_val, j_val in metrics:
+        if s_val is not None and j_val is not None:
+            if abs(float(s_val) - float(j_val)) > 0.5:
+                mark    = "✗"
+                mismatch = True
+            else:
+                mark = "✓"
+        else:
+            mark = "✓"  # one or both sides absent — informational, not an error
+        s_str = str(int(round(s_val))) if s_val is not None else "None"
+        j_str = str(int(round(j_val))) if j_val is not None else "None"
+        print(f"{name:<22} sqlite={s_str:<6} json={j_str:<6} {mark}")
+
+    return 2 if mismatch else 0
+
+
 # ── morning-report ────────────────────────────────────────────────────────────
 
 def cmd_morning_report(args) -> int:
@@ -586,6 +746,20 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Output format (default: mobile = Discord-friendly day cards; table = desktop-aligned)",
     )
     p_sched.set_defaults(func=cmd_schedule)
+
+    # db
+    p_db = sub.add_parser("db", help="SQLite pipeline diagnostics")
+    db_sub = p_db.add_subparsers(dest="db_command", required=True)
+    db_sub.add_parser("sanity", help="Check SQLite ingest + retrieval health")
+    p_db.set_defaults(func=cmd_db)
+
+    # parity
+    p_parity = sub.add_parser("parity", help="Compare SQLite vs JSON cache for a day")
+    p_parity.add_argument(
+        "--day", required=True, metavar="YYYY-MM-DD",
+        help="Date to compare (e.g. 2026-02-20)",
+    )
+    p_parity.set_defaults(func=cmd_parity)
 
     # morning-report
     p_mr = sub.add_parser("morning-report", help="Generate AI morning training report")

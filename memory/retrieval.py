@@ -25,10 +25,13 @@ Size caps (characters):
 
 import hashlib
 import json
+import logging
 import re
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+log = logging.getLogger(__name__)
 
 
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -122,10 +125,12 @@ def _rollup_readiness_from_sqlite(days_back: int, db_path) -> Optional[Dict]:
 
     try:
         rows = get_daily_metrics(start, today, db_path=db_path)
-    except Exception:
+    except Exception as exc:
+        log.warning("readiness source=json_fallback reason=sqlite_error(%s)", type(exc).__name__)
         return None
 
     if not rows:
+        log.warning("readiness source=json_fallback reason=sqlite_empty")
         return None
 
     hrv_vals  = [r["hrv_rmssd"]          for r in rows if r.get("hrv_rmssd")          is not None]
@@ -137,6 +142,10 @@ def _rollup_readiness_from_sqlite(days_back: int, db_path) -> Optional[Dict]:
 
     # Most-recent row = "today" snapshot (rows ordered ASC by day)
     latest = rows[-1]
+    log.info(
+        "readiness source=sqlite days_back=%d latest_date=%s",
+        days_back, latest.get("day", "?"),
+    )
 
     return {
         "period_days": days_back,
