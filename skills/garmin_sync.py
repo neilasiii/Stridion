@@ -15,22 +15,39 @@ PROJECT_ROOT = Path(__file__).parent.parent
 log = logging.getLogger("skills.garmin_sync")
 
 
-def run(force: bool = False, source: str = "agent") -> dict:
+def run(
+    force: bool = False,
+    source: str = "agent",
+    days: int = None,
+    check_only: bool = False,
+) -> dict:
     """
     Run Garmin sync and record a sync event in SQLite.
 
     Args:
-        force:  Pass --force to smart_sync.sh (skips cache-age check).
-        source: Who triggered this sync ('agent', 'cli', 'discord', etc.).
+        force:      Pass --force to smart_sync.sh (skips cache-age check).
+        source:     Who triggered this sync ('agent', 'cli', 'discord', etc.).
+        days:       Number of days to sync. If set, calls sync_garmin_data.sh
+                    directly to pass the --days flag through.
+        check_only: Preview what would be synced without writing. If set,
+                    calls sync_garmin_data.sh directly with --check-only.
 
     Returns:
         dict with keys: success, returncode, stdout, stderr, event_id, summary
     """
-    # Invoke with bash explicitly — smart_sync.sh has a Termux shebang
-    # that doesn't resolve on standard Linux. bash reads it fine regardless.
-    cmd = ["bash", str(PROJECT_ROOT / "bin" / "smart_sync.sh")]
-    if force:
-        cmd.append("--force")
+    if days is not None or check_only:
+        # --days / --check-only require sync_garmin_data.sh (smart_sync.sh
+        # doesn't propagate these flags).
+        cmd = ["bash", str(PROJECT_ROOT / "bin" / "sync_garmin_data.sh")]
+        if days is not None:
+            cmd += ["--days", str(days)]
+        if check_only:
+            cmd.append("--check-only")
+    else:
+        # Default path: smart_sync.sh handles cache-age check.
+        cmd = ["bash", str(PROJECT_ROOT / "bin" / "smart_sync.sh")]
+        if force:
+            cmd.append("--force")
 
     from memory.db import (
         init_db, insert_event, log_task_start, log_task_finish,

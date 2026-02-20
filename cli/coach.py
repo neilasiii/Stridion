@@ -35,7 +35,12 @@ logging.basicConfig(
 def cmd_sync(args) -> int:
     from skills.garmin_sync import run
 
-    result = run(force=getattr(args, "force", False), source="cli")
+    result = run(
+        force=getattr(args, "force", False),
+        source="cli",
+        days=getattr(args, "days", None),
+        check_only=getattr(args, "check_only", False),
+    )
     if result["success"]:
         print(f"✓ Garmin sync complete (event_id={result['event_id'][:8]})")
         if result["summary"]:
@@ -511,7 +516,8 @@ def _memory_search(query: str) -> int:
 
 # ── CLI wiring ────────────────────────────────────────────────────────────────
 
-def main() -> int:
+def _build_parser() -> argparse.ArgumentParser:
+    """Build and return the top-level argument parser (extracted for testability)."""
     parser = argparse.ArgumentParser(
         prog="coach",
         description="Running coach CLI — Brain + Body system",
@@ -521,6 +527,8 @@ def main() -> int:
     # sync
     p_sync = sub.add_parser("sync", help="Sync Garmin health data")
     p_sync.add_argument("--force", action="store_true", help="Skip cache-age check")
+    p_sync.add_argument("--days", type=int, metavar="N", help="Number of days to sync (default: 30)")
+    p_sync.add_argument("--check-only", action="store_true", help="Preview what would be synced without updating cache")
     p_sync.set_defaults(func=cmd_sync)
 
     # plan
@@ -575,7 +583,11 @@ def main() -> int:
     agent_sub.add_parser("run-once", help="Run one heartbeat cycle")
     p_agent.set_defaults(func=cmd_agent)
 
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> int:
+    args = _build_parser().parse_args()
     rc = args.func(args)
     return rc if rc is not None else 0
 
