@@ -35,7 +35,7 @@ logging.basicConfig(
 def cmd_sync(args) -> int:
     from skills.garmin_sync import run
 
-    result = run(force=getattr(args, "force", False))
+    result = run(force=getattr(args, "force", False), source="cli")
     if result["success"]:
         print(f"✓ Garmin sync complete (event_id={result['event_id'][:8]})")
         if result["summary"]:
@@ -352,7 +352,8 @@ def cmd_agent(args) -> int:
 
 def _agent_status() -> int:
     import sqlite3
-    from memory.db import DB_PATH, init_db
+    from datetime import datetime, timezone
+    from memory.db import DB_PATH, init_db, get_last_sync_run
     from agent.lock import get_lock_state
 
     init_db()
@@ -365,6 +366,28 @@ def _agent_status() -> int:
         print(f"Lock:  EXPIRED (was held by {lock['owner']} until {lock['expires_at']})")
     else:
         print(f"Lock:  HELD by {lock['owner']}  expires {lock['expires_at']}")
+
+    print()
+
+    # Sync freshness
+    last_ok  = get_last_sync_run(status="success")
+    last_run = get_last_sync_run()
+    if last_ok:
+        ts_str = last_ok["finished_at"] or last_ok["started_at"]
+        try:
+            ts = datetime.fromisoformat(ts_str)
+            age_min = int((datetime.utcnow() - ts).total_seconds() / 60)
+            age_str = f"{age_min} min ago"
+        except Exception:
+            age_str = ts_str or "unknown"
+        src = last_ok.get("source", "?")
+        print(f"Sync:  last success {age_str}  (source={src})")
+    else:
+        print("Sync:  no successful sync recorded yet")
+
+    if last_run and last_run.get("status") not in ("success", "running"):
+        err = last_run.get("error_summary") or ""
+        print(f"Sync:  last run status={last_run['status']}  {err[:80]}")
 
     print()
 

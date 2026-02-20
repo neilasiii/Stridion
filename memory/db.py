@@ -104,6 +104,19 @@ CREATE TABLE IF NOT EXISTS task_runs (
 );
 
 CREATE INDEX IF NOT EXISTS task_runs_task ON task_runs(task, started_at);
+
+CREATE TABLE IF NOT EXISTS sync_runs (
+    run_id         TEXT PRIMARY KEY,
+    started_at     DATETIME NOT NULL DEFAULT (datetime('now')),
+    finished_at    DATETIME,
+    status         TEXT NOT NULL DEFAULT 'running',
+    source         TEXT NOT NULL DEFAULT 'agent',
+    days_requested INTEGER,
+    days_synced    INTEGER,
+    error_summary  TEXT
+);
+
+CREATE INDEX IF NOT EXISTS sync_runs_started ON sync_runs(started_at);
 """
 
 
@@ -592,6 +605,74 @@ def get_last_task_run(task: str, db_path: Path = DB_PATH) -> Optional[Dict]:
             "SELECT * FROM task_runs WHERE task = ? ORDER BY started_at DESC LIMIT 1",
             (task,),
         ).fetchone()
+        return dict(row) if row else None
+    finally:
+        conn.close()
+
+
+# ── Sync Runs ─────────────────────────────────────────────────────────────────
+
+def record_sync_start(
+    source: str = "agent",
+    days_requested: Optional[int] = None,
+    run_id: Optional[str] = None,
+    db_path: Path = DB_PATH,
+) -> str:
+    """Insert a sync_runs row with status='running'. Returns run_id."""
+    rid = run_id or uuid.uuid4().hex
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """INSERT INTO sync_runs(run_id, started_at, status, source, days_requested)
+               VALUES (?, datetime('now'), 'running', ?, ?)""",
+            (rid, source, days_requested),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+    return rid
+
+
+def record_sync_finish(
+    run_id: str,
+    status: str,
+    days_synced: Optional[int] = None,
+    error_summary: Optional[str] = None,
+    db_path: Path = DB_PATH,
+) -> None:
+    """Update a sync_run row with completion info."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """UPDATE sync_runs
+               SET finished_at = datetime('now'),
+                   status = ?,
+                   days_synced = ?,
+                   error_summary = ?
+               WHERE run_id = ?""",
+            (status, days_synced, error_summary, run_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_last_sync_run(
+    status: Optional[str] = None,
+    db_path: Path = DB_PATH,
+) -> Optional[Dict]:
+    """Return the most recent sync_run row, optionally filtered by status."""
+    conn = _connect(db_path)
+    try:
+        if status:
+            row = conn.execute(
+                "SELECT * FROM sync_runs WHERE status = ? ORDER BY started_at DESC LIMIT 1",
+                (status,),
+            ).fetchone()
+        else:
+            row = conn.execute(
+                "SELECT * FROM sync_runs ORDER BY started_at DESC LIMIT 1"
+            ).fetchone()
         return dict(row) if row else None
     finally:
         conn.close()

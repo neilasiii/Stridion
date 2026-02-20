@@ -15,12 +15,13 @@ PROJECT_ROOT = Path(__file__).parent.parent
 log = logging.getLogger("skills.garmin_sync")
 
 
-def run(force: bool = False) -> dict:
+def run(force: bool = False, source: str = "agent") -> dict:
     """
     Run Garmin sync and record a sync event in SQLite.
 
     Args:
-        force: Pass --force to smart_sync.sh (skips cache-age check).
+        force:  Pass --force to smart_sync.sh (skips cache-age check).
+        source: Who triggered this sync ('agent', 'cli', 'discord', etc.).
 
     Returns:
         dict with keys: success, returncode, stdout, stderr, event_id, summary
@@ -31,10 +32,14 @@ def run(force: bool = False) -> dict:
     if force:
         cmd.append("--force")
 
-    from memory.db import init_db, insert_event, log_task_start, log_task_finish
+    from memory.db import (
+        init_db, insert_event, log_task_start, log_task_finish,
+        record_sync_start, record_sync_finish,
+    )
 
     init_db()
     run_id = log_task_start("garmin_sync")
+    sync_run_id = record_sync_start(source=source)
 
     log.info("Running Garmin sync: %s", " ".join(cmd))
     try:
@@ -50,6 +55,7 @@ def run(force: bool = False) -> dict:
             run_id, "failed",
             details={"error": "timeout", "timeout_sec": 180},
         )
+        record_sync_finish(sync_run_id, "failed", error_summary="timeout after 180s")
         raise RuntimeError("garmin_sync timed out after 180s") from exc
 
     success = result.returncode == 0
@@ -57,11 +63,16 @@ def run(force: bool = False) -> dict:
 
     if success:
         log_task_finish(run_id, "success", details={"summary": summary[:200]})
+        record_sync_finish(sync_run_id, "success")
     else:
         log.warning("Garmin sync failed rc=%d stderr: %s", result.returncode, result.stderr[:300])
         log_task_finish(
             run_id, "failed",
             details={"returncode": result.returncode, "stderr": result.stderr[:500]},
+        )
+        record_sync_finish(
+            sync_run_id, "failed",
+            error_summary=result.stderr[:200] if result.stderr else f"rc={result.returncode}",
         )
 
     # Append-only event log (each run unique via ts-derived id)
