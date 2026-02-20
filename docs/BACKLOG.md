@@ -1,6 +1,6 @@
 # Backlog — running-coach refactor
 
-_Last updated: 2026-02-20 (batch run: B11-001–003, B11-005–006, B11-009, B11-015, B11-017, B11-019 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
+_Last updated: 2026-02-20 (batch run: B11-001–003, B11-005–006, B11-009, B11-015, B11-017, B11-019 DONE; second batch B11-018, B11-004, B11-007, B11-010, B11-011, B11-008 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
 
 ---
 
