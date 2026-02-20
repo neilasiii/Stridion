@@ -932,26 +932,26 @@ def calculate_pace_adjustment(weather_summary, pace_seconds_per_mile):
     return None
 
 
-def main():
-    """Generate morning report."""
-    import argparse
+def run(
+    check_sleep: bool = False,
+    as_json: bool = False,
+    notification_only: bool = False,
+    full_only: bool = False,
+    no_weather: bool = False,
+) -> int:
+    """
+    Run the morning report generator.
 
-    parser = argparse.ArgumentParser(description='Generate AI morning report')
-    parser.add_argument('--json', action='store_true', help='Output as JSON')
-    parser.add_argument('--notification-only', action='store_true', help='Only output notification')
-    parser.add_argument('--full-only', action='store_true', help='Only output full report')
-    parser.add_argument('--no-weather', action='store_true', help='Skip weather fetch')
-    parser.add_argument('--check-sleep', action='store_true', help='Check if sleep data exists for today (exit 0=yes, 1=no)')
-    args = parser.parse_args()
-
-    # Handle sleep check mode
-    if args.check_sleep:
+    Returns exit code: 0 = success, 1 = no sleep data (--check-sleep) or error.
+    Callable directly from cli/coach.py without spawning a subprocess.
+    """
+    if check_sleep:
         if has_todays_sleep():
             print("Sleep data found for today")
-            sys.exit(0)
+            return 0
         else:
             print("No sleep data for today")
-            sys.exit(1)
+            return 1
 
     # Load data
     cache = load_health_data()
@@ -963,7 +963,7 @@ def main():
     historical_context = get_historical_context(cache, lookback_days=30)
 
     # Get weather unless disabled
-    weather = None if args.no_weather else get_weather()
+    weather = None if no_weather else get_weather()
 
     # Build prompt
     prompt = build_ai_prompt(workout, recovery, activities, athlete_context, weather, upcoming_workouts, historical_context)
@@ -978,7 +978,7 @@ def main():
         notification, full_report = parse_ai_response(response)
 
     # Output
-    if args.json:
+    if as_json:
         output = {
             'notification': notification,
             'full_report': full_report,
@@ -988,9 +988,9 @@ def main():
             'ai_used': error is None
         }
         print(json.dumps(output, indent=2))
-    elif args.notification_only:
+    elif notification_only:
         print(notification)
-    elif args.full_only:
+    elif full_only:
         print(full_report)
     else:
         # Default: print both separated by marker
@@ -1006,6 +1006,28 @@ def main():
     with open(report_file, 'w') as f:
         f.write(f"# Morning Report - {datetime.now().strftime('%A, %B %d, %Y')}\n\n")
         f.write(full_report)
+
+    return 0
+
+
+def main():
+    """Generate morning report (CLI entry point)."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Generate AI morning report')
+    parser.add_argument('--json', action='store_true', help='Output as JSON')
+    parser.add_argument('--notification-only', action='store_true', help='Only output notification')
+    parser.add_argument('--full-only', action='store_true', help='Only output full report')
+    parser.add_argument('--no-weather', action='store_true', help='Skip weather fetch')
+    parser.add_argument('--check-sleep', action='store_true', help='Check if sleep data exists for today (exit 0=yes, 1=no)')
+    args = parser.parse_args()
+    sys.exit(run(
+        check_sleep=args.check_sleep,
+        as_json=args.json,
+        notification_only=args.notification_only,
+        full_only=args.full_only,
+        no_weather=args.no_weather,
+    ))
 
 
 if __name__ == '__main__':

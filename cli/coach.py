@@ -333,6 +333,24 @@ def _fmt_md(sched: dict) -> str:
     return "\n".join(lines)
 
 
+# ── morning-report ────────────────────────────────────────────────────────────
+
+def cmd_morning_report(args) -> int:
+    # Add src/ to sys.path so morning_report can import environmental_adjustments
+    src_dir = str(PROJECT_ROOT / "src")
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
+
+    from morning_report import run as _mr_run
+    return _mr_run(
+        check_sleep=getattr(args, "check_sleep", False),
+        as_json=getattr(args, "json", False),
+        notification_only=getattr(args, "notification_only", False),
+        full_only=getattr(args, "full_only", False),
+        no_weather=getattr(args, "no_weather", False),
+    )
+
+
 # ── memory search ─────────────────────────────────────────────────────────────
 
 def cmd_memory(args) -> int:
@@ -568,6 +586,15 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Output format (default: mobile = Discord-friendly day cards; table = desktop-aligned)",
     )
     p_sched.set_defaults(func=cmd_schedule)
+
+    # morning-report
+    p_mr = sub.add_parser("morning-report", help="Generate AI morning training report")
+    p_mr.add_argument("--json", action="store_true", help="Output as JSON")
+    p_mr.add_argument("--notification-only", action="store_true", help="Only output notification text")
+    p_mr.add_argument("--full-only", action="store_true", help="Only output full report")
+    p_mr.add_argument("--no-weather", action="store_true", help="Skip weather fetch")
+    p_mr.add_argument("--check-sleep", action="store_true", help="Exit 0 if today's sleep data exists, 1 otherwise")
+    p_mr.set_defaults(func=cmd_morning_report)
 
     # memory
     p_mem = sub.add_parser("memory", help="Query the Memory OS")

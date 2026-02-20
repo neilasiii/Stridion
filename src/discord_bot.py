@@ -439,7 +439,7 @@ async def report_command(interaction: discord.Interaction):
 
     try:
         result = subprocess.run(
-            ["python3", "src/morning_report.py", "--full-only"],
+            [sys.executable, str(PROJECT_ROOT / "cli" / "coach.py"), "morning-report", "--full-only"],
             cwd=PROJECT_ROOT,
             capture_output=True,
             text=True,
@@ -544,7 +544,7 @@ async def status_command(interaction: discord.Interaction):
 
     try:
         result = subprocess.run(
-            ["python3", "src/morning_report.py", "--json"],
+            [sys.executable, str(PROJECT_ROOT / "cli" / "coach.py"), "morning-report", "--json"],
             cwd=PROJECT_ROOT,
             capture_output=True,
             text=True,
@@ -1160,15 +1160,9 @@ async def check_sleep_and_sync(retry_intervals=None):
         retry_intervals = [15, 30, 60]  # Default: retry at 15min, 30min, 60min
 
     # Check if sleep data exists
-    proc = await asyncio.create_subprocess_exec(
-        "python3", "src/morning_report.py", "--check-sleep",
-        cwd=PROJECT_ROOT,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
-    await proc.wait()
+    rc, _, _ = await run_coach_cli(["morning-report", "--check-sleep"])
 
-    if proc.returncode == 0:
+    if rc == 0:
         # Sleep data exists!
         logger.info("[Morning Report] Sleep data found for today")
         return True
@@ -1189,15 +1183,9 @@ async def check_sleep_and_sync(retry_intervals=None):
         logger.warning(f"[Morning Report] Sync failed: {e}")
 
     # Check again after sync
-    proc = await asyncio.create_subprocess_exec(
-        "python3", "src/morning_report.py", "--check-sleep",
-        cwd=PROJECT_ROOT,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
-    await proc.wait()
+    rc, _, _ = await run_coach_cli(["morning-report", "--check-sleep"])
 
-    if proc.returncode == 0:
+    if rc == 0:
         logger.info("[Morning Report] Sleep data found after sync")
         return True
 
@@ -1210,15 +1198,9 @@ async def check_sleep_and_sync(retry_intervals=None):
         await asyncio.sleep(wait_minutes * 60)
 
         # Check sleep again
-        proc = await asyncio.create_subprocess_exec(
-            "python3", "src/morning_report.py", "--check-sleep",
-            cwd=PROJECT_ROOT,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        await proc.wait()
+        rc, _, _ = await run_coach_cli(["morning-report", "--check-sleep"])
 
-        if proc.returncode == 0:
+        if rc == 0:
             logger.info(f"[Morning Report] Sleep data found on retry {i}")
             return True
 
@@ -1243,7 +1225,6 @@ async def check_sleep_and_sync(retry_intervals=None):
 
 @tasks.loop(time=time(hour=5, minute=30, tzinfo=EST))  # 5:30 AM EST
 async def morning_report_task():
-    # TODO: migrate to run_coach_cli once morning_report is exposed via cli/coach.py
     """Send daily morning report (waits for sleep data with retries from 5:30 AM to ~10:00 AM)."""
     channel = bot.get_channel(CHANNELS["morning_report"])
     if not channel:
@@ -1278,26 +1259,17 @@ async def morning_report_task():
             return
 
         # Sleep data exists - generate report
-        proc = await asyncio.create_subprocess_exec(
-            "python3", "src/morning_report.py", "--full-only",
-            cwd=PROJECT_ROOT,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=120)
+        rc, stdout, stderr = await run_coach_cli(["morning-report", "--full-only"], timeout=120)
 
-        if proc.returncode == 0 and stdout:
+        if rc == 0 and stdout:
             # Filter out MOTD banner (Debian LXC Container message)
-            report_raw = stdout.decode()
-            # Remove ANSI color codes
             import re
             ansi_escape = re.compile(r'\x1b\[[0-9;]*[mGKHF]')
-            report_clean = ansi_escape.sub('', report_raw)
+            report_clean = ansi_escape.sub('', stdout)
 
             # Remove MOTD lines
             lines = report_clean.split('\n')
             filtered_lines = []
-            skip_motd = False
             for line in lines:
                 # Skip MOTD banner lines
                 if 'Debian LXC Container' in line or 'Provided by:' in line or \
@@ -1315,8 +1287,7 @@ async def morning_report_task():
             )
             await channel.send(embed=embed)
         else:
-            error_msg = stderr.decode() if stderr else "Unknown error"
-            await channel.send(f"❌ Report generation failed: {error_msg[:500]}")
+            await channel.send(f"❌ Report generation failed: {(stderr or 'Unknown error')[:500]}")
 
     except Exception as e:
         logger.error(f"Morning report task error: {e}", exc_info=True)
