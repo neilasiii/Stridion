@@ -178,7 +178,7 @@ def cmd_schedule(args) -> int:
         return 1
 
     days = getattr(args, "days", 7)
-    fmt  = getattr(args, "format", "table")
+    fmt  = getattr(args, "format", "mobile")
 
     from skills.plans import get_schedule
 
@@ -556,8 +556,8 @@ def main() -> int:
     p_sched.add_argument("--week", action="store_true", required=True, help="Export next N days")
     p_sched.add_argument("--days", type=int, default=7, metavar="N", help="Number of days (default 7)")
     p_sched.add_argument(
-        "--format", choices=["table", "text", "md", "mobile"], default="table",
-        help="Output format (default: table; mobile = Discord-friendly day cards)",
+        "--format", choices=["table", "text", "md", "mobile"], default="mobile",
+        help="Output format (default: mobile = Discord-friendly day cards; table = desktop-aligned)",
     )
     p_sched.set_defaults(func=cmd_schedule)
 
