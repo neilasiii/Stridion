@@ -1,6 +1,6 @@
 # Backlog — running-coach refactor
 
-_Last updated: 2026-02-20 (Phase 11.1 — added B11-017, B11-018, B11-019). See `docs/PHASE_11_AUDIT.md` for full rationale._
+_Last updated: 2026-02-20 (batch run: B11-001 DONE). See `docs/PHASE_11_AUDIT.md` for full rationale._
 
 ---
 
@@ -38,7 +38,7 @@ If any gate fails, stop and report. Do NOT continue to the implementation.
 
 | ID | Title | Scope | Files Touched | Acceptance Criteria | Risk | Est. Tokens | Status | Dependencies | Notes |
 |---|---|---|---|---|---|---|---|---|---|
-| B11-001 | Delete broken security tests | Cleanup | `tests/test_security.py` | File deleted; `pytest tests/` still passes | L | S | **TODO** | — | `src/web/app` doesn't exist; test will ImportError on every run |
+| B11-001 | Delete broken security tests | Cleanup | `tests/test_security.py` | File deleted; `pytest tests/` still passes | L | S | **DONE** | — | Deleted 2026-02-20; `src/web.app` never existed; 59 tests pass |
 | B11-002 | Delete one-off bin cleanup scripts | Cleanup | `bin/delete_strength_mobility_next_week.py`, `bin/delete_strength_mobility_workouts.py`, `bin/fix_strength_rotation.py`, `bin/remove_finalsurge_strength.py` | Files deleted; `pytest tests/` passes; no other file imports them | L | S | **TODO** | — | Confirmed zero callers via rg |
 | B11-003 | Archive orphaned src/ files | Cleanup | `src/discord_bot_streaming.py`, `src/test_streprogen.py`, `src/coach_service/` (entire dir) | Files moved to `archive/` dir; `pytest tests/` passes; no imports broken | L | S | **TODO** | — | Zero callers for all three; `coach_service/` has zero imports |
 | B11-004 | Delete pre-Memory OS planned workout stack | Cleanup | `src/planned_workout_manager.py`, `src/planned_workout_cli.py`, `src/extract_baseline_plan.py`, `bin/planned_workouts.sh` | Files deleted; `pytest tests/` passes; no callers exist | M | S | **TODO** | B11-003 | Verify `bin/planned_workouts.sh` is the only external caller before deleting |
@@ -79,3 +79,4 @@ _(moved here after status = DONE)_
 | ID | Title | Completed | Notes |
 |---|---|---|---|
 | — | Phase 11 audit docs created | 2026-02-20 | `docs/PHASE_11_AUDIT.md`, `docs/BACKLOG.md`, `docs/BACKLOG_RUNNER_PROMPT.md` |
+| B11-001 | Delete broken security tests | 2026-02-20 | `git rm tests/test_security.py`; 59 tests pass |
