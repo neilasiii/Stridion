@@ -181,6 +181,122 @@ def _ingest_activities(health: dict, days: int, db_path) -> int:
     return count
 
 
+CONSTRAINT_LOOKAHEAD_DAYS = 60
+
+
+def _ingest_constraint_calendars(days_forward: int = CONSTRAINT_LOOKAHEAD_DAYS, db_path=None) -> int:
+    """
+    Fetch constraint-type ICS calendars from config/calendar_sources.json
+    and replace future constraint events in SQLite.
+
+    Strategy per source:
+      1. Fetch the ICS feed. If fetch fails, preserve existing SQLite data unchanged.
+      2. Filter events to the [today, today + days_forward] window.
+      3. Delete all future ICS-sourced constraint events for this source.
+      4. Insert fresh events from the feed.
+
+    This ensures cancelled or moved shifts are reflected immediately — stale rows
+    cannot accumulate because the future window is always replaced on success.
+
+    Returns total number of constraint events written across all sources.
+    """
+    import hashlib
+    import json as _json
+    import sys
+    from datetime import timedelta
+
+    config_path = PROJECT_ROOT / "config" / "calendar_sources.json"
+    if not config_path.exists():
+        log.debug("No calendar_sources.json — skipping constraint calendar ingest")
+        return 0
+
+    try:
+        with open(config_path) as f:
+            cfg = _json.load(f)
+    except Exception as exc:
+        log.warning("calendar_sources.json unreadable: %s", exc)
+        return 0
+
+    sources = [
+        s for s in cfg.get("calendar_urls", [])
+        if s.get("type") == "constraint" and s.get("enabled", True) and s.get("url")
+    ]
+    if not sources:
+        log.debug("No enabled constraint calendars configured")
+        return 0
+
+    sys.path.insert(0, str(PROJECT_ROOT / "src"))
+    try:
+        from ics_parser import parse_ics_url
+    except ImportError as exc:
+        log.warning("ics_parser unavailable — skipping constraint ingest: %s", exc)
+        return 0
+
+    from memory.db import insert_event, delete_events_by_source, DB_PATH as _DEFAULT_DB
+    db = db_path or _DEFAULT_DB
+
+    today = date.today()
+    cutoff = today + timedelta(days=days_forward)
+    total = 0
+
+    for src in sources:
+        url = src["url"].replace("webcal://", "https://")
+        name = src.get("name", "constraint_calendar")
+        source_tag = f"ics_calendar:{name.lower().replace(' ', '_')}"
+
+        # Step 1: fetch — bail without touching SQLite on failure
+        try:
+            raw_events = parse_ics_url(url)
+        except Exception as exc:
+            log.warning("ICS fetch failed for %r — preserving existing SQLite data: %s", name, exc)
+            continue
+
+        # Step 2: filter to future window
+        to_insert = []
+        for ev in raw_events:
+            date_str = ev.get("scheduled_date", "")
+            if not date_str:
+                continue
+            try:
+                ev_date = date.fromisoformat(date_str)
+            except ValueError:
+                continue
+            if ev_date < today or ev_date > cutoff:
+                continue
+            raw_text = (ev.get("name") or "Work shift").strip()
+            to_insert.append((date_str, raw_text))
+
+        # Step 3: delete stale future events for this source
+        deleted = delete_events_by_source(
+            source=source_tag,
+            since_date=today,
+            event_type="constraint",
+            db_path=db,
+        )
+        log.debug("Constraint calendar %r: cleared %d stale future events", name, deleted)
+
+        # Step 4: insert fresh events
+        for date_str, raw_text in to_insert:
+            stable_id = hashlib.sha256(
+                f"constraint:{date_str}:{raw_text}".encode()
+            ).hexdigest()[:32]
+            insert_event(
+                event_type="constraint",
+                payload={"date": date_str, "raw_text": raw_text, "source": source_tag},
+                source=source_tag,
+                stable_id=stable_id,
+                db_path=db,
+            )
+
+        log.info(
+            "Constraint calendar %r: %d events written for next %d days",
+            name, len(to_insert), days_forward,
+        )
+        total += len(to_insert)
+
+    return total
+
+
 # ── Main sync entry point ──────────────────────────────────────────────────────
 
 def run(
@@ -312,6 +428,7 @@ def run(
     ingest_days = days if days is not None else DEFAULT_INGEST_DAYS
     metrics_rows = 0
     activities_rows = 0
+    constraint_events = 0
 
     if success and not check_only:
         health = _load_cache()
@@ -323,6 +440,10 @@ def run(
             activities_rows = _ingest_activities(health, ingest_days, db_path)
         except Exception as exc:
             log.warning("activities ingest failed: %s", exc)
+        try:
+            constraint_events = _ingest_constraint_calendars(db_path=db_path)
+        except Exception as exc:
+            log.warning("constraint calendar ingest failed: %s", exc)
 
     return {
         "success": success,
@@ -334,4 +455,5 @@ def run(
         "skipped": False,
         "ingest_metrics_rows": metrics_rows,
         "ingest_activities_rows": activities_rows,
+        "ingest_constraint_events": constraint_events,
     }
