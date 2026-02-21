@@ -1563,10 +1563,44 @@ async def obs_test_task():
     await channel.send("\n".join(lines))
 
 
+@tasks.loop(time=time(hour=22, minute=0, tzinfo=EST))  # 10:00 PM EST
+async def saturday_plan_task():
+    """Auto-generate next week's plan every Saturday night at 10 PM."""
+    if datetime.now(EST).weekday() != 5:  # 5 = Saturday
+        return
+    channel = bot.get_channel(CHANNELS["coach"])
+    if not channel:
+        logger.warning("saturday_plan_task: coach channel not found")
+        return
+    try:
+        logger.info("[Saturday Plan] Generating next week's plan...")
+        await channel.send("📅 Generating next week's plan…")
+        rc, stdout, stderr = await run_coach_cli(["plan", "--week"], timeout=300)
+        if rc == 0:
+            embed = discord.Embed(
+                title="📅 Next Week's Plan Ready",
+                description=clamp(stdout.strip(), 3900),
+                color=discord.Color.blue(),
+                timestamp=datetime.now(),
+            )
+        else:
+            msg = stderr.strip() or stdout.strip() or "Unknown error"
+            embed = discord.Embed(
+                title="⚠️ Saturday Plan Generation Failed",
+                description=clamp(msg, 1800),
+                color=discord.Color.orange(),
+                timestamp=datetime.now(),
+            )
+        await channel.send(embed=embed)
+    except Exception as exc:
+        logger.error("saturday_plan_task error: %s", exc)
+
+
 @morning_report_task.before_loop
 @sync_digest_task.before_loop
 @daily_workouts_task.before_loop
 @obs_test_task.before_loop
+@saturday_plan_task.before_loop
 async def before_scheduled_tasks():
     """Wait until bot is ready before starting tasks."""
     await bot.wait_until_ready()
@@ -1609,6 +1643,9 @@ async def on_ready():
     if not daily_workouts_task.is_running():
         daily_workouts_task.start()
         print("✓ Daily workouts task started")
+    if not saturday_plan_task.is_running():
+        saturday_plan_task.start()
+        print("✓ Saturday plan task started")
 
     # Start observability test task only if days remain
     _obs_runs = 0

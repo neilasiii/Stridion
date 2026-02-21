@@ -75,6 +75,11 @@ If data_quality.readiness_confidence == "low":
 If data_quality.has_health_cache is false:
   - Treat as low readiness confidence regardless of other signals.
 
+RACE RULES (check context_packet.upcoming_races before planning):
+- Race day itself → workout_type "rest", intent "Race day — {race name}", duration_min 0.
+- Week containing a race → taper phase; no hard sessions in the 2 days before race day.
+- If upcoming_races is empty, plan normally.
+
 OUTPUT RULES:
 - Output ONLY a single JSON object. No markdown fences. No prose.
 - Every field in the schema is required unless marked Optional.
@@ -398,12 +403,20 @@ def _find_plan_by_hash(ctx_hash: str, db_path) -> Optional[Dict]:
 # ── Week boundary helpers ─────────────────────────────────────────────────────
 
 def _resolve_week_start(week_start: Optional[date]) -> date:
-    """Return the ISO Monday for the planning week."""
+    """Return the upcoming Sunday for the planning week (weeks run Sun–Sat).
+
+    If called on Saturday, returns tomorrow (the start of next week).
+    If called on Sunday, returns today.
+    Any other day returns the coming Sunday.
+    """
     if week_start is not None:
         return week_start
     today = date.today()
-    # Monday of current week
-    return today - timedelta(days=today.weekday())
+    # weekday(): 0=Mon … 5=Sat, 6=Sun
+    # Days until next Sunday: (6 - today.weekday()) % 7
+    # → Sun=0 (today), Mon=6, Tue=5, …, Sat=1
+    days_ahead = (6 - today.weekday()) % 7
+    return today + timedelta(days=days_ahead)
 
 
 # ── plan_week ─────────────────────────────────────────────────────────────────
@@ -420,7 +433,7 @@ def plan_week(
     Args:
         context_packet: Output of memory.build_context_packet().
         force:          Skip cache check and always call the LLM.
-        week_start:     Monday of the week to plan (default: current ISO week).
+        week_start:     Sunday of the week to plan (default: upcoming Sunday).
         db_path:        Override SQLite path (testing).
 
     Returns:
@@ -486,7 +499,10 @@ def plan_week(
         status="draft",
         db_path=db,
     )
-    insert_plan_days(plan_id, decision.as_plan_days_rows(), db_path=db)
+    # Only persist days that are today or in the future (never backfill past days)
+    today_iso = date.today().isoformat()
+    future_rows = [r for r in decision.as_plan_days_rows() if r["day"] >= today_iso]
+    insert_plan_days(plan_id, future_rows, db_path=db)
     set_active_plan(plan_id, db_path=db)
 
     # ── Vault ──────────────────────────────────────────────────────────────

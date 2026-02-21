@@ -34,9 +34,10 @@ from typing import Any, Dict, List, Optional
 log = logging.getLogger(__name__)
 
 
-PROJECT_ROOT = Path(__file__).parent.parent
-HEALTH_CACHE = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
-VAULT_ROOT   = PROJECT_ROOT / "vault"
+PROJECT_ROOT   = Path(__file__).parent.parent
+HEALTH_CACHE   = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
+VAULT_ROOT     = PROJECT_ROOT / "vault"
+UPCOMING_RACES = PROJECT_ROOT / "data" / "athlete" / "upcoming_races.md"
 
 # Hard size caps (characters)
 MAX_PACKET_CHARS      = 8_000
@@ -466,6 +467,47 @@ def _enforce_size_caps(packet: Dict) -> Dict:
     return packet
 
 
+# ── Race loader ───────────────────────────────────────────────────────────────
+
+def _load_upcoming_races() -> list:
+    """Parse upcoming_races.md and return races on or after today."""
+    if not UPCOMING_RACES.exists():
+        return []
+    try:
+        content = UPCOMING_RACES.read_text()
+        today_iso = date.today().isoformat()
+        races = []
+        # Split on level-3 headers (### Race Name)
+        for section in re.split(r"^###\s+", content, flags=re.MULTILINE)[1:]:
+            lines = section.strip().splitlines()
+            name = lines[0].strip()
+            date_m = re.search(r"\*\*Date:\*\*\s+([A-Za-z]+ \d+,\s*\d{4}|\d{4}-\d{2}-\d{2})", section)
+            dist_m = re.search(r"\*\*Distance:\*\*\s+(.+)", section)
+            prio_m = re.search(r"\*\*Race Priority:\*\*\s+(.+)", section)
+            if not date_m:
+                continue
+            raw = date_m.group(1).strip()
+            try:
+                race_date = (
+                    raw if "-" in raw
+                    else datetime.strptime(raw, "%B %d, %Y").date().isoformat()
+                )
+            except ValueError:
+                continue
+            if race_date < today_iso:
+                continue
+            races.append({
+                "name":     name,
+                "date":     race_date,
+                "distance": dist_m.group(1).strip() if dist_m else None,
+                "priority": prio_m.group(1).split("(")[0].strip() if prio_m else None,
+            })
+        return races
+    except Exception as exc:
+        log.warning("_load_upcoming_races failed: %s", exc)
+        return []
+
+
 # ── Public API ────────────────────────────────────────────────────────────────
 
 def build_context_packet(
@@ -543,6 +585,7 @@ def build_context_packet(
         "generated_at":     datetime.utcnow().isoformat(),
         "today":            today.isoformat(),
         "athlete":          athlete,
+        "upcoming_races":   _load_upcoming_races(),
         "training_summary": _rollup_activities(health, days_back),
         "readiness_trend":  readiness_trend,
         "plan_authority":   _get_plan_authority(db_path),
