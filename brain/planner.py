@@ -79,7 +79,7 @@ OUTPUT RULES:
 - Output ONLY a single JSON object. No markdown fences. No prose.
 - Every field in the schema is required unless marked Optional.
 - Rationale fields: max 200 chars each (300 for top-level).
-- structure_steps: warmup + main + cooldown minimum for non-rest days.
+- structure_steps: easy/recovery runs → single "main" step only (no warmup/cooldown). Tempo/interval/long runs → warmup + main/intervals + cooldown. Rest/cross days → empty array.
 """
 
 _SYSTEM_ADJUST_TODAY = """\
