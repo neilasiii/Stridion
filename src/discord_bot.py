@@ -477,7 +477,7 @@ async def report_command(interaction: discord.Interaction):
             )
             await interaction.followup.send(embed=embed)
         else:
-            await interaction.followup.send(f"❌ Error generating report:\n```{result.stderr[:500]}```")
+            await interaction.followup.send(f"❌ Error generating report:\n{result.stderr[:500]}")
 
     except Exception as e:
         await interaction.followup.send(f"❌ Error: {str(e)}")
@@ -528,8 +528,7 @@ async def workout_command(interaction: discord.Interaction):
             )
 
             if w.get("description"):
-                desc = w["description"][:2000]
-                embed.description = f"```\n{desc}\n```"
+                embed.description = w["description"][:3900]
 
             if w.get("duration_min"):
                 embed.add_field(name="Duration", value=f"{w['duration_min']} min", inline=True)
@@ -599,7 +598,7 @@ async def status_command(interaction: discord.Interaction):
 
             await interaction.followup.send(embed=embed)
         else:
-            await interaction.followup.send(f"❌ Error:\n```{result.stderr[:500]}```")
+            await interaction.followup.send(f"❌ Error: {result.stderr[:500]}")
 
     except Exception as e:
         await interaction.followup.send(f"❌ Error: {str(e)}")
@@ -811,7 +810,7 @@ async def coach_today_command(interaction: discord.Interaction):
     if rc == 0 and stdout.strip():
         embed = discord.Embed(
             title="📋 Today's Workout",
-            description=f"```\n{clamp(stdout.strip(), 3900)}\n```",
+            description=clamp(stdout.strip(), 3900),
             color=discord.Color.green(),
             timestamp=datetime.now(),
         )
@@ -819,7 +818,7 @@ async def coach_today_command(interaction: discord.Interaction):
         msg = stderr.strip() or stdout.strip() or "No output"
         embed = discord.Embed(
             title="⚠️ coach brief --today",
-            description=f"```\n{clamp(msg, 1800)}\n```",
+            description=clamp(msg, 1800),
             color=discord.Color.orange(),
             timestamp=datetime.now(),
         )
@@ -834,7 +833,7 @@ async def coach_sync_command(interaction: discord.Interaction):
     if rc == 0:
         embed = discord.Embed(
             title="✓ Coach Sync Complete",
-            description=f"```\n{clamp(stdout.strip(), 1800)}\n```",
+            description=clamp(stdout.strip(), 3900),
             color=discord.Color.green(),
             timestamp=datetime.now(),
         )
@@ -842,7 +841,7 @@ async def coach_sync_command(interaction: discord.Interaction):
         msg = stderr.strip() or stdout.strip() or "Unknown error"
         embed = discord.Embed(
             title="❌ Coach Sync Failed",
-            description=f"```\n{clamp(msg, 1800)}\n```",
+            description=clamp(msg, 1800),
             color=discord.Color.red(),
             timestamp=datetime.now(),
         )
@@ -857,7 +856,7 @@ async def coach_plan_command(interaction: discord.Interaction):
     if rc == 0:
         embed = discord.Embed(
             title="✓ Plan Generated",
-            description=f"```\n{clamp(stdout.strip(), 3900)}\n```",
+            description=clamp(stdout.strip(), 3900),
             color=discord.Color.blue(),
             timestamp=datetime.now(),
         )
@@ -865,7 +864,7 @@ async def coach_plan_command(interaction: discord.Interaction):
         msg = stderr.strip() or stdout.strip() or "Unknown error"
         embed = discord.Embed(
             title="❌ Plan Generation Failed",
-            description=f"```\n{clamp(msg, 1800)}\n```",
+            description=clamp(msg, 1800),
             color=discord.Color.red(),
             timestamp=datetime.now(),
         )
@@ -881,7 +880,7 @@ async def coach_export_command(interaction: discord.Interaction):
     color = discord.Color.green() if rc == 0 else discord.Color.orange()
     embed = discord.Embed(
         title="📤 Garmin Export Preview",
-        description=f"```\n{clamp(msg, 3900)}\n```",
+        description=clamp(msg, 3900),
         color=color,
         timestamp=datetime.now(),
     )
@@ -897,7 +896,7 @@ async def coach_status_command(interaction: discord.Interaction):
     color = discord.Color.green() if rc == 0 else discord.Color.orange()
     embed = discord.Embed(
         title="🔧 Agent Status",
-        description=f"```\n{clamp(msg, 3900)}\n```",
+        description=clamp(msg, 3900),
         color=color,
         timestamp=datetime.now(),
     )
@@ -914,7 +913,7 @@ async def coach_memory_command(interaction: discord.Interaction, query: str):
     color = discord.Color.blue() if rc == 0 else discord.Color.orange()
     embed = discord.Embed(
         title=f"🔍 Memory: {clamp(query, 60)}",
-        description=f"```\n{clamp(msg, 3900)}\n```",
+        description=clamp(msg, 3900),
         color=color,
         timestamp=datetime.now(),
     )
@@ -1093,32 +1092,32 @@ async def on_message(message: discord.Message):
             if re.search(r'\bsync\b', lower):
                 rc, stdout, stderr = await run_coach_cli(["sync"], timeout=300)
                 out = stdout.strip() or stderr.strip() or "Done"
-                await message.reply(f"```\n{clamp(out, 1800)}\n```")
+                await send_long_message(message, clamp(out, 1900))
                 return
 
             if re.search(r'\b(brief|today|workout)\b', lower):
                 rc, stdout, stderr = await run_coach_cli(["brief", "--today"])
                 out = stdout.strip() or stderr.strip() or "No plan found"
-                await message.reply(f"```\n{clamp(out, 1800)}\n```")
+                await send_long_message(message, clamp(out, 1900))
                 return
 
             if lower == "plan" or lower.startswith("plan "):
                 rc, stdout, stderr = await run_coach_cli(["plan", "--week"], timeout=240)
                 out = stdout.strip() or stderr.strip() or "No output"
                 if rc == 0:
-                    await message.reply(f"```\n{clamp(out, 1800)}\n```")
+                    await send_long_message(message, clamp(out, 1900))
                 else:
                     await message.reply(
                         f"Plan generation failed (rc={rc}). "
-                        f"Use `/coach_plan` if this persists.\n"
-                        f"```\n{clamp(out, 1000)}\n```"
+                        f"Use `/coach_plan` if this persists.\n\n"
+                        f"{clamp(out, 1000)}"
                     )
                 return
 
             if re.search(r'\b(status|agent)\b', lower):
                 rc, stdout, stderr = await run_coach_cli(["agent", "status"])
                 out = stdout.strip() or stderr.strip() or "No status"
-                await message.reply(f"```\n{clamp(out, 1800)}\n```")
+                await send_long_message(message, clamp(out, 1900))
                 return
 
             if lower in ("schedule", "week", "this week") or lower.startswith("schedule "):
