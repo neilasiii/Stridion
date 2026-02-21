@@ -275,6 +275,40 @@ def query_events(
         conn.close()
 
 
+def delete_events_by_source(
+    source: str,
+    since_date: Optional[date] = None,
+    event_type: Optional[str] = None,
+    db_path: Path = DB_PATH,
+) -> int:
+    """
+    Delete events matching source (and optionally event_type and payload date).
+
+    If since_date is provided, only deletes events where
+    json_extract(payload_json, '$.date') >= since_date.isoformat().
+
+    Returns number of rows deleted.
+    """
+    clauses: List[str] = ["source = ?"]
+    params: List[Any] = [source]
+
+    if event_type:
+        clauses.append("type = ?")
+        params.append(event_type)
+    if since_date:
+        clauses.append("json_extract(payload_json, '$.date') >= ?")
+        params.append(since_date.isoformat())
+
+    sql = f"DELETE FROM events WHERE {' AND '.join(clauses)}"
+    conn = _connect(db_path)
+    try:
+        cur = conn.execute(sql, params)
+        conn.commit()
+        return cur.rowcount
+    finally:
+        conn.close()
+
+
 # ── State ────────────────────────────────────────────────────────────────────────
 
 def set_state(key: str, value: str, db_path: Path = DB_PATH) -> None:

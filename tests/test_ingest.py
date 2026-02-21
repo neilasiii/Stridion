@@ -283,3 +283,134 @@ class TestRunIngestsAfterSync:
         result = self._run_sync(health=health, days=1)
         assert result["ingest_metrics_rows"] == 2
         assert result["ingest_activities_rows"] == 2
+
+
+# ── Unit: _ingest_constraint_calendars ───────────────────────────────────────
+
+def _fake_ics_events(*date_strs, name="Work shift"):
+    """Build a list of minimal ICS event dicts for mocking parse_ics_url."""
+    return [{"scheduled_date": d, "name": name} for d in date_strs]
+
+
+def _future_date(days_ahead: int) -> str:
+    return (date.today() + timedelta(days=days_ahead)).isoformat()
+
+
+class TestIngestConstraintCalendars:
+    def setup_method(self):
+        self.db = _tmp_db()
+        from memory.db import init_db
+        init_db(db_path=self.db)
+
+    def _make_config(self, tmp_path: Path, sources: list) -> Path:
+        cfg = {"calendar_urls": sources}
+        cfg_dir = tmp_path / "config"
+        cfg_dir.mkdir(parents=True, exist_ok=True)
+        p = cfg_dir / "calendar_sources.json"
+        p.write_text(json.dumps(cfg))
+        return p
+
+    def test_no_config_file_returns_zero(self):
+        from skills.garmin_sync import _ingest_constraint_calendars
+        with patch("skills.garmin_sync.PROJECT_ROOT", Path("/nonexistent/path")):
+            result = _ingest_constraint_calendars(db_path=self.db)
+        assert result == 0
+
+    def test_no_enabled_constraint_sources_returns_zero(self, tmp_path):
+        from skills.garmin_sync import _ingest_constraint_calendars
+        cfg_path = self._make_config(tmp_path, [
+            {"name": "FinalSurge", "url": "https://example.com/training.ics",
+             "type": "training", "enabled": True},
+        ])
+        with patch("skills.garmin_sync.PROJECT_ROOT", tmp_path):
+            result = _ingest_constraint_calendars(db_path=self.db)
+        assert result == 0
+
+    def test_events_in_range_appear_in_sqlite(self, tmp_path):
+        from skills.garmin_sync import _ingest_constraint_calendars
+        from memory.db import query_events
+
+        cfg_path = self._make_config(tmp_path, [
+            {"name": "Nursing Schedule", "url": "https://example.com/nurse.ics",
+             "type": "constraint", "enabled": True},
+        ])
+        shift_date = _future_date(5)
+
+        with (
+            patch("skills.garmin_sync.PROJECT_ROOT", tmp_path),
+            patch("ics_parser.parse_ics_url", return_value=_fake_ics_events(shift_date)),
+        ):
+            count = _ingest_constraint_calendars(db_path=self.db)
+
+        assert count == 1
+        events = query_events(event_type="constraint", db_path=self.db)
+        assert len(events) == 1
+        payload = json.loads(events[0]["payload_json"])
+        assert payload["date"] == shift_date
+
+    def test_stale_shift_removed_on_next_ingest(self, tmp_path):
+        from skills.garmin_sync import _ingest_constraint_calendars
+        from memory.db import query_events
+
+        cfg_path = self._make_config(tmp_path, [
+            {"name": "Nursing Schedule", "url": "https://example.com/nurse.ics",
+             "type": "constraint", "enabled": True},
+        ])
+        date_a = _future_date(3)
+        date_b = _future_date(7)
+
+        # First ingest: shift on date_a
+        with (
+            patch("skills.garmin_sync.PROJECT_ROOT", tmp_path),
+            patch("ics_parser.parse_ics_url", return_value=_fake_ics_events(date_a)),
+        ):
+            _ingest_constraint_calendars(db_path=self.db)
+
+        events = query_events(event_type="constraint", db_path=self.db)
+        assert any(json.loads(e["payload_json"])["date"] == date_a for e in events)
+
+        # Second ingest: shift moved to date_b, date_a no longer in feed
+        with (
+            patch("skills.garmin_sync.PROJECT_ROOT", tmp_path),
+            patch("ics_parser.parse_ics_url", return_value=_fake_ics_events(date_b)),
+        ):
+            _ingest_constraint_calendars(db_path=self.db)
+
+        events = query_events(event_type="constraint", db_path=self.db)
+        dates = [json.loads(e["payload_json"])["date"] for e in events]
+        assert date_a not in dates, "stale shift should have been removed"
+        assert date_b in dates
+
+    def test_ics_fetch_failure_preserves_existing_data(self, tmp_path):
+        from skills.garmin_sync import _ingest_constraint_calendars
+        from memory.db import query_events, insert_event
+        import hashlib
+
+        cfg_path = self._make_config(tmp_path, [
+            {"name": "Nursing Schedule", "url": "https://example.com/nurse.ics",
+             "type": "constraint", "enabled": True},
+        ])
+        shift_date = _future_date(4)
+        source_tag = "ics_calendar:nursing_schedule"
+
+        # Pre-seed a constraint event directly
+        stable_id = hashlib.sha256(f"constraint:{shift_date}:Work shift".encode()).hexdigest()[:32]
+        insert_event(
+            event_type="constraint",
+            payload={"date": shift_date, "raw_text": "Work shift", "source": source_tag},
+            source=source_tag,
+            stable_id=stable_id,
+            db_path=self.db,
+        )
+
+        # Simulate ICS fetch failure
+        with (
+            patch("skills.garmin_sync.PROJECT_ROOT", tmp_path),
+            patch("ics_parser.parse_ics_url", side_effect=Exception("network error")),
+        ):
+            count = _ingest_constraint_calendars(db_path=self.db)
+
+        assert count == 0
+        # Existing row must still be present
+        events = query_events(event_type="constraint", db_path=self.db)
+        assert len(events) == 1, "existing constraint must be preserved on fetch failure"
