@@ -34,6 +34,11 @@ CHANNELS = {
 PROJECT_ROOT = Path(__file__).parent.parent
 CLAUDE_PATH = os.path.expanduser("~/.local/bin/claude")
 
+# Observability testing (D12-1 / D12-2) — runs daily for 7 days
+TESTING_CHANNEL_ID = 1474504005244948548
+_OBS_TEST_STATE = PROJECT_ROOT / "data" / "obs_test_state.json"
+_OBS_TEST_MAX_DAYS = 7
+
 # Timezone for scheduling (Eastern Time)
 EST = timezone(timedelta(hours=-5))
 
@@ -1294,37 +1299,143 @@ async def morning_report_task():
         await channel.send(f"❌ Morning report failed: {str(e)}")
 
 
+def _build_sync_digest(window_hours: int = 6) -> discord.Embed:
+    """
+    Read the last window_hours of agent activity from SQLite and return a
+    Discord embed summarising it. No network I/O — purely a DB read.
+    """
+    import sqlite3
+    from datetime import timezone as tz
+
+    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
+    now = datetime.now(tz.utc)
+    since = (now - timedelta(hours=window_hours)).isoformat()
+
+    cycles_total = cycles_ok = cycles_fail = 0
+    readiness_triggered = False
+    hash_changed_count = 0
+    last_sync_at: str | None = None
+    last_sync_ok: bool | None = None
+
+    today_metrics: dict = {}
+
+    if db_path.exists():
+        try:
+            conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+            conn.row_factory = sqlite3.Row
+            try:
+                # ── agent cycle summary ──────────────────────────────────────
+                rows = conn.execute(
+                    """SELECT status, details_json FROM task_runs
+                       WHERE task = 'agent_cycle' AND started_at >= ?
+                       ORDER BY started_at ASC""",
+                    (since,),
+                ).fetchall()
+                for r in rows:
+                    cycles_total += 1
+                    if r["status"] == "success":
+                        cycles_ok += 1
+                        d = json.loads(r["details_json"] or "{}")
+                        if d.get("readiness_triggered"):
+                            readiness_triggered = True
+                        if d.get("hash_changed"):
+                            hash_changed_count += 1
+                    else:
+                        cycles_fail += 1
+
+                # ── last sync run ────────────────────────────────────────────
+                sr = conn.execute(
+                    """SELECT finished_at, status FROM sync_runs
+                       ORDER BY started_at DESC LIMIT 1"""
+                ).fetchone()
+                if sr:
+                    last_sync_at = sr["finished_at"]
+                    last_sync_ok = sr["status"] == "success"
+
+                # ── today's metrics snapshot ─────────────────────────────────
+                today_str = now.astimezone().date().isoformat()
+                tm = conn.execute(
+                    """SELECT training_readiness, body_battery, sleep_score,
+                              sleep_duration_h, hrv_rmssd, resting_hr
+                       FROM daily_metrics WHERE day = ?""",
+                    (today_str,),
+                ).fetchone()
+                if tm:
+                    today_metrics = dict(tm)
+            finally:
+                conn.close()
+        except Exception as exc:
+            logger.warning("sync_digest: DB read error: %s", exc)
+
+    # ── build embed ──────────────────────────────────────────────────────────
+    all_ok = cycles_fail == 0 and (last_sync_ok is not False)
+    color = discord.Color.green() if all_ok else discord.Color.orange()
+    title = f"📊 Heartbeat Digest — last {window_hours}h"
+
+    lines = []
+
+    # Agent cycles
+    if cycles_total:
+        cycle_str = f"{cycles_ok}/{cycles_total} cycles OK"
+        if cycles_fail:
+            cycle_str += f", {cycles_fail} failed ⚠️"
+        lines.append(f"**Agent:** {cycle_str}")
+        lines.append(f"**Data changes:** {hash_changed_count} sync(s) with new data")
+    else:
+        lines.append("**Agent:** no cycles recorded in window")
+
+    # Last sync
+    if last_sync_at:
+        try:
+            ts = datetime.fromisoformat(last_sync_at.replace("Z", "+00:00"))
+            age_min = int((now - ts.replace(tzinfo=ts.tzinfo or tz.utc)).total_seconds() / 60)
+            sync_icon = "✓" if last_sync_ok else "✗"
+            lines.append(f"**Last sync:** {sync_icon} {age_min} min ago")
+        except Exception:
+            lines.append(f"**Last sync:** {last_sync_at}")
+    else:
+        lines.append("**Last sync:** unknown")
+
+    # Readiness adjustment
+    if readiness_triggered:
+        lines.append("**Readiness:** ⚡ adjustment triggered")
+
+    # Today's metrics
+    if today_metrics:
+        parts = []
+        if today_metrics.get("training_readiness") is not None:
+            parts.append(f"readiness {int(today_metrics['training_readiness'])}")
+        if today_metrics.get("body_battery") is not None:
+            parts.append(f"battery {int(today_metrics['body_battery'])}")
+        if today_metrics.get("sleep_score") is not None:
+            parts.append(f"sleep {int(today_metrics['sleep_score'])}")
+        if today_metrics.get("hrv_rmssd") is not None:
+            parts.append(f"HRV {int(today_metrics['hrv_rmssd'])}")
+        if parts:
+            lines.append(f"**Today:** {' · '.join(parts)}")
+
+    return discord.Embed(
+        title=title,
+        description="\n".join(lines),
+        color=color,
+        timestamp=datetime.now(),
+    )
+
+
 @tasks.loop(time=[time(hour=0, minute=0, tzinfo=EST), time(hour=6, minute=0, tzinfo=EST), time(hour=12, minute=0, tzinfo=EST), time(hour=18, minute=0, tzinfo=EST)])
-async def periodic_sync_task():
-    """Periodic Garmin sync via coach CLI, posted to #sync-log."""
+async def sync_digest_task():
+    """Post heartbeat agent digest to #sync-log. No sync — reads SQLite only."""
     channel = bot.get_channel(CHANNELS["sync_log"])
     if not channel:
         logger.warning("Sync log channel %s not found", CHANNELS["sync_log"])
         return
-
     try:
-        rc, stdout, stderr = await run_coach_cli(["sync"], timeout=300)
-        if rc == 0:
-            summary = clamp(stdout.strip() or "No output", 1800)
-            embed = discord.Embed(
-                title="✓ Garmin Sync Complete",
-                description=f"```\n{summary}\n```",
-                color=discord.Color.green(),
-                timestamp=datetime.now(),
-            )
-        else:
-            msg = clamp(stderr.strip() or stdout.strip() or "Unknown error", 1800)
-            embed = discord.Embed(
-                title="❌ Sync Failed",
-                description=f"```\n{msg}\n```",
-                color=discord.Color.red(),
-                timestamp=datetime.now(),
-            )
+        embed = await asyncio.get_event_loop().run_in_executor(None, _build_sync_digest)
         await channel.send(embed=embed)
     except Exception as exc:
-        logger.error("Periodic sync error: %s", exc)
+        logger.error("sync_digest_task error: %s", exc)
         await channel.send(embed=discord.Embed(
-            title="❌ Sync Error",
+            title="❌ Digest Error",
             description=str(exc),
             color=discord.Color.red(),
             timestamp=datetime.now(),
@@ -1387,9 +1498,76 @@ async def daily_workouts_task():
         await channel.send(f"❌ Failed to load workouts: {str(e)}")
 
 
+@tasks.loop(time=time(hour=8, minute=30, tzinfo=EST))  # 8:30 AM EST
+async def obs_test_task():
+    """Run daily observability checks (coach db sanity + parity) for 7 days."""
+    # Load persistent state so run count survives bot restarts
+    state: dict = {}
+    if _OBS_TEST_STATE.exists():
+        try:
+            state = json.loads(_OBS_TEST_STATE.read_text())
+        except Exception:
+            state = {}
+
+    run_number = state.get("runs", 0) + 1
+    if run_number > _OBS_TEST_MAX_DAYS:
+        obs_test_task.stop()
+        return
+
+    # Persist updated state immediately (guards against crash before posting)
+    state.setdefault("start_date", datetime.now(EST).date().isoformat())
+    state["runs"] = run_number
+    _OBS_TEST_STATE.write_text(json.dumps(state))
+
+    channel = bot.get_channel(TESTING_CHANNEL_ID)
+    if not channel:
+        logger.error("obs_test_task: testing channel %s not found", TESTING_CHANNEL_ID)
+        return
+
+    today = datetime.now(EST).strftime("%Y-%m-%d")
+    overall_pass = True
+
+    # ── db sanity ──────────────────────────────────────────────────────────────
+    rc_sanity, out_sanity, _ = await run_coach_cli(["db", "sanity"], timeout=30)
+    sanity_pass = rc_sanity == 0
+    if not sanity_pass:
+        overall_pass = False
+
+    # ── parity ─────────────────────────────────────────────────────────────────
+    rc_parity, out_parity, _ = await run_coach_cli(["parity", "--day", today], timeout=30)
+    parity_pass = rc_parity == 0
+    if not parity_pass:
+        overall_pass = False
+
+    icon = "✅" if overall_pass else "❌"
+    lines = [
+        f"**{icon} Daily Observability Check — {today}** (day {run_number}/{_OBS_TEST_MAX_DAYS})",
+        "",
+        f"• `db sanity`: {'✅ PASS' if sanity_pass else f'❌ FAIL (rc={rc_sanity})'}",
+        f"• `parity`:    {'✅ PASS' if parity_pass else f'❌ FAIL (rc={rc_parity})'}",
+    ]
+
+    # Always include the sanity summary (first 8 lines)
+    if out_sanity.strip():
+        summary = "\n".join(out_sanity.strip().splitlines()[:8])
+        lines += ["", "```", summary, "```"]
+
+    # Include parity output only on mismatch (exit 2) or failure
+    if not parity_pass and out_parity.strip():
+        parity_snippet = out_parity.strip()[:600]
+        lines += ["", "```", parity_snippet, "```"]
+
+    if run_number >= _OBS_TEST_MAX_DAYS:
+        lines += ["", "_Observability week complete (7/7). Task stopped._"]
+        obs_test_task.stop()
+
+    await channel.send("\n".join(lines))
+
+
 @morning_report_task.before_loop
-@periodic_sync_task.before_loop
+@sync_digest_task.before_loop
 @daily_workouts_task.before_loop
+@obs_test_task.before_loop
 async def before_scheduled_tasks():
     """Wait until bot is ready before starting tasks."""
     await bot.wait_until_ready()
@@ -1426,12 +1604,23 @@ async def on_ready():
     if not morning_report_task.is_running():
         morning_report_task.start()
         print("✓ Morning report task started")
-    if not periodic_sync_task.is_running():
-        periodic_sync_task.start()
-        print("✓ Periodic sync task started")
+    if not sync_digest_task.is_running():
+        sync_digest_task.start()
+        print("✓ Sync digest task started")
     if not daily_workouts_task.is_running():
         daily_workouts_task.start()
         print("✓ Daily workouts task started")
+
+    # Start observability test task only if days remain
+    _obs_runs = 0
+    if _OBS_TEST_STATE.exists():
+        try:
+            _obs_runs = json.loads(_OBS_TEST_STATE.read_text()).get("runs", 0)
+        except Exception:
+            pass
+    if _obs_runs < _OBS_TEST_MAX_DAYS and not obs_test_task.is_running():
+        obs_test_task.start()
+        print(f"✓ Observability test task started ({_obs_runs}/{_OBS_TEST_MAX_DAYS} days done)")
 
 
 # ============== Entry Point ==============
