@@ -1,22 +1,20 @@
 # Heartbeat Agent — Architecture & Operations Guide
 
 _Verified against: `agent/runner.py`, `agent/lock.py`, `deploy/running-coach-agent.service`._
-_Last updated: 2026-02-20._
+_Last updated: 2026-02-21._
 
 ---
 
 ## 1. What runs sync and where
 
-There are **two independent processes** that can trigger a Garmin sync:
+The **heartbeat agent is the sole background syncer.** The Discord bot does not perform scheduled syncs.
 
 | Process | File | Trigger | Sync path |
 |---|---|---|---|
 | **Heartbeat agent** | `agent/runner.py` | Every 15 min (systemd loop) | `skills/garmin_sync.run()` |
-| **Discord bot** | `src/discord_bot.py` | User `/coach_sync` command, or scheduled tasks (6am + 12pm EST) | `python3 cli/coach.py sync` subprocess |
+| **Discord bot** | `src/discord_bot.py` | User `/coach_sync` command only | `python3 cli/coach.py sync` subprocess |
 
-Both routes end up calling `bin/smart_sync.sh → bin/sync_garmin_data.sh → src/garmin_sync.py`. The heartbeat agent uses `skills/garmin_sync.run()` directly; the Discord bot spawns the CLI as a subprocess.
-
-**The heartbeat agent is the authoritative background syncer.** The Discord bot's scheduled syncs are belt-and-suspenders and useful when the agent is down.
+The heartbeat agent calls `skills/garmin_sync.run()` directly, which delegates to `bin/smart_sync.sh → bin/sync_garmin_data.sh → src/garmin_sync.py`. The Discord bot's `/coach_sync` command spawns the same CLI path on demand (e.g., after completing a workout).
 
 ---
 
@@ -149,16 +147,15 @@ python3 cli/coach.py agent status    # lock + recent task_runs
 
 ---
 
-## 8. Discord bot scheduled syncs (independent)
+## 8. Discord bot sync digest (read-only)
 
-The Discord bot (`src/discord_bot.py`) runs **two independent periodic syncs** via `discord.ext.tasks`:
+The Discord bot posts a **heartbeat digest** to `#sync-log` four times a day via `sync_digest_task`:
 
-| Task | Schedule | Channel |
-|---|---|---|
-| Morning sync | 6:00 AM EST | `#sync-log` |
-| Midday sync | 12:00 PM EST | `#sync-log` |
+| Schedule | Channel |
+|---|---|
+| midnight, 6:00 AM, noon, 6:00 PM EST | `#sync-log` |
 
-These use `python3 cli/coach.py sync` as a subprocess. They are independent of the heartbeat agent and operate even if the agent is down. However, they do **not** hold the SQLite lock, so they may race with the agent. (B11-019 will address this by adding `sync_runs` provenance tracking.)
+This task reads SQLite only (`task_runs`, `sync_runs`, `daily_metrics`) — it does **not** trigger a Garmin sync. Each digest summarises the last 6 hours of agent activity: cycle count, data change count, last sync age, whether a readiness adjustment fired, and today's metrics snapshot (readiness, body battery, sleep score, HRV).
 
 ---
 

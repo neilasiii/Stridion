@@ -313,7 +313,7 @@ journalctl -u running-coach-bot -f       # View bot logs
 
 **Scheduled Tasks:**
 - **Morning Report:** Starts checking at 5:30 AM EST, continues until ~10:00 AM (sends to #morning-report channel when sleep data detected)
-- **Periodic Sync:** 6:00 AM and 12:00 PM EST (sends to #sync-log channel with Termux-style notifications)
+- **Sync Digest:** midnight, 6:00 AM, noon, 6:00 PM EST — posts a summary of the last 6 hours of heartbeat activity to #sync-log (reads SQLite only, no network I/O)
 
 See [docs/DISCORD_BOT_SETUP_COMPLETE.md](docs/DISCORD_BOT_SETUP_COMPLETE.md) for complete setup guide.
 
@@ -325,7 +325,7 @@ The system runs on systemd with the Discord bot providing the primary interface.
 - Discord bot runs as systemd service: `sudo systemctl status running-coach-bot`
 - **Restart bot:** `sudo systemctl restart running-coach-bot` (user has NOPASSWD sudo for systemctl)
 - Manual sync: `bash bin/sync_garmin_data.sh` or `bash bin/smart_sync.sh`
-- Morning reports: `bash bin/morning_report.sh` (automated via Discord bot at 9am EST)
+- Morning reports: `bash bin/morning_report.sh` (automated via Discord bot, sleep-aware, starts checking 5:30 AM EST)
 
 **Gemini API Configuration (for AI fallback):**
 ```bash

@@ -111,7 +111,7 @@ You can also send messages directly in the **#coach** channel for conversational
 ### Automated Tasks
 
 - **Morning Report** - Starts checking at 5:30 AM EST and continues until ~10:00 AM, posts to #morning-report when sleep data is detected (sleep-aware scheduling)
-- **Periodic Sync** - Runs every 6 hours, posts updates to #sync-log when there are new activities or workouts
+- **Sync Digest** - Posts a summary of the last 6 hours of heartbeat agent activity to #sync-log at midnight, 6am, noon, and 6pm EST (reads SQLite only — Garmin syncing is handled entirely by the heartbeat agent)
 
 ### Conversational Coaching
 
