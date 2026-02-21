@@ -22,9 +22,6 @@ profile, and training history.
 
 ### Work Schedule
 - Works **four days per week**: **Monday–Thursday**, **0700–1730** in-office.
-- **Currently on paid parental leave** through **January 4, 2026**
-  - Full scheduling flexibility during this period (no work constraints)
-  - Returns to normal work schedule January 6, 2026
 - Commute, family responsibilities, and work hours limit training flexibility on regular workdays.
 
 ### Fitness Hours Availability
@@ -40,11 +37,7 @@ profile, and training history.
 - Avoids evening sessions due to:
   - family obligations
   - newborn care
-  - fatigue from long workdays (when working)
-- **During parental leave (through Jan 5):**
-  - Flexible timing for workouts throughout the day
-  - Can schedule longer sessions on any day (not just weekends)
-  - Morning sessions still preferred but mid-day options available
+  - fatigue from long workdays
 
 ### Weekend Flexibility
 - Friday, Saturday, and Sunday provide more flexibility.
@@ -52,12 +45,10 @@ profile, and training history.
 - Sunday is ideal for a longer mobility/yoga block.
 
 ### Agent Guidance Expectations
-- **Through January 4, 2026:** Full flexibility - can schedule workout any day/time
-- **Starting January 5, 2026:** Return to standard work schedule guidance below
-- Favor **morning workouts** for workdays (when working).
-- Avoid long/intense weekday evenings (when working).
-- Keep weekday sessions **time-efficient** (when working).
-- Schedule demanding or long sessions on weekends (when working).
+- Favor **morning workouts** for workdays.
+- Avoid long/intense weekday evenings.
+- Keep weekday sessions **time-efficient**.
+- Schedule demanding or long sessions on weekends.
 
 ---
 

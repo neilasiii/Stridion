@@ -288,17 +288,19 @@ journalctl -u running-coach-bot -f       # View bot logs
 ```
 
 **Available Commands:**
-- `/sync` - Sync Garmin health data
+- `/ask <question>` - Ask AI coach a question (general)
 - `/report` - Generate morning report
 - `/workout` - Show today's workouts
 - `/status` - View recovery metrics
-- `/ask <question>` - Ask AI coach a question (general)
-- `/running <question>` - Ask running coach specifically
-- `/strength <question>` - Ask strength coach specifically
-- `/mobility <question>` - Ask mobility coach specifically
-- `/nutrition <question>` - Ask nutrition coach specifically
+- `/coach_today` - Today's planned workout from the internal plan
+- `/coach_sync` - Sync Garmin health data
+- `/coach_plan` - Generate a new training week via the Brain LLM
+- `/coach_schedule` - Week schedule (mobile-friendly day cards)
+- `/coach_note <text>` - Save a note to the coach inbox
 - `/reset` - Start fresh conversation (resets session)
-- `/sessions` - View active session info
+
+**Deprecated stubs (redirect only):**
+- `/sync`, `/running`, `/strength`, `/mobility`, `/nutrition` — registered but redirect users to `/ask` or the agent system
 
 **AI Features:**
 - All AI commands use **Claude Code with Gemini fallback**
@@ -535,14 +537,11 @@ running-coach/
 
 ### Schedule Constraints
 - Works Mon-Thu, 0700-1730 (in-office)
-- **Currently on paid parental leave through January 5, 2026** - full scheduling flexibility
-- Returns to work January 6, 2026
 - Has 3 hours/week of work-granted fitness time (typically morning sessions)
 - Prefers early morning workouts on workdays
 
 **Spouse Work Schedule (Childcare Constraint):**
 - Wife works as a nurse (12-hour shifts, 7am-7pm)
-- Starts back January 4, 2026 (after maternity leave)
 - Cannot workout on wife's work days due to childcare
 - Schedule integrated via ICS feed (NurseGrid calendar)
 - System automatically reschedules conflicting running workouts to other days in the same week

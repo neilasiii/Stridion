@@ -3,8 +3,7 @@
 ## Personal Work Schedule
 
 - **Employer:** In-office position, Mon-Thu, 0700-1730
-- **Current Status:** On paid parental leave through January 5, 2026
-- **Return to Work:** January 6, 2026
+- **Current Status:** Working normal schedule (returned January 6, 2026)
 - **Fitness Time:** 3 hours/week of work-granted fitness time (typically morning sessions)
 - **Preference:** Early morning workouts on workdays
 
@@ -13,7 +12,7 @@
 **Wife's Employment:**
 - Occupation: Registered Nurse
 - Shift Type: 12-hour shifts (7:00 AM - 7:00 PM)
-- Return Date: January 4, 2026 (after maternity leave)
+- Status: Active — returned January 4, 2026
 - Schedule Source: NurseGrid ICS calendar (integrated into system)
 
 **Impact on Training:**
@@ -86,5 +85,5 @@ As baby grows and childcare situation evolves:
 
 ## Last Updated
 
-- **Date:** December 27, 2025
-- **Reason:** Wife starting back to work January 4, 2026 after maternity leave
+- **Date:** February 21, 2026
+- **Reason:** Removed stale parental leave dates; both work schedules now active
