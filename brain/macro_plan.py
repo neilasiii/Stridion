@@ -590,7 +590,14 @@ def generate_macro_plan(
     system, user = _build_macro_prompts(inputs)
 
     # ── LLM call (OUTSIDE DB transaction) ───────────────────────────────────
-    raw = _call_llm(system, user, timeout=240)
+    import subprocess as _subprocess
+    try:
+        raw = _call_llm(system, user, timeout=600)
+    except _subprocess.TimeoutExpired:
+        raise RuntimeError(
+            "Macro plan generation timed out (10 min). "
+            "The LLM is likely overloaded — try again in a few minutes."
+        )
 
     # ── Parse + Pydantic validation ──────────────────────────────────────────
     plan = _parse_and_validate_macro(raw, system)

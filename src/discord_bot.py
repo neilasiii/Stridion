@@ -888,7 +888,7 @@ async def coach_macro_command(
         cli_args.append("--force")
     if show:
         cli_args.append("--show")
-    rc, stdout, stderr = await run_coach_cli(cli_args, timeout=360)
+    rc, stdout, stderr = await run_coach_cli(cli_args, timeout=720)
     if rc == 0:
         embed = discord.Embed(
             title="📊 Macro Plan",
