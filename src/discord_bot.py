@@ -871,6 +871,42 @@ async def coach_plan_command(interaction: discord.Interaction):
     await interaction.followup.send(embed=embed)
 
 
+@bot.tree.command(name="coach_macro", description="Generate or show the full periodized training block")
+@app_commands.describe(
+    force="Force regeneration even if a macro plan already exists",
+    show="Show the current macro plan without regenerating",
+)
+async def coach_macro_command(
+    interaction: discord.Interaction,
+    force: bool = False,
+    show: bool = False,
+):
+    """Route to: coach plan --macro [--force] [--show]"""
+    await interaction.response.defer(thinking=True)
+    cli_args = ["plan", "--macro"]
+    if force:
+        cli_args.append("--force")
+    if show:
+        cli_args.append("--show")
+    rc, stdout, stderr = await run_coach_cli(cli_args, timeout=360)
+    if rc == 0:
+        embed = discord.Embed(
+            title="📊 Macro Plan",
+            description=clamp(stdout.strip(), 3900),
+            color=discord.Color.blue(),
+            timestamp=datetime.now(),
+        )
+    else:
+        msg = stderr.strip() or stdout.strip() or "Unknown error"
+        embed = discord.Embed(
+            title="❌ Macro Plan Failed",
+            description=clamp(msg, 1800),
+            color=discord.Color.red(),
+            timestamp=datetime.now(),
+        )
+    await interaction.followup.send(embed=embed)
+
+
 @bot.tree.command(name="coach_export", description="Preview Garmin export from the internal plan (dry run)")
 async def coach_export_command(interaction: discord.Interaction):
     """Route to: coach export-garmin (dry run by default)"""

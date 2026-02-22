@@ -56,8 +56,12 @@ def cmd_sync(args) -> int:
 # ── plan ──────────────────────────────────────────────────────────────────────
 
 def cmd_plan(args) -> int:
+    # Route --macro to cmd_macro
+    if getattr(args, "macro", False):
+        return cmd_macro(args)
+
     if not getattr(args, "week", False):
-        print("Error: specify --week", file=sys.stderr)
+        print("Error: specify --week or --macro", file=sys.stderr)
         return 1
 
     from memory.retrieval import build_context_packet
@@ -69,6 +73,14 @@ def cmd_plan(args) -> int:
     dq = ctx.get("data_quality", {})
     conf = dq.get("readiness_confidence", "unknown")
     print(f"  data_quality.readiness_confidence = {conf}")
+    mg = ctx.get("macro_guidance")
+    if mg and isinstance(mg, dict) and not mg.get("_truncated"):
+        cw = mg.get("current_week", {})
+        print(
+            f"  macro_guidance = {mg.get('macro_id')} "
+            f"week {cw.get('week_number')}/{mg.get('total_weeks')} "
+            f"phase={cw.get('phase')} vol={cw.get('target_volume_miles')}mi"
+        )
 
     print("Calling Brain (LLM)…")
     try:
@@ -89,6 +101,91 @@ def cmd_plan(args) -> int:
         print(f"  {d.date}  {d.workout_type:10s}  {d.duration_min:3d}min  {d.intent}{flag}")
 
     return 0
+
+
+# ── macro ──────────────────────────────────────────────────────────────────────
+
+def cmd_macro(args) -> int:
+    """Generate or display the long-range periodized training block."""
+    from brain.macro_plan import generate_macro_plan, MacroValidationError
+    from memory.db import get_active_macro_plan
+
+    show_only = getattr(args, "show", False)
+    force     = getattr(args, "force", False)
+
+    if show_only:
+        row = get_active_macro_plan()
+        if row is None:
+            print("No active macro plan. Run 'coach plan --macro' to generate one.")
+            return 1
+        try:
+            from brain.schemas import MacroPlan
+            plan = MacroPlan.model_validate(row["plan"])
+            _print_macro_plan(plan, row["macro_id"])
+            return 0
+        except Exception as exc:
+            print(f"✗ Could not parse active macro plan: {exc}", file=sys.stderr)
+            return 1
+
+    from memory.retrieval import build_context_packet
+
+    print("Building context packet…")
+    ctx = build_context_packet()
+
+    print("Calling Brain (LLM) to generate macro plan…")
+    print("  (This may take up to 4 minutes — macro plan covers the full block)")
+    try:
+        plan = generate_macro_plan(ctx, force=force)
+    except MacroValidationError as exc:
+        print(f"\n✗ Macro plan validation failed:", file=sys.stderr)
+        for err in exc.errors:
+            print(f"  ✗ {err}", file=sys.stderr)
+        return 1
+    except Exception as exc:
+        print(f"✗ Macro plan generation failed: {exc}", file=sys.stderr)
+        return 1
+
+    # Fetch the macro_id that was just activated
+    from memory.db import get_active_macro_plan_id
+    macro_id = get_active_macro_plan_id() or "unknown"
+    _print_macro_plan(plan, macro_id)
+    return 0
+
+
+def _print_macro_plan(plan, macro_id: str) -> None:
+    """Print a human-readable tabular summary of the macro plan."""
+    from datetime import date, timedelta
+
+    try:
+        start_d = date.fromisoformat(plan.start_week)
+        end_d = start_d + timedelta(days=7 * plan.total_weeks - 1)
+        block_range = f"{plan.start_week} → {end_d.isoformat()}"
+    except ValueError:
+        block_range = plan.start_week
+
+    race_info = ""
+    if plan.mode == "race_targeted" and plan.race_date:
+        race_info = f"  Race: {plan.race_name} on {plan.race_date}"
+
+    print(f"✓ Macro plan: {macro_id}  mode={plan.mode}")
+    print(
+        f"  Block: {block_range}  {plan.total_weeks} weeks  "
+        f"VDOT: {plan.vdot:.1f}  Peak: {plan.peak_weekly_miles:.1f} mi/wk"
+        + race_info
+    )
+    print()
+    print(f"  {'WK':>2}  {'START':<12} {'PHASE':<13} {'MILES':>5}  {'LR_MIN':>6}  {'INTENSITY':<10} NOTES")
+    print("  " + "─" * 76)
+
+    for w in plan.weeks:
+        notes = w.planner_notes[:35] if w.planner_notes else ""
+        if len(w.planner_notes) > 35:
+            notes = notes.rstrip() + "…"
+        print(
+            f"  {w.week_number:>2}  {w.week_start:<12} {w.phase:<13} "
+            f"{w.target_volume_miles:>5.1f}  {w.long_run_max_min:>6}  "
+            f"{w.intensity_budget:<10} {notes}"
+        )
 
 
 # ── export-garmin ─────────────────────────────────────────────────────────────
@@ -414,6 +511,30 @@ def _db_sanity() -> int:
 
     print()
 
+    # Macro plan status
+    from memory.db import get_active_macro_plan
+    macro = get_active_macro_plan()
+    if macro:
+        macro_id = macro["macro_id"]
+        mode = macro["mode"]
+        total_weeks = macro["total_weeks"]
+        status_str = macro["status"]
+        try:
+            from brain.schemas import MacroPlan
+            mp = MacroPlan.model_validate(macro["plan"])
+            cw = mp.get_week_for_date(today_str)
+            weeks_remaining = (total_weeks - cw.week_number + 1) if cw else "N/A"
+        except Exception:
+            weeks_remaining = "?"
+        print(
+            f"macro_plan:  {macro_id}  mode={mode}  "
+            f"weeks_remaining={weeks_remaining}  status={status_str}"
+        )
+    else:
+        print("macro_plan:  none")
+
+    print()
+
     if issues:
         print(f"Status: DEGRADED ({'; '.join(issues)})")
         return 1
@@ -710,8 +831,10 @@ def _build_parser() -> argparse.ArgumentParser:
     p_sync.set_defaults(func=cmd_sync)
 
     # plan
-    p_plan = sub.add_parser("plan", help="Generate a training week via Brain LLM")
-    p_plan.add_argument("--week", action="store_true", required=True, help="Plan current week")
+    p_plan = sub.add_parser("plan", help="Generate a training week or macro block via Brain LLM")
+    p_plan.add_argument("--week",  action="store_true", help="Plan current week")
+    p_plan.add_argument("--macro", action="store_true", help="Generate full periodized macro block")
+    p_plan.add_argument("--show",  action="store_true", help="Show active macro plan without regenerating (use with --macro)")
     p_plan.add_argument("--force", action="store_true", help="Bypass LLM cache")
     p_plan.set_defaults(func=cmd_plan)
 

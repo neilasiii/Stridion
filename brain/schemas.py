@@ -14,6 +14,7 @@ Design rules enforced at schema level:
 
 from __future__ import annotations
 
+from datetime import date, timedelta
 from typing import List, Literal, Optional
 from pydantic import BaseModel, Field, model_validator
 
@@ -136,3 +137,59 @@ class TodayAdjustment(BaseModel):
     alternatives: List[str] = Field(default_factory=list, max_length=3)
     safety_flags: List[str] = Field(default_factory=list)
     rationale: str = Field(max_length=200)
+
+
+# ── Macro Plan ─────────────────────────────────────────────────────────────────
+
+MacroModeT       = Literal["race_targeted", "base_block"]
+RaceDistanceT    = Literal["half_marathon", "marathon", "10k", "5k", "other"]
+IntensityBudgetT = Literal["none", "low", "moderate", "high"]
+
+
+class MacroPaces(BaseModel):
+    easy:     str = Field(max_length=20)
+    tempo:    Optional[str] = Field(None, max_length=20)
+    interval: Optional[str] = Field(None, max_length=20)
+    long_run: str = Field(max_length=20)
+
+
+class MacroWeek(BaseModel):
+    week_number:              int   = Field(ge=1, le=52)
+    week_start:               str          # ISO Sunday
+    phase:                    TrainingPhaseT
+    target_volume_miles:      float = Field(ge=0.0, le=150.0)
+    long_run_max_min:         int   = Field(ge=0, le=300)
+    intensity_budget:         IntensityBudgetT
+    quality_sessions_allowed: int   = Field(ge=0, le=2)
+    key_workout_type:         WorkoutTypeT
+    paces:                    MacroPaces
+    planner_notes:            str   = Field(max_length=200)
+    phase_rationale:          str   = Field(max_length=200)
+
+
+class MacroPlan(BaseModel):
+    mode:              MacroModeT
+    race_date:         Optional[str] = None    # null in base_block
+    race_name:         Optional[str] = Field(None, max_length=120)
+    race_distance:     Optional[RaceDistanceT] = None
+    vdot:              float = Field(ge=20.0, le=85.0)
+    start_week:        str                      # ISO Sunday
+    total_weeks:       int   = Field(ge=1, le=52)
+    peak_weekly_miles: float = Field(ge=0.0, le=150.0)
+    rationale:         str   = Field(max_length=300)
+    weeks:             List[MacroWeek] = Field(min_length=1)
+
+    def get_week_for_date(self, target_date: str) -> Optional[MacroWeek]:
+        """Return the MacroWeek whose window contains target_date."""
+        try:
+            td = date.fromisoformat(target_date)
+        except ValueError:
+            return None
+        for w in self.weeks:
+            try:
+                ws = date.fromisoformat(w.week_start)
+            except ValueError:
+                continue
+            if ws <= td < ws + timedelta(days=7):
+                return w
+        return None

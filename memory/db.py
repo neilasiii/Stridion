@@ -151,6 +151,21 @@ CREATE TABLE IF NOT EXISTS activities (
 
 CREATE INDEX IF NOT EXISTS activities_date ON activities(activity_date);
 CREATE INDEX IF NOT EXISTS activities_type ON activities(activity_type, activity_date);
+
+CREATE TABLE IF NOT EXISTS macro_plans (
+    macro_id    TEXT PRIMARY KEY,
+    created_at  DATETIME NOT NULL DEFAULT (datetime('now')),
+    mode        TEXT NOT NULL,
+    race_date   DATE,
+    race_name   TEXT,
+    start_week  DATE NOT NULL,
+    total_weeks INTEGER NOT NULL,
+    vdot        REAL NOT NULL,
+    status      TEXT NOT NULL DEFAULT 'draft',
+    plan_json   TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS macro_plans_status    ON macro_plans(status);
+CREATE INDEX IF NOT EXISTS macro_plans_race_date ON macro_plans(race_date);
 """
 
 
@@ -890,3 +905,175 @@ def get_activities(
         return [dict(r) for r in rows]
     finally:
         conn.close()
+
+
+# ── Macro Plans ────────────────────────────────────────────────────────────────
+
+def _new_macro_id(mode: str, race_date_or_none: Optional[str], vdot: float) -> str:
+    """Generate a human-readable, unique macro plan id.
+
+    Examples:
+      base_block  → "base-v38-a1b2c3d4"
+      race_targeted with 2026-06-01 → "20260601-v38-a1b2c3d4"
+    """
+    suffix = uuid.uuid4().hex[:8]
+    vdot_int = int(round(float(vdot)))
+    if mode == "base_block" or not race_date_or_none:
+        return f"base-v{vdot_int}-{suffix}"
+    # Strip dashes from race date prefix (YYYYMMDD)
+    date_prefix = race_date_or_none.replace("-", "")[:8]
+    return f"{date_prefix}-v{vdot_int}-{suffix}"
+
+
+def insert_macro_plan(
+    mode: str,
+    race_date: Optional[str],
+    race_name: Optional[str],
+    start_week: str,
+    total_weeks: int,
+    vdot: float,
+    plan_json: Dict,
+    status: str = "draft",
+    db_path: Path = DB_PATH,
+) -> str:
+    """Insert a new macro plan row. Returns the macro_id."""
+    macro_id = _new_macro_id(mode, race_date, vdot)
+    conn = _connect(db_path)
+    try:
+        # Guarantee uniqueness on collision (astronomically rare)
+        while conn.execute(
+            "SELECT 1 FROM macro_plans WHERE macro_id = ?", (macro_id,)
+        ).fetchone():
+            macro_id = _new_macro_id(mode, race_date, vdot)
+
+        conn.execute(
+            """INSERT INTO macro_plans(macro_id, mode, race_date, race_name,
+                   start_week, total_weeks, vdot, status, plan_json)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                macro_id,
+                mode,
+                race_date,
+                race_name,
+                start_week,
+                total_weeks,
+                vdot,
+                status,
+                json.dumps(plan_json),
+            ),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+    return macro_id
+
+
+def set_active_macro_plan(macro_id: str, db_path: Path = DB_PATH) -> None:
+    """
+    Promote macro_id to 'active'. ATOMIC: all steps run in one transaction.
+
+      1) Verify macro_id exists — raises ValueError if not.
+      2) Capture previous active macro_id (for event payload).
+      3) Archive any currently-active macro plan (status → 'archived').
+      4) Set the new plan to status='active'.
+      5) Write a 'macro_plan_activated' event (inline, same connection).
+      6) Update state['active_macro_plan_id'] for fast lookup.
+
+    Only call this AFTER validate_macro_plan() passes.
+
+    Raises:
+        ValueError: if macro_id does not exist in macro_plans table.
+    """
+    ts = datetime.utcnow().isoformat()
+    conn = _connect(db_path)
+    try:
+        # 1) Guard: macro plan must exist
+        if not conn.execute(
+            "SELECT 1 FROM macro_plans WHERE macro_id = ?", (macro_id,)
+        ).fetchone():
+            raise ValueError(f"set_active_macro_plan: macro_id {macro_id!r} not found")
+
+        # 2) Capture previous active macro plan (may be None)
+        prev = conn.execute(
+            "SELECT macro_id FROM macro_plans WHERE status = 'active'"
+        ).fetchone()
+        previous_macro_id: Optional[str] = prev["macro_id"] if prev else None
+
+        # 3) Archive current active macro plan(s)
+        conn.execute(
+            "UPDATE macro_plans SET status = 'archived' WHERE status = 'active'"
+        )
+
+        # 4) Activate new macro plan
+        conn.execute(
+            "UPDATE macro_plans SET status = 'active' WHERE macro_id = ?", (macro_id,)
+        )
+
+        # 5) Write macro_plan_activated event (inline, same transaction)
+        event_payload = {
+            "macro_id":          macro_id,
+            "previous_macro_id": previous_macro_id,
+            "activated_at":      ts,
+        }
+        event_payload_str = json.dumps(event_payload, sort_keys=True)
+        event_id = uuid.uuid4().hex  # guaranteed unique
+        conn.execute(
+            """INSERT INTO events(id, type, ts, payload_json, source, hash)
+               VALUES (?, 'macro_plan_activated', ?, ?, 'system', ?)""",
+            (event_id, ts, event_payload_str, event_id),
+        )
+
+        # 6) Fast-lookup state entry
+        conn.execute(
+            """INSERT INTO state(key, value, updated_at)
+               VALUES('active_macro_plan_id', ?, datetime('now'))
+               ON CONFLICT(key) DO UPDATE SET
+                 value      = excluded.value,
+                 updated_at = excluded.updated_at""",
+            (macro_id,),
+        )
+
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+
+
+def get_active_macro_plan(db_path: Path = DB_PATH) -> Optional[Dict]:
+    """
+    Return the active macro plan as a dict, or None if no active plan exists.
+
+    Shape: {macro_id, mode, race_date, race_name, start_week, total_weeks,
+            vdot, status, plan: <dict>}
+    """
+    active_id = get_active_macro_plan_id(db_path=db_path)
+    if not active_id:
+        return None
+
+    conn = _connect(db_path)
+    try:
+        row = conn.execute(
+            "SELECT * FROM macro_plans WHERE macro_id = ?", (active_id,)
+        ).fetchone()
+        if not row:
+            return None
+        return {
+            "macro_id":    row["macro_id"],
+            "mode":        row["mode"],
+            "race_date":   row["race_date"],
+            "race_name":   row["race_name"],
+            "start_week":  row["start_week"],
+            "total_weeks": row["total_weeks"],
+            "vdot":        row["vdot"],
+            "status":      row["status"],
+            "plan":        json.loads(row["plan_json"]),
+        }
+    finally:
+        conn.close()
+
+
+def get_active_macro_plan_id(db_path: Path = DB_PATH) -> Optional[str]:
+    """Return the active macro plan's macro_id from the state table, or None."""
+    return get_state("active_macro_plan_id", db_path=db_path)

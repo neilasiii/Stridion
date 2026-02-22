@@ -80,6 +80,21 @@ RACE RULES (check context_packet.upcoming_races before planning):
 - Week containing a race → taper phase; no hard sessions in the 2 days before race day.
 - If upcoming_races is empty, plan normally.
 
+MACRO PLAN RULES (check context_packet.macro_guidance):
+If macro_guidance is present and non-null:
+  - phase SHOULD match macro_guidance.current_week.phase.
+    Deviate only if: readiness severely degraded, constraint blocks required session
+    types, or race just completed. On deviation add "macro_deviation" to safety_flags
+    and explain in rationale.
+  - weekly_volume_miles: target macro_guidance.current_week.target_volume_miles.
+    May reduce up to 20% for low readiness. Never EXCEED the target.
+  - quality_sessions: do NOT exceed quality_sessions_allowed. If 0, easy/rest/cross only.
+  - long run: do NOT exceed long_run_max_min minutes.
+  - paces: use macro_guidance.current_week.paces for all target_value fields.
+  - Follow planner_notes literally unless a safety rule overrides.
+  - Add "macro_guided" to plan-level safety_flags when macro_guidance is applied.
+If macro_guidance is null: infer phase from race proximity and training history.
+
 OUTPUT RULES:
 - Output ONLY a single JSON object. No markdown fences. No prose.
 - Every field in the schema is required unless marked Optional.
@@ -309,7 +324,7 @@ def _extract_or_reprompt(raw: str, system: str) -> str:
 
 _EXPECTED_PACKET_KEYS = {
     "today", "athlete", "training_summary", "readiness_trend",
-    "plan_authority", "active_plan", "constraints",
+    "plan_authority", "active_plan", "macro_guidance", "constraints",
     "recent_decisions", "vault_excerpts", "data_quality",
 }
 
@@ -489,6 +504,14 @@ def plan_week(
     if _low_conf and "low_readiness_confidence" not in decision.safety_flags:
         decision.safety_flags.append("low_readiness_confidence")
         log.info("Enforced low_readiness_confidence safety flag")
+
+    # ── Enforce macro_guided flag deterministically ─────────────────────────
+    # When macro_guidance is present (not None, not truncated), always mark.
+    mg = context_packet.get("macro_guidance")
+    if isinstance(mg, dict) and not mg.get("_truncated"):
+        if "macro_guided" not in decision.safety_flags:
+            decision.safety_flags.append("macro_guided")
+            log.info("Enforced macro_guided safety flag")
 
     # ── Persist ───────────────────────────────────────────────────────────
     plan_id = insert_plan(

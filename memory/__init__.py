@@ -30,6 +30,10 @@ from .db import (
     get_plan_meta,
     log_task_start,
     log_task_finish,
+    insert_macro_plan,
+    set_active_macro_plan,
+    get_active_macro_plan,
+    get_active_macro_plan_id,
     DB_PATH,
 )
 
@@ -67,6 +71,10 @@ __all__ = [
     "get_plan_meta",
     "log_task_start",
     "log_task_finish",
+    "insert_macro_plan",
+    "set_active_macro_plan",
+    "get_active_macro_plan",
+    "get_active_macro_plan_id",
     # vault
     "write_daily_note",
     "append_decision",

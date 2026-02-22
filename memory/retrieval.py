@@ -47,6 +47,7 @@ MAX_PLAN_CHARS        = 2_000
 MAX_CONSTRAINTS_CHARS =   600
 MAX_DECISIONS_CHARS   =   900   # shared across 3 decisions
 MAX_EXCERPTS_CHARS    = 1_200   # shared across up to 5 excerpts
+MAX_MACRO_CHARS       =   800
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -457,6 +458,8 @@ def _enforce_size_caps(packet: Dict) -> Dict:
     packet["readiness_trend"]  = _cap_field(packet["readiness_trend"],  MAX_READINESS_CHARS)
     packet["active_plan"]      = _cap_field(packet["active_plan"],       MAX_PLAN_CHARS)
     packet["constraints"]      = _cap_field(packet["constraints"],       MAX_CONSTRAINTS_CHARS)
+    if packet.get("macro_guidance") is not None:
+        packet["macro_guidance"] = _cap_field(packet["macro_guidance"],  MAX_MACRO_CHARS)
 
     per_decision = MAX_DECISIONS_CHARS // 3
     packet["recent_decisions"] = [_trunc(d, per_decision) for d in packet["recent_decisions"]]
@@ -465,6 +468,77 @@ def _enforce_size_caps(packet: Dict) -> Dict:
     packet["vault_excerpts"]   = [_trunc(e, per_excerpt) for e in packet["vault_excerpts"]]
 
     return packet
+
+
+# ── Macro Plan Guidance ────────────────────────────────────────────────────────
+
+def _get_macro_guidance(target_date: str, db_path) -> Optional[Dict]:
+    """
+    Load the active macro plan and return guidance for the week containing target_date.
+
+    target_date should be the upcoming Sunday being planned (ISO YYYY-MM-DD).
+    Returns None if no active macro plan exists or if target_date is outside the block.
+
+    Uses lazy import of MacroPlan to avoid circular imports at module load time.
+
+    Observability: logs at INFO level with source=sqlite and macro_id.
+    """
+    from .db import get_active_macro_plan
+
+    row = get_active_macro_plan(db_path=db_path)
+    if not row:
+        return None
+
+    try:
+        # Lazy import to avoid circular import (brain → memory → brain)
+        from brain.schemas import MacroPlan
+        plan = MacroPlan.model_validate(row["plan"])
+    except Exception as exc:
+        log.warning("_get_macro_guidance: failed to validate macro plan: %s", exc)
+        return None
+
+    current_week = plan.get_week_for_date(target_date)
+    if current_week is None:
+        log.info(
+            "macro_guidance: target_date=%s is outside macro block "
+            "(start=%s total_weeks=%d)",
+            target_date, plan.start_week, plan.total_weeks,
+        )
+        return None
+
+    weeks_remaining = plan.total_weeks - current_week.week_number + 1
+
+    log.info(
+        "macro_guidance source=sqlite macro_id=%s mode=%s week=%d/%d",
+        row["macro_id"], row["mode"], current_week.week_number, plan.total_weeks,
+    )
+
+    return {
+        "macro_id":       row["macro_id"],
+        "mode":           row["mode"],
+        "race_date":      row.get("race_date"),
+        "race_name":      row.get("race_name"),
+        "total_weeks":    plan.total_weeks,
+        "weeks_remaining": weeks_remaining,
+        "current_week": {
+            "week_number":              current_week.week_number,
+            "week_start":               current_week.week_start,
+            "phase":                    current_week.phase,
+            "target_volume_miles":      current_week.target_volume_miles,
+            "long_run_max_min":         current_week.long_run_max_min,
+            "intensity_budget":         current_week.intensity_budget,
+            "quality_sessions_allowed": current_week.quality_sessions_allowed,
+            "key_workout_type":         current_week.key_workout_type,
+            "paces": {
+                "easy":     current_week.paces.easy,
+                "tempo":    current_week.paces.tempo,
+                "interval": current_week.paces.interval,
+                "long_run": current_week.paces.long_run,
+            },
+            "planner_notes":   current_week.planner_notes,
+            "phase_rationale": current_week.phase_rationale,
+        },
+    }
 
 
 # ── Race loader ───────────────────────────────────────────────────────────────
@@ -581,6 +655,17 @@ def build_context_packet(
     if readiness_trend is None:
         readiness_trend = _rollup_readiness(health, readiness_days)
 
+    # Upcoming Sunday — target date for macro guidance (week being planned)
+    days_until_sunday = (6 - today.weekday()) % 7
+    upcoming_sunday = (today + timedelta(days=days_until_sunday)).isoformat()
+
+    # Macro guidance (silently None if no active macro plan or outside block)
+    macro_guidance = None
+    try:
+        macro_guidance = _get_macro_guidance(upcoming_sunday, db_path)
+    except Exception as exc:
+        log.warning("_get_macro_guidance failed: %s", exc)
+
     packet = {
         "generated_at":     datetime.utcnow().isoformat(),
         "today":            today.isoformat(),
@@ -590,6 +675,7 @@ def build_context_packet(
         "readiness_trend":  readiness_trend,
         "plan_authority":   _get_plan_authority(db_path),
         "active_plan":      _get_plan_section(days_forward, db_path),
+        "macro_guidance":   macro_guidance,
         "constraints":      _get_constraints(days_forward, db_path),
         "recent_decisions": [],
         "vault_excerpts":   [],
