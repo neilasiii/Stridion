@@ -822,10 +822,10 @@ def generate_macro_plan(
     # ── LLM call (OUTSIDE DB transaction) ───────────────────────────────────
     import subprocess as _subprocess
     try:
-        raw = _call_llm(system, user, timeout=120, model=_MACRO_MODEL)
+        raw = _call_llm(system, user, timeout=300, model=_MACRO_MODEL)
     except _subprocess.TimeoutExpired:
         raise RuntimeError(
-            "Macro plan generation timed out (2 min). "
+            "Macro plan generation timed out (5 min). "
             "The LLM is likely overloaded — try again in a few minutes."
         )
 
