@@ -3,7 +3,8 @@ Brain Macro Planner — LLM-powered long-range periodization block.
 
 Public API:
     generate_macro_plan(context_packet, force=False, db_path=None) -> MacroPlan
-    validate_macro_plan(plan: MacroPlan) -> MacroValidationResult
+    validate_macro_plan(plan: MacroPlan, *, post_race_cap_miles=None,
+                        post_race_recovery_weeks=0) -> MacroValidationResult
 
 The macro plan is a rail, not a cage: it gives the weekly planner a
 deterministic arc (phase, volume target, intensity budget, paces) to
@@ -57,9 +58,22 @@ class MacroValidationResult:
     errors: List[str] = field(default_factory=list)
 
 
-def validate_macro_plan(plan: MacroPlan) -> MacroValidationResult:
+def validate_macro_plan(
+    plan: MacroPlan,
+    *,
+    post_race_cap_miles: Optional[float] = None,
+    post_race_recovery_weeks: int = 0,
+) -> MacroValidationResult:
     """
     Run all structural and training-science invariants.
+
+    Args:
+        plan: The MacroPlan to validate.
+        post_race_cap_miles: If set, Week 1 (and recovery weeks) must not
+            exceed this volume. Provided by _extract_macro_inputs() when a
+            recent race-level effort is detected.
+        post_race_recovery_weeks: How many weeks must obey recovery constraints.
+            Default 0 means post-race check is skipped even if cap is set.
 
     Returns MacroValidationResult(ok=True) on success, or
     MacroValidationResult(ok=False, errors=[...]) with human-readable
@@ -207,7 +221,7 @@ def validate_macro_plan(plan: MacroPlan) -> MacroValidationResult:
                 f"but quality_sessions_allowed={w.quality_sessions_allowed} (must be 0)"
             )
 
-    # 9. long_run_max_min sanity (≤ 62% of weekly volume at ~10 min/mi)
+    # 9. long_run_max_min sanity (≤ 62% of weekly volume at ~10 min/mi, general cap)
     for w in weeks:
         if w.target_volume_miles > 0:
             volume_mins_approx = w.target_volume_miles * 10
@@ -217,7 +231,154 @@ def validate_macro_plan(plan: MacroPlan) -> MacroValidationResult:
                     f"exceeds 62% of ~{volume_mins_approx:.0f}min weekly volume"
                 )
 
+    # 10. Rationale consistency — warn if "from 0" language when Week 1 > 5 mi
+    if weeks and plan.weeks[0].target_volume_miles > 5.0:
+        if re.search(r"\bfrom\s+0\b", plan.rationale, re.IGNORECASE):
+            errors.append(
+                "rationale mentions 'from 0' but Week 1 volume > 5 mi "
+                "(misleading — reference actual Week 1 target volume)"
+            )
+
+    # 11. Early-block long run cap (weeks 1-4): ≤ 50% of weekly volume
+    for w in weeks:
+        if 1 <= w.week_number <= 4 and w.target_volume_miles > 0:
+            vol_mins = w.target_volume_miles * 10
+            if w.long_run_max_min > vol_mins * 0.50 + 0.5:  # 0.5 min tolerance
+                errors.append(
+                    f"week {w.week_number}: early-block LR cap exceeded — "
+                    f"long_run_max_min {w.long_run_max_min} exceeds 50% of "
+                    f"~{vol_mins:.0f}min weekly volume"
+                )
+
+    # 12. Quality ramp — no 0→2 jump; no simultaneous quality + LR spike
+    for i in range(1, len(weeks)):
+        prev_q  = weeks[i - 1].quality_sessions_allowed
+        curr_q  = weeks[i].quality_sessions_allowed
+        prev_lr = weeks[i - 1].long_run_max_min
+        curr_lr = weeks[i].long_run_max_min
+        q_jump  = curr_q - prev_q
+        lr_pct  = (curr_lr - prev_lr) / prev_lr if prev_lr > 0 else 0.0
+        if prev_q == 0 and curr_q == 2:
+            errors.append(
+                f"week {weeks[i].week_number}: quality jumped 0→2 in one step "
+                f"(introduce gradually — start with 1 quality session)"
+            )
+        if q_jump > 0 and lr_pct > 0.10 + 1e-9:
+            errors.append(
+                f"week {weeks[i].week_number}: simultaneous quality increase "
+                f"(+{q_jump} session) and LR cap increase "
+                f"({lr_pct:.0%}) — too much stress spike"
+            )
+
+    # 13. End-of-block stress (base_block only)
+    if plan.mode == "base_block" and weeks:
+        final    = weeks[-1]
+        peak_vol = max((w.target_volume_miles for w in weeks), default=0.0)
+        if (
+            final.target_volume_miles >= peak_vol - 0.1
+            and final.intensity_budget == "high"
+            and final.quality_sessions_allowed == 2
+        ):
+            errors.append(
+                f"week {final.week_number}: base_block ends at peak volume "
+                f"({final.target_volume_miles:.1f}mi) with high intensity + "
+                f"2 quality sessions — unsustainable block finish; "
+                f"reduce volume or intensity in final week"
+            )
+
+    # 14. Post-race recovery constraints (only when post_race_cap_miles is provided)
+    if post_race_cap_miles is not None and weeks:
+        n_recovery = max(1, post_race_recovery_weeks) if post_race_recovery_weeks else 1
+        for rw in weeks[:n_recovery]:
+            if rw.target_volume_miles > post_race_cap_miles * 1.15 + 0.5:
+                errors.append(
+                    f"week {rw.week_number}: post-race recovery required — "
+                    f"volume {rw.target_volume_miles:.1f}mi exceeds cap "
+                    f"{post_race_cap_miles:.1f}mi (with 15% slack)"
+                )
+            if rw.quality_sessions_allowed > 0:
+                errors.append(
+                    f"week {rw.week_number}: post-race recovery required — "
+                    f"quality_sessions_allowed must be 0, "
+                    f"got {rw.quality_sessions_allowed}"
+                )
+            if rw.intensity_budget not in ("none", "low"):
+                errors.append(
+                    f"week {rw.week_number}: post-race recovery required — "
+                    f"intensity_budget must be 'none' or 'low', "
+                    f"got '{rw.intensity_budget}'"
+                )
+
     return MacroValidationResult(ok=len(errors) == 0, errors=errors)
+
+
+# ── Race detection ─────────────────────────────────────────────────────────────
+
+
+def _detect_post_race_recovery(context_packet: Dict) -> Dict:
+    """
+    Detect if a race-level effort occurred in the last 7 days.
+
+    Uses training_summary.recent_runs from the context packet.
+    A "race-level effort" is any run with distance_mi >= 10.0 within 7 days
+    of today (covers 10k+, half marathon, marathon).
+
+    Returns:
+        {
+            "required":           bool,
+            "days_ago":           int,     # 0 if not required
+            "approx_distance_mi": float,   # 0.0 if not required
+            "week_load_mi":       float,   # rolling weekly avg from training summary
+            "recovery_weeks":     int,     # 0 if not required, else 1 or 2
+        }
+    """
+    today = date.today()
+    recent_runs = (
+        context_packet.get("training_summary", {}).get("recent_runs", []) or []
+    )
+
+    best_candidate: Optional[Dict] = None
+    for run in recent_runs:
+        run_date_str = run.get("date", "")
+        dist = float(run.get("distance_mi", 0) or 0)
+        try:
+            run_date = date.fromisoformat(run_date_str)
+        except ValueError:
+            continue
+        days_ago = (today - run_date).days
+        if days_ago <= 7 and dist >= 10.0:
+            if best_candidate is None or dist > best_candidate["dist"]:
+                best_candidate = {"days_ago": days_ago, "dist": dist}
+
+    if best_candidate is None:
+        return {
+            "required":           False,
+            "days_ago":           0,
+            "approx_distance_mi": 0.0,
+            "week_load_mi":       0.0,
+            "recovery_weeks":     0,
+        }
+
+    dist_mi = best_candidate["dist"]
+    ts = context_packet.get("training_summary", {})
+    total_mi = float(ts.get("total_miles", 0) or 0)
+    period_days = int(ts.get("period_days", 14) or 14)
+    week_load = (total_mi / period_days * 7) if period_days > 0 else 0.0
+
+    # Marathon → 2 recovery weeks; half/other → 1
+    recovery_weeks = 2 if dist_mi >= 24.0 else 1
+
+    log.info(
+        "post_race_recovery detected: dist_mi=%.1f days_ago=%d recovery_weeks=%d",
+        dist_mi, best_candidate["days_ago"], recovery_weeks,
+    )
+    return {
+        "required":           True,
+        "days_ago":           best_candidate["days_ago"],
+        "approx_distance_mi": round(dist_mi, 1),
+        "week_load_mi":       round(week_load, 1),
+        "recovery_weeks":     recovery_weeks,
+    }
 
 
 # ── LLM prompt construction ───────────────────────────────────────────────────
@@ -259,13 +420,16 @@ Required JSON structure (output ONLY this, no prose, no markdown fences):
 
 def _extract_macro_inputs(context_packet: Dict) -> Dict:
     """
-    Determine mode, race info, block length, VDOT, and current weekly mileage
-    from the context packet.
+    Determine mode, race info, block length, VDOT, current weekly mileage,
+    and post-race recovery constraints from the context packet.
 
     Returns a dict with all inputs needed to build the LLM prompt.
     """
     races = context_packet.get("upcoming_races", []) or []
     today = date.today()
+
+    # Detect recent race-level effort for recovery enforcement
+    post_race = _detect_post_race_recovery(context_packet)
 
     # Find the target race: A-priority first, then first available
     target_race = None
@@ -289,6 +453,14 @@ def _extract_macro_inputs(context_packet: Dict) -> Dict:
     # VDOT from athlete snapshot (VO2max ≈ VDOT in Jack Daniels system)
     vdot_raw = context_packet.get("athlete", {}).get("vo2_max")
     vdot = float(vdot_raw) if vdot_raw is not None else 38.0
+
+    # Week 1 cap for post-race recovery (formula: min(60% race_week, 70% 4wk_avg, 20 mi))
+    week1_cap_miles: Optional[float] = None
+    if post_race["required"]:
+        wk_load = post_race["week_load_mi"] if post_race["week_load_mi"] > 0 else weekly_avg
+        cap_a = 0.60 * wk_load if wk_load > 0 else 14.0
+        cap_b = 0.70 * weekly_avg if weekly_avg > 0 else 14.0
+        week1_cap_miles = max(round(min(cap_a, cap_b, 20.0), 1), 10.0)  # floor 10 mi
 
     if target_race:
         race_date_str = target_race.get("date", "")
@@ -316,35 +488,45 @@ def _extract_macro_inputs(context_packet: Dict) -> Dict:
                 race_distance = "other"
 
             return {
-                "mode":                "race_targeted",
-                "race_date":           race_date_str,
-                "race_name":           str(target_race.get("name", "Race") or "Race")[:120],
-                "race_distance":       race_distance,
-                "block_weeks":         block_weeks,
-                "vdot":                vdot,
-                "current_weekly_miles": round(weekly_avg, 1),
-                "start_week":          start_week.isoformat(),
+                "mode":                           "race_targeted",
+                "race_date":                      race_date_str,
+                "race_name":                      str(target_race.get("name", "Race") or "Race")[:120],
+                "race_distance":                  race_distance,
+                "block_weeks":                    block_weeks,
+                "vdot":                           vdot,
+                "current_weekly_miles":           round(weekly_avg, 1),
+                "start_week":                     start_week.isoformat(),
+                "post_race_recovery_required":    post_race["required"],
+                "post_race_recovery_days_ago":    post_race["days_ago"],
+                "post_race_approx_distance_mi":   post_race["approx_distance_mi"],
+                "post_race_recovery_week_count":  post_race["recovery_weeks"],
+                "week1_cap_miles":                week1_cap_miles,
             }
 
     # No valid future race → base_block, 12 weeks
     return {
-        "mode":                "base_block",
-        "race_date":           None,
-        "race_name":           None,
-        "race_distance":       None,
-        "block_weeks":         12,
-        "vdot":                vdot,
-        "current_weekly_miles": round(weekly_avg, 1),
-        "start_week":          start_week.isoformat(),
+        "mode":                           "base_block",
+        "race_date":                      None,
+        "race_name":                      None,
+        "race_distance":                  None,
+        "block_weeks":                    12,
+        "vdot":                           vdot,
+        "current_weekly_miles":           round(weekly_avg, 1),
+        "start_week":                     start_week.isoformat(),
+        "post_race_recovery_required":    post_race["required"],
+        "post_race_recovery_days_ago":    post_race["days_ago"],
+        "post_race_approx_distance_mi":   post_race["approx_distance_mi"],
+        "post_race_recovery_week_count":  post_race["recovery_weeks"],
+        "week1_cap_miles":                week1_cap_miles,
     }
 
 
 def _build_macro_prompts(inputs: Dict) -> tuple:
     """Build (system_prompt, user_prompt) for the macro plan LLM call."""
-    mode = inputs["mode"]
-    total_weeks = inputs["block_weeks"]
-    start_week = inputs["start_week"]
-    vdot = inputs["vdot"]
+    mode         = inputs["mode"]
+    total_weeks  = inputs["block_weeks"]
+    start_week   = inputs["start_week"]
+    vdot         = inputs["vdot"]
     weekly_miles = inputs["current_weekly_miles"]
 
     # Pre-compute all week starts (help LLM avoid date arithmetic errors)
@@ -360,7 +542,11 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
             '- Allowed phases: only "base" and "quality". '
             'No "race_specific". No "taper".\n'
             "- race_date, race_name, race_distance MUST be null.\n"
-            "- Build aerobic fitness throughout. No taper at the end."
+            "- Build aerobic fitness throughout. No taper at the end.\n"
+            "- END-OF-BLOCK: final 2 weeks must HOLD or REDUCE from peak volume. "
+            "Do NOT make the last week simultaneously: peak volume + "
+            "intensity_budget='high' + quality_sessions_allowed=2. "
+            "Prefer a steady, sustainable block finish."
         )
         race_context = ""
     else:
@@ -382,10 +568,30 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
             f"({inputs['race_distance']})"
         )
 
+    # Post-race recovery block (injected into prompt when recent race detected)
+    if inputs.get("post_race_recovery_required"):
+        days_ago = inputs["post_race_recovery_days_ago"]
+        cap      = inputs["week1_cap_miles"]
+        dist     = inputs["post_race_approx_distance_mi"]
+        n_rec    = inputs.get("post_race_recovery_week_count", 1)
+        recovery_note = (
+            f"POST-RACE RECOVERY REQUIREMENT:\n"
+            f"- A race-level effort ({dist:.1f} mi) was completed {days_ago} day(s) ago.\n"
+            f"- Weeks 1–{n_rec} MUST be recovery weeks:\n"
+            f"  * target_volume_miles <= {cap:.1f} mi (hard cap)\n"
+            f"  * quality_sessions_allowed = 0\n"
+            f"  * intensity_budget = 'none' or 'low'\n"
+            f"  * key_workout_type = 'easy' or 'rest'\n"
+            f"  * planner_notes must mention 'post-race recovery'\n\n"
+        )
+    else:
+        recovery_note = ""
+
     system = (
         f"You are a running coach AI. Generate a {total_weeks}-week {mode} "
         f"macro training block.\n\n"
         f"{mode_rules}\n\n"
+        f"{recovery_note}"
         f"TRAINING CONTEXT:\n"
         f"- Athlete VDOT: {vdot:.1f}\n"
         f"- Current weekly mileage: {weekly_miles:.1f} mi/week\n"
@@ -398,11 +604,22 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
         f"- race_specific: race-pace work, begin volume reduction, budget 'moderate'\n"
         f"- taper: reduce volume 20-30%/week, maintain intensity, preserve fitness\n\n"
         f"VOLUME RAMP (base phase only):\n"
+        f"- Start Week 1 close to current weekly mileage ({weekly_miles:.1f} mi/wk). "
+        f"Do NOT drop to 0 or start from scratch.\n"
         f"- Max 10% increase week-over-week\n"
         f"- No more than 2 consecutive weeks of >7% increase\n"
         f"- Volume == 0 → key_workout_type must be 'rest'\n"
         f"- Volume < 6 mi → quality_sessions_allowed must be 0\n\n"
-        f"LONG RUN: long_run_max_min ≤ 62% of (target_volume_miles × 10 minutes)\n\n"
+        f"LONG RUN (target 35-45% of weekly volume at ~10 min/mi):\n"
+        f"- TARGET long_run_max_min = 35-45% of (target_volume_miles × 10 min)\n"
+        f"  Example: 20 mi/wk → target 70-90 min long run\n"
+        f"- Hard cap (any week): ≤ 62% of (target_volume_miles × 10 min)\n"
+        f"- Early-block cap (weeks 1-4): ≤ 50% of (target_volume_miles × 10 min)\n\n"
+        f"QUALITY RAMP (avoid sudden stress spikes):\n"
+        f"- First quality week: quality_sessions_allowed = 1 (NEVER jump 0→2)\n"
+        f"- Do NOT simultaneously increase quality_sessions_allowed AND "
+        f"long_run_max_min by >10% in the same week\n"
+        f"- Build intensity_budget gradually: none → low → moderate → high\n\n"
         f"PACES (VDOT {vdot:.1f}):\n"
         f"- Easy: approximately 10:30-11:10/mi (adjust for exact VDOT)\n"
         f"- Long run: approximately 11:00-11:40/mi\n"
@@ -413,7 +630,10 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
         f"- Generate EXACTLY {total_weeks} week entries.\n"
         f"- week_start for each week MUST match the exact Sunday listed below.\n"
         f"- week_number must be 1-indexed and sequential.\n"
-        f"- Phases must not regress (e.g., quality cannot follow taper)."
+        f"- Phases must not regress (e.g., quality cannot follow taper).\n"
+        f"- rationale: reference actual Week 1 volume ({weekly_miles:.1f} mi/wk currently). "
+        f"NEVER write 'from 0 miles' or 'starting from scratch' — "
+        f"the athlete is already training."
     )
 
     user = (
@@ -582,8 +802,11 @@ def generate_macro_plan(
     # ── Extract inputs from context packet ───────────────────────────────────
     inputs = _extract_macro_inputs(context_packet)
     log.info(
-        "generate_macro_plan mode=%s block_weeks=%d start_week=%s vdot=%.1f",
+        "generate_macro_plan mode=%s block_weeks=%d start_week=%s vdot=%.1f "
+        "post_race=%s week1_cap=%s",
         inputs["mode"], inputs["block_weeks"], inputs["start_week"], inputs["vdot"],
+        inputs.get("post_race_recovery_required", False),
+        inputs.get("week1_cap_miles"),
     )
 
     # ── Build prompt ─────────────────────────────────────────────────────────
@@ -603,7 +826,11 @@ def generate_macro_plan(
     plan = _parse_and_validate_macro(raw, system)
 
     # ── Structural validation layer ──────────────────────────────────────────
-    result = validate_macro_plan(plan)
+    result = validate_macro_plan(
+        plan,
+        post_race_cap_miles=inputs.get("week1_cap_miles"),
+        post_race_recovery_weeks=inputs.get("post_race_recovery_week_count", 0),
+    )
 
     if not result.ok:
         # Audit insert (status="validation_failed") — no activation

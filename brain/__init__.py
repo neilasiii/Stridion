@@ -10,7 +10,13 @@ Authority: internal plan in SQLite is authoritative. FinalSurge is not.
 from .planner import plan_week, adjust_today
 from .schemas import PlanDecision, TodayAdjustment, PlanDay, WorkoutStep
 from .schemas import MacroPlan, MacroWeek, MacroPaces
-from .macro_plan import generate_macro_plan, validate_macro_plan, MacroValidationError
+from .macro_plan import (
+    generate_macro_plan,
+    validate_macro_plan,
+    MacroValidationError,
+    MacroValidationResult,
+    _detect_post_race_recovery,
+)
 
 __all__ = [
     "plan_week",
@@ -25,4 +31,6 @@ __all__ = [
     "generate_macro_plan",
     "validate_macro_plan",
     "MacroValidationError",
+    "MacroValidationResult",
+    "_detect_post_race_recovery",
 ]
