@@ -684,7 +684,10 @@ def build_context_packet(
     if vdot_approx is None:
         readings = health.get("vo2_max_readings", [])
         if readings:
-            vdot_approx = readings[-1].get("vo2_max")
+            # readings may be newest-first or oldest-first depending on source;
+            # always pick the entry with the latest date to get the current VDOT.
+            latest = max(readings, key=lambda r: r.get("date", ""))
+            vdot_approx = latest.get("vo2_max")
     rhr_rows = health.get("resting_hr", [])
     rhr_latest = rhr_rows[-1].get("restingHeartRate") if rhr_rows else None
 
