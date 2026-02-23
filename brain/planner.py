@@ -522,6 +522,26 @@ def plan_week(
             decision.safety_flags.append("macro_guided")
             log.info("Enforced macro_guided safety flag")
 
+        # ── Enforce macro volume cap ─────────────────────────────────────
+        # The LLM prompt says "Never exceed the target", but we cannot
+        # fully rely on that. Flag over-volume plans for operator visibility.
+        # We do NOT silently clamp — the flag triggers a warning, letting the
+        # weekly planner rationale (and the human reviewer) see the overage.
+        macro_target_vol = (
+            mg.get("current_week", {}).get("target_volume_miles")
+        )
+        if (
+            macro_target_vol is not None
+            and isinstance(macro_target_vol, (int, float))
+            and decision.weekly_volume_miles > macro_target_vol + 0.5  # 0.5 mi tolerance
+        ):
+            if "macro_cap_exceeded" not in decision.safety_flags:
+                decision.safety_flags.append("macro_cap_exceeded")
+                log.warning(
+                    "macro_cap_exceeded: plan volume %.1f mi exceeds macro target %.1f mi",
+                    decision.weekly_volume_miles, macro_target_vol,
+                )
+
     # ── Persist ───────────────────────────────────────────────────────────
     plan_id = insert_plan(
         start_date=ws,

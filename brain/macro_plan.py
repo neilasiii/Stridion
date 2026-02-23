@@ -888,5 +888,14 @@ def generate_macro_plan(
         rationale=plan.rationale[:300],
     )
 
-    log.info("generate_macro_plan persisted macro_id=%s", macro_id)
+    log.info(
+        "generate_macro_plan activated macro_id=%s mode=%s weeks=%d "
+        "peak_miles=%.1f vdot=%.1f post_race_recovery=%s",
+        macro_id,
+        inputs["mode"],
+        inputs["block_weeks"],
+        plan.peak_weekly_miles,
+        inputs["vdot"],
+        inputs.get("post_race_recovery_required", False),
+    )
     return plan
