@@ -223,3 +223,46 @@ def test_dry_run_flags_logged_date_missing_from_active_plan(tmp_path: Path):
         s["date"] == today_str and "no active plan session" in s["reason"]
         for s in result["skipped"]
     )
+
+
+def test_live_remove_delete_exception_emits_single_warning(tmp_path: Path):
+    import skills.publish_to_garmin as pub
+
+    target_date = date.today().isoformat()
+    log_path = tmp_path / "generated_workouts.json"
+    log_path.write_text(
+        json.dumps(
+            {
+                "running": {
+                    target_date: {
+                        "garmin_id": 777,
+                        "signature": "sig",
+                    }
+                }
+            }
+        )
+    )
+
+    with (
+        patch.object(pub, "_GENERATED_LOG", log_path),
+        patch(
+            "skills.plans.get_active_sessions",
+            return_value=[
+                {
+                    "date": target_date,
+                    "workout_type": "rest",
+                }
+            ],
+        ),
+        patch("skills.internal_plan_to_scheduled_workouts.convert", return_value=[]),
+        patch("workout_uploader.get_garmin_client", return_value=object()),
+        patch("workout_uploader.delete_workout", side_effect=RuntimeError("api timeout")),
+        patch("memory.db.init_db"),
+        patch("memory.db.insert_event", return_value="event-id"),
+    ):
+        result = pub.publish(days=1, dry_run=False)
+
+    relevant = [w for w in result["warnings"] if target_date in w]
+    assert len(relevant) == 1
+    assert "delete failed for Garmin workout 777" in relevant[0]
+    assert "could not delete obsolete" not in relevant[0]

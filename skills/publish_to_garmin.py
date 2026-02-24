@@ -337,8 +337,8 @@ def publish(
         try:
             deleted = delete_workout(client, int(garmin_id), quiet=True)
         except Exception as exc:
-            deleted = False
             warnings.append(f"{remove_date}: delete failed for Garmin workout {garmin_id} ({exc})")
+            continue
         if not deleted:
             warnings.append(f"{remove_date}: could not delete obsolete Garmin workout {garmin_id}")
             continue
