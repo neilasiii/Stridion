@@ -167,7 +167,16 @@ def publish(
     workouts = convert(sessions, db_path=db_path)
     log_data = _load_generated_log()
     running_log = log_data["running"]
-    session_by_date = {s.get("date"): s for s in sessions if s.get("date")}
+    session_types_by_date: Dict[str, set[str]] = {}
+    session_count_by_date: Dict[str, int] = {}
+    for session in sessions:
+        session_date = session.get("date")
+        if not session_date:
+            continue
+        raw_type = session.get("workout_type")
+        workout_type = str(raw_type).strip().lower() if raw_type is not None else ""
+        session_types_by_date.setdefault(session_date, set()).add(workout_type)
+        session_count_by_date[session_date] = session_count_by_date.get(session_date, 0) + 1
 
     today = date.today()
     cutoff = today + timedelta(days=days)
@@ -213,21 +222,31 @@ def publish(
             continue
         if dt < today or dt > cutoff:
             continue
-        session = session_by_date.get(log_date)
-        if not session:
+        session_types = session_types_by_date.get(log_date)
+        if not session_types:
             reason = "in publish log but no active plan session for date"
             skipped.append({"date": log_date, "reason": reason})
             log.warning("Skipping cleanup for %s: %s", log_date, reason)
             continue
-        session_type_raw = session.get("workout_type")
-        session_type = str(session_type_raw).strip().lower() if session_type_raw is not None else ""
-        if not session_type:
+
+        if "" in session_types:
             reason = "active plan session missing workout_type; leaving Garmin workout unchanged"
             skipped.append({"date": log_date, "reason": reason})
             log.warning("Skipping cleanup for %s: %s", log_date, reason)
             continue
-        # Safe default: only delete when workout type is explicitly non-running.
-        if session_type not in NON_RUNNING_TYPES:
+
+        # If multiple sessions share a date, keep any Garmin running workout
+        # unless all session types are explicitly non-running.
+        if session_count_by_date.get(log_date, 0) > 1:
+            log.info(
+                "Date %s has %d sessions (%s); using conservative removal rule",
+                log_date,
+                session_count_by_date[log_date],
+                ",".join(sorted(session_types)),
+            )
+
+        # Safe default: only delete when all session types are explicitly non-running.
+        if any(stype not in NON_RUNNING_TYPES for stype in session_types):
             continue
         if isinstance(entry, dict) and entry.get("garmin_id") is not None:
             to_remove.append(log_date)

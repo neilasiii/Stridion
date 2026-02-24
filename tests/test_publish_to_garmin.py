@@ -307,3 +307,42 @@ def test_live_remove_delete_exception_emits_single_warning(tmp_path: Path):
     assert len(relevant) == 1
     assert "delete failed for Garmin workout 777" in relevant[0]
     assert "could not delete obsolete" not in relevant[0]
+
+
+def test_live_publish_same_day_mixed_sessions_does_not_remove_running_workout(tmp_path: Path):
+    import skills.publish_to_garmin as pub
+
+    target_date = date.today().isoformat()
+    log_path = tmp_path / "generated_workouts.json"
+    log_path.write_text(
+        json.dumps(
+            {
+                "running": {
+                    target_date: {
+                        "garmin_id": 888,
+                        "signature": "sig",
+                    }
+                }
+            }
+        )
+    )
+
+    with (
+        patch.object(pub, "_GENERATED_LOG", log_path),
+        patch(
+            "skills.plans.get_active_sessions",
+            return_value=[
+                {"date": target_date, "workout_type": "strength"},
+                {"date": target_date, "workout_type": "easy"},
+            ],
+        ),
+        patch("skills.internal_plan_to_scheduled_workouts.convert", return_value=[]),
+        patch("workout_uploader.get_garmin_client", return_value=object()),
+        patch("workout_uploader.delete_workout", return_value=True) as mock_delete,
+        patch("memory.db.init_db"),
+        patch("memory.db.insert_event", return_value="event-id"),
+    ):
+        result = pub.publish(days=1, dry_run=False)
+
+    assert result["removed"] == []
+    mock_delete.assert_not_called()
