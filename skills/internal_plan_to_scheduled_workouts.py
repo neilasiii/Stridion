@@ -29,6 +29,7 @@ Strength, rest, and cross sessions are skipped.
 """
 
 import logging
+from copy import deepcopy
 from typing import Any, Dict, List, Optional, Tuple
 
 log = logging.getLogger("skills.internal_plan_to_scheduled_workouts")
@@ -91,6 +92,14 @@ def convert(
                 "description":    intent or f"{workout_type.title()} run",
                 "source":         "internal_plan",
                 "_degraded":      degraded_reason is not None,
+                # Extra canonical plan context for publish signatures. This
+                # does not affect Garmin parsing/upload, only update detection.
+                "_signature_context": {
+                    "workout_type": workout_type,
+                    "duration_min": duration_min,
+                    "structure_steps": deepcopy(steps),
+                    "intent": intent,
+                },
             }
         )
 

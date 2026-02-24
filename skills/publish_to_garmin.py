@@ -76,13 +76,15 @@ def _save_generated_log(data: Dict[str, Any]) -> None:
         suffix=".tmp",
         dir=str(_GENERATED_LOG.parent),
     )
+    os.close(fd)
     try:
-        with os.fdopen(fd, "w") as f:
+        with open(tmp_path, "w") as f:
             json.dump(data, f, indent=2)
             f.write("\n")
         os.replace(tmp_path, _GENERATED_LOG)
+        tmp_path = ""
     finally:
-        if os.path.exists(tmp_path):
+        if tmp_path and os.path.exists(tmp_path):
             try:
                 os.unlink(tmp_path)
             except OSError:
@@ -102,6 +104,14 @@ def _workout_signature(workout: Dict[str, Any]) -> str:
         "source": workout.get("source"),
         "degraded": bool(workout.get("_degraded", False)),
     }
+    signature_context = workout.get("_signature_context")
+    if isinstance(signature_context, dict):
+        payload["signature_context"] = {
+            "workout_type": signature_context.get("workout_type"),
+            "duration_min": signature_context.get("duration_min"),
+            "structure_steps": signature_context.get("structure_steps", []),
+            "intent": signature_context.get("intent"),
+        }
     raw = json.dumps(payload, sort_keys=True)
     return hashlib.sha256(raw.encode()).hexdigest()
 

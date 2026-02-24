@@ -42,6 +42,47 @@ def test_dry_run_skips_when_signature_unchanged(tmp_path: Path):
     assert any("unchanged" in s["reason"] for s in result["skipped"])
 
 
+def test_signature_changes_when_structure_changes_even_if_text_matches():
+    import skills.publish_to_garmin as pub
+
+    target_date = date.today().isoformat()
+    base = {
+        "scheduled_date": target_date,
+        "name": "50 min E",
+        "description": "Aerobic run",
+        "source": "internal_plan",
+        "_degraded": False,
+    }
+    with_steps_a = {
+        **base,
+        "_signature_context": {
+            "workout_type": "easy",
+            "duration_min": 50,
+            "intent": "Aerobic run",
+            "structure_steps": [
+                {"label": "warmup", "duration_min": 10},
+                {"label": "main", "duration_min": 30},
+                {"label": "cooldown", "duration_min": 10},
+            ],
+        },
+    }
+    with_steps_b = {
+        **base,
+        "_signature_context": {
+            "workout_type": "easy",
+            "duration_min": 50,
+            "intent": "Aerobic run",
+            "structure_steps": [
+                {"label": "warmup", "duration_min": 5},
+                {"label": "main", "duration_min": 40},
+                {"label": "cooldown", "duration_min": 5},
+            ],
+        },
+    }
+
+    assert pub._workout_signature(with_steps_a) != pub._workout_signature(with_steps_b)
+
+
 def test_live_publish_replaces_changed_workout_and_updates_log(tmp_path: Path):
     import skills.publish_to_garmin as pub
 

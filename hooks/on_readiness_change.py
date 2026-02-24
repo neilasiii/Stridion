@@ -53,7 +53,8 @@ def run(context_packet: Dict[str, Any], db_path=None) -> Dict[str, Any]:
 
     # ── Gate: active plan must exist ───────────────────────────────────────
     pa = context_packet.get("plan_authority", {})
-    if not pa.get("active_plan_id"):
+    active_plan_id = pa.get("active_plan_id")
+    if not active_plan_id:
         log.debug("No active plan — skipping adjust_today")
         return {"triggered": False, "reason": "no_active_plan", "adjustment": None}
 
@@ -155,10 +156,12 @@ def run(context_packet: Dict[str, Any], db_path=None) -> Dict[str, Any]:
         # Persist the adjusted workout into today's active plan row so all
         # downstream reads (brief/schedule/export) reflect the change.
         adjusted_workout = adjustment.model_dump()
+        # TodayAdjustment uses adjusted_intent as the canonical text, while
+        # plan_days.workout_json expects intent for downstream readers.
         adjusted_workout["intent"] = adjustment.adjusted_intent
         try:
             insert_plan_days(
-                pa.get("active_plan_id"),
+                active_plan_id,
                 [
                     {
                         "day": today_str,
