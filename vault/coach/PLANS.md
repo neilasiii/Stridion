@@ -4899,3 +4899,2407 @@ Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.3 mi
 ```
 
 </details>
+
+## [2026-02-23 16:06 UTC] `20260301-9206be64`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    }
+  ],
+  "weekly_volume_miles": 20.0,
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "rationale": "Base training week.",
+  "context_hash": "h001"
+}
+```
+
+</details>
+
+## [2026-02-23 16:06 UTC] `20260301-9206be64`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.3 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    }
+  ],
+  "weekly_volume_miles": 20.3,
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "rationale": "Base training week.",
+  "context_hash": "h001"
+}
+```
+
+</details>
+
+## [2026-02-23 16:06 UTC] `20260301-f8209820`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 35.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    }
+  ],
+  "weekly_volume_miles": 35.0,
+  "safety_flags": [],
+  "rationale": "Base training week.",
+  "context_hash": "h001"
+}
+```
+
+</details>
+
+## [2026-02-23 16:06 UTC] `20260301-9206be64`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    }
+  ],
+  "weekly_volume_miles": 20.0,
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "rationale": "Base training week.",
+  "context_hash": "h001"
+}
+```
+
+</details>
+
+## [2026-02-23 16:06 UTC] `20260301-b5c0de3c`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    }
+  ],
+  "weekly_volume_miles": 20.0,
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "rationale": "Base training week. Building aerobic fitness.",
+  "context_hash": "testhash0001"
+}
+```
+
+</details>
+
+## [2026-02-23 16:06 UTC] `20260301-b3f788f6`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 15.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    }
+  ],
+  "weekly_volume_miles": 15.0,
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "rationale": "Base training week. Building aerobic fitness.",
+  "context_hash": "testhash0001"
+}
+```
+
+</details>
+
+## [2026-02-23 16:06 UTC] `20260301-7a878d5d`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    }
+  ],
+  "weekly_volume_miles": 20.0,
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "rationale": "Base training week. Building aerobic fitness.",
+  "context_hash": "testhash0001"
+}
+```
+
+</details>
+
+## [2026-02-23 16:06 UTC] `20260301-b942defc`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.3 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    }
+  ],
+  "weekly_volume_miles": 20.3,
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "rationale": "Base training week. Building aerobic fitness.",
+  "context_hash": "testhash0001"
+}
+```
+
+</details>
+
+## [2026-02-24 14:40 UTC] `20260301-9206be64`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    }
+  ],
+  "weekly_volume_miles": 20.0,
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "rationale": "Base training week.",
+  "context_hash": "h001"
+}
+```
+
+</details>
+
+## [2026-02-24 14:40 UTC] `20260301-9206be64`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.3 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    }
+  ],
+  "weekly_volume_miles": 20.3,
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "rationale": "Base training week.",
+  "context_hash": "h001"
+}
+```
+
+</details>
+
+## [2026-02-24 14:40 UTC] `20260301-f8209820`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 35.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    }
+  ],
+  "weekly_volume_miles": 35.0,
+  "safety_flags": [],
+  "rationale": "Base training week.",
+  "context_hash": "h001"
+}
+```
+
+</details>
+
+## [2026-02-24 14:40 UTC] `20260301-9206be64`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic base."
+    }
+  ],
+  "weekly_volume_miles": 20.0,
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "rationale": "Base training week.",
+  "context_hash": "h001"
+}
+```
+
+</details>
+
+## [2026-02-24 14:40 UTC] `20260301-b5c0de3c`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    }
+  ],
+  "weekly_volume_miles": 20.0,
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "rationale": "Base training week. Building aerobic fitness.",
+  "context_hash": "testhash0001"
+}
+```
+
+</details>
+
+## [2026-02-24 14:40 UTC] `20260301-b3f788f6`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 15.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    }
+  ],
+  "weekly_volume_miles": 15.0,
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "rationale": "Base training week. Building aerobic fitness.",
+  "context_hash": "testhash0001"
+}
+```
+
+</details>
+
+## [2026-02-24 14:40 UTC] `20260301-7a878d5d`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.0 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    }
+  ],
+  "weekly_volume_miles": 20.0,
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "rationale": "Base training week. Building aerobic fitness.",
+  "context_hash": "testhash0001"
+}
+```
+
+</details>
+
+## [2026-02-24 14:40 UTC] `20260301-b942defc`
+
+Phase: base | Week: 2026-03-01–2026-03-07 | Volume: 20.3 mi
+
+<details><summary>Full plan</summary>
+
+```json
+{
+  "week_start": "2026-03-01",
+  "week_end": "2026-03-07",
+  "phase": "base",
+  "days": [
+    {
+      "date": "2026-03-01",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-02",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-03",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-04",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-05",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-06",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    },
+    {
+      "date": "2026-03-07",
+      "intent": "Easy aerobic run",
+      "workout_type": "easy",
+      "duration_min": 45,
+      "structure_steps": [
+        {
+          "label": "main",
+          "duration_min": 45,
+          "target_metric": "pace",
+          "target_value": "10:30-11:10/mi",
+          "reps": null,
+          "notes": null
+        }
+      ],
+      "safety_flags": [],
+      "rationale": "Aerobic conditioning."
+    }
+  ],
+  "weekly_volume_miles": 20.3,
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "rationale": "Base training week. Building aerobic fitness.",
+  "context_hash": "testhash0001"
+}
+```
+
+</details>
