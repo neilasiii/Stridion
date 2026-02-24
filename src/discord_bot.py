@@ -850,16 +850,31 @@ async def coach_sync_command(interaction: discord.Interaction):
 
 @bot.tree.command(name="coach_plan", description="Generate a new training week via the Brain LLM")
 async def coach_plan_command(interaction: discord.Interaction):
-    """Route to: coach plan --week"""
+    """Route to: coach plan --week, then coach export-garmin --live"""
     await interaction.response.defer(thinking=True)
     rc, stdout, stderr = await run_coach_cli(["plan", "--week"], timeout=300)
     if rc == 0:
-        embed = discord.Embed(
-            title="✓ Plan Generated",
-            description=clamp(stdout.strip(), 3900),
-            color=discord.Color.blue(),
-            timestamp=datetime.now(),
+        # Plan succeeded — publish to Garmin immediately.
+        exp_rc, exp_stdout, exp_stderr = await run_coach_cli(
+            ["export-garmin", "--live"],
+            timeout=240,
         )
+        plan_msg = clamp(stdout.strip() or "Plan generated.", 1700)
+        export_msg = clamp(exp_stdout.strip() or exp_stderr.strip() or "No export output.", 1700)
+        if exp_rc == 0:
+            embed = discord.Embed(
+                title="✓ Plan Generated + Garmin Updated",
+                description=f"{plan_msg}\n\n---\n{export_msg}",
+                color=discord.Color.blue(),
+                timestamp=datetime.now(),
+            )
+        else:
+            embed = discord.Embed(
+                title="⚠ Plan Generated, Garmin Publish Failed",
+                description=f"{plan_msg}\n\n---\n{export_msg}",
+                color=discord.Color.orange(),
+                timestamp=datetime.now(),
+            )
     else:
         msg = stderr.strip() or stdout.strip() or "Unknown error"
         embed = discord.Embed(

@@ -362,7 +362,13 @@ def run(
             }
 
     # ── Build sync command ─────────────────────────────────────────────────────
-    cmd = ["bash", str(PROJECT_ROOT / "bin" / "sync_garmin_data.sh")]
+    # Enforce "sync-only" behavior: health ingest must not implicitly publish
+    # workouts. Garmin publish is a separate explicit CLI action.
+    cmd = [
+        "bash",
+        str(PROJECT_ROOT / "bin" / "sync_garmin_data.sh"),
+        "--no-auto-workouts",
+    ]
     if days is not None:
         cmd += ["--days", str(days)]
     if check_only:

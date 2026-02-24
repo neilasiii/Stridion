@@ -5,15 +5,16 @@
 # This is a convenience wrapper that:
 # 1. Syncs data from Garmin Connect API
 # 2. Shows a 14-day summary of activities and health metrics
-# 3. Automatically generates Garmin workouts from new FinalSurge workouts
+# 3. Optionally generates Garmin workouts from new FinalSurge workouts
 #
 # Usage:
-#   bash bin/sync_garmin_data.sh [--days DAYS] [--check-only] [--no-auto-workouts]
+#   bash bin/sync_garmin_data.sh [--days DAYS] [--check-only] [--auto-workouts|--no-auto-workouts]
 #
 # Options:
 #   --days DAYS            Number of days to sync (default: 30)
 #   --check-only           Check what would be synced without updating cache
-#   --no-auto-workouts     Skip automatic workout generation
+#   --auto-workouts        Enable automatic workout generation (legacy behavior)
+#   --no-auto-workouts     Explicitly disable automatic workout generation
 #
 # Environment Variables:
 #   GARMIN_EMAIL     Garmin Connect email/username (required)
@@ -41,7 +42,7 @@ fi
 # Default options
 DAYS=30
 CHECK_ONLY=""
-AUTO_WORKOUTS=true
+AUTO_WORKOUTS=false
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -54,13 +55,17 @@ while [[ $# -gt 0 ]]; do
             CHECK_ONLY="--check-only"
             shift
             ;;
+        --auto-workouts)
+            AUTO_WORKOUTS=true
+            shift
+            ;;
         --no-auto-workouts)
             AUTO_WORKOUTS=false
             shift
             ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [--days DAYS] [--check-only] [--no-auto-workouts]"
+            echo "Usage: $0 [--days DAYS] [--check-only] [--auto-workouts|--no-auto-workouts]"
             exit 1
             ;;
     esac
@@ -78,7 +83,7 @@ if [ -z "$CHECK_ONLY" ]; then
     echo "✓ Deduplication complete"
 fi
 
-# If sync was successful and not check-only, generate Garmin workouts from FinalSurge
+# If explicitly requested and not check-only, generate Garmin workouts from FinalSurge
 if [ "$AUTO_WORKOUTS" = true ] && [ -z "$CHECK_ONLY" ]; then
     echo ""
     echo "Checking for new FinalSurge workouts to generate..."

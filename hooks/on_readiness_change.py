@@ -131,7 +131,7 @@ def run(context_packet: Dict[str, Any], db_path=None) -> Dict[str, Any]:
 
     try:
         from brain import adjust_today
-        from memory.db import insert_event
+        from memory.db import insert_event, insert_plan_days
 
         adjustment = adjust_today(context_packet, db_path=db)
         log.info(
@@ -151,6 +151,33 @@ def run(context_packet: Dict[str, Any], db_path=None) -> Dict[str, Any]:
             source="on_readiness_change",
             db_path=db,
         )
+
+        # Persist the adjusted workout into today's active plan row so all
+        # downstream reads (brief/schedule/export) reflect the change.
+        adjusted_workout = adjustment.model_dump()
+        adjusted_workout["intent"] = adjustment.adjusted_intent
+        try:
+            insert_plan_days(
+                pa.get("active_plan_id"),
+                [
+                    {
+                        "day": today_str,
+                        "intent": adjustment.adjusted_intent,
+                        "workout_json": adjusted_workout,
+                    }
+                ],
+                db_path=db,
+            )
+            log.info("Updated plan_days for %s from readiness adjustment", today_str)
+
+            # Push today's change to Garmin immediately (best effort).
+            try:
+                from skills.publish_to_garmin import publish
+                publish(days=1, dry_run=False, db_path=db)
+            except Exception as publish_exc:
+                log.warning("Garmin publish after readiness adjustment failed: %s", publish_exc)
+        except Exception as persist_exc:
+            log.warning("Could not persist adjusted workout to plan_days: %s", persist_exc)
 
         return {
             "triggered":  True,
