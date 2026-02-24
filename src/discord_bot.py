@@ -1344,7 +1344,7 @@ def _build_sync_digest(window_hours: int = 6) -> discord.Embed:
 
     db_path = PROJECT_ROOT / "data" / "coach.sqlite"
     now = datetime.now(tz.utc)
-    since = (now - timedelta(hours=window_hours)).isoformat()
+    since = (now - timedelta(hours=window_hours)).strftime("%Y-%m-%d %H:%M:%S")
 
     cycles_total = cycles_ok = cycles_fail = 0
     readiness_triggered = False
