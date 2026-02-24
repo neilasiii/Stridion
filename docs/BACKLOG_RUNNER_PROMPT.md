@@ -133,13 +133,6 @@ Stop and do nothing further if:
 
 ## Architecture Quick Reference
 
-(For context when implementing — do not modify these invariants)
-
-**Sacred paths (never bypass):**
-- All Garmin publishing: `skills/publish_to_garmin.py` only
-- Health cache writes: `src/garmin_sync.py` only
-- Skip gate: `data/generated_workouts.json` managed by `skills/publish_to_garmin.py` only
-
 **Authoritative sources:**
 - Training plan: `data/coach.sqlite` → `plans` + `plan_days`
 - Health data: `data/health/health_data_cache.json` (migrating to SQLite `daily_metrics` + `activities`)

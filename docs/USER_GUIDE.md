@@ -38,17 +38,6 @@ The running coach is a **Brain + Body** system:
 `data/coach.sqlite` → `plans` + `plan_days` tables hold the active weekly plan.
 FinalSurge and ICS calendars are **optional inputs only** — they can inform the Brain but cannot override it.
 
-### What remains sacred (do not modify)
-
-| Component | Why |
-|---|---|
-| `src/auto_workout_generator.py` | Garmin workout builder — converts descriptions to structured steps |
-| `src/workout_uploader.py` | Garmin API upload path |
-| `src/garmin_sync.py` | Garmin data fetch + health cache writer |
-| `data/generated_workouts.json` | **Sole skip gate** for Garmin publish — if a date+workout is in this file, it will not be re-uploaded |
-
-Never write to `data/generated_workouts.json` directly. Never modify the sacred `src/` files above.
-
 ---
 
 ## 2. Quick Start (5 minutes)

@@ -188,31 +188,6 @@ The agent runs every 15 minutes. At 4am it performs a daily deep run: writes a v
 
 ---
 
-## Safety / Sacred Path
-
-The Garmin publish path must never be bypassed or modified:
-
-```
-cli/coach.py export-garmin --live
-        │
-skills/publish_to_garmin.py
-        │  reads:  data/generated_workouts.json  (skip gate)
-        │  calls:  skills/internal_plan_to_scheduled_workouts.py
-        │
-src/auto_workout_generator.py  →  src/workout_uploader.py
-        │
-Garmin Connect API
-        │
-data/generated_workouts.json  ←  updated (idempotency record)
-```
-
-**Invariants:**
-- New code must never write `data/generated_workouts.json` directly.
-- New code must never call `src/workout_uploader.py` directly — always go through the skills layer.
-- FinalSurge ICS source is rejected at the CLI level (`--source ics` returns error).
-
----
-
 ## Docs
 
 | Document | Contents |
