@@ -2,22 +2,26 @@
 Skills wrapper: publish internal plan workouts to Garmin Connect.
 
 Uses the sacred upload path (src/auto_workout_generator + src/workout_uploader)
-as black boxes. Does NOT write to data/generated_workouts.json.
+as black boxes.
 
-Dedupe authority (non-negotiable):
-  data/generated_workouts.json is the SOLE authoritative gate for "this date is
-  already on Garmin Connect". A date present in that log is skipped unconditionally.
-  SQLite (type="garmin_publish_internal") records publish attempts/results for
-  audit purposes only — it NEVER causes a workout to be skipped.
+Dedupe/update authority (non-negotiable):
+  data/generated_workouts.json is the SOLE source of truth for Garmin publish
+  state per date. For each running date:
+    - same signature  -> skip (already up to date)
+    - changed signature -> replace workout on Garmin
+    - missing entry -> create new workout on Garmin
 
 Authority rule (non-negotiable):
   Source is always the internal SQLite plan. FinalSurge/ICS is not read here.
 """
 
+import hashlib
 import json
 import logging
+import os
 import sys
-from datetime import date, timedelta
+import tempfile
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -29,25 +33,120 @@ if _SRC not in sys.path:
 log = logging.getLogger("skills.publish_to_garmin")
 
 _GENERATED_LOG = PROJECT_ROOT / "data" / "generated_workouts.json"
+# Conservative policy: unknown/new workout types are treated as "running"
+# (not removable) until explicitly added here as non-running.
+NON_RUNNING_TYPES = {
+    "rest",
+    "strength",
+    "mobility",
+    "cross",
+    "cross_training",
+    "off",
+    "none",
+}
 
 
-def _date_in_generated_log(target_date: str) -> bool:
-    """
-    Return True if data/generated_workouts.json has a running entry for target_date.
-
-    This is the ONLY authoritative dedupe gate.  If this returns True the workout
-    is already on Garmin Connect (published by the auto_workout_generator sacred path)
-    and must not be uploaded again.
-    """
+def _load_generated_log() -> Dict[str, Any]:
+    """Load generated_workouts.json with backward-compatible defaults."""
     if not _GENERATED_LOG.exists():
-        return False
+        return {"running": {}, "strength": {}, "mobility": {}, "week_snapshots": {}}
+
     try:
         with open(_GENERATED_LOG) as f:
             data = json.load(f)
-        return target_date in data.get("running", {})
     except Exception as exc:
-        log.warning("Could not read generated_workouts.json: %s — assuming date not present", exc)
-        return False
+        log.warning("Could not read generated_workouts.json: %s — starting fresh", exc)
+        return {"running": {}, "strength": {}, "mobility": {}, "week_snapshots": {}}
+
+    if not isinstance(data, dict):
+        return {"running": {}, "strength": {}, "mobility": {}, "week_snapshots": {}}
+
+    data.setdefault("running", {})
+    data.setdefault("strength", {})
+    data.setdefault("mobility", {})
+    data.setdefault("week_snapshots", {})
+    if not isinstance(data["running"], dict):
+        data["running"] = {}
+    return data
+
+
+def _save_generated_log(data: Dict[str, Any]) -> None:
+    """Persist generated_workouts.json safely."""
+    _GENERATED_LOG.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_path = tempfile.mkstemp(
+        prefix=f"{_GENERATED_LOG.name}.",
+        suffix=".tmp",
+        dir=str(_GENERATED_LOG.parent),
+    )
+    os.close(fd)
+    try:
+        with open(tmp_path, "w") as f:
+            json.dump(data, f, indent=2)
+            f.write("\n")
+        os.replace(tmp_path, _GENERATED_LOG)
+        tmp_path = ""
+    finally:
+        if tmp_path and os.path.exists(tmp_path):
+            try:
+                os.unlink(tmp_path)
+            except OSError:
+                pass
+
+
+def _workout_signature(workout: Dict[str, Any]) -> str:
+    """
+    Stable signature for Garmin publish dedupe/update decisions.
+
+    Signature is derived from renderer outputs that define actual Garmin content.
+    """
+    payload = {
+        "scheduled_date": workout.get("scheduled_date"),
+        "name": workout.get("name"),
+        "description": workout.get("description"),
+        "source": workout.get("source"),
+        "degraded": bool(workout.get("_degraded", False)),
+    }
+    signature_context = workout.get("_signature_context")
+    if isinstance(signature_context, dict):
+        payload["signature_context"] = {
+            "workout_type": signature_context.get("workout_type"),
+            "duration_min": signature_context.get("duration_min"),
+            "structure_steps": signature_context.get("structure_steps", []),
+            "intent": signature_context.get("intent"),
+        }
+    raw = json.dumps(payload, sort_keys=True)
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+def _running_entry(log_data: Dict[str, Any], target_date: str) -> Optional[Dict[str, Any]]:
+    """
+    Return running entry dict for target_date, or None when missing/invalid.
+    """
+    running = log_data.get("running", {})
+    entry = running.get(target_date)
+    return entry if isinstance(entry, dict) else None
+
+
+def _normalized_stale_ids(entry: Dict[str, Any], current_id: Any = None) -> List[int]:
+    """Return unique stale Garmin IDs from a log entry, excluding current_id."""
+    raw = entry.get("stale_garmin_ids", [])
+    out: List[int] = []
+    if not isinstance(raw, list):
+        return out
+    for item in raw:
+        try:
+            item_int = int(item)
+        except (TypeError, ValueError):
+            continue
+        if current_id is not None:
+            try:
+                if item_int == int(current_id):
+                    continue
+            except (TypeError, ValueError):
+                pass
+        if item_int not in out:
+            out.append(item_int)
+    return out
 
 
 def publish(
@@ -65,32 +164,49 @@ def publish(
 
     Returns:
         dict with keys:
-            prepared      List of workout dicts ready to upload
-            published     List of dates actually uploaded (empty when dry_run=True)
-            skipped       List of dicts with date + reason for each skip
+            prepared      List of workout dicts ready to upload/update
+            published     List of dates uploaded/updated in Garmin
+            removed       List of dates removed from Garmin (no longer running)
+            skipped       List of dicts with date + reason
             degraded      List of dates that fell back to easy-run rendering
             dry_run       bool
+            warnings      List of non-fatal warnings (live mode)
     """
     from skills.plans import get_active_sessions
     from skills.internal_plan_to_scheduled_workouts import convert
 
-    # ── Collect upcoming internal plan sessions ────────────────────────────
     sessions = get_active_sessions(db_path=db_path)
     if not sessions:
         log.warning("No active plan — nothing to publish")
         return {
-            "prepared": [], "published": [], "skipped": [],
-            "degraded": [], "dry_run": dry_run,
+            "prepared": [],
+            "published": [],
+            "removed": [],
+            "skipped": [],
+            "degraded": [],
+            "dry_run": dry_run,
+            "warnings": [],
         }
 
-    # ── Convert to parser-compatible workout objects ───────────────────────
     workouts = convert(sessions, db_path=db_path)
+    log_data = _load_generated_log()
+    running_log = log_data["running"]
+    session_types_by_date: Dict[str, set[str]] = {}
+    session_count_by_date: Dict[str, int] = {}
+    for session in sessions:
+        session_date = session.get("date")
+        if not session_date:
+            continue
+        raw_type = session.get("workout_type")
+        workout_type = str(raw_type).strip().lower() if raw_type is not None else ""
+        session_types_by_date.setdefault(session_date, set()).add(workout_type)
+        session_count_by_date[session_date] = session_count_by_date.get(session_date, 0) + 1
 
-    # ── Filter: upcoming dates within window ──────────────────────────────
     today = date.today()
     cutoff = today + timedelta(days=days)
-    prepared = []
-    skipped = []
+    prepared: List[Dict[str, Any]] = []
+    to_remove: List[str] = []
+    skipped: List[Dict[str, str]] = []
 
     for wo in workouts:
         wo_date = wo["scheduled_date"]
@@ -101,63 +217,113 @@ def publish(
             continue
 
         if dt < today:
-            log.debug("SKIP %s: past date", wo_date)
             skipped.append({"date": wo_date, "reason": "past date"})
             continue
         if dt > cutoff:
-            log.debug("SKIP %s: beyond %d-day window", wo_date, days)
             skipped.append({"date": wo_date, "reason": f"beyond {days}-day window"})
             continue
 
-        # Sole authoritative dedupe gate: generated_workouts.json.
-        # SQLite garmin_publish_internal events are audit records only; they do
-        # NOT gate uploads (generated_workouts.json may disagree after re-runs).
-        if _date_in_generated_log(wo_date):
-            log.info(
-                "SKIP %s: date found in generated_workouts.json — "
-                "a Garmin running workout already exists for this date",
-                wo_date,
-            )
-            skipped.append({
-                "date": wo_date,
-                "reason": "date in generated_workouts.json (Garmin workout already exists)",
-            })
+        signature = _workout_signature(wo)
+        existing = _running_entry(log_data, wo_date)
+        existing_signature = existing.get("signature") if existing else None
+
+        if existing and existing_signature == signature:
+            skipped.append({"date": wo_date, "reason": "unchanged (already up to date in Garmin)"})
             continue
 
-        prepared.append(wo)
+        wo_copy = dict(wo)
+        wo_copy["_signature"] = signature
+        wo_copy["_existing_entry"] = existing
+        wo_copy["_action"] = "update" if existing else "create"
+        prepared.append(wo_copy)
+
+    # If a date in the active plan is explicitly non-running but a running
+    # workout exists in generated_workouts.json, remove it in live mode.
+    for log_date, entry in list(running_log.items()):
+        try:
+            dt = date.fromisoformat(log_date)
+        except ValueError:
+            continue
+        if dt < today or dt > cutoff:
+            continue
+        session_types = session_types_by_date.get(log_date)
+        if not session_types:
+            reason = "in publish log but no active plan session for date"
+            skipped.append({"date": log_date, "reason": reason})
+            log.warning("Skipping cleanup for %s: %s", log_date, reason)
+            continue
+
+        if "" in session_types:
+            reason = "active plan session missing workout_type; leaving Garmin workout unchanged"
+            skipped.append({"date": log_date, "reason": reason})
+            log.warning("Skipping cleanup for %s: %s", log_date, reason)
+            continue
+
+        # If multiple sessions share a date, keep any Garmin running workout
+        # unless all session types are explicitly non-running.
+        if session_count_by_date.get(log_date, 0) > 1:
+            log.info(
+                "Date %s has %d sessions (%s); using conservative removal rule",
+                log_date,
+                session_count_by_date[log_date],
+                ",".join(sorted(session_types)),
+            )
+
+        # Safe default: only delete when all session types are explicitly non-running.
+        if any(stype not in NON_RUNNING_TYPES for stype in session_types):
+            continue
+        if isinstance(entry, dict) and entry.get("garmin_id") is not None:
+            to_remove.append(log_date)
 
     degraded = [wo["scheduled_date"] for wo in prepared if wo.get("_degraded")]
 
-    # ── Dry-run mode ──────────────────────────────────────────────────────
     if dry_run:
-        print(f"[DRY RUN] Would upload {len(prepared)} workout(s):")
+        print(f"[DRY RUN] Would upload/update {len(prepared)} workout(s):")
         for wo in prepared:
-            flag = " [DEGRADED→easy]" if wo.get("_degraded") else ""
-            print(f"  {wo['scheduled_date']}: {wo['name']}{flag}")
+            flag = " [DEGRADED->easy]" if wo.get("_degraded") else ""
+            action = wo.get("_action", "create")
+            print(f"  {wo['scheduled_date']}: {wo['name']} [{action}]{flag}")
         if skipped:
             print(f"\n[DRY RUN] Skipped {len(skipped)}:")
             for s in skipped:
                 print(f"  {s['date']}: {s['reason']}")
+        if to_remove:
+            print(f"\n[DRY RUN] Would remove {len(to_remove)} obsolete running workout(s):")
+            for d in to_remove:
+                print(f"  {d}: day is no longer a running workout")
         return {
-            "prepared":  prepared,
+            "prepared": prepared,
             "published": [],
-            "skipped":   skipped,
-            "degraded":  degraded,
-            "dry_run":   True,
+            "removed": [],
+            "skipped": skipped,
+            "degraded": degraded,
+            "dry_run": True,
+            "warnings": [],
         }
 
-    # ── Live publish ──────────────────────────────────────────────────────
     from workout_parser import parse_workout_description
     from auto_workout_generator import generate_garmin_workout, generate_workout_name
-    from workout_uploader import upload_workout, schedule_workout, get_garmin_client
-    from memory.db import init_db, insert_event, DB_PATH as _DEFAULT_DB
+    from workout_uploader import (
+        delete_workout,
+        get_garmin_client,
+        schedule_workout,
+        upload_workout,
+    )
+    from memory.db import DB_PATH as _DEFAULT_DB, init_db, insert_event
 
     init_db(db_path or _DEFAULT_DB)
     client = get_garmin_client()
-    published = []
+    published: List[str] = []
+    removed: List[str] = []
+    warnings: List[str] = []
+    log_dirty = False
 
     for wo in prepared:
         wo_date = wo["scheduled_date"]
+        existing = wo.get("_existing_entry") or {}
+        prev_id = existing.get("garmin_id")
+        stale_ids = _normalized_stale_ids(existing, current_id=prev_id)
+
         try:
             parsed = parse_workout_description(wo["name"])
             garmin_name = generate_workout_name(wo_date, parsed)
@@ -171,30 +337,144 @@ def publish(
             garmin_id = response.get("workoutId")
             schedule_workout(client, garmin_id, wo_date, quiet=True)
 
-            # Record idempotency event in SQLite
+            # Best-effort cleanup of replaced workout to avoid duplicates.
+            if prev_id and str(prev_id) != str(garmin_id):
+                try:
+                    deleted = delete_workout(client, int(prev_id), quiet=True)
+                except Exception:
+                    deleted = False
+                if not deleted:
+                    try:
+                        prev_int = int(prev_id)
+                        if prev_int not in stale_ids:
+                            stale_ids.append(prev_int)
+                    except (TypeError, ValueError):
+                        pass
+                    warn = (
+                        f"{wo_date}: new workout published ({garmin_id}) but could not "
+                        f"delete previous workout {prev_id}"
+                    )
+                    warnings.append(warn)
+                    log.warning(warn)
+
             insert_event(
                 event_type="garmin_publish_internal",
                 payload={
-                    "date":       wo_date,
-                    "garmin_id":  garmin_id,
-                    "name":       garmin_name,
-                    "degraded":   wo.get("_degraded", False),
+                    "date": wo_date,
+                    "garmin_id": garmin_id,
+                    "name": garmin_name,
+                    "degraded": wo.get("_degraded", False),
+                    "action": wo.get("_action", "create"),
+                    "previous_garmin_id": prev_id,
+                    "signature": wo.get("_signature"),
                 },
                 source="skills.publish_to_garmin",
                 db_path=db_path or _DEFAULT_DB,
             )
 
-            log.info("Published %s → Garmin %s", wo_date, garmin_id)
+            running_log[wo_date] = {
+                "garmin_id": garmin_id,
+                "name": garmin_name,
+                "description": wo.get("description", ""),
+                "source": "internal_plan",
+                "signature": wo.get("_signature"),
+                "published_at": datetime.now(timezone.utc).isoformat(),
+            }
+            if stale_ids:
+                running_log[wo_date]["stale_garmin_ids"] = stale_ids
+            log_dirty = True
+
+            log.info("Published %s -> Garmin %s (%s)", wo_date, garmin_id, wo.get("_action", "create"))
             published.append(wo_date)
 
         except Exception as exc:
             log.error("Failed to publish %s: %s", wo_date, exc)
             skipped.append({"date": wo_date, "reason": f"upload error: {exc}"})
 
+    for remove_date in to_remove:
+        entry = _running_entry(log_data, remove_date) or {}
+        garmin_id = entry.get("garmin_id")
+        if garmin_id is None:
+            continue
+        try:
+            deleted = delete_workout(client, int(garmin_id), quiet=True)
+        except Exception as exc:
+            warnings.append(f"{remove_date}: delete failed for Garmin workout {garmin_id} ({exc})")
+            continue
+        if not deleted:
+            warnings.append(f"{remove_date}: could not delete obsolete Garmin workout {garmin_id}")
+            continue
+
+        insert_event(
+            event_type="garmin_publish_internal",
+            payload={
+                "date": remove_date,
+                "garmin_id": garmin_id,
+                "action": "remove",
+                "reason": "day no longer running workout",
+            },
+            source="skills.publish_to_garmin",
+            db_path=db_path or _DEFAULT_DB,
+        )
+        running_log.pop(remove_date, None)
+        log_dirty = True
+        removed.append(remove_date)
+
+    # Retry cleanup of stale Garmin IDs left behind by previous replacement
+    # attempts (e.g., transient API failures during delete).
+    for log_date, entry in list(running_log.items()):
+        if not isinstance(entry, dict):
+            continue
+        current_id = entry.get("garmin_id")
+        stale_ids = _normalized_stale_ids(entry, current_id=current_id)
+        if not stale_ids:
+            if "stale_garmin_ids" in entry:
+                entry.pop("stale_garmin_ids", None)
+                log_dirty = True
+            continue
+
+        remaining: List[int] = []
+        for stale_id in stale_ids:
+            try:
+                deleted = delete_workout(client, int(stale_id), quiet=True)
+            except Exception as exc:
+                deleted = False
+                warnings.append(f"{log_date}: stale cleanup delete failed for Garmin workout {stale_id} ({exc})")
+            if not deleted:
+                remaining.append(stale_id)
+                continue
+
+            insert_event(
+                event_type="garmin_publish_internal",
+                payload={
+                    "date": log_date,
+                    "garmin_id": stale_id,
+                    "action": "cleanup_stale",
+                },
+                source="skills.publish_to_garmin",
+                db_path=db_path or _DEFAULT_DB,
+            )
+
+        if remaining:
+            entry["stale_garmin_ids"] = remaining
+        else:
+            entry.pop("stale_garmin_ids", None)
+        log_dirty = True
+
+    if log_dirty:
+        try:
+            _save_generated_log(log_data)
+        except Exception as exc:
+            warn = f"Failed to update generated_workouts.json: {exc}"
+            warnings.append(warn)
+            log.warning(warn)
+
     return {
-        "prepared":  prepared,
+        "prepared": prepared,
         "published": published,
-        "skipped":   skipped,
-        "degraded":  degraded,
-        "dry_run":   False,
+        "removed": removed,
+        "skipped": skipped,
+        "degraded": degraded,
+        "dry_run": False,
+        "warnings": warnings,
     }

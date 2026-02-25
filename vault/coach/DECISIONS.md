@@ -1529,3 +1529,2667 @@
   "week_start": "2026-03-01"
 }
 ```
+
+## [2026-02-24 16:41 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:41 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:41 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:41 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:41 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-52cc00aa",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:41 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-6febb620",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:41 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-3227747b",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:41 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-6736cd38",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:41 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:41 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:41 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:41 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:46 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:46 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:46 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:46 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:46 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-084e3a77",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:46 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-5a6d85e9",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:46 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-1eae82ee",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:46 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-0c155203",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:46 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:46 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:46 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:46 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:54 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:54 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:54 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:54 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:54 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-f05cdea1",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:54 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-3d6d63de",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:54 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-4fe90fc2",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:54 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-7e1abe63",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:54 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:54 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:54 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:54 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:56 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:56 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:56 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:56 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:56 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-5711763e",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:56 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-1ddafbfe",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:56 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-0d5813fe",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:56 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-37bb822f",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 16:56 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:56 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:56 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 16:56 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 17:33 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 17:33 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 17:33 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 17:33 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 17:33 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-4671b892",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 17:33 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-1ca5efba",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 17:33 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-2ad59928",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 17:33 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-39aba509",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 17:33 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 17:33 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 17:33 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 17:33 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:18 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:18 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:18 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:18 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:18 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-0fdb40ef",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:18 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-2896a3e1",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:18 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-0f263b47",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:18 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-47100cb8",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:18 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:18 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:18 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:18 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:26 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-135a598b",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:26 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-92ddda60",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:26 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-936006a8",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:26 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-a7dfbbc3",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:31 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:31 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:31 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:31 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:31 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-5f572da0",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:31 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-2ac7e92c",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:31 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-d1380934",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:31 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-f493c976",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 19:31 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:31 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:31 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 19:31 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:26 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-bd22203e",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:26 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-7b80c3f1",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:26 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-75facd51",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:26 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-1e4c9968",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:26 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:28 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:28 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:28 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:28 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:28 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-d77843a5",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:28 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-9415bfdc",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:28 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-46a4448d",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:28 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-da8059d7",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:28 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:28 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:28 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:28 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:32 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:32 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:32 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:32 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:32 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-3c667589",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:32 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-bc4f72d0",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:32 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-abf4b296",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:32 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-6a592da6",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:32 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:32 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:32 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:32 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:34 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:34 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:34 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-f8209820",
+  "safety_flags": [],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 35.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:34 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-9206be64",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:34 UTC] macro_plan_generated
+
+**Rationale:** Short-race recovery block starting at 20 mi/wk.
+
+```json
+{
+  "macro_id": "base-v51-b1a0c252",
+  "mode": "base_block",
+  "peak_miles": 22.0,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:34 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-62e06290",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:34 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-cc6afb4f",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:34 UTC] macro_plan_generated
+
+**Rationale:** Recovery block after race. Starting at 10.0 mi/wk. VDOT 50.6.
+
+```json
+{
+  "macro_id": "base-v51-afa8bcc7",
+  "mode": "base_block",
+  "peak_miles": 15.6,
+  "race_date": null,
+  "race_name": null,
+  "start_week": "2026-03-01",
+  "total_weeks": 12,
+  "type": "macro_plan_generated"
+}
+```
+
+## [2026-02-24 23:34 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b5c0de3c",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:34 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b3f788f6",
+  "safety_flags": [
+    "low_readiness_confidence"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 15.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:34 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-7a878d5d",
+  "safety_flags": [
+    "macro_guided",
+    "macro_cap_exceeded",
+    "macro_cap_clamped"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.0,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```
+
+## [2026-02-24 23:34 UTC] plan_generated — base week 2026-03-01
+
+**Rationale:** Base training week. Building aerobic fitness.
+
+```json
+{
+  "phase": "base",
+  "plan_id": "20260301-b942defc",
+  "safety_flags": [
+    "macro_guided"
+  ],
+  "summary": "base week 2026-03-01",
+  "type": "plan_generated",
+  "volume_mi": 20.3,
+  "week_end": "2026-03-07",
+  "week_start": "2026-03-01"
+}
+```

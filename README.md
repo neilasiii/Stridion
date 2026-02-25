@@ -143,7 +143,7 @@ The Discord bot is the primary interface. All `coach_*` commands route to `cli/c
 |---|---|---|
 | `/coach_today` | Show today's plan from SQLite | No |
 | `/coach_sync` | Sync Garmin data | No |
-| `/coach_plan` | Generate new weekly plan | **Yes** |
+| `/coach_plan` | Generate new weekly plan, then publish updates to Garmin | **Yes** |
 | `/coach_macro` | Generate / view macro periodization plan | **Yes** (first time) |
 | `/coach_export` | Preview Garmin upload (dry run) | No |
 | `/coach_status` | Agent lock state + recent task runs | No |

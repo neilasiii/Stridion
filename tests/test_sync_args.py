@@ -104,6 +104,12 @@ class TestGarminSyncRunDaysFlag:
         assert any("sync_garmin_data" in p for p in cmd)
         assert not any("smart_sync" in p for p in cmd)
 
+    def test_sync_enforces_no_auto_workout_generation(self):
+        """Sync must not auto-publish workouts; export-garmin is explicit."""
+        _, sp_args = self._call_run(stale_cache=True)
+        cmd = sp_args[0][0]
+        assert "--no-auto-workouts" in cmd
+
 
 class TestCoachSyncCLIArgs:
     """CLI argparse wires --days / --check-only through to run()."""

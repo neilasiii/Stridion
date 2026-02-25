@@ -73,28 +73,27 @@ vdot, paces = calculate_vdot_from_race('half', 1, 55, 4)  # Returns VDOT + train
 
 Uses official Jack Daniels formulas. Verified accuracy: Half marathon 1:55:04 → VDOT 38.3.
 
-**Garmin Connect Sync (with Automatic Workout Generation)**
+**Garmin Connect Sync (ingest-only by default)**
 ```bash
-bash bin/sync_garmin_data.sh                     # Standard sync + auto-generate workouts
+bash bin/sync_garmin_data.sh                     # Standard sync (no auto workout generation)
 bash bin/sync_garmin_data.sh --days 60           # Sync specific days
 bash bin/sync_garmin_data.sh --check-only        # Preview without updating
-bash bin/sync_garmin_data.sh --no-auto-workouts  # Disable automatic workout generation
+bash bin/sync_garmin_data.sh --auto-workouts     # Opt in to legacy auto generation path
+bash bin/sync_garmin_data.sh --no-auto-workouts  # Explicit no-auto flag (default behavior)
 
 bash bin/smart_sync.sh                    # Smart sync (recommended for agents)
 bash bin/smart_sync.sh --force            # Force sync (new workout reported)
 ```
 
-**Automatic Workout Generation:**
-- When syncing, system automatically detects new FinalSurge workouts
-- Generates corresponding Garmin **running** workouts with coach-prescribed paces
-- Uploads and schedules all workouts to Garmin Connect calendar
-- Tracks generated workouts in `data/generated_workouts.json` to prevent duplicates
-- Only generates workouts for upcoming dates (skips past workouts >1 day old)
+**Workout Generation and Publish:**
+- Sync now only ingests health/activity data by default.
+- Weekly planning + publish should run through `python3 cli/coach.py plan --week` then `python3 cli/coach.py export-garmin --live` (or `/coach_plan` in Discord).
+- Legacy sync-time workout generation remains available only with `--auto-workouts`.
+- Publish state is tracked in `data/generated_workouts.json` to prevent duplicates and support updates.
 
 **NOTE:** All automatic strength/mobility workout generation is **DISABLED**, including:
 - Regular sync auto-generation (commented out in `bin/sync_garmin_data.sh`)
 - Reschedule-triggered regeneration (commented out in `src/garmin_sync.py`)
-- Running workouts are still auto-generated from FinalSurge
 - Manual generation via `src/supplemental_workout_generator.py` still available if needed
 
 **Manual Supplemental Workout Generation (if needed):**

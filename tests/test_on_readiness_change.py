@@ -46,15 +46,19 @@ def _base_context(
     }
 
 
-def _fake_adjustment() -> MagicMock:
+def _fake_adjustment(
+    workout_type: str = "rest",
+    adjusted_intent: str = "Recovery day due to low readiness.",
+) -> MagicMock:
     """Return a mock TodayAdjustment with the required fields."""
     adj = MagicMock()
-    adj.workout_type = "rest"
+    adj.workout_type = workout_type
     adj.adjustment_reason = "low_readiness"
+    adj.adjusted_intent = adjusted_intent
     adj.rationale = "Readiness is below threshold."
     adj.model_dump.return_value = {
         "date": date.today().isoformat(),
-        "workout_type": "rest",
+        "workout_type": workout_type,
         "adjustment_reason": "low_readiness",
     }
     return adj
@@ -80,13 +84,28 @@ class TestReadinessChangeDedup:
         fake_adj = _fake_adjustment()
 
         # get_metrics_range is lazy-imported from memory.db inside run(), so patch the source
-        with patch("memory.db.get_metrics_range", return_value=[]):
-            with patch("brain.adjust_today", return_value=fake_adj) as mock_brain:
-                result = _run(ctx, db)
+        with (
+            patch("memory.db.get_metrics_range", return_value=[]),
+            patch("brain.adjust_today", return_value=fake_adj) as mock_brain,
+            patch("memory.db.insert_plan_days") as mock_persist,
+            patch(
+                "skills.publish_to_garmin.publish",
+                return_value={"published": [], "removed": [], "skipped": [], "warnings": []},
+            ) as mock_publish,
+        ):
+            result = _run(ctx, db)
 
         assert result["triggered"] is True
         assert "readiness 35" in result["reason"]
         mock_brain.assert_called_once()
+        mock_persist.assert_called_once()
+        mock_publish.assert_called_once_with(days=1, dry_run=False, db_path=db)
+        persist_args, persist_kwargs = mock_persist.call_args
+        assert persist_args[0] == "test-plan-001"
+        assert persist_args[1][0]["day"] == date.today().isoformat()
+        assert persist_args[1][0]["intent"] == "Recovery day due to low readiness."
+        assert persist_args[1][0]["workout_json"]["intent"] == "Recovery day due to low readiness."
+        assert persist_kwargs["db_path"] == db
 
         # SQLite event must exist
         events = query_events(event_type="today_adjustment", db_path=db)
@@ -104,16 +123,25 @@ class TestReadinessChangeDedup:
         ctx = _base_context(readiness_today=35)
         fake_adj = _fake_adjustment()
 
-        with patch("memory.db.get_metrics_range", return_value=[]):
-            with patch("brain.adjust_today", return_value=fake_adj) as mock_brain:
-                first = _run(ctx, db)
-                second = _run(ctx, db)
+        with (
+            patch("memory.db.get_metrics_range", return_value=[]),
+            patch("brain.adjust_today", return_value=fake_adj) as mock_brain,
+            patch("memory.db.insert_plan_days") as mock_persist,
+            patch(
+                "skills.publish_to_garmin.publish",
+                return_value={"published": [], "removed": [], "skipped": [], "warnings": []},
+            ) as mock_publish,
+        ):
+            first = _run(ctx, db)
+            second = _run(ctx, db)
 
         assert first["triggered"] is True
         assert second["triggered"] is False
         assert second["reason"] == "already_adjusted_today"
         # Brain must have been called exactly once across both cycles
         mock_brain.assert_called_once()
+        mock_persist.assert_called_once()
+        mock_publish.assert_called_once_with(days=1, dry_run=False, db_path=db)
 
     def test_no_event_written_on_brain_failure(self):
         """If Brain raises, no SQLite event is written so the next cycle can retry."""
@@ -131,6 +159,94 @@ class TestReadinessChangeDedup:
         assert "brain_error" in result["reason"]
         events = query_events(event_type="today_adjustment", db_path=db)
         assert len(events) == 0
+
+    def test_publish_failure_retries_without_reinvoking_brain(self):
+        """If initial Garmin publish fails, next run retries publish without new adjust_today call."""
+        db = _tmp_db()
+        from memory.db import init_db, query_events
+        init_db(db_path=db)
+
+        ctx = _base_context(readiness_today=35)
+        fake_adj = _fake_adjustment()
+
+        with (
+            patch("memory.db.get_metrics_range", return_value=[]),
+            patch("brain.adjust_today", return_value=fake_adj) as mock_brain,
+            patch("memory.db.insert_plan_days") as mock_persist,
+            patch(
+                "skills.publish_to_garmin.publish",
+                side_effect=[RuntimeError("Garmin API down"), {"published": [date.today().isoformat()]}],
+            ) as mock_publish,
+        ):
+            first = _run(ctx, db)
+            second = _run(ctx, db)
+
+        assert first["triggered"] is True
+        assert second["triggered"] is False
+        assert second["reason"] == "already_adjusted_today_publish_retried"
+        mock_brain.assert_called_once()
+        mock_persist.assert_called_once()
+        assert mock_publish.call_count == 2
+
+        # Adjustment event is still present once.
+        adj_events = query_events(event_type="today_adjustment", db_path=db)
+        assert len(adj_events) == 1
+
+        # Publish status records both failed initial attempt and successful retry.
+        pub_events = query_events(event_type="today_adjustment_garmin_publish", db_path=db)
+        payloads = [json.loads(e["payload_json"]) for e in pub_events]
+        statuses = {p.get("status") for p in payloads if p.get("date") == date.today().isoformat()}
+        modes = {p.get("mode") for p in payloads if p.get("date") == date.today().isoformat()}
+        assert "failed" in statuses
+        assert "success" in statuses
+        assert "initial" in modes
+        assert "retry" in modes
+
+    def test_publish_skipped_error_retries_without_reinvoking_brain(self):
+        """If publish reports per-date upload error in skipped, it must be treated as failed."""
+        db = _tmp_db()
+        from memory.db import init_db, query_events
+        init_db(db_path=db)
+
+        today_str = date.today().isoformat()
+        ctx = _base_context(readiness_today=35)
+        fake_adj = _fake_adjustment(
+            workout_type="easy",
+            adjusted_intent="30 min easy run at conversational effort.",
+        )
+
+        with (
+            patch("memory.db.get_metrics_range", return_value=[]),
+            patch("brain.adjust_today", return_value=fake_adj) as mock_brain,
+            patch("memory.db.insert_plan_days") as mock_persist,
+            patch(
+                "skills.publish_to_garmin.publish",
+                side_effect=[
+                    {
+                        "published": [],
+                        "removed": [],
+                        "skipped": [{"date": today_str, "reason": "upload error: Garmin timeout"}],
+                        "warnings": [],
+                    },
+                    {"published": [today_str], "removed": [], "skipped": [], "warnings": []},
+                ],
+            ) as mock_publish,
+        ):
+            first = _run(ctx, db)
+            second = _run(ctx, db)
+
+        assert first["triggered"] is True
+        assert second["triggered"] is False
+        assert second["reason"] == "already_adjusted_today_publish_retried"
+        mock_brain.assert_called_once()
+        mock_persist.assert_called_once()
+        assert mock_publish.call_count == 2
+
+        pub_events = query_events(event_type="today_adjustment_garmin_publish", db_path=db)
+        payloads = [json.loads(e["payload_json"]) for e in pub_events]
+        statuses = [p.get("status") for p in payloads if p.get("date") == today_str]
+        assert "failed" in statuses
+        assert "success" in statuses
 
 
 # ── gate tests ────────────────────────────────────────────────────────────────
@@ -195,10 +311,19 @@ class TestReadinessChangeGates:
         # today=52 (above LOW=45), yesterday=68 → drop=16 >= threshold=15
         ctx = _base_context(readiness_today=52)
         fake_adj = _fake_adjustment()
-        with patch("memory.db.get_metrics_range",
-                   return_value=[{"training_readiness": 68}]):
-            with patch("brain.adjust_today", return_value=fake_adj) as mock_brain:
-                result = _run(ctx, db)
+        with (
+            patch("memory.db.get_metrics_range",
+                  return_value=[{"training_readiness": 68}]),
+            patch("brain.adjust_today", return_value=fake_adj) as mock_brain,
+            patch("memory.db.insert_plan_days") as mock_persist,
+            patch(
+                "skills.publish_to_garmin.publish",
+                return_value={"published": [], "removed": [], "skipped": [], "warnings": []},
+            ) as mock_publish,
+        ):
+            result = _run(ctx, db)
         assert result["triggered"] is True
         assert "dropped 16" in result["reason"]
         mock_brain.assert_called_once()
+        mock_persist.assert_called_once()
+        mock_publish.assert_called_once_with(days=1, dry_run=False, db_path=db)
