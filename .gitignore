@@ -91,3 +91,6 @@ vault/inbox/processed/
 
 # Vault daily notes (generated content, not versioned)
 vault/daily/
+
+# Vault coach working docs (AI-generated planning/decision logs, not versioned)
+vault/coach/
