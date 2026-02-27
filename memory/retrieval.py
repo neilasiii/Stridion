@@ -623,14 +623,20 @@ def _load_upcoming_races() -> list:
 # ── Race-derived VDOT ─────────────────────────────────────────────────────────
 
 # Standard race distances: (center_miles, tolerance_miles).
-# An activity whose distance falls within tolerance is classified as a race.
+# An activity whose distance falls within tolerance MAY be classified as a race.
+# Short-race bands (5k/10k/15k) require BOTH a distance match AND a keyword match
+# because easy training runs of 3–6 miles are common and would otherwise pollute
+# VDOT with slow-paced non-race efforts.
+# Long-race bands (half/marathon) accept distance match alone — it is very unusual
+# to do a 13–26 mile training run without it being race-level effort.
 _RACE_DISTANCE_BANDS: tuple = (
-    (3.107, 0.20),   # 5k
-    (6.214, 0.30),   # 10k
-    (9.321, 0.40),   # 15k
-    (13.109, 0.60),  # Half marathon  (covers 12.5–13.7 mi)
-    (26.219, 1.00),  # Marathon       (covers 25.2–27.2 mi)
+    (3.107, 0.20),   # 5k   — keyword required (see _is_race_distance_long_only)
+    (6.214, 0.30),   # 10k  — keyword required
+    (9.321, 0.40),   # 15k  — keyword required
+    (13.109, 0.60),  # Half marathon  (covers 12.5–13.7 mi) — distance match OK
+    (26.219, 1.00),  # Marathon       (covers 25.2–27.2 mi) — distance match OK
 )
+_RACE_DISTANCE_BANDS_LONG_ONLY: tuple = _RACE_DISTANCE_BANDS[3:]  # half + marathon only
 
 # Activity name keywords that indicate a race (case-insensitive).
 # Checked against activity_name / name / title fields.
@@ -641,10 +647,16 @@ _RACE_KEYWORDS_VDOT: frozenset = frozenset([
 
 
 def _is_race_distance(dist_mi: float) -> bool:
-    """Return True if dist_mi is within tolerance of a standard race distance."""
+    """
+    Return True if dist_mi qualifies as a race by distance alone.
+
+    Only half-marathon and marathon distances qualify on distance alone.
+    Shorter races (5k/10k/15k) require a keyword match because training runs
+    of similar length are common and would contaminate VDOT with easy-pace data.
+    """
     return any(
         abs(dist_mi - center) <= tol
-        for center, tol in _RACE_DISTANCE_BANDS
+        for center, tol in _RACE_DISTANCE_BANDS_LONG_ONLY
     )
 
 
@@ -797,6 +809,18 @@ def build_context_packet(
         "vo2_max":          vdot_approx,       # Garmin physiological VO2max estimate
         "vdot_race_derived": vdot_race_derived, # Race-performance VDOT (preferred for planning)
         "rhr_latest":       rhr_latest,
+        "weekly_structure": {
+            "runs_per_week":        4,
+            "quality_sessions":     1,
+            "long_runs":            1,
+            "easy_runs":            2,
+            "quality_must_progress": True,
+            "note": (
+                "4 runs/week is the consistent observed pattern. "
+                "Days are flexible around constraint calendar. "
+                "Quality must be harder than prior week — never regress."
+            ),
+        },
     }
 
     # Readiness trend: prefer SQLite (populated by post-sync ingest); fall back

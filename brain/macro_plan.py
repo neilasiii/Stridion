@@ -412,16 +412,34 @@ def _detect_post_race_recovery(context_packet: Dict) -> Dict:
     # Long race takes priority
     if long_candidate is not None:
         dist_mi = long_candidate["dist"]
-        recovery_weeks = 2 if dist_mi >= 24.0 else 1
+        days_ago = long_candidate["days_ago"]
+
+        # Half-marathon recovery window: 5 days (Brant had quality on day 5 post-HM).
+        # The check uses days_ago at block start, not at generation time, so that a macro
+        # generated mid-week correctly sees the recovery as already elapsed by Sunday.
+        days_until_sunday = (6 - today.weekday()) % 7
+        days_ago_at_block_start = days_ago + days_until_sunday
+
+        if dist_mi >= 24.0:
+            # Marathon: 2 full recovery weeks regardless of timing
+            recovery_weeks = 2
+        elif days_ago_at_block_start <= 5:
+            # Half marathon: block starts before recovery window closes — enforce week 1 recovery
+            recovery_weeks = 1
+        else:
+            # Half marathon: recovery window already elapsed by the time the block starts
+            # No need to enforce a no-quality week; athlete is ready to train normally
+            recovery_weeks = 0
+
         log.info(
             "post_race_recovery detected (long): dist_mi=%.1f days_ago=%d recovery_weeks=%d",
-            dist_mi, long_candidate["days_ago"], recovery_weeks,
+            dist_mi, days_ago, recovery_weeks,
         )
         return {
-            "required":           True,
+            "required":           recovery_weeks > 0,
             "short_race_mode":    False,
             "no_quality_days":    0,
-            "days_ago":           long_candidate["days_ago"],
+            "days_ago":           days_ago,
             "approx_distance_mi": round(dist_mi, 1),
             "week_load_mi":       round(week_load, 1),
             "recovery_weeks":     recovery_weeks,
@@ -546,11 +564,19 @@ def _extract_macro_inputs(context_packet: Dict) -> Dict:
 
     # Week 1 volume cap for long-race recovery only (not for short races).
     # Short races enforce a no-quality window but NOT a volume cap.
+    # Marathon (>=24mi): 60/70% cap — significant recovery needed.
+    # Half marathon (<24mi): 85/90% cap — volume can stay near normal, only quality is restricted.
     week1_cap_miles: Optional[float] = None
     if post_race["required"] and not post_race["short_race_mode"]:
         wk_load = post_race["week_load_mi"] if post_race["week_load_mi"] > 0 else weekly_avg
-        cap_a = 0.60 * wk_load if wk_load > 0 else 14.0
-        cap_b = 0.70 * weekly_avg if weekly_avg > 0 else 14.0
+        dist_mi = post_race["approx_distance_mi"]
+        if dist_mi >= 24.0:
+            cap_a = 0.60 * wk_load if wk_load > 0 else 14.0
+            cap_b = 0.70 * weekly_avg if weekly_avg > 0 else 14.0
+        else:
+            # Half marathon or similar: keep volume close to normal, just cut quality
+            cap_a = 0.85 * wk_load if wk_load > 0 else 18.0
+            cap_b = 0.90 * weekly_avg if weekly_avg > 0 else 18.0
         week1_cap_miles = max(round(min(cap_a, cap_b, 20.0), 1), 10.0)  # floor 10 mi
 
     # Short-race no-quality days: pass through for prompt injection + validation
@@ -712,8 +738,20 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
         f"- Total weeks: {total_weeks}"
         f"{race_context}\n\n"
         f"PHASE GUIDELINES:\n"
-        f"- base: aerobic foundation, easy/long only, intensity_budget 'none' or 'low'\n"
-        f"- quality: add tempo/interval work (max 2 sessions/week), budget 'moderate'/'high'\n"
+        + (
+            f"- base week 1+: quality_sessions_allowed = 1 "
+            f"(no post-race recovery required — start quality from week 1)\n"
+            if not inputs.get("post_race_recovery_required")
+            else (
+                f"- base weeks 1–{inputs.get('post_race_recovery_week_count', 1)}: "
+                f"quality_sessions_allowed = 0 (see POST-RACE RECOVERY REQUIREMENT above)\n"
+                f"- base week {inputs.get('post_race_recovery_week_count', 1) + 1}: "
+                f"quality_sessions_allowed = 1 (MANDATORY — first week after recovery block)\n"
+                f"- base week {inputs.get('post_race_recovery_week_count', 1) + 2}+: "
+                f"quality_sessions_allowed = 1\n"
+            )
+        )
+        + f"- quality: add tempo/interval work (max 2 sessions/week), budget 'moderate'/'high'\n"
         f"- race_specific: race-pace work, begin volume reduction, budget 'moderate'\n"
         f"- taper: reduce volume 20-30%/week, maintain intensity, preserve fitness\n\n"
         f"VOLUME RAMP (base phase only):\n"
@@ -939,6 +977,46 @@ def generate_macro_plan(
 
     # ── Parse + Pydantic validation ──────────────────────────────────────────
     plan = _parse_and_validate_macro(raw, system)
+
+    # ── Post-parse fixup: enforce volume ramp constraints ────────────────────
+    # Haiku regularly generates volume jumps that exceed 10% or 3+ consecutive
+    # >7% ramps. Normalise the progression deterministically.
+    consec_big = 0
+    for i in range(1, len(plan.weeks)):
+        prev = plan.weeks[i - 1]
+        curr = plan.weeks[i]
+        if prev.target_volume_miles > 0 and curr.phase == "base":
+            pct = (curr.target_volume_miles - prev.target_volume_miles) / prev.target_volume_miles
+            import math as _math
+            # Cap at 10% — use floor to avoid rounding past the limit
+            if pct > 0.10 + 1e-9:
+                capped = _math.floor(prev.target_volume_miles * 1.099 * 10) / 10
+                log.info("volume ramp fixup: week %d %.1f→%.1f", curr.week_number, curr.target_volume_miles, capped)
+                curr.target_volume_miles = capped
+                pct = (capped - prev.target_volume_miles) / prev.target_volume_miles
+            # Track consecutive >7% ramps and flatten the third
+            consec_big = consec_big + 1 if pct > 0.07 else 0
+            if consec_big >= 3:
+                flattened = _math.floor(prev.target_volume_miles * 1.05 * 10) / 10
+                log.info("consec ramp fixup: week %d %.1f→%.1f", curr.week_number, curr.target_volume_miles, flattened)
+                curr.target_volume_miles = flattened
+                consec_big = 1  # reset streak
+
+    # ── Post-parse fixup: enforce simultaneous quality+LR constraint ─────────
+    # Validation rule 12 rejects plans where quality increases AND long_run_max_min
+    # increases >10% in the same week. Haiku consistently violates this despite
+    # the prompt warning. Cap the LR to stay within 10% when quality also increases.
+    for i in range(1, len(plan.weeks)):
+        prev = plan.weeks[i - 1]
+        curr = plan.weeks[i]
+        if curr.quality_sessions_allowed > prev.quality_sessions_allowed and prev.long_run_max_min > 0:
+            max_lr = round(prev.long_run_max_min * 1.09)  # 9% headroom (under 10% limit)
+            if curr.long_run_max_min > max_lr:
+                log.info(
+                    "lr cap fixup: week %d LR %d→%d (quality also increased)",
+                    curr.week_number, curr.long_run_max_min, max_lr,
+                )
+                curr.long_run_max_min = max_lr
 
     # ── Structural validation layer ──────────────────────────────────────────
     result = validate_macro_plan(

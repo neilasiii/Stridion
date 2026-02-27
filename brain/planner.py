@@ -68,9 +68,11 @@ SAFETY RULES (enforced — violations will be flagged):
 
 DATA QUALITY RULE:
 If data_quality.readiness_confidence == "low":
-  - Default to conservative plan: NO hard workouts (no tempo, no interval, no long).
-  - Prioritize easy (RPE 4-5) and rest days only.
+  - Reduce intensity by one level (e.g., planned tempo → easy with strides).
+  - Keep running day count per athlete.weekly_structure.runs_per_week.
   - Do NOT increase volume vs training_summary.total_miles baseline.
+  - Preserve quality session if macro permits; reduce duration/intensity rather
+    than eliminating it entirely.
   - Add "low_readiness_confidence" to plan-level safety_flags.
 If data_quality.has_health_cache is false:
   - Treat as low readiness confidence regardless of other signals.
@@ -94,6 +96,17 @@ If macro_guidance is present and non-null:
   - Follow planner_notes literally unless a safety rule overrides.
   - Add "macro_guided" to plan-level safety_flags when macro_guidance is applied.
 If macro_guidance is null: infer phase from race proximity and training history.
+
+ATHLETE STRUCTURE RULES (check context_packet.athlete.weekly_structure):
+- Total running days MUST equal athlete.weekly_structure.runs_per_week (default 4).
+- Include exactly 1 quality session per week during quality/race_specific phase,
+  unless macro quality_sessions_allowed == 0 OR BOTH of these are true:
+  training_readiness < 40 AND RHR is elevated > 5 bpm above baseline.
+  A single low-confidence signal is NOT enough to drop the quality session — reduce
+  it instead (shorter duration, lower intensity).
+- Quality session must be harder than or equal to last week's quality in total
+  quality volume. Never regress without a documented reason in rationale.
+- Remaining running days = easy or long. Place around constraint dates.
 
 OUTPUT RULES:
 - Output ONLY a single JSON object. No markdown fences. No prose.
@@ -190,14 +203,15 @@ def _call_llm(system: str, user: str, timeout: int = 120, model: Optional[str] =
                default model (currently Sonnet 4.6).
 
     SDK fallback is opt-in: set BRAIN_ALLOW_SDK_FALLBACK=1 to enable.
-    This keeps the transport deterministic in production; the SDK path is
-    only used in environments where the claude CLI is not available and
-    the operator has explicitly consented to it.
+    When set, the SDK is used directly (bypassing the CLI entirely).
+    Useful when running inside a Claude Code session where nested CLI
+    calls are blocked.
     """
+    if os.environ.get("BRAIN_ALLOW_SDK_FALLBACK") == "1":
+        return _call_anthropic_sdk(system, user, model=model)
+
     claude = _find_claude()
     if claude is None:
-        if os.environ.get("BRAIN_ALLOW_SDK_FALLBACK") == "1":
-            return _call_anthropic_sdk(system, user)
         raise RuntimeError(
             "claude CLI not found. Searched:\n  "
             + "\n  ".join(str(p) for p in CLAUDE_PATHS)
@@ -239,24 +253,60 @@ def _call_llm(system: str, user: str, timeout: int = 120, model: Optional[str] =
     return text
 
 
-def _call_anthropic_sdk(system: str, user: str) -> str:
-    """Fallback: use anthropic Python SDK if installed."""
-    try:
-        import anthropic  # type: ignore
-    except ImportError:
-        raise RuntimeError(
-            "No LLM backend available. Install 'anthropic' SDK or ensure "
-            "claude CLI is accessible at one of: "
-            + ", ".join(str(p) for p in CLAUDE_PATHS)
-        )
-    client = anthropic.Anthropic()
-    msg = client.messages.create(
-        model=MODEL,
-        max_tokens=MAX_TOKENS,
-        system=system,
-        messages=[{"role": "user", "content": user}],
+def _call_anthropic_sdk(system: str, user: str, model: Optional[str] = None) -> str:
+    """Fallback LLM call: tries anthropic SDK first, then Gemini."""
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if api_key:
+        try:
+            import anthropic  # type: ignore
+            client = anthropic.Anthropic(api_key=api_key)
+            msg = client.messages.create(
+                model=model or MODEL,
+                max_tokens=MAX_TOKENS,
+                system=system,
+                messages=[{"role": "user", "content": user}],
+            )
+            return msg.content[0].text
+        except Exception as e:
+            log.warning("anthropic SDK call failed (%s), trying Gemini", e)
+
+    # Gemini fallback
+    return _call_gemini(system, user)
+
+
+def _call_gemini(system: str, user: str) -> str:
+    """Call Gemini API using the project's configured key."""
+    import urllib.request as _req
+    import urllib.error as _uerr
+
+    gemini_env = PROJECT_ROOT / "config" / "gemini_api.env"
+    gemini_key = ""
+    if gemini_env.exists():
+        for line in gemini_env.read_text().splitlines():
+            if line.startswith("GEMINI_API_KEY="):
+                gemini_key = line.split("=", 1)[1].strip()
+    gemini_key = gemini_key or os.environ.get("GEMINI_API_KEY", "")
+    if not gemini_key:
+        raise RuntimeError("No LLM backend available: no ANTHROPIC_API_KEY and no GEMINI_API_KEY")
+
+    import json as _json
+    url = (
+        f"https://generativelanguage.googleapis.com/v1/models/"
+        f"gemini-2.0-flash:generateContent?key={gemini_key}"
     )
-    return msg.content[0].text
+    # v1 API does not support system_instruction — prepend system as context
+    combined = f"{system}\n\n{user}"
+    payload = _json.dumps({
+        "contents": [{"parts": [{"text": combined}]}],
+        "generationConfig": {"maxOutputTokens": 4096},
+    }).encode()
+    request = _req.Request(url, data=payload, headers={"Content-Type": "application/json"})
+    try:
+        with _req.urlopen(request, timeout=120) as resp:
+            data = _json.loads(resp.read())
+        return data["candidates"][0]["content"]["parts"][0]["text"]
+    except _uerr.HTTPError as e:
+        raise RuntimeError(f"Gemini API error {e.code}: {e.read()[:300]}")
 
 
 # ── JSON extraction ────────────────────────────────────────────────────────────
@@ -498,7 +548,7 @@ def plan_week(
     )
 
     # ── Call LLM ──────────────────────────────────────────────────────────
-    raw = _call_llm(_SYSTEM_PLAN_WEEK, user_prompt)
+    raw = _call_llm(_SYSTEM_PLAN_WEEK, user_prompt, timeout=300, model="claude-haiku-4-5-20251001")
     decision = _parse_and_validate_plan(raw, ctx_hash, _SYSTEM_PLAN_WEEK)
     decision = _enforce_stride_rules(decision)
 

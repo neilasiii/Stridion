@@ -97,8 +97,15 @@ This pattern has been consistent across multiple training blocks.
 
 ## 6. Race History
 
-### Gasparilla Distance Classic Half Marathon — Tampa, FL
-- Completed earlier in 2025.
+### Gasparilla Distance Classic Half Marathon — Tampa, FL (Feb 22, 2026)
+- **Finish time:** **1:55:xx** (13.25mi @ 9:00/mi avg, avg HR 172) → VDOT 37.2
+- Post-race recovery pattern (coach Brant Stachel's actual prescription):
+  - Day 3 (Wed Feb 25): 30 min Easy
+  - Day 5 (Fri Feb 27): 20 min warm-up + 6×4 min @ tempo on 1 min jog + 10 min cool-down
+  - Day 6 (Sat Feb 28): 60 min Easy
+- **Key insight:** Quality work resumed at day 5 post-half marathon. No multi-week recovery block. Volume stayed near normal (~16mi/week). This is the correct recovery template for future half marathon planning.
+
+### Gasparilla Distance Classic Half Marathon — Tampa, FL (earlier 2025)
 - **Finish time:** **1:55:04**
 - Demonstrates capacity for sustained moderate–high intensity effort and strong pacing over 13.1 miles.
 
