@@ -1104,6 +1104,60 @@ async def coach_note_command(interaction: discord.Interaction, note: str):
     await interaction.followup.send(embed=embed)
 
 
+# ============== RPE Tracking ==============
+
+# Maps Discord message ID → activity_id for pending check-ins.
+# Populated by _post_pending_checkin when it sends a check-in message.
+_active_checkins: dict[int, str] = {}
+
+
+def _extract_and_store_rpe(text: str, activity_id: str) -> None:
+    """
+    Extract RPE from an athlete's check-in reply and store it in the DB.
+    Silent no-op if nothing is detected.
+    """
+    if not activity_id:
+        return
+
+    rpe: float | None = None
+
+    # Numeric: "7/10", "8 / 10", etc.
+    m = re.search(r'\b(\d+)\s*/\s*10\b', text)
+    if m:
+        val = int(m.group(1))
+        if 1 <= val <= 10:
+            rpe = float(val)
+
+    # Qualitative keywords (first match wins, checked hardest → easiest)
+    if rpe is None:
+        lower = text.lower()
+        qualitative = [
+            (["very hard", "brutal", "struggled", "destroyed", "dying"], 9.0),
+            (["hard", "tough", "worked", "grinding"], 7.0),
+            (["moderate", "decent", "okay", "alright"], 6.0),
+            (["easy", "smooth", "relaxed", "comfortable", "recovery"], 4.0),
+        ]
+        for keywords, score in qualitative:
+            if any(kw in lower for kw in keywords):
+                rpe = score
+                break
+
+    if rpe is None:
+        return  # nothing detected — skip silently
+
+    try:
+        sys.path.insert(0, str(PROJECT_ROOT))
+        from memory.db import record_checkin_response
+        record_checkin_response(
+            activity_id=activity_id,
+            rpe=rpe,
+            effort_notes=text[:500],
+        )
+        logger.info("RPE %.1f stored for activity %s", rpe, activity_id)
+    except Exception as exc:
+        logger.warning("_extract_and_store_rpe: DB write failed: %s", exc)
+
+
 # ============== Conversational Coaching ==============
 
 @bot.event
@@ -1148,6 +1202,10 @@ async def on_message(message: discord.Message):
                     if provider == "gemini":
                         response = f"{response}\n\n*Powered by Gemini (Claude unavailable)*"
                     await send_long_message(message, response)
+                    # Extract RPE if this reply is to a check-in message
+                    ref_msg_id = message.reference.message_id
+                    if ref_msg_id and ref_msg_id in _active_checkins:
+                        _extract_and_store_rpe(content, _active_checkins[ref_msg_id])
                     return
 
             # ── LLM opt-in via "ai:" prefix ────────────────────────────────
@@ -1743,7 +1801,9 @@ async def _post_pending_checkin(channel) -> bool:
             msg = f"You logged **{name}**. How did it feel?"
 
     try:
-        await channel.send(msg)
+        sent_msg = await channel.send(msg)
+        # Register message ID so replies can be matched to this activity
+        _active_checkins[sent_msg.id] = activity_id
     except Exception as exc:
         logger.error("_post_pending_checkin: send failed: %s", exc)
         return False
@@ -1768,12 +1828,136 @@ async def _post_pending_checkin(channel) -> bool:
     return True
 
 
+async def _post_pending_vdot_update(channel) -> bool:
+    """
+    Check SQLite for a pending VDOT change written by the heartbeat agent.
+    If found, post a notification to #coach and clear the flag.
+    Returns True if a message was posted.
+    """
+    import sqlite3 as _sqlite3
+    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
+    if not db_path.exists():
+        return False
+
+    try:
+        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = _sqlite3.Row
+        row = conn.execute(
+            "SELECT value FROM state WHERE key = 'pending_vdot_update'"
+        ).fetchone()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_post_pending_vdot_update: DB read error: %s", exc)
+        return False
+
+    if not row:
+        return False
+
+    try:
+        payload = json.loads(row["value"])
+    except Exception:
+        return False
+
+    derived = payload.get("derived")
+    stored  = payload.get("stored")
+    source  = payload.get("source", "a recent activity")
+
+    if derived is None or stored is None:
+        return False
+
+    msg = (
+        f"Your VDOT looks like it's updated to **{derived}** (was {stored}) "
+        f"based on **{source}**. Next plan will use this. "
+        f"Reply 'confirm' to apply it now, or ignore to let it apply at next plan generation."
+    )
+
+    try:
+        await channel.send(msg)
+    except Exception as exc:
+        logger.error("_post_pending_vdot_update: send failed: %s", exc)
+        return False
+
+    # Clear the pending flag
+    try:
+        conn = _sqlite3.connect(str(db_path))
+        conn.execute("DELETE FROM state WHERE key = 'pending_vdot_update'")
+        conn.commit()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_post_pending_vdot_update: could not clear pending flag: %s", exc)
+
+    logger.info(
+        "_post_pending_vdot_update: VDOT update posted (%.1f → %.1f)", stored, derived
+    )
+    return True
+
+
+async def _post_pending_weekly_synthesis(channel) -> bool:
+    """
+    Check SQLite for a pending weekly synthesis written by the heartbeat agent.
+    If found, post it to #coach and clear the flag.
+    Returns True if a message was posted.
+    """
+    import sqlite3 as _sqlite3
+    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
+    if not db_path.exists():
+        return False
+
+    try:
+        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = _sqlite3.Row
+        row = conn.execute(
+            "SELECT value FROM state WHERE key = 'pending_weekly_synthesis'"
+        ).fetchone()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_post_pending_weekly_synthesis: DB read error: %s", exc)
+        return False
+
+    if not row:
+        return False
+
+    try:
+        payload = json.loads(row["value"])
+    except Exception:
+        return False
+
+    text = payload.get("text", "").strip()
+    synth_date = payload.get("date", "")
+
+    if not text:
+        return False
+
+    header = f"**Weekly Synthesis — {synth_date}**\n\n" if synth_date else ""
+    msg = f"{header}{text}"
+
+    try:
+        await channel.send(msg)
+    except Exception as exc:
+        logger.error("_post_pending_weekly_synthesis: send failed: %s", exc)
+        return False
+
+    # Clear the pending flag
+    try:
+        conn = _sqlite3.connect(str(db_path))
+        conn.execute("DELETE FROM state WHERE key = 'pending_weekly_synthesis'")
+        conn.commit()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_post_pending_weekly_synthesis: could not clear pending flag: %s", exc)
+
+    logger.info("_post_pending_weekly_synthesis: weekly synthesis posted for %s", synth_date)
+    return True
+
+
 @tasks.loop(minutes=30)
 async def checkin_delivery_task():
     """Deliver pending post-workout check-in messages to #coach every 30 minutes."""
     channel = bot.get_channel(CHANNELS["coach"])
     if channel:
         await _post_pending_checkin(channel)
+        await _post_pending_vdot_update(channel)
+        await _post_pending_weekly_synthesis(channel)
 
 
 @tasks.loop(time=time(hour=8, minute=30, tzinfo=EST))  # 8:30 AM EST

@@ -181,11 +181,26 @@ CREATE INDEX IF NOT EXISTS checkins_date ON workout_checkins(activity_date);
 """
 
 
+def _run_migrations(conn: sqlite3.Connection) -> None:
+    """Apply any schema changes to existing tables."""
+    migrations = [
+        "ALTER TABLE workout_checkins ADD COLUMN rpe REAL",
+        "ALTER TABLE workout_checkins ADD COLUMN effort_notes TEXT",
+        "ALTER TABLE workout_checkins ADD COLUMN response_received_at DATETIME",
+    ]
+    for sql in migrations:
+        try:
+            conn.execute(sql)
+        except sqlite3.OperationalError:
+            pass  # column already exists — safe to ignore
+
+
 def init_db(db_path: Path = DB_PATH) -> None:
     """Create all tables. Safe to call multiple times (idempotent)."""
     conn = _connect(db_path)
     try:
         conn.executescript(_DDL)
+        _run_migrations(conn)
         conn.commit()
     finally:
         conn.close()
@@ -1148,5 +1163,56 @@ def mark_checkin_sent(activity_id: str, db_path: Path = DB_PATH) -> None:
             (activity_id,),
         )
         conn.commit()
+    finally:
+        conn.close()
+
+
+def record_checkin_response(
+    activity_id: str,
+    rpe: Optional[float],
+    effort_notes: Optional[str],
+    db_path: Path = DB_PATH,
+) -> None:
+    """Store athlete's check-in reply: RPE score and verbatim effort notes."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """UPDATE workout_checkins
+               SET rpe = ?, effort_notes = ?, response_received_at = datetime('now')
+               WHERE activity_id = ?""",
+            (rpe, effort_notes, activity_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_weekly_rpe_summary(
+    week_start: date,
+    db_path: Path = DB_PATH,
+) -> List[Dict]:
+    """
+    Return checkin rows with RPE data for the 7 days starting week_start.
+    Useful for weekly synthesis.
+    """
+    week_end = (
+        date.fromisoformat(week_start.isoformat()) + timedelta(days=6)
+        if isinstance(week_start, date)
+        else date.fromisoformat(week_start) + timedelta(days=6)
+    )
+    conn = _connect(db_path)
+    try:
+        rows = conn.execute(
+            """SELECT activity_id, activity_type, activity_name, activity_date,
+                      rpe, effort_notes
+               FROM workout_checkins
+               WHERE activity_date BETWEEN ? AND ?
+               ORDER BY activity_date""",
+            (
+                week_start.isoformat() if isinstance(week_start, date) else week_start,
+                week_end.isoformat(),
+            ),
+        ).fetchall()
+        return [dict(r) for r in rows]
     finally:
         conn.close()

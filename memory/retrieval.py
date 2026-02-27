@@ -707,7 +707,14 @@ def _derive_vdot_from_activities(health: Dict, lookback_days: int = 90) -> Optio
         if dist_mi <= 0 or dur_min <= 0:
             continue
 
-        if not (_is_race_distance(dist_mi) or _has_race_keyword_activity(a)):
+        # Time trial detection — treat as race-equivalent for VDOT
+        name_lower = (
+            a.get("activity_name") or a.get("name") or a.get("title") or ""
+        ).lower()
+        _TIME_TRIAL_KEYWORDS = ["time trial", " tt ", "timed mile", "test effort", "race effort"]
+        is_time_trial = any(kw in name_lower for kw in _TIME_TRIAL_KEYWORDS)
+
+        if not (_is_race_distance(dist_mi) or _has_race_keyword_activity(a) or is_time_trial):
             continue
 
         try:

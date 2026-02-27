@@ -172,6 +172,14 @@ def run_cycle(db_path=None) -> dict:
                 log.info("on_activity_completed: checkin queued for '%s'",
                          activity_result.get("activity_name", "?"))
 
+            # on_vdot_change: detect VDOT drift and queue notification
+            from hooks.on_vdot_change import run as on_vdot_change
+            vdot_result = on_vdot_change(ctx=ctx, db_path=db)
+            summary["hooks_run"].append("on_vdot_change")
+            if vdot_result["changed"]:
+                log.info("on_vdot_change: drift detected %.1f → %.1f",
+                         vdot_result.get("stored", 0), vdot_result.get("derived", 0))
+
             _save_context_hash(new_hash, db)
             refresh_lock(owner, db_path=db)
 
@@ -193,6 +201,13 @@ def run_cycle(db_path=None) -> dict:
         if obs_missed["pending_written"]:
             summary["hooks_run"].append("on_obs_missed")
             log.info("on_obs_missed: pending result written for Discord bot delivery")
+
+        # ── 7. Weekly rollup (Saturday 7pm+, always, idempotent) ────────────
+        from hooks.on_weekly_rollup import run as on_weekly_rollup
+        rollup = on_weekly_rollup(db_path=db)
+        if rollup["synthesis_written"]:
+            summary["hooks_run"].append("on_weekly_rollup")
+            log.info("on_weekly_rollup: weekly synthesis queued")
 
         log_task_finish(run_id, "success", details=summary, db_path=db)
 
