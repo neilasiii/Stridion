@@ -179,6 +179,13 @@ def run_cycle(db_path=None) -> dict:
                 constraints_result["needs_replan"],
             )
 
+        # ── 6. Obs missed check (always) ────────────────────────────────────
+        from hooks.on_obs_missed import run as on_obs_missed
+        obs_missed = on_obs_missed(db_path=db)
+        if obs_missed["pending_written"]:
+            summary["hooks_run"].append("on_obs_missed")
+            log.info("on_obs_missed: pending result written for Discord bot delivery")
+
         log_task_finish(run_id, "success", details=summary, db_path=db)
 
     except Exception as exc:
