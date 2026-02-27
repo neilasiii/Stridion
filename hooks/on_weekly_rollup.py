@@ -39,7 +39,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 _STATE_PENDING_KEY    = "pending_weekly_synthesis"
 _STATE_LAST_ROLLUP    = "runner_last_weekly_rollup"
 _TRIGGER_WEEKDAY      = 5    # Saturday
-_TRIGGER_HOUR         = 19   # 7 PM local
+_TRIGGER_HOUR         = 23   # 11 PM local (after saturday_plan_task at 10 PM EST)
 
 log = logging.getLogger("hooks.on_weekly_rollup")
 
