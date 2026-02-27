@@ -166,6 +166,18 @@ CREATE TABLE IF NOT EXISTS macro_plans (
 );
 CREATE INDEX IF NOT EXISTS macro_plans_status    ON macro_plans(status);
 CREATE INDEX IF NOT EXISTS macro_plans_race_date ON macro_plans(race_date);
+
+CREATE TABLE IF NOT EXISTS workout_checkins (
+    activity_id      TEXT PRIMARY KEY,
+    activity_date    DATE NOT NULL,
+    activity_type    TEXT NOT NULL,
+    activity_name    TEXT,
+    distance_mi      REAL,
+    duration_min     REAL,
+    avg_hr           REAL,
+    checkin_sent_at  DATETIME
+);
+CREATE INDEX IF NOT EXISTS checkins_date ON workout_checkins(activity_date);
 """
 
 
@@ -1077,3 +1089,64 @@ def get_active_macro_plan(db_path: Path = DB_PATH) -> Optional[Dict]:
 def get_active_macro_plan_id(db_path: Path = DB_PATH) -> Optional[str]:
     """Return the active macro plan's macro_id from the state table, or None."""
     return get_state("active_macro_plan_id", db_path=db_path)
+
+
+# ── Workout Check-ins ──────────────────────────────────────────────────────────
+
+def upsert_checkin(
+    activity_id: str,
+    activity_date: date,
+    activity_type: str,
+    activity_name: Optional[str] = None,
+    distance_mi: Optional[float] = None,
+    duration_min: Optional[float] = None,
+    avg_hr: Optional[float] = None,
+    db_path: Path = DB_PATH,
+) -> None:
+    """Insert a checkin row. INSERT OR IGNORE — never overwrites an existing row."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """INSERT OR IGNORE INTO workout_checkins(
+                   activity_id, activity_date, activity_type, activity_name,
+                   distance_mi, duration_min, avg_hr
+               ) VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (
+                activity_id,
+                activity_date.isoformat() if isinstance(activity_date, date) else activity_date,
+                activity_type,
+                activity_name,
+                distance_mi,
+                duration_min,
+                avg_hr,
+            ),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_unsent_checkins(db_path: Path = DB_PATH) -> List[Dict]:
+    """Return all checkin rows where checkin_sent_at IS NULL, ordered newest first."""
+    conn = _connect(db_path)
+    try:
+        rows = conn.execute(
+            "SELECT * FROM workout_checkins WHERE checkin_sent_at IS NULL "
+            "ORDER BY activity_date DESC, activity_id DESC"
+        ).fetchall()
+        return [dict(r) for r in rows]
+    finally:
+        conn.close()
+
+
+def mark_checkin_sent(activity_id: str, db_path: Path = DB_PATH) -> None:
+    """Set checkin_sent_at = now for the given activity_id."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            "UPDATE workout_checkins SET checkin_sent_at = datetime('now') WHERE activity_id = ?",
+            (activity_id,),
+        )
+        conn.commit()
+    finally:
+        conn.close()

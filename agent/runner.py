@@ -164,6 +164,14 @@ def run_cycle(db_path=None) -> dict:
             log.info("on_readiness_change: triggered=%s reason=%s",
                      readiness_result["triggered"], readiness_result["reason"])
 
+            # on_activity_completed: queue post-workout check-in for Discord
+            from hooks.on_activity_completed import run as on_activity_completed
+            activity_result = on_activity_completed(db_path=db)
+            summary["hooks_run"].append("on_activity_completed")
+            if activity_result["pending_written"]:
+                log.info("on_activity_completed: checkin queued for '%s'",
+                         activity_result.get("activity_name", "?"))
+
             _save_context_hash(new_hash, db)
             refresh_lock(owner, db_path=db)
 

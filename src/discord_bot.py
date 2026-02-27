@@ -1666,6 +1666,98 @@ async def _post_pending_obs(channel) -> bool:
     return True
 
 
+async def _post_pending_checkin(channel) -> bool:
+    """
+    Check SQLite for a pending post-workout check-in written by the heartbeat agent.
+    If found, post a short message to #coach and mark it delivered.
+    Returns True if a message was posted.
+    """
+    import sqlite3 as _sqlite3
+    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
+    if not db_path.exists():
+        return False
+
+    # Read pending checkin from SQLite state table
+    try:
+        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = _sqlite3.Row
+        row = conn.execute("SELECT value FROM state WHERE key = 'pending_checkin'").fetchone()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_post_pending_checkin: DB read error: %s", exc)
+        return False
+
+    if not row:
+        return False
+
+    try:
+        payload = json.loads(row["value"])
+    except Exception:
+        return False
+
+    activity_id   = payload.get("activity_id", "")
+    activity_type = payload.get("activity_type", "").lower()
+    name          = payload.get("activity_name") or activity_type.replace("_", " ").title()
+    distance_mi   = payload.get("distance_mi")
+    duration_min  = payload.get("duration_min")
+    avg_hr        = payload.get("avg_hr")
+
+    # Build short, conversational message
+    running_types = {"running", "trail_running", "treadmill_running"}
+    if activity_type in running_types:
+        parts = []
+        if distance_mi:
+            parts.append(f"{distance_mi:.1f} mi")
+        if duration_min:
+            mins = int(duration_min)
+            parts.append(f"{mins} min")
+        if avg_hr:
+            parts.append(f"avg HR {int(avg_hr)}")
+        detail = " · ".join(parts)
+        if detail:
+            msg = f"You just finished **{name}** ({detail}). How did that go?"
+        else:
+            msg = f"You just finished **{name}**. How did that go?"
+    else:
+        if duration_min:
+            msg = f"You logged **{name}** ({int(duration_min)} min). How did it feel?"
+        else:
+            msg = f"You logged **{name}**. How did it feel?"
+
+    try:
+        await channel.send(msg)
+    except Exception as exc:
+        logger.error("_post_pending_checkin: send failed: %s", exc)
+        return False
+
+    # Mark checkin sent + clear the SQLite pending flag
+    try:
+        sys.path.insert(0, str(PROJECT_ROOT))
+        from memory.db import mark_checkin_sent
+        mark_checkin_sent(activity_id, db_path=db_path)
+    except Exception as exc:
+        logger.warning("_post_pending_checkin: mark_checkin_sent failed: %s", exc)
+
+    try:
+        conn = _sqlite3.connect(str(db_path))
+        conn.execute("DELETE FROM state WHERE key = 'pending_checkin'")
+        conn.commit()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_post_pending_checkin: could not clear pending flag: %s", exc)
+
+    logger.info("_post_pending_checkin: check-in posted for activity %s (%s)", activity_id, name)
+    return True
+
+
+@tasks.loop(minutes=30)
+async def checkin_delivery_task():
+    """Deliver pending post-workout check-in messages to #coach every 30 minutes."""
+    channel = bot.get_channel(CHANNELS["coach"])
+    if channel:
+        await _post_pending_checkin(channel)
+
+
 @tasks.loop(time=time(hour=8, minute=30, tzinfo=EST))  # 8:30 AM EST
 async def obs_test_task():
     """Run daily observability checks (coach db sanity + parity) for 7 days."""
@@ -1773,6 +1865,7 @@ async def saturday_plan_task():
 @daily_workouts_task.before_loop
 @obs_test_task.before_loop
 @saturday_plan_task.before_loop
+@checkin_delivery_task.before_loop
 async def before_scheduled_tasks():
     """Wait until bot is ready before starting tasks."""
     await bot.wait_until_ready()
@@ -1836,6 +1929,11 @@ async def on_ready():
         posted = await _post_pending_obs(testing_channel)
         if posted:
             print("✓ Late obs result delivered on reconnect")
+
+    # Start post-workout check-in delivery task (fires immediately on first run)
+    if not checkin_delivery_task.is_running():
+        checkin_delivery_task.start()
+        print("✓ Check-in delivery task started")
 
 
 # ============== Entry Point ==============
