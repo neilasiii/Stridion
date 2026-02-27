@@ -88,6 +88,37 @@
           {
             "type": "command",
             "command": "bash /home/coach/running-coach/.claude/hooks/remind_memory_update.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash /home/coach/running-coach/.claude/hooks/track_bot_changes.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/coach/running-coach/.claude/hooks/detect_bot_restart.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash /home/coach/running-coach/.claude/hooks/remind_sync_commit.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/coach/running-coach/.claude/hooks/warn_bot_stale.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash /home/coach/running-coach/.claude/hooks/warn_stale_health_data.sh"
           }
         ]
       }
