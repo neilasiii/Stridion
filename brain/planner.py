@@ -108,6 +108,17 @@ ATHLETE STRUCTURE RULES (check context_packet.athlete.weekly_structure):
   quality volume. Never regress without a documented reason in rationale.
 - Remaining running days = easy or long. Place around constraint dates.
 
+RPE RULES (check context_packet.rpe_history):
+If rpe_history is present and session_count >= 3:
+  - "easy_rpe_elevated" in flags → easy runs feel harder than expected.
+    Reduce E-pace target by 15–20 sec/mi. Note in rationale. Do NOT increase volume.
+  - "quality_rpe_low" in flags → quality sessions feel too easy.
+    Increase quality duration or reps by ~10%. Note potential fitness improvement ahead of VDOT update.
+  - "high_overall_effort" in flags → athlete is working hard across all run types.
+    Reduce week volume by 5–10% vs macro target. Keep quality session but shorten.
+    Add "high_overall_rpe" to safety_flags.
+If rpe_history is absent or session_count < 3: ignore RPE signal, plan from readiness only.
+
 OUTPUT RULES:
 - Output ONLY a single JSON object. No markdown fences. No prose.
 - Every field in the schema is required unless marked Optional.

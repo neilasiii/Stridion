@@ -1186,6 +1186,13 @@ async def on_message(message: discord.Message):
 
     async with message.channel.typing():
         try:
+            # ── VDOT confirm handler (before reply routing) ──────────────────
+            # If athlete types "confirm" and a pending VDOT update exists, apply it.
+            if lower.strip() == "confirm":
+                handled = await _handle_vdot_confirm(message)
+                if handled:
+                    return
+
             # ── Reply to bot message → route straight to AI ─────────────────
             # Handles post-workout check-in replies (and any other bot reply)
             # without keyword matching accidentally triggering CLI commands.
@@ -1868,7 +1875,8 @@ async def _post_pending_vdot_update(channel) -> bool:
     msg = (
         f"Your VDOT looks like it's updated to **{derived}** (was {stored}) "
         f"based on **{source}**. Next plan will use this. "
-        f"Reply 'confirm' to apply it now, or ignore to let it apply at next plan generation."
+        f"Type **confirm** (or reply with it) to regenerate your macro + weekly plan now, "
+        f"or ignore to let it apply at next plan generation."
     )
 
     try:
@@ -1877,9 +1885,13 @@ async def _post_pending_vdot_update(channel) -> bool:
         logger.error("_post_pending_vdot_update: send failed: %s", exc)
         return False
 
-    # Clear the pending flag
+    # Persist confirm payload so the confirm handler can apply it (survives bot restart)
     try:
         conn = _sqlite3.connect(str(db_path))
+        conn.execute(
+            "INSERT OR REPLACE INTO state (key, value) VALUES (?, ?)",
+            ("pending_vdot_confirm", row["value"]),
+        )
         conn.execute("DELETE FROM state WHERE key = 'pending_vdot_update'")
         conn.commit()
         conn.close()
@@ -1889,6 +1901,86 @@ async def _post_pending_vdot_update(channel) -> bool:
     logger.info(
         "_post_pending_vdot_update: VDOT update posted (%.1f → %.1f)", stored, derived
     )
+    return True
+
+
+async def _handle_vdot_confirm(message: discord.Message) -> bool:
+    """
+    If 'pending_vdot_confirm' exists in SQLite state, apply the VDOT update:
+      1. Regenerate macro plan (--force) — picks up new VDOT from health cache.
+      2. Regenerate weekly plan (--force).
+      3. Post a summary to #coach.
+      4. Clear pending_vdot_confirm.
+
+    Returns True if we handled a confirm, False if no pending confirm found.
+    """
+    import sqlite3 as _sqlite3
+    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
+    if not db_path.exists():
+        return False
+
+    try:
+        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = _sqlite3.Row
+        row = conn.execute(
+            "SELECT value FROM state WHERE key = 'pending_vdot_confirm'"
+        ).fetchone()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_handle_vdot_confirm: DB read error: %s", exc)
+        return False
+
+    if not row:
+        return False  # No pending confirm — not meant for us
+
+    try:
+        payload = json.loads(row["value"])
+    except Exception:
+        return False
+
+    derived = payload.get("derived", "?")
+    stored  = payload.get("stored", "?")
+
+    await message.reply(
+        f"Got it — applying VDOT **{derived}** (was {stored}). "
+        f"Regenerating macro plan and this week's workouts…"
+    )
+
+    # Step 1: Regenerate macro plan with new VDOT (LLM call, long timeout)
+    async with message.channel.typing():
+        rc1, out1, err1 = await run_coach_cli(["plan", "--macro", "--force"], timeout=360)
+
+    if rc1 != 0:
+        await message.channel.send(
+            f"⚠️ Macro plan regeneration failed (exit {rc1}). "
+            f"Try `/coach_plan` manually.\n```{(err1 or out1)[:400]}```"
+        )
+        return True  # We handled the confirm even if it failed
+
+    # Step 2: Regenerate this week's plan
+    async with message.channel.typing():
+        rc2, out2, err2 = await run_coach_cli(["plan", "--week", "--force"], timeout=300)
+
+    if rc2 != 0:
+        await message.channel.send(
+            f"⚠️ Weekly plan regeneration failed (exit {rc2}).\n```{(err2 or out2)[:400]}```"
+        )
+    else:
+        await message.channel.send(
+            f"✅ Plans updated with VDOT **{derived}**. "
+            f"Run `/coach_schedule` to see your updated week."
+        )
+
+    # Clear the pending confirm
+    try:
+        conn = _sqlite3.connect(str(db_path))
+        conn.execute("DELETE FROM state WHERE key = 'pending_vdot_confirm'")
+        conn.commit()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_handle_vdot_confirm: could not clear pending_vdot_confirm: %s", exc)
+
+    logger.info("_handle_vdot_confirm: applied VDOT %.1f → %.1f", stored, derived)
     return True
 
 
@@ -2043,9 +2135,21 @@ async def saturday_plan_task():
         await channel.send("📅 Generating next week's plan…")
         rc, stdout, stderr = await run_coach_cli(["plan", "--week"], timeout=300)
         if rc == 0:
+            # Also publish to Garmin Connect
+            logger.info("[Saturday Plan] Publishing to Garmin Connect…")
+            exp_rc, exp_out, exp_err = await run_coach_cli(
+                ["export-garmin", "--live"], timeout=120
+            )
+            garmin_note = ""
+            if exp_rc == 0:
+                garmin_note = "\n✅ Workouts published to Garmin Connect."
+            else:
+                garmin_note = f"\n⚠️ Garmin export failed: {(exp_err or exp_out)[:120]}"
+                logger.warning("[Saturday Plan] Garmin export failed: %s", exp_err or exp_out)
+
             embed = discord.Embed(
                 title="📅 Next Week's Plan Ready",
-                description=clamp(stdout.strip(), 3900),
+                description=clamp(stdout.strip(), 3900 - len(garmin_note)) + garmin_note,
                 color=discord.Color.blue(),
                 timestamp=datetime.now(),
             )

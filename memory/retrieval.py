@@ -48,6 +48,7 @@ MAX_CONSTRAINTS_CHARS =   600
 MAX_DECISIONS_CHARS   =   900   # shared across 3 decisions
 MAX_EXCERPTS_CHARS    = 1_200   # shared across up to 5 excerpts
 MAX_MACRO_CHARS       =   800
+MAX_RPE_CHARS         =   600   # RPE history (last 4 weeks)
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -491,6 +492,72 @@ def _cap_field(obj: Any, max_chars: int) -> Any:
     return {"_truncated": True, "preview": preview, "full_chars": len(s)}
 
 
+def _build_rpe_history(db_path, weeks: int = 4) -> Optional[Dict]:
+    """
+    Summarise the last `weeks` weeks of RPE checkin data for the Brain.
+
+    Returns None if no sessions with RPE data exist.
+    Returns a compact dict with:
+      weeks          list of {week_start, sessions: [{date, type, rpe, notes}]}
+      flags          list of signal strings the planner should act on
+      session_count  total sessions with RPE data
+    """
+    try:
+        from .db import get_weekly_rpe_summary
+    except Exception:
+        return None
+
+    today = date.today()
+    all_sessions = []
+    weekly_data = []
+
+    for w in range(weeks):
+        # Walk backwards week by week
+        week_end   = today - timedelta(days=w * 7)
+        week_start = week_end - timedelta(days=6)
+        rows = get_weekly_rpe_summary(week_start, db_path=db_path)
+        sessions_with_rpe = [r for r in rows if r.get("rpe") is not None]
+        if sessions_with_rpe:
+            weekly_data.append({
+                "week_start": week_start.isoformat(),
+                "sessions": [
+                    {
+                        "date":  r["activity_date"],
+                        "type":  r["activity_type"],
+                        "rpe":   r["rpe"],
+                        "notes": (r.get("effort_notes") or "")[:60],
+                    }
+                    for r in sessions_with_rpe
+                ],
+            })
+            all_sessions.extend(sessions_with_rpe)
+
+    if not all_sessions:
+        return None
+
+    # Derive actionable flags
+    flags = []
+    easy_rpes    = [r["rpe"] for r in all_sessions if r.get("rpe") and r.get("activity_type") == "running"
+                    and "easy" in (r.get("activity_name") or "").lower()]
+    quality_rpes = [r["rpe"] for r in all_sessions if r.get("rpe") and r.get("activity_type") == "running"
+                    and any(k in (r.get("activity_name") or "").lower()
+                            for k in ("tempo", "interval", "quality", "threshold"))]
+    all_rpes     = [r["rpe"] for r in all_sessions if r.get("rpe")]
+
+    if easy_rpes and (sum(easy_rpes) / len(easy_rpes)) > 7.0:
+        flags.append("easy_rpe_elevated")
+    if quality_rpes and (sum(quality_rpes) / len(quality_rpes)) < 5.0:
+        flags.append("quality_rpe_low")
+    if all_rpes and (sum(all_rpes) / len(all_rpes)) >= 8.0:
+        flags.append("high_overall_effort")
+
+    return {
+        "session_count": len(all_sessions),
+        "flags":         flags,
+        "weeks":         weekly_data[:weeks],  # newest first
+    }
+
+
 def _enforce_size_caps(packet: Dict) -> Dict:
     packet["training_summary"] = _cap_field(packet["training_summary"], MAX_TRAINING_CHARS)
     packet["readiness_trend"]  = _cap_field(packet["readiness_trend"],  MAX_READINESS_CHARS)
@@ -498,6 +565,8 @@ def _enforce_size_caps(packet: Dict) -> Dict:
     packet["constraints"]      = _cap_field(packet["constraints"],       MAX_CONSTRAINTS_CHARS)
     if packet.get("macro_guidance") is not None:
         packet["macro_guidance"] = _cap_field(packet["macro_guidance"],  MAX_MACRO_CHARS)
+    if packet.get("rpe_history") is not None:
+        packet["rpe_history"]  = _cap_field(packet["rpe_history"],       MAX_RPE_CHARS)
 
     per_decision = MAX_DECISIONS_CHARS // 3
     packet["recent_decisions"] = [_trunc(d, per_decision) for d in packet["recent_decisions"]]
@@ -859,6 +928,7 @@ def build_context_packet(
         "active_plan":      _get_plan_section(days_forward, db_path),
         "macro_guidance":   macro_guidance,
         "constraints":      _get_constraints(days_forward, db_path),
+        "rpe_history":      _build_rpe_history(db_path),
         "recent_decisions": [],
         "vault_excerpts":   [],
     }
