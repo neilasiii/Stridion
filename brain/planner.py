@@ -117,6 +117,11 @@ If rpe_history is present and session_count >= 3:
   - "high_overall_effort" in flags → athlete is working hard across all run types.
     Reduce week volume by 5–10% vs macro target. Keep quality session but shorten.
     Add "high_overall_rpe" to safety_flags.
+  - "watch_harder_than_reported" in flags → watch self-eval is consistently harder than
+    what athlete tells the coach. Trust the watch. Apply same adjustments as easy_rpe_elevated
+    or high_overall_effort as appropriate. Note in rationale.
+  - "watch_easier_than_reported" in flags → athlete reports harder to coach than watch shows.
+    No load adjustment needed.
 If rpe_history is absent or session_count < 3: ignore RPE signal, plan from readiness only.
 
 OUTPUT RULES:

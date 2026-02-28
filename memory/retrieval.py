@@ -516,16 +516,22 @@ def _build_rpe_history(db_path, weeks: int = 4) -> Optional[Dict]:
         week_end   = today - timedelta(days=w * 7)
         week_start = week_end - timedelta(days=6)
         rows = get_weekly_rpe_summary(week_start, db_path=db_path)
-        sessions_with_rpe = [r for r in rows if r.get("rpe") is not None]
+        # Include sessions that have ANY RPE data (coach or watch)
+        sessions_with_rpe = [
+            r for r in rows
+            if r.get("rpe") is not None or r.get("rpe_watch") is not None
+        ]
         if sessions_with_rpe:
             weekly_data.append({
                 "week_start": week_start.isoformat(),
                 "sessions": [
                     {
-                        "date":  r["activity_date"],
-                        "type":  r["activity_type"],
-                        "rpe":   r["rpe"],
-                        "notes": (r.get("effort_notes") or "")[:60],
+                        "date":       r["activity_date"],
+                        "type":       r["activity_type"],
+                        "rpe":        r.get("rpe"),        # coach-reported (Discord)
+                        "rpe_watch":  r.get("rpe_watch"),  # watch self-evaluation
+                        "feel":       r.get("workout_feel"),  # 0=bad,50=ok,75=good,100=excellent
+                        "notes":      (r.get("effort_notes") or "")[:60],
                     }
                     for r in sessions_with_rpe
                 ],
@@ -535,7 +541,7 @@ def _build_rpe_history(db_path, weeks: int = 4) -> Optional[Dict]:
     if not all_sessions:
         return None
 
-    # Derive actionable flags
+    # Derive actionable flags from coach RPE
     flags = []
     easy_rpes    = [r["rpe"] for r in all_sessions if r.get("rpe") and r.get("activity_type") == "running"
                     and "easy" in (r.get("activity_name") or "").lower()]
@@ -550,6 +556,21 @@ def _build_rpe_history(db_path, weeks: int = 4) -> Optional[Dict]:
         flags.append("quality_rpe_low")
     if all_rpes and (sum(all_rpes) / len(all_rpes)) >= 8.0:
         flags.append("high_overall_effort")
+
+    # Watch vs coach divergence: athlete may underreport effort to coach
+    # Flag if abs(rpe_watch - rpe) >= 2 in 2+ sessions
+    divergent = [
+        r for r in all_sessions
+        if r.get("rpe") is not None and r.get("rpe_watch") is not None
+        and abs(r["rpe_watch"] - r["rpe"]) >= 2.0
+    ]
+    if len(divergent) >= 2:
+        avg_watch  = sum(r["rpe_watch"] for r in divergent) / len(divergent)
+        avg_coach  = sum(r["rpe"]       for r in divergent) / len(divergent)
+        if avg_watch > avg_coach:
+            flags.append("watch_harder_than_reported")  # watch says harder than told coach
+        else:
+            flags.append("watch_easier_than_reported")  # watch says easier than told coach
 
     return {
         "session_count": len(all_sessions),

@@ -187,6 +187,9 @@ def _run_migrations(conn: sqlite3.Connection) -> None:
         "ALTER TABLE workout_checkins ADD COLUMN rpe REAL",
         "ALTER TABLE workout_checkins ADD COLUMN effort_notes TEXT",
         "ALTER TABLE workout_checkins ADD COLUMN response_received_at DATETIME",
+        # Watch-side self-evaluation (from Garmin summaryDTO)
+        "ALTER TABLE workout_checkins ADD COLUMN rpe_watch REAL",    # directWorkoutRpe / 10
+        "ALTER TABLE workout_checkins ADD COLUMN workout_feel REAL", # directWorkoutFeel (0=bad,50=ok,75=good,100=excellent)
     ]
     for sql in migrations:
         try:
@@ -1187,6 +1190,26 @@ def record_checkin_response(
         conn.close()
 
 
+def record_watch_feel(
+    activity_id: str,
+    rpe_watch: Optional[float],
+    workout_feel: Optional[float],
+    db_path: Path = DB_PATH,
+) -> None:
+    """Store watch-side perceived effort (directWorkoutRpe/10) and feel (0–100 scale)."""
+    conn = _connect(db_path)
+    try:
+        conn.execute(
+            """UPDATE workout_checkins
+               SET rpe_watch = ?, workout_feel = ?
+               WHERE activity_id = ?""",
+            (rpe_watch, workout_feel, activity_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
 def get_weekly_rpe_summary(
     week_start: date,
     db_path: Path = DB_PATH,
@@ -1204,7 +1227,7 @@ def get_weekly_rpe_summary(
     try:
         rows = conn.execute(
             """SELECT activity_id, activity_type, activity_name, activity_date,
-                      rpe, effort_notes
+                      rpe, effort_notes, rpe_watch, workout_feel
                FROM workout_checkins
                WHERE activity_date BETWEEN ? AND ?
                ORDER BY activity_date""",
