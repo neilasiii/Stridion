@@ -56,6 +56,19 @@ def run(db_path=None) -> Dict[str, Any]:
         metrics_updated = True
         log.info("Metrics upserted for %s: %s", today.isoformat(), list(metrics.keys()))
 
+    # ── Sync daily_metrics table from current JSON cache ───────────────────
+    # External processes (morning report, Discord bot) update health_data_cache.json
+    # via sync_garmin_data.sh without triggering a full agent sync. When the
+    # context hash changes as a result, this hook fires — so we also update
+    # daily_metrics here to keep SQLite in parity with the JSON cache.
+    daily_metrics_rows = 0
+    try:
+        from skills.garmin_sync import _ingest_daily_metrics
+        daily_metrics_rows = _ingest_daily_metrics(health, days=7, db_path=db)
+        log.info("daily_metrics synced: %d rows (on_sync hook)", daily_metrics_rows)
+    except Exception as exc:
+        log.warning("daily_metrics sync failed in on_sync hook: %s", exc)
+
     # ── Vault daily note stub ──────────────────────────────────────────────
     vault_note_path = PROJECT_ROOT / "vault" / "daily" / f"{today.isoformat()}.md"
     vault_written = False
@@ -66,10 +79,11 @@ def run(db_path=None) -> Dict[str, Any]:
         log.info("Vault daily note written for %s", today.isoformat())
 
     return {
-        "metrics_updated": metrics_updated,
-        "vault_written":   vault_written,
-        "today":           today.isoformat(),
-        "metrics":         metrics,
+        "metrics_updated":      metrics_updated,
+        "daily_metrics_rows":   daily_metrics_rows,
+        "vault_written":        vault_written,
+        "today":                today.isoformat(),
+        "metrics":              metrics,
     }
 
 
