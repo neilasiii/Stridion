@@ -1111,6 +1111,73 @@ async def coach_note_command(interaction: discord.Interaction, note: str):
 _active_checkins: dict[int, str] = {}
 
 
+def _parse_rpe_value(text: str) -> float | None:
+    """
+    Parse an RPE value from text. Returns float in range 1–10, or None.
+    Does NOT write to DB — use _extract_and_store_rpe for that.
+
+    Recognized formats (in priority order):
+      "7/10", "8 / 10"          — explicit out-of-10
+      "3", "3ish", "about 4"    — bare number (short messages only, ≤ 25 chars)
+      "hard", "easy", ...       — qualitative keywords
+    """
+    # Numeric: "7/10", "8 / 10", etc.
+    m = re.search(r'\b(\d+)\s*/\s*10\b', text)
+    if m:
+        val = int(m.group(1))
+        if 1 <= val <= 10:
+            return float(val)
+
+    # Bare number or "Xish" — only for short messages (clearly a direct RPE response)
+    if len(text.strip()) <= 25:
+        m = re.search(r'\b(\d+(?:\.\d+)?)\s*(?:ish)?\b', text.strip(), re.IGNORECASE)
+        if m:
+            val = float(m.group(1))
+            if 1.0 <= val <= 10.0:
+                return val
+
+    # Qualitative keywords (first match wins, checked hardest → easiest)
+    lower = text.lower()
+    qualitative = [
+        (["very hard", "brutal", "struggled", "destroyed", "dying"], 9.0),
+        (["hard", "tough", "worked", "grinding"], 7.0),
+        (["moderate", "decent", "okay", "alright"], 6.0),
+        (["easy", "smooth", "relaxed", "comfortable", "recovery"], 4.0),
+    ]
+    for keywords, score in qualitative:
+        if any(kw in lower for kw in keywords):
+            return score
+
+    return None
+
+
+def _get_most_recent_unanswered_checkin() -> dict | None:
+    """
+    Return the most recent sent check-in (within 24h) that has no response yet.
+    Used as a fallback when the user replies to an AI follow-up rather than the
+    original check-in message.
+    """
+    import sqlite3 as _sqlite3
+    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
+    try:
+        conn = _sqlite3.connect(str(db_path))
+        conn.row_factory = _sqlite3.Row
+        row = conn.execute(
+            """SELECT activity_id, activity_name, activity_type
+               FROM workout_checkins
+               WHERE checkin_sent_at IS NOT NULL
+                 AND response_received_at IS NULL
+                 AND checkin_sent_at >= datetime('now', '-24 hours')
+               ORDER BY checkin_sent_at DESC
+               LIMIT 1"""
+        ).fetchone()
+        conn.close()
+        return dict(row) if row else None
+    except Exception as exc:
+        logger.debug("_get_most_recent_unanswered_checkin: %s", exc)
+        return None
+
+
 def _extract_and_store_rpe(text: str, activity_id: str) -> None:
     """
     Extract RPE from an athlete's check-in reply and store it in the DB.
@@ -1119,29 +1186,7 @@ def _extract_and_store_rpe(text: str, activity_id: str) -> None:
     if not activity_id:
         return
 
-    rpe: float | None = None
-
-    # Numeric: "7/10", "8 / 10", etc.
-    m = re.search(r'\b(\d+)\s*/\s*10\b', text)
-    if m:
-        val = int(m.group(1))
-        if 1 <= val <= 10:
-            rpe = float(val)
-
-    # Qualitative keywords (first match wins, checked hardest → easiest)
-    if rpe is None:
-        lower = text.lower()
-        qualitative = [
-            (["very hard", "brutal", "struggled", "destroyed", "dying"], 9.0),
-            (["hard", "tough", "worked", "grinding"], 7.0),
-            (["moderate", "decent", "okay", "alright"], 6.0),
-            (["easy", "smooth", "relaxed", "comfortable", "recovery"], 4.0),
-        ]
-        for keywords, score in qualitative:
-            if any(kw in lower for kw in keywords):
-                rpe = score
-                break
-
+    rpe = _parse_rpe_value(text)
     if rpe is None:
         return  # nothing detected — skip silently
 
@@ -1199,6 +1244,21 @@ async def on_message(message: discord.Message):
             if message.reference and message.reference.resolved:
                 ref = message.reference.resolved
                 if isinstance(ref, discord.Message) and ref.author == bot.user:
+                    ref_msg_id = message.reference.message_id
+                    checkin_activity_id = _active_checkins.get(ref_msg_id)
+
+                    # Fallback: user replied to an AI follow-up (e.g., "rate 1-10")
+                    # rather than the original check-in message. If the reply looks like
+                    # a pure RPE value, intercept it before routing to a confused AI.
+                    if checkin_activity_id is None:
+                        rpe_val = _parse_rpe_value(content)
+                        if rpe_val is not None:
+                            recent = _get_most_recent_unanswered_checkin()
+                            if recent:
+                                _extract_and_store_rpe(content, recent["activity_id"])
+                                await message.reply("Got it, thanks!")
+                                return
+
                     response, provider = call_ai_with_fallback(
                         content,
                         allowed_tools="Bash(python3:*),Read,Grep,Glob",
@@ -1209,10 +1269,9 @@ async def on_message(message: discord.Message):
                     if provider == "gemini":
                         response = f"{response}\n\n*Powered by Gemini (Claude unavailable)*"
                     await send_long_message(message, response)
-                    # Extract RPE if this reply is to a check-in message
-                    ref_msg_id = message.reference.message_id
-                    if ref_msg_id and ref_msg_id in _active_checkins:
-                        _extract_and_store_rpe(content, _active_checkins[ref_msg_id])
+                    # Extract RPE if this is a reply to the original check-in message
+                    if checkin_activity_id:
+                        _extract_and_store_rpe(content, checkin_activity_id)
                     return
 
             # ── LLM opt-in via "ai:" prefix ────────────────────────────────
