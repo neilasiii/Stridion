@@ -445,6 +445,22 @@ def cmd_db(args) -> int:
     return 1
 
 
+def _json_cache_age_minutes() -> float | None:
+    """Return age of health_data_cache.json in minutes, or None on failure."""
+    try:
+        import json as _json
+        from datetime import datetime, timezone
+        from memory.retrieval import HEALTH_CACHE
+        data = _json.loads(HEALTH_CACHE.read_text())
+        ts_str = data.get("last_updated", "")
+        if not ts_str:
+            return None
+        ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00")).replace(tzinfo=None)
+        return (datetime.utcnow() - ts).total_seconds() / 60
+    except Exception:
+        return None
+
+
 def _db_sanity() -> int:
     import sqlite3
     from datetime import datetime, timedelta
@@ -473,7 +489,18 @@ def _db_sanity() -> int:
             age_min = int((datetime.utcnow() - ts).total_seconds() / 60)
             age_str = f"{age_min} min ago"
             if age_min > 60:
-                issues.append(f"last sync {age_min}min ago (>60min threshold)")
+                # External processes (morning report, Discord bot) sync Garmin
+                # via sync_garmin_data.sh without writing to sync_runs. So
+                # sync_runs age alone is not a reliable health signal — also
+                # check JSON cache freshness before flagging DEGRADED.
+                cache_age_min = _json_cache_age_minutes()
+                if cache_age_min is not None and cache_age_min <= 60:
+                    age_str += f"  (cache {int(cache_age_min)}min old — ok)"
+                else:
+                    stale = f"{int(cache_age_min)}min" if cache_age_min is not None else "unknown"
+                    issues.append(
+                        f"last sync {age_min}min ago and cache {stale} old (both stale)"
+                    )
         except Exception:
             age_str = ts_str
         print(f"Sync:  last success {age_str}  (source={last_ok.get('source','?')})")
