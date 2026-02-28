@@ -18,11 +18,13 @@ Idempotency is guaranteed by INSERT OR IGNORE on activity_id.
 
 import json
 import logging
+import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 _STATE_PENDING_KEY = "pending_checkin"
 
@@ -99,6 +101,14 @@ def run(db_path=None) -> Dict[str, Any]:
 
     result["new_activities"] = len(relevant)
 
+    # ── 2b. Backfill watch RPE for running activities ──────────────────────
+    # Fetch directWorkoutRpe / directWorkoutFeel from Garmin detail endpoint
+    # for running activities that don't yet have watch data. One API call per
+    # new running activity (typically 0–2 per cycle). Graceful if auth fails.
+    running_acts = [a for a in relevant if a.get("activity_type", "").lower() in _RUNNING_TYPES]
+    if running_acts:
+        _backfill_watch_rpe(running_acts, db)
+
     # ── 3. Find unsent checkins ────────────────────────────────────────────
     try:
         unsent = get_unsent_checkins(db_path=db)
@@ -141,3 +151,51 @@ def run(db_path=None) -> Dict[str, Any]:
         log.warning("on_activity_completed: set_state failed: %s", exc)
 
     return result
+
+
+def _backfill_watch_rpe(activities: list, db_path) -> None:
+    """
+    For each running activity, fetch directWorkoutRpe and directWorkoutFeel
+    from the Garmin detail endpoint and store in workout_checkins.
+
+    Scale conversions:
+      rpe_watch    = directWorkoutRpe / 10        (Garmin 0–100 → 0–10 RPE)
+      workout_feel = directWorkoutFeel as-is      (0=bad, 25=poor, 50=ok, 75=good, 100=excellent)
+
+    Silently skips if Garmin auth fails or the activity has no data.
+    """
+    from memory.db import record_watch_feel
+
+    try:
+        from garmin_token_auth import authenticate_with_tokens
+        api = authenticate_with_tokens()
+        if api is None:
+            log.debug("_backfill_watch_rpe: Garmin auth unavailable, skipping")
+            return
+    except Exception as exc:
+        log.debug("_backfill_watch_rpe: auth import failed: %s", exc)
+        return
+
+    for act in activities:
+        activity_id = str(act.get("activity_id", ""))
+        if not activity_id:
+            continue
+        try:
+            detail = api.get_activity(activity_id)
+            summary = detail.get("summaryDTO", {})
+            raw_rpe  = summary.get("directWorkoutRpe")
+            raw_feel = summary.get("directWorkoutFeel")
+
+            rpe_watch    = round(raw_rpe / 10, 1)  if raw_rpe  is not None else None
+            workout_feel = float(raw_feel)           if raw_feel is not None else None
+
+            if rpe_watch is not None or workout_feel is not None:
+                record_watch_feel(activity_id, rpe_watch, workout_feel, db_path=db_path)
+                log.info(
+                    "_backfill_watch_rpe: %s rpe_watch=%.1f feel=%s",
+                    activity_id,
+                    rpe_watch or 0,
+                    workout_feel,
+                )
+        except Exception as exc:
+            log.debug("_backfill_watch_rpe: activity %s failed: %s", activity_id, exc)
