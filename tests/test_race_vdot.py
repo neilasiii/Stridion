@@ -41,25 +41,33 @@ def _run(dist_mi: float, dur_min: float, name: str = "Easy Run", days_ago: int =
 
 
 # ── _is_race_distance ────────────────────────────────────────────────────────
+# NOTE: _is_race_distance() matches by distance ONLY for long races (half/marathon).
+# Short races (5k/10k/15k) are NOT matched by distance alone — they require a keyword
+# match via _has_race_keyword_activity(), because easy training runs of similar length
+# are common and would otherwise contaminate VDOT with non-race effort.
 
 class TestIsRaceDistance:
-    def test_5k_exact(self):
-        assert _is_race_distance(3.107)
+    def test_5k_requires_keyword_not_distance(self):
+        # 5k requires keyword match — distance alone is not sufficient
+        assert not _is_race_distance(3.107)
 
-    def test_5k_within_tolerance(self):
-        assert _is_race_distance(3.0)   # 3.107 - 0.20 = 2.907 ≤ 3.0
+    def test_5k_short_of_exact_also_rejected(self):
+        # Still requires keyword regardless of how close to 5k distance
+        assert not _is_race_distance(3.0)
 
     def test_5k_just_outside(self):
-        assert not _is_race_distance(2.89)   # 3.107 - 0.20 = 2.907 > 2.89
+        assert not _is_race_distance(2.89)
 
-    def test_10k_exact(self):
-        assert _is_race_distance(6.214)
+    def test_10k_requires_keyword_not_distance(self):
+        # 10k requires keyword match — distance alone is not sufficient
+        assert not _is_race_distance(6.214)
 
-    def test_10k_within_tolerance(self):
-        assert _is_race_distance(6.0)
+    def test_10k_short_of_exact_also_rejected(self):
+        assert not _is_race_distance(6.0)
 
-    def test_15k_exact(self):
-        assert _is_race_distance(9.321)
+    def test_15k_requires_keyword_not_distance(self):
+        # 15k requires keyword match — distance alone is not sufficient
+        assert not _is_race_distance(9.321)
 
     def test_half_marathon_exact(self):
         assert _is_race_distance(13.109)
