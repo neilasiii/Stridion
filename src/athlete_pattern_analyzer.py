@@ -229,7 +229,10 @@ def _bucket_pace_by_hr(runs: List[Dict], hr_step: int = 5) -> Dict[int, float]:
     }
 
 
-def analyze_patterns(joined_runs: List[Dict]) -> Dict:
+def analyze_patterns(
+    joined_runs: List[Dict],
+    all_hrv_by_date: Optional[Dict[str, float]] = None,
+) -> Dict:
     """
     Compute 5 statistical patterns from joined run+recovery data.
 
@@ -363,7 +366,9 @@ def analyze_patterns(joined_runs: List[Dict]) -> Dict:
     hrv_baseline = hrv_median or 65.0
     recovery_days_list = []
     quality_dates = sorted({r["date"] for r in quality_runs})
-    hrv_by_date = {
+    # Prefer the full daily HRV map (includes rest days) when provided; otherwise
+    # fall back to run-day-only data (may overestimate recovery if rest days exist).
+    hrv_by_date: Dict[str, float] = all_hrv_by_date if all_hrv_by_date is not None else {
         r["date"]: r["hrv_last_night"]
         for r in joined_runs
         if r.get("hrv_last_night")
@@ -554,8 +559,21 @@ def run_analysis(cache_path: Path = _HEALTH_CACHE, out_path: Path = _OUTPUT_PATH
     readiness_map = _build_date_map(cache.get("training_readiness", []))
     sleep_map     = _build_date_map(cache.get("sleep_sessions", []))
 
+    # Build scalar HRV map covering ALL days (including rest days) so recovery
+    # signature is measured from actual first recovery day, not first run day.
+    all_hrv_by_date: Dict[str, float] = {
+        k: v.get("last_night_avg") if isinstance(v, dict) else v
+        for k, v in hrv_map.items()
+        if (v.get("last_night_avg") if isinstance(v, dict) else v) is not None
+    }
+
     joined = _join_runs_with_recovery(activities, hrv_map, bb_map, readiness_map, sleep_map)
-    patterns = analyze_patterns(joined)
+    patterns = analyze_patterns(joined, all_hrv_by_date=all_hrv_by_date or None)
+
+    # Guard: if no activities were found (empty/failed cache load) and valid
+    # patterns already exist, preserve them rather than overwriting with n/a data.
+    if not activities and out_path.exists():
+        return patterns
 
     if activities:
         dates = sorted(a.get("date", "")[:10] for a in activities if a.get("date"))

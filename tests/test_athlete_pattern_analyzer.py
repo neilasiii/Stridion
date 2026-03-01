@@ -293,21 +293,158 @@ class TestWritePatterns:
         out.unlink()
 
 
+class TestHRVRecoveryFromRestDays:
+    """Bug fix: recovery signature must use full daily HRV map, not just run days."""
+
+    def _quality_run(self, date_str, hrv=55):
+        return {
+            "date": date_str,
+            "workout_type": "tempo",
+            "distance_miles": 6.0,
+            "duration_min": 54.0,
+            "pace_per_mile": 9.0,
+            "avg_heart_rate": 155,
+            "quality_zone_pct": 0.45,
+            "hrv_last_night": hrv,
+            "hrv_status": "LOW",
+            "body_battery": 55,
+            "readiness_score": 55,
+            "sleep_hours": 6.5,
+        }
+
+    def _easy_run(self, date_str, hrv=66):
+        return {
+            "date": date_str,
+            "workout_type": "easy",
+            "distance_miles": 5.0,
+            "duration_min": 50.0,
+            "pace_per_mile": 10.0,
+            "avg_heart_rate": 135,
+            "quality_zone_pct": 0.05,
+            "hrv_last_night": hrv,
+            "hrv_status": "BALANCED",
+            "body_battery": 70,
+            "readiness_score": 65,
+            "sleep_hours": 7.0,
+        }
+
+    def _build_scenario(self):
+        """
+        Quality sessions on Mar 1, 8, 15.
+        Rest days (day+1) on Mar 2, 9, 16 — no run, HRV=68 (recovered).
+        Next runs (day+3) on Mar 4, 11, 18 — HRV=68.
+        Easy runs in Feb — no overlap with Mar recovery windows.
+
+        Without fix: recovery = 3 (next RUN day is day+3).
+        With fix:    recovery = 1 (rest day HRV on day+1 detected via all_hrv_by_date).
+        """
+        easy = [self._easy_run(f"2026-02-{i:02d}", hrv=65) for i in range(1, 21)]
+        quality = [
+            self._quality_run("2026-03-01", hrv=55),
+            self._quality_run("2026-03-08", hrv=55),
+            self._quality_run("2026-03-15", hrv=55),
+        ]
+        next_runs = [
+            self._easy_run("2026-03-04", hrv=68),
+            self._easy_run("2026-03-11", hrv=68),
+            self._easy_run("2026-03-18", hrv=68),
+        ]
+        all_hrv_by_date = {
+            # day+1 rest days (HRV recovered)
+            "2026-03-02": 68.0, "2026-03-09": 68.0, "2026-03-16": 68.0,
+            # day+3 run days
+            "2026-03-04": 68.0, "2026-03-11": 68.0, "2026-03-18": 68.0,
+        }
+        return easy + quality + next_runs, all_hrv_by_date
+
+    def test_recovery_uses_rest_day_hrv(self):
+        """HRV rebounds on a rest day (not in joined_runs) should count as day+1 recovery."""
+        from athlete_pattern_analyzer import analyze_patterns
+        runs, all_hrv_by_date = self._build_scenario()
+        result = analyze_patterns(runs, all_hrv_by_date=all_hrv_by_date)
+        rec = result["recovery_signature"]
+        assert rec["days_to_hrv_recovery"] == 1.0, (
+            f"Expected 1-day recovery (rest day HRV available) but got "
+            f"{rec['days_to_hrv_recovery']}"
+        )
+
+    def test_recovery_falls_back_to_run_days_when_no_hrv_map(self):
+        """Without all_hrv_by_date, falls back to run-days-only lookup."""
+        from athlete_pattern_analyzer import analyze_patterns
+        runs, _ = self._build_scenario()
+        # No all_hrv_by_date — rest days on Mar 2/9/16 are invisible
+        result = analyze_patterns(runs)
+        rec = result["recovery_signature"]
+        # Next RUN day after each quality session is day+3 (Mar 4/11/18)
+        assert rec["days_to_hrv_recovery"] == 3.0
+
+
+class TestCacheFailureGuard:
+    """Bug fix: run_analysis() must not overwrite valid patterns when cache is empty."""
+
+    def test_does_not_overwrite_valid_patterns_on_empty_cache(self):
+        """If activities=[] and out_path exists, the existing file is preserved."""
+        from athlete_pattern_analyzer import run_analysis
+
+        empty_cache = {"activities": [], "hrv_readings": [], "body_battery": [],
+                       "training_readiness": [], "sleep_sessions": []}
+
+        with tempfile.NamedTemporaryFile(suffix=".json", mode="w", delete=False) as f:
+            json.dump(empty_cache, f)
+            cache_path = Path(f.name)
+
+        # Pre-populate out_path with valid content
+        with tempfile.NamedTemporaryFile(suffix=".md", mode="w", delete=False) as f:
+            f.write("# Learned Athlete Patterns\n\nValid existing content.\n")
+            out_path = Path(f.name)
+
+        try:
+            run_analysis(cache_path=cache_path, out_path=out_path)
+            content = out_path.read_text()
+            assert "Valid existing content." in content, (
+                "run_analysis() overwrote valid patterns with empty-cache data"
+            )
+        finally:
+            cache_path.unlink(missing_ok=True)
+            out_path.unlink(missing_ok=True)
+
+    def test_writes_new_file_when_no_existing_patterns(self):
+        """If no existing file, run_analysis() still writes empty patterns on first run."""
+        from athlete_pattern_analyzer import run_analysis
+
+        empty_cache = {"activities": [], "hrv_readings": [], "body_battery": [],
+                       "training_readiness": [], "sleep_sessions": []}
+
+        with tempfile.NamedTemporaryFile(suffix=".json", mode="w", delete=False) as f:
+            json.dump(empty_cache, f)
+            cache_path = Path(f.name)
+
+        out_path = Path(tempfile.mktemp(suffix=".md"))  # does NOT exist yet
+
+        try:
+            patterns = run_analysis(cache_path=cache_path, out_path=out_path)
+            assert "hrv_calibration" in patterns
+            assert out_path.exists(), "Should write new file on first run even if empty"
+        finally:
+            cache_path.unlink(missing_ok=True)
+            out_path.unlink(missing_ok=True)
+
+
 class TestRunAnalysis:
     def test_run_analysis_with_empty_cache_does_not_crash(self):
-        """run_analysis() with empty data writes a valid file without raising."""
+        """run_analysis() with empty data and no existing file writes patterns without raising."""
         from athlete_pattern_analyzer import run_analysis
         empty_cache = {"activities": [], "hrv_readings": [], "body_battery": [],
                        "training_readiness": [], "sleep_sessions": []}
         with tempfile.NamedTemporaryFile(suffix=".json", mode="w", delete=False) as f:
             json.dump(empty_cache, f)
             cache_path = Path(f.name)
-        with tempfile.NamedTemporaryFile(suffix=".md", delete=False) as f:
-            out_path = Path(f.name)
+        # Use a path that does NOT exist yet — guard only preserves existing files
+        out_path = Path(tempfile.mkdtemp()) / "patterns_new.md"
         try:
             patterns = run_analysis(cache_path=cache_path, out_path=out_path)
             assert "hrv_calibration" in patterns
-            assert out_path.read_text()  # file was written
+            assert out_path.read_text()  # file was written on first run
         finally:
             cache_path.unlink(missing_ok=True)
             out_path.unlink(missing_ok=True)
