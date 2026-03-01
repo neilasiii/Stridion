@@ -673,7 +673,7 @@ async def workout_command(interaction: discord.Interaction):
                     timestamp=datetime.now(),
                 )
                 if w.get("description"):
-                    embed.description = w["description"][:MOBILE_DESC_LIMIT]
+                    embed.description = clamp(w["description"], MOBILE_DESC_LIMIT)
                 if w.get("duration_min"):
                     embed.add_field(name="Duration", value=f"{w['duration_min']} min", inline=False)
                 embeds.append(embed)
