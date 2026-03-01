@@ -954,21 +954,18 @@ async def coach_today_command(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
     rc, stdout, stderr = await run_coach_cli(["brief", "--today"])
     if rc == 0 and stdout.strip():
-        embed = discord.Embed(
-            title="📋 Today's Workout",
-            description=clamp(stdout.strip(), 3900),
-            color=discord.Color.green(),
-            timestamp=datetime.now(),
+        await interaction.followup.send(
+            embeds=split_embeds(stdout.strip(), "📋 Today's Workout", discord.Color.green())[:10]
         )
     else:
         msg = stderr.strip() or stdout.strip() or "No output"
         embed = discord.Embed(
             title="⚠️ coach brief --today",
-            description=clamp(msg, 1800),
+            description=clamp(msg, MOBILE_DESC_LIMIT),
             color=discord.Color.orange(),
             timestamp=datetime.now(),
         )
-    await interaction.followup.send(embed=embed)
+        await interaction.followup.send(embed=embed)
 
 
 @bot.tree.command(name="coach_sync", description="Sync Garmin health data via the internal coach CLI")
@@ -977,21 +974,18 @@ async def coach_sync_command(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
     rc, stdout, stderr = await run_coach_cli(["sync"], timeout=300)
     if rc == 0:
-        embed = discord.Embed(
-            title="✓ Coach Sync Complete",
-            description=clamp(stdout.strip(), 3900),
-            color=discord.Color.green(),
-            timestamp=datetime.now(),
+        await interaction.followup.send(
+            embeds=split_embeds(stdout.strip(), "✓ Coach Sync Complete", discord.Color.green())[:10]
         )
     else:
         msg = stderr.strip() or stdout.strip() or "Unknown error"
         embed = discord.Embed(
             title="❌ Coach Sync Failed",
-            description=clamp(msg, 1800),
+            description=clamp(msg, MOBILE_DESC_LIMIT),
             color=discord.Color.red(),
             timestamp=datetime.now(),
         )
-    await interaction.followup.send(embed=embed)
+        await interaction.followup.send(embed=embed)
 
 
 @bot.tree.command(name="coach_plan", description="Generate a new training week via the Brain LLM")
@@ -1000,7 +994,7 @@ async def coach_plan_command(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
     rc, stdout, stderr = await run_coach_cli(["plan", "--week"], timeout=300)
     if rc == 0:
-        plan_msg = clamp(stdout.strip() or "Plan generated.", 1700)
+        plan_msg = stdout.strip() or "Plan generated."
         # Long-running export step: update the deferred message so users see
         # progress instead of waiting silently.
         await interaction.edit_original_response(
@@ -1017,7 +1011,7 @@ async def coach_plan_command(interaction: discord.Interaction):
             ["export-garmin", "--live"],
             timeout=240,
         )
-        export_msg = clamp(exp_stdout.strip() or exp_stderr.strip() or "No export output.", 1700)
+        export_msg = exp_stdout.strip() or exp_stderr.strip() or "No export output."
         plan_embeds = split_embeds(plan_msg, "✓ Plan Generated", discord.Color.blue())
         if exp_rc == 0:
             export_embeds = split_embeds(export_msg, "📤 Garmin Updated", discord.Color.green())
@@ -1038,6 +1032,7 @@ async def coach_plan_command(interaction: discord.Interaction):
                 timestamp=datetime.now(),
             )
         )
+        return
 
 
 @bot.tree.command(name="coach_macro", description="Generate or show the full periodized training block")
@@ -1059,21 +1054,18 @@ async def coach_macro_command(
         cli_args.append("--show")
     rc, stdout, stderr = await run_coach_cli(cli_args, timeout=720)
     if rc == 0:
-        embed = discord.Embed(
-            title="📊 Macro Plan",
-            description=clamp(stdout.strip(), 3900),
-            color=discord.Color.blue(),
-            timestamp=datetime.now(),
+        await interaction.followup.send(
+            embeds=split_embeds(stdout.strip(), "📊 Macro Plan", discord.Color.blue())[:10]
         )
     else:
         msg = stderr.strip() or stdout.strip() or "Unknown error"
         embed = discord.Embed(
             title="❌ Macro Plan Failed",
-            description=clamp(msg, 1800),
+            description=clamp(msg, MOBILE_DESC_LIMIT),
             color=discord.Color.red(),
             timestamp=datetime.now(),
         )
-    await interaction.followup.send(embed=embed)
+        await interaction.followup.send(embed=embed)
 
 
 @bot.tree.command(name="coach_export", description="Preview Garmin export from the internal plan (dry run)")
@@ -1083,13 +1075,9 @@ async def coach_export_command(interaction: discord.Interaction):
     rc, stdout, stderr = await run_coach_cli(["export-garmin"], timeout=120)
     msg = stdout.strip() or stderr.strip() or "No output"
     color = discord.Color.green() if rc == 0 else discord.Color.orange()
-    embed = discord.Embed(
-        title="📤 Garmin Export Preview",
-        description=clamp(msg, 3900),
-        color=color,
-        timestamp=datetime.now(),
+    await interaction.followup.send(
+        embeds=split_embeds(msg, "📤 Garmin Export Preview", color)[:10]
     )
-    await interaction.followup.send(embed=embed)
 
 
 @bot.tree.command(name="coach_status", description="Show agent lock state and recent task runs")
@@ -1099,13 +1087,9 @@ async def coach_status_command(interaction: discord.Interaction):
     rc, stdout, stderr = await run_coach_cli(["agent", "status"])
     msg = stdout.strip() or stderr.strip() or "No output"
     color = discord.Color.green() if rc == 0 else discord.Color.orange()
-    embed = discord.Embed(
-        title="🔧 Agent Status",
-        description=clamp(msg, 3900),
-        color=color,
-        timestamp=datetime.now(),
+    await interaction.followup.send(
+        embeds=split_embeds(msg, "🔧 Agent Status", color)[:10]
     )
-    await interaction.followup.send(embed=embed)
 
 
 @bot.tree.command(name="coach_memory", description="Search the coach memory (plan days + events)")
@@ -1116,13 +1100,9 @@ async def coach_memory_command(interaction: discord.Interaction, query: str):
     rc, stdout, stderr = await run_coach_cli(["memory", "search", query])
     msg = stdout.strip() or stderr.strip() or "No results"
     color = discord.Color.blue() if rc == 0 else discord.Color.orange()
-    embed = discord.Embed(
-        title=f"🔍 Memory: {clamp(query, 60)}",
-        description=clamp(msg, 3900),
-        color=color,
-        timestamp=datetime.now(),
+    await interaction.followup.send(
+        embeds=split_embeds(msg, f"🔍 Memory: {clamp(query, 60)}", color)[:10]
     )
-    await interaction.followup.send(embed=embed)
 
 
 @bot.tree.command(name="coach_schedule", description="Show the active plan's week schedule (mobile-friendly day cards)")
@@ -1146,7 +1126,7 @@ async def coach_schedule_command(
     if rc != 0:
         embed = discord.Embed(
             title="❌ Schedule Error",
-            description=clamp(out, 1800),
+            description=clamp(out, MOBILE_DESC_LIMIT),
             color=discord.Color.red(),
             timestamp=datetime.now(),
         )
@@ -2376,7 +2356,7 @@ async def saturday_plan_task():
             msg = stderr.strip() or stdout.strip() or "Unknown error"
             embed = discord.Embed(
                 title="⚠️ Saturday Plan Generation Failed",
-                description=clamp(msg, 1800),
+                description=clamp(msg, MOBILE_DESC_LIMIT),
                 color=discord.Color.orange(),
                 timestamp=datetime.now(),
             )
