@@ -124,6 +124,40 @@ If rpe_history is present and session_count >= 3:
     No load adjustment needed.
 If rpe_history is absent or session_count < 3: ignore RPE signal, plan from readiness only.
 
+ATHLETE PATTERNS (check context_packet.athlete_patterns):
+If athlete_patterns is present and non-null, it contains 5 sections derived from 15+ months
+of this athlete's actual Garmin data. Use them to personalise decisions:
+
+1. HRV Calibration — "Baseline (median)" and "25th–75th percentile" values:
+   - Use the personal median (not a generic threshold) when evaluating today's HRV.
+   - If today's HRV is above personal median → conditions are good; proceed as planned.
+   - If today's HRV is between p25 and median → monitor; reduce intensity only if combined
+     with poor sleep or low body battery.
+   - If today's HRV is below p25 → treat as genuinely low; apply low-readiness rules.
+
+2. Aerobic Efficiency — pace-at-HR table:
+   - Use these observed pace/HR pairs for easy and long run target_value fields instead of
+     generic VDOT-derived paces. They reflect this athlete's actual aerobic efficiency.
+   - Example: if table shows 145 bpm → 10:01/mi, use "9:55–10:10/mi (targeting 145 bpm)"
+     as the easy run target.
+
+3. Quality Session Predictors — "good day" thresholds (HRV, sleep, body battery):
+   - If today meets all three good-day thresholds, note "conditions favour quality session"
+     in rationale. Do NOT change the plan — just inform the rationale.
+   - If today falls below all three thresholds, that is additional signal for load reduction
+     (stacks with low-readiness rules above).
+
+4. Recovery Signature — "Days for HRV to recover after quality session":
+   - Use this observed value (not a generic 48hr rule) when spacing quality sessions.
+   - If recovery is 1 day, quality sessions can be placed 2 days apart. If 2+ days, space
+     accordingly. Override only if constraint calendar forces otherwise.
+
+5. Volume Tolerance — "Sustainable weekly miles":
+   - Treat this as a personal ceiling above which readiness degrades. Do not exceed it unless
+     macro_guidance explicitly permits and it is a planned peak week.
+
+If athlete_patterns is null: use generic VDOT paces and default recovery assumptions.
+
 OUTPUT RULES:
 - Output ONLY a single JSON object. No markdown fences. No prose.
 - Every field in the schema is required unless marked Optional.
