@@ -494,6 +494,7 @@ async def workout_command(interaction: discord.Interaction):
 
         # ── Internal plan (authoritative) ──────────────────────────────────────
         today_row = None
+        schedule: dict = {}
         try:
             from skills.plans import get_schedule
             schedule = get_schedule(days=1)
