@@ -109,24 +109,24 @@ class _Bot:
 
 
 # ---- commands module ----
-_commands_mod = types.ModuleType("discord.ext.commands")
+_commands_mod = types.SimpleNamespace()
 _commands_mod.Bot = _Bot
 
 # ---- tasks module ----
-_tasks_mod = types.ModuleType("discord.ext.tasks")
+_tasks_mod = types.SimpleNamespace()
 _tasks_mod.loop = _tasks_loop
 
 # ---- app_commands module ----
-_app_commands_mod = types.ModuleType("discord.app_commands")
+_app_commands_mod = types.SimpleNamespace()
 _app_commands_mod.describe = _describe
 
 # ---- discord.ext ----
-_ext_mod = types.ModuleType("discord.ext")
+_ext_mod = types.SimpleNamespace()
 _ext_mod.commands = _commands_mod
 _ext_mod.tasks = _tasks_mod
 
 # ---- discord root ----
-_discord_mod = types.ModuleType("discord")
+_discord_mod = types.SimpleNamespace()
 _discord_mod.Color = _Color
 _discord_mod.Embed = _Embed
 _discord_mod.Intents = _Intents
