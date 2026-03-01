@@ -20,6 +20,11 @@ from pathlib import Path
 
 from environmental_adjustments import calculate_environmental_adjustment
 
+# Ensure project root is on sys.path for skills/ imports
+_project_root = str(Path(__file__).parent.parent)
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
 
 # ── Internal plan helpers ──────────────────────────────────────────────────────
 
@@ -66,10 +71,6 @@ def _session_to_workout(session):
 def _get_active_sessions_safe():
     """Call skills.plans.get_active_sessions(), returning [] on any error."""
     try:
-        import sys
-        from pathlib import Path as _Path
-        _root = _Path(__file__).parent.parent
-        sys.path.insert(0, str(_root))
         from skills.plans import get_active_sessions
         return get_active_sessions()
     except Exception:
@@ -201,8 +202,10 @@ def get_upcoming_workouts(cache, days=5):
                     "domain": "running",
                     "source": "internal_plan",
                 })
-        upcoming.sort(key=lambda x: x["date"])
-        return upcoming
+        if upcoming:
+            upcoming.sort(key=lambda x: x["date"])
+            return upcoming
+        # else fall through to health cache
 
     # Health cache fallback
     upcoming = []

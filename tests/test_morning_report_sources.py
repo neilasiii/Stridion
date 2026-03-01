@@ -2,9 +2,7 @@
 import sys
 from datetime import date, timedelta
 from pathlib import Path
-from unittest.mock import patch, MagicMock
-
-import pytest
+from unittest.mock import patch
 
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
@@ -175,3 +173,14 @@ class TestGetUpcomingWorkouts:
         cache_workouts = [{"scheduled_date": tomorrow, "name": "Easy run", "description": "", "domain": "running"}]
         result = self._call([], cache_workouts)
         assert len(result) == 1
+
+    def test_falls_back_to_cache_when_sessions_exist_but_none_in_window(self):
+        """If plan has sessions but none fall in the upcoming window, use cache."""
+        # Session is 30 days away — outside the 3-day window
+        far_future = (date.today() + timedelta(days=30)).isoformat()
+        sessions = [_make_session(far_future, wtype="easy")]
+        tomorrow = (date.today() + timedelta(days=1)).isoformat()
+        cache_workouts = [{"scheduled_date": tomorrow, "name": "Cache Easy Run", "description": "", "domain": "running"}]
+        result = self._call(sessions, cache_workouts, days=3)
+        assert len(result) == 1
+        assert result[0]["name"] == "Cache Easy Run"
