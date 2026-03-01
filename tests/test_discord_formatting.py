@@ -138,11 +138,11 @@ _discord_mod.app_commands = _app_commands_mod
 _discord_mod.ext = _ext_mod
 
 # Register all stubs before any import of discord_bot
-sys.modules["discord"] = _discord_mod
-sys.modules["discord.ext"] = _ext_mod
-sys.modules["discord.ext.commands"] = _commands_mod
-sys.modules["discord.ext.tasks"] = _tasks_mod
-sys.modules["discord.app_commands"] = _app_commands_mod
+sys.modules["discord"] = _discord_mod  # type: ignore
+sys.modules["discord.ext"] = _ext_mod  # type: ignore
+sys.modules["discord.ext.commands"] = _commands_mod  # type: ignore
+sys.modules["discord.ext.tasks"] = _tasks_mod  # type: ignore
+sys.modules["discord.app_commands"] = _app_commands_mod  # type: ignore
 
 # Now import the helpers
 from src.discord_bot import split_embeds, bullet_fields, MOBILE_DESC_LIMIT
@@ -150,7 +150,7 @@ from src.discord_bot import split_embeds, bullet_fields, MOBILE_DESC_LIMIT
 
 class TestSplitEmbeds:
     def test_short_content_returns_single_embed(self):
-        embeds = split_embeds("Hello world", "Title", "blue")
+        embeds = split_embeds("Hello world", "Title", "blue")  # type: ignore
         assert len(embeds) == 1
         assert embeds[0].title == "Title"
         assert embeds[0].description == "Hello world"
@@ -158,32 +158,32 @@ class TestSplitEmbeds:
     def test_long_content_splits_at_paragraph_boundary(self):
         chunk = "x" * 600
         content = chunk + "\n\n" + chunk  # two 600-char paras = 1202 chars total
-        embeds = split_embeds(content, "Title", "blue", chunk_size=1200)
+        embeds = split_embeds(content, "Title", "blue", chunk_size=1200)  # type: ignore
         assert len(embeds) == 2
         assert embeds[0].title == "Title"
         assert embeds[1].title == ""  # continuation embeds have no title
 
     def test_only_first_embed_has_title(self):
         content = "\n\n".join(["word " * 100] * 5)
-        embeds = split_embeds(content, "MyTitle", "blue", chunk_size=300)
+        embeds = split_embeds(content, "MyTitle", "blue", chunk_size=300)  # type: ignore
         assert embeds[0].title == "MyTitle"
         for embed in embeds[1:]:
             assert embed.title == ""
 
     def test_empty_content_returns_one_embed(self):
-        embeds = split_embeds("", "Title", "blue")
+        embeds = split_embeds("", "Title", "blue")  # type: ignore
         assert len(embeds) == 1
 
     def test_each_embed_under_chunk_size(self):
         content = " ".join(["word"] * 2000)
-        embeds = split_embeds(content, "T", "blue", chunk_size=500)
+        embeds = split_embeds(content, "T", "blue", chunk_size=500)  # type: ignore
         for embed in embeds:
             assert len(embed.description) <= 500
 
     def test_oversized_paragraph_no_sentence_boundary(self):
         # A single paragraph with no ". " -- should not exceed chunk_size
         content = "x" * 2000  # no periods, no paragraph breaks
-        embeds = split_embeds(content, "T", "blue", chunk_size=500)
+        embeds = split_embeds(content, "T", "blue", chunk_size=500)  # type: ignore
         for embed in embeds:
             assert len(embed.description) <= 500
 
