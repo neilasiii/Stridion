@@ -489,56 +489,121 @@ async def workout_command(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
     try:
-        cache_path = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
-        with open(cache_path) as f:
-            cache = json.load(f)
-
         today = datetime.now().strftime("%Y-%m-%d")
-        workouts = [
-            w for w in cache.get("scheduled_workouts", [])
-            if w.get("scheduled_date", "").startswith(today)
-        ]
+        embeds = []
 
-        if not workouts:
+        # ── Internal plan (authoritative) ──────────────────────────────────────
+        today_row = None
+        try:
+            from skills.plans import get_schedule
+            schedule = get_schedule(days=1)
+            today_row = next(
+                (r for r in schedule.get("rows", []) if r["date"] == today),
+                None,
+            )
+        except Exception:
+            pass
+
+        if today_row and today_row.get("workout_type") not in ("none", "rest", None):
+            row = today_row
+            wtype = row["workout_type"]
+            dur = row.get("duration_min") or 0
+            intent = row.get("intent", "")
+            steps = row.get("structure_steps", [])
+
+            _EMOJI = {"easy": "🏃", "long": "🏃", "tempo": "⚡", "interval": "⚡"}
+            _COLOR = {
+                "easy": discord.Color.green(),
+                "long": discord.Color.green(),
+                "tempo": discord.Color.orange(),
+                "interval": discord.Color.orange(),
+            }
+            _LABEL = {
+                "easy": "Easy Run",
+                "long": "Long Run",
+                "tempo": "Tempo Run",
+                "interval": "Interval Run",
+            }
+            emoji = _EMOJI.get(wtype, "📋")
+            color = _COLOR.get(wtype, discord.Color.blue())
+            label = _LABEL.get(wtype, wtype.title())
+
+            embed = discord.Embed(
+                title=f"{emoji} {label}",
+                color=color,
+                timestamp=datetime.now(),
+            )
+            if intent:
+                embed.description = intent
+            if dur:
+                embed.add_field(name="Duration", value=f"{dur} min", inline=True)
+            if steps:
+                step_lines = []
+                for i, s in enumerate(steps, 1):
+                    rep_str = f" ×{s['reps']}" if s.get("reps") else ""
+                    tv = f"  [{s.get('target_value', '')}]" if s.get("target_value") else ""
+                    step_lines.append(
+                        f"{i}. {s.get('label', '').title()} {s.get('duration_min', 0)}min{rep_str}{tv}"
+                    )
+                embed.add_field(name="Structure", value="\n".join(step_lines), inline=False)
+
+            plan_id = schedule.get("plan_id") or "unknown"
+            embed.set_footer(text=f"Plan: {plan_id}")
+            embeds.append(embed)
+
+        else:
+            # ── Health cache fallback (FinalSurge / ICS) ───────────────────────
+            cache_path = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
+            with open(cache_path) as f:
+                cache = json.load(f)
+
+            workouts = [
+                w for w in cache.get("scheduled_workouts", [])
+                if w.get("scheduled_date", "").startswith(today)
+            ]
+
+            if not workouts:
+                await interaction.followup.send("📭 No workouts scheduled for today")
+                return
+
+            for w in workouts:
+                source = w.get("source", "unknown")
+                domain = w.get("domain", "")
+
+                if "ics_calendar" in source or domain == "running":
+                    emoji = "🏃"
+                    color = discord.Color.green()
+                elif "strength" in domain or "strength" in w.get("name", "").lower():
+                    emoji = "💪"
+                    color = discord.Color.orange()
+                elif "mobility" in domain or "mobility" in w.get("name", "").lower():
+                    emoji = "🧘"
+                    color = discord.Color.purple()
+                else:
+                    emoji = "📋"
+                    color = discord.Color.blue()
+
+                embed = discord.Embed(
+                    title=f"{emoji} {w.get('name', 'Workout')}",
+                    color=color,
+                    timestamp=datetime.now(),
+                )
+                if w.get("description"):
+                    embed.description = w["description"][:3900]
+                if w.get("duration_min"):
+                    embed.add_field(name="Duration", value=f"{w['duration_min']} min", inline=True)
+                embeds.append(embed)
+
+        if not embeds:
             await interaction.followup.send("📭 No workouts scheduled for today")
             return
 
-        embeds = []
-        for w in workouts:
-            source = w.get("source", "unknown")
-            domain = w.get("domain", "")
-
-            if "ics_calendar" in source or domain == "running":
-                emoji = "🏃"
-                color = discord.Color.green()
-            elif "strength" in domain or "strength" in w.get("name", "").lower():
-                emoji = "💪"
-                color = discord.Color.orange()
-            elif "mobility" in domain or "mobility" in w.get("name", "").lower():
-                emoji = "🧘"
-                color = discord.Color.purple()
-            else:
-                emoji = "📋"
-                color = discord.Color.blue()
-
-            embed = discord.Embed(
-                title=f"{emoji} {w.get('name', 'Workout')}",
-                color=color,
-                timestamp=datetime.now()
-            )
-
-            if w.get("description"):
-                embed.description = w["description"][:3900]
-
-            if w.get("duration_min"):
-                embed.add_field(name="Duration", value=f"{w['duration_min']} min", inline=True)
-
-            embeds.append(embed)
-
-        await interaction.followup.send(embeds=embeds)
+        # Discord limit: max 10 embeds per message
+        await interaction.followup.send(embeds=embeds[:10])
 
     except Exception as e:
-        await interaction.followup.send(f"❌ Error: {str(e)}")
+        logger.error(f"Workout command error: {e}", exc_info=True)
+        await interaction.followup.send(f"❌ Failed to load workouts: {str(e)[:200]}")
 
 
 @bot.tree.command(name="status", description="Show current recovery metrics")
@@ -1521,6 +1586,7 @@ def _build_sync_digest(window_hours: int = 6) -> discord.Embed:
     last_sync_ok: bool | None = None
 
     today_metrics: dict = {}
+    workout_done_today: bool = False
 
     if db_path.exists():
         try:
@@ -1565,6 +1631,19 @@ def _build_sync_digest(window_hours: int = 6) -> discord.Embed:
                 ).fetchone()
                 if tm:
                     today_metrics = dict(tm)
+
+                # ── check if workout already completed today ──────────────────
+                workout_done_today = False
+                try:
+                    wrow = conn.execute(
+                        """SELECT COUNT(*) FROM activities
+                           WHERE activity_date = ?
+                           AND activity_type IN ('running','strength_training','cycling','swimming','walking')""",
+                        (today_str,),
+                    ).fetchone()
+                    workout_done_today = bool(wrow and wrow[0])
+                except Exception:
+                    pass
             finally:
                 conn.close()
         except Exception as exc:
@@ -1601,7 +1680,10 @@ def _build_sync_digest(window_hours: int = 6) -> discord.Embed:
 
     # Readiness adjustment
     if readiness_triggered:
-        lines.append("**Readiness:** ⚡ adjustment triggered")
+        if workout_done_today:
+            lines.append("**Readiness:** ⚡ adjustment triggered (workout already done)")
+        else:
+            lines.append("**Readiness:** ⚡ adjustment triggered")
 
     # Today's metrics
     if today_metrics:
