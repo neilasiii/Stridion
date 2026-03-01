@@ -24,7 +24,7 @@ from pydantic import BaseModel, Field, model_validator
 WorkoutTypeT = Literal["easy", "tempo", "interval", "long", "strength", "rest", "cross"]
 TargetMetricT = Literal["pace", "hr", "power", "rpe"]
 TrainingPhaseT = Literal["base", "quality", "race_specific", "taper"]
-StepLabelT = Literal["warmup", "main", "cooldown", "interval", "recovery"]
+StepLabelT = Literal["warmup", "main", "cooldown", "interval", "recovery", "strides"]
 AdjustReasonT = Literal[
     "low_readiness", "constraint", "illness",
     "missed_workout", "weather", "other"

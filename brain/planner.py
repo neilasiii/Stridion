@@ -162,7 +162,7 @@ OUTPUT RULES:
 - Output ONLY a single JSON object. No markdown fences. No prose.
 - Every field in the schema is required unless marked Optional.
 - Rationale fields: max 200 chars each (300 for top-level).
-- structure_steps: easy/recovery runs → single "main" step only (no warmup/cooldown). Tempo/interval/long runs → warmup + main/intervals + cooldown. Rest/cross days → empty array.
+- structure_steps: easy/recovery runs → single "main" step only (no warmup/cooldown). Easy runs with strides → "main" step + "strides" step. Tempo/interval/long runs → warmup + main/intervals + cooldown. Rest/cross days → empty array.
 """
 
 _SYSTEM_ADJUST_TODAY = """\
@@ -194,7 +194,7 @@ Required output JSON structure (all fields required unless marked optional):
       "duration_min": <int 0-300>,
       "structure_steps": [
         {
-          "label": "warmup"|"main"|"cooldown"|"interval"|"recovery",
+          "label": "warmup"|"main"|"cooldown"|"interval"|"recovery"|"strides",
           "duration_min": <int 1-120>,
           "target_metric": "pace"|"hr"|"power"|"rpe",
           "target_value": "<e.g. '10:30-11:10/mi' or 'RPE 4'>",
