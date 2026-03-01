@@ -16,6 +16,24 @@ HEALTH_DATA_CACHE = REPO_ROOT / "data" / "health" / "health_data_cache.json"
 STRENGTH_WORKOUTS_DIR = REPO_ROOT / "data" / "workouts" / "strength"
 MOBILITY_WORKOUTS_DIR = REPO_ROOT / "data" / "workouts" / "mobility"
 
+# Ensure project root is on sys.path for skills/ imports
+_project_root_str = str(REPO_ROOT)
+if _project_root_str not in sys.path:
+    sys.path.insert(0, _project_root_str)
+
+
+def _get_active_sessions_safe():
+    """Call skills.plans.get_active_sessions(), returning [] on any error."""
+    try:
+        from skills.plans import get_active_sessions
+        return get_active_sessions()
+    except Exception:
+        return []
+
+
+# Patchable alias for tests
+get_active_sessions = _get_active_sessions_safe
+
 
 def load_health_data():
     """Load health data cache"""
@@ -27,7 +45,39 @@ def load_health_data():
 
 
 def get_scheduled_workouts(date_str):
-    """Get all scheduled workouts for a specific date"""
+    """Get all scheduled workouts for a given date — internal plan first, cache fallback."""
+    _RUNNING_TYPES = {"easy", "long", "tempo", "interval"}
+    _LABELS = {
+        "easy": "Easy Run",
+        "long": "Long Run",
+        "tempo": "Tempo Run",
+        "interval": "Interval Run",
+    }
+
+    # Internal plan (authoritative) — try for today's running sessions
+    sessions = get_active_sessions()
+    today_sessions = [s for s in sessions if s.get("date") == date_str]
+    if today_sessions:
+        workouts = []
+        for s in today_sessions:
+            wtype = s.get("workout_type", "rest")
+            if wtype not in _RUNNING_TYPES:
+                continue  # skip rest / strength / cross
+            steps = s.get("structure_steps", [])
+            intent = s.get("intent", "")
+            workouts.append({
+                "name": _LABELS.get(wtype, wtype.title()),
+                "description": intent,
+                "duration_min": s.get("duration_min", 0),
+                "domain": "running",
+                "source": "internal_plan",
+                "workout_type": wtype,
+                "structure_steps": steps,
+                "intent": intent,
+            })
+        return workouts  # may be empty list for pure rest days — caller handles
+
+    # Health cache fallback
     health_data = load_health_data()
     if not health_data:
         return []
@@ -35,15 +85,15 @@ def get_scheduled_workouts(date_str):
     scheduled = health_data.get('scheduled_workouts', [])
     workouts = [w for w in scheduled if w.get('scheduled_date') == date_str]
 
-    # Infer domain for workouts that don't have it set
+    # Infer domain for workouts missing it
     for w in workouts:
         if not w.get('domain'):
             name = w.get('name', '').lower()
-            if 'run' in name or 'tempo' in name or 'interval' in name or 'easy' in name or 'long' in name:
+            if any(k in name for k in ('run', 'tempo', 'interval', 'easy', 'long')):
                 w['domain'] = 'running'
-            elif 'strength' in name or 'lift' in name:
+            elif any(k in name for k in ('strength', 'lift')):
                 w['domain'] = 'strength'
-            elif 'mobility' in name or 'stretch' in name or 'yoga' in name:
+            elif any(k in name for k in ('mobility', 'stretch', 'yoga')):
                 w['domain'] = 'mobility'
 
     return workouts
@@ -61,6 +111,35 @@ def load_workout_file(workout_dir, date_str):
 
 def format_running_workout(workout):
     """Format a running workout for display"""
+    # ── Internal plan: format directly without regex name-parsing ─────────────
+    if workout.get("source") == "internal_plan":
+        wtype = workout.get("workout_type", "easy")
+        dur = workout.get("duration_min", 0)
+        intent = workout.get("intent", "")
+        steps = workout.get("structure_steps", [])
+
+        _LABELS = {
+            "easy": "Easy Run",
+            "long": "Long Run",
+            "tempo": "Tempo Run",
+            "interval": "Interval Run",
+        }
+        label = _LABELS.get(wtype, wtype.title())
+        output = f"## 🏃 {label}\n"
+        if dur:
+            output += f"**Duration:** {dur} minutes\n"
+        output += "\n"
+        if intent:
+            output += f"**Workout:** {intent}\n"
+        if steps:
+            output += "\n**Structure:**\n"
+            for i, s in enumerate(steps, 1):
+                rep_str = f" ×{s['reps']}" if s.get("reps") else ""
+                tv = f"  [{s.get('target_value', '')}]" if s.get("target_value") else ""
+                output += f"{i}. {s.get('label', '').title()} {s.get('duration_min', 0)}min{rep_str}{tv}\n"
+        return output
+
+    # ── Health cache / FinalSurge: existing name-parsing logic ────────────────
     name = workout.get('name', 'Unknown')
     description = workout.get('description', '')
     duration_min = workout.get('duration_min', 0)
