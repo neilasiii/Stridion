@@ -34,10 +34,11 @@ from typing import Any, Dict, List, Optional
 log = logging.getLogger(__name__)
 
 
-PROJECT_ROOT   = Path(__file__).parent.parent
-HEALTH_CACHE   = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
-VAULT_ROOT     = PROJECT_ROOT / "vault"
-UPCOMING_RACES = PROJECT_ROOT / "data" / "athlete" / "upcoming_races.md"
+PROJECT_ROOT          = Path(__file__).parent.parent
+HEALTH_CACHE          = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
+VAULT_ROOT            = PROJECT_ROOT / "vault"
+UPCOMING_RACES        = PROJECT_ROOT / "data" / "athlete" / "upcoming_races.md"
+_ATHLETE_PATTERNS_PATH = PROJECT_ROOT / "data" / "athlete" / "learned_patterns.md"
 
 # Hard size caps (characters)
 MAX_PACKET_CHARS      = 8_000
@@ -710,6 +711,20 @@ def _load_upcoming_races() -> list:
         return []
 
 
+def _load_athlete_patterns() -> Optional[str]:
+    """
+    Load learned athlete patterns from data/athlete/learned_patterns.md.
+    Returns the file content as a string, or None if the file doesn't exist yet.
+    Run `coach analyze-patterns` to generate this file.
+    """
+    if _ATHLETE_PATTERNS_PATH.exists():
+        try:
+            return _ATHLETE_PATTERNS_PATH.read_text()
+        except Exception:
+            pass
+    return None
+
+
 # ── Race-derived VDOT ─────────────────────────────────────────────────────────
 
 # Standard race distances: (center_miles, tolerance_miles).
@@ -950,6 +965,7 @@ def build_context_packet(
         "macro_guidance":   macro_guidance,
         "constraints":      _get_constraints(days_forward, db_path),
         "rpe_history":      _build_rpe_history(db_path),
+        "athlete_patterns": _load_athlete_patterns(),
         "recent_decisions": [],
         "vault_excerpts":   [],
     }

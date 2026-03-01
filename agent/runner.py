@@ -297,6 +297,14 @@ def run_daily_deep(db_path=None) -> dict:
                 log.error("plan_week failed: %s", exc)
                 summary["plan_error"] = str(exc)
 
+        # ── Refresh learned athlete patterns (no network I/O) ─────────────────
+        try:
+            from src.athlete_pattern_analyzer import run_analysis as _refresh_patterns
+            _refresh_patterns()
+            log.info("[daily_deep] Athlete patterns refreshed")
+        except Exception as exc:
+            log.warning(f"[daily_deep] Pattern refresh failed: {exc}")
+
         log_task_finish(run_id, "success", details=summary, db_path=db)
 
     except Exception as exc:

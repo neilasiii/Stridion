@@ -94,3 +94,6 @@ vault/daily/
 
 # Vault coach working docs (AI-generated planning/decision logs, not versioned)
 vault/coach/
+
+# Git worktrees
+.worktrees/

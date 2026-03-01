@@ -198,3 +198,13 @@ class TestReadinessTrendSQLitePath:
 
         rt = packet["readiness_trend"]
         assert "period_days" in rt
+
+
+def test_context_packet_has_athlete_patterns_key(tmp_path):
+    """build_context_packet() always includes athlete_patterns key (may be None)."""
+    from memory.retrieval import build_context_packet
+    from memory.db import init_db
+    db_path = tmp_path / "test.sqlite"
+    init_db(db_path=db_path)
+    packet = build_context_packet(db_path=db_path)
+    assert "athlete_patterns" in packet  # key exists even if value is None

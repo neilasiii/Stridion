@@ -664,6 +664,26 @@ def cmd_morning_report(args) -> int:
     )
 
 
+# ── analyze-patterns ──────────────────────────────────────────────────────────
+
+def cmd_analyze_patterns(args) -> int:
+    src_dir = str(PROJECT_ROOT / "src")
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
+    from athlete_pattern_analyzer import run_analysis
+    patterns = run_analysis()
+    hrv = patterns["hrv_calibration"]
+    aero = patterns["aerobic_efficiency"]
+    rec = patterns["recovery_signature"]
+    vol = patterns["volume_tolerance"]
+    print("✓ Patterns written to data/athlete/learned_patterns.md")
+    print(f"  HRV baseline: {hrv['median_hrv']} ms (range {hrv['hrv_range']})")
+    print(f"  Aerobic efficiency: {len(aero['pace_at_hr'])} HR buckets computed")
+    print(f"  Recovery signature: {rec['days_to_hrv_recovery']} days to HRV recovery")
+    print(f"  Volume tolerance: ~{vol['sustainable_weekly_miles']} mi/week sustainable")
+    return 0
+
+
 # ── memory search ─────────────────────────────────────────────────────────────
 
 def cmd_memory(args) -> int:
@@ -938,6 +958,12 @@ def _build_parser() -> argparse.ArgumentParser:
     agent_sub.add_parser("status",   help="Show lock state + recent task_runs")
     agent_sub.add_parser("run-once", help="Run one heartbeat cycle")
     p_agent.set_defaults(func=cmd_agent)
+
+    p_patterns = sub.add_parser(
+        "analyze-patterns",
+        help="Mine historical Garmin data to discover athlete-specific training patterns",
+    )
+    p_patterns.set_defaults(func=cmd_analyze_patterns)
 
     return parser
 
