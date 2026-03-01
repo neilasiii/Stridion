@@ -233,3 +233,56 @@ class TestParseAiResponse:
         text = "NOTIFICATION:\nOk.\nADJUSTMENT:\nAS PLANNED\nFULL_REPORT:\n## Recovery\nGood."
         _, report = self._parse(text)
         assert "## Adjustment" not in report
+
+
+class TestHasTodaysReadinessData:
+    """has_todays_readiness_data blocks until all recovery metrics have today's date."""
+
+    TODAY = date.today().isoformat()
+    YESTERDAY = (date.today() - timedelta(days=1)).isoformat()
+
+    def _call(self, cache):
+        from morning_report import has_todays_readiness_data
+        with patch("morning_report.load_health_data", return_value=cache):
+            return has_todays_readiness_data()
+
+    def _full_cache(self, sleep_date=None, hrv_date=None, bb_date=None, readiness_date=None):
+        """Build a cache where every metric has today's date by default."""
+        t = self.TODAY
+        return {
+            "sleep_sessions":     [{"date": sleep_date or t, "total_duration_minutes": 420}],
+            "hrv_readings":       [{"date": hrv_date or t, "last_night_avg": 45, "status": "balanced"}],
+            "body_battery":       [{"date": bb_date or t, "latest_level": 72}],
+            "training_readiness": [{"date": readiness_date or t, "score": 65, "level": "good"}],
+        }
+
+    def test_returns_true_when_all_metrics_are_today(self):
+        assert self._call(self._full_cache()) is True
+
+    def test_returns_false_when_no_sleep(self):
+        cache = self._full_cache()
+        cache["sleep_sessions"] = []
+        assert self._call(cache) is False
+
+    def test_returns_false_when_sleep_is_yesterday(self):
+        assert self._call(self._full_cache(sleep_date=self.YESTERDAY)) is False
+
+    def test_returns_false_when_hrv_is_yesterday(self):
+        assert self._call(self._full_cache(hrv_date=self.YESTERDAY)) is False
+
+    def test_returns_false_when_body_battery_is_yesterday(self):
+        assert self._call(self._full_cache(bb_date=self.YESTERDAY)) is False
+
+    def test_returns_false_when_readiness_is_yesterday(self):
+        assert self._call(self._full_cache(readiness_date=self.YESTERDAY)) is False
+
+    def test_missing_metric_does_not_block(self):
+        """If a metric has never been in the cache (empty list), don't block on it."""
+        cache = self._full_cache()
+        cache["hrv_readings"] = []  # device doesn't provide HRV
+        assert self._call(cache) is True
+
+    def test_returns_false_on_load_error(self):
+        from morning_report import has_todays_readiness_data
+        with patch("morning_report.load_health_data", side_effect=Exception("disk error")):
+            assert has_todays_readiness_data() is False

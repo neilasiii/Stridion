@@ -124,6 +124,47 @@ def has_todays_sleep():
         return False
 
 
+def has_todays_readiness_data():
+    """
+    Return True only when sleep AND all available recovery metrics have today's data.
+
+    Checks: sleep_sessions, hrv_readings, body_battery, training_readiness.
+    - Sleep is required (must exist and be today's).
+    - For the other metrics: if the cache has ANY historical entries for that
+      metric, the most recent must also be today's.  If the cache has never
+      contained that metric (empty list), it is skipped — not every device
+      provides every metric.
+
+    This prevents the morning report from generating adjustments before Garmin
+    has finished syncing HRV, body battery, and readiness data.
+    """
+    try:
+        cache = load_health_data()
+        today = datetime.now().date().isoformat()
+
+        # Sleep is mandatory
+        sleep_sessions = cache.get('sleep_sessions', [])
+        if not sleep_sessions or sleep_sessions[0].get('date', '') != today:
+            return False
+
+        # For each recovery metric: if any data exists, the most recent must be today's
+        recovery_metrics = {
+            'hrv_readings':       lambda item: item.get('date', '')[:10],
+            'body_battery':       lambda item: item.get('date', '')[:10],
+            'training_readiness': lambda item: item.get('date', '')[:10],
+        }
+        for key, get_date in recovery_metrics.items():
+            items = cache.get(key, [])
+            if items and get_date(items[0]) != today:
+                return False
+
+        return True
+
+    except Exception as e:
+        print(f"Error checking readiness data: {e}", file=sys.stderr)
+        return False
+
+
 def load_athlete_context():
     """Load athlete context files."""
     project_root = Path(__file__).parent.parent
@@ -1087,11 +1128,11 @@ def run(
     Callable directly from cli/coach.py without spawning a subprocess.
     """
     if check_sleep:
-        if has_todays_sleep():
-            print("Sleep data found for today")
+        if has_todays_readiness_data():
+            print("Sleep and readiness data found for today")
             return 0
         else:
-            print("No sleep data for today")
+            print("Readiness data not yet complete for today")
             return 1
 
     # Load data
