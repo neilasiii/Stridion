@@ -114,8 +114,7 @@ class TestFormatRunningWorkoutInternalPlan:
     def test_internal_plan_does_not_call_regex_parser(self):
         """Ensure early return fires before the name-parsing regex block."""
         wo = self._internal_workout(wtype="easy", dur=30, intent="Easy 30min")
-        # If the regex path ran, it would parse the *name* ("Easy Run") not the intent.
-        # The regex path returns "Easy Run" as workout_type label.
-        # The internal path returns the intent directly.
+        # Internal path renders intent directly; regex path would parse the name field instead.
         result = self._format(wo)
-        assert "Conversational" not in result or "Easy 30min" in result
+        assert "Easy 30min" in result  # intent shown — internal path taken
+        assert "Structure" not in result  # no regex-driven structure header
