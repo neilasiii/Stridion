@@ -143,7 +143,12 @@ def split_embeds(
                 if len(current) + len(piece) > chunk_size:
                     if current:
                         chunks.append(current.rstrip())
-                    current = piece
+                    # Hard-cut if piece itself exceeds chunk_size (no sentence boundaries)
+                    if len(piece) > chunk_size:
+                        chunks.append(clamp(piece.rstrip(), chunk_size))
+                        current = ""
+                    else:
+                        current = piece
                 else:
                     current += piece
         else:
