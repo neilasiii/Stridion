@@ -552,6 +552,25 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
             if workout.get('description'):
                 workout_text += f"\nDetails: {workout['description'][:200]}"
 
+    # Format ORIGINAL PLAN block (rich context for internal plan sessions)
+    original_plan_text = "Not available (health cache source — no structured plan data)"
+    if workout and isinstance(workout, list) and workout[0].get("source") == "internal_plan":
+        w = workout[0]
+        wtype = w.get("workout_type", "unknown")
+        dur = w.get("duration_min", 0)
+        intent = w.get("intent", "")
+        steps = w.get("structure_steps", [])
+        original_plan_text = f"Type: {wtype}  Duration: {dur}min\nIntent: {intent}"
+        if steps:
+            slines = []
+            for s in steps:
+                rep_str = f" ×{s.get('reps')}" if s.get("reps") else ""
+                tv = f"  [{s.get('target_value', '')}]" if s.get("target_value") else ""
+                slines.append(
+                    f"  - {s.get('label', '').title()} {s.get('duration_min', 0)}min{rep_str}{tv}"
+                )
+            original_plan_text += "\nSteps:\n" + "\n".join(slines)
+
     # Format recent activity
     activity_text = f"Last 7 days: {activities['running_count']} runs, {activities['running_miles']} miles"
     if activities.get('last_run'):
@@ -596,6 +615,9 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
 
 RECOVERY METRICS:
 {chr(10).join(recovery_text) if recovery_text else "No recovery data available"}
+
+ORIGINAL PLAN (from internal coach system — what was prescribed for today):
+{original_plan_text}
 
 TODAY'S WORKOUT:
 {workout_text}
@@ -644,6 +666,13 @@ NOTIFICATION:
 Example: "45min E → 30min E (readiness 50). Battery 14/100"
 Example: "Rest day. Readiness LOW (46), battery depleted"
 Example: "40min E as planned. Recovery excellent"
+
+ADJUSTMENT:
+[If recommending the workout as-is, write exactly: "As planned"]
+[If recommending any modification, write exactly this format:
+  Original: <what was planned, e.g. "Easy 45min with strides">
+  Recommended: <what to do instead, e.g. "Easy 30min, skip strides">
+  Reason: <one sentence — the single metric or combination driving this decision>]
 
 FULL_REPORT:
 [Detailed markdown report with sections for Recovery Analysis, Workout Recommendation, and Rationale]
@@ -727,12 +756,32 @@ def call_claude_headless(prompt):
 
 
 def parse_ai_response(response):
-    """Parse AI response into notification and full report."""
+    """Parse AI response into notification and full report.
+
+    Handles three-section format: NOTIFICATION / ADJUSTMENT / FULL_REPORT.
+    When ADJUSTMENT contains a modification (not "as planned"), prepends an
+    ## Adjustment block to the full report so it's the first thing read.
+    Falls back to original two-section parse when ADJUSTMENT is absent.
+    """
     notification = ""
+    adjustment = ""
     full_report = ""
 
-    # Try to extract NOTIFICATION section
-    if 'NOTIFICATION:' in response:
+    if 'ADJUSTMENT:' in response:
+        before_adj, rest_adj = response.split('ADJUSTMENT:', 1)
+        # Extract notification from before ADJUSTMENT
+        if 'NOTIFICATION:' in before_adj:
+            notification = before_adj.split('NOTIFICATION:', 1)[1].strip()
+        else:
+            notification = before_adj.strip()
+        # Extract adjustment text and full report
+        if 'FULL_REPORT:' in rest_adj:
+            adjustment = rest_adj.split('FULL_REPORT:', 1)[0].strip()
+            full_report = rest_adj.split('FULL_REPORT:', 1)[1].strip()
+        else:
+            adjustment = rest_adj.strip()
+    elif 'NOTIFICATION:' in response:
+        # Backwards compat: no ADJUSTMENT section
         parts = response.split('NOTIFICATION:', 1)
         if len(parts) > 1:
             rest = parts[1]
@@ -740,17 +789,19 @@ def parse_ai_response(response):
                 notification = rest.split('FULL_REPORT:', 1)[0].strip()
                 full_report = rest.split('FULL_REPORT:', 1)[1].strip()
             else:
-                # Take first line as notification
                 lines = rest.strip().split('\n')
                 notification = lines[0].strip() if lines else ""
                 full_report = '\n'.join(lines[1:]).strip()
     else:
-        # Fallback: use first line as notification
         lines = response.strip().split('\n')
         notification = lines[0][:200] if lines else "Check full report"
         full_report = response
 
-    # Clean up notification - remove quotes and ensure length
+    # Prepend adjustment block to full report when a modification was recommended
+    if adjustment and adjustment.lower().strip() != "as planned":
+        full_report = f"## Adjustment\n{adjustment}\n\n---\n\n{full_report}"
+
+    # Clean up notification
     notification = notification.strip('"\'').strip()
     if len(notification) > 240:
         notification = notification[:237] + "..."

@@ -183,3 +183,52 @@ class TestGetUpcomingWorkouts:
         result = self._call(sessions, cache_workouts, days=3)
         assert len(result) == 1
         assert result[0]["name"] == "Cache Easy Run"
+
+
+class TestParseAiResponse:
+    """parse_ai_response extracts notification, adjustment, and full report."""
+
+    def _parse(self, text):
+        from morning_report import parse_ai_response
+        return parse_ai_response(text)
+
+    def test_extracts_notification(self):
+        text = "NOTIFICATION:\n45min E as planned. Recovery excellent.\nADJUSTMENT:\nAs planned\nFULL_REPORT:\n## Recovery\nAll good."
+        notif, report = self._parse(text)
+        assert "45min E as planned" in notif
+
+    def test_as_planned_not_prepended_to_report(self):
+        text = "NOTIFICATION:\nAs planned.\nADJUSTMENT:\nAs planned\nFULL_REPORT:\n## Recovery\nGood numbers."
+        _, report = self._parse(text)
+        assert "## Adjustment" not in report
+        assert "As planned" not in report.split("## Recovery")[0]
+
+    def test_modification_prepended_to_full_report(self):
+        text = (
+            "NOTIFICATION:\n45min E → 30min E (HRV low).\n"
+            "ADJUSTMENT:\nOriginal: Easy 45min\nRecommended: Easy 30min\nReason: HRV well below norm.\n"
+            "FULL_REPORT:\n## Recovery\nHRV tanked."
+        )
+        _, report = self._parse(text)
+        assert report.startswith("## Adjustment")
+        assert "Original: Easy 45min" in report
+        assert "## Recovery" in report
+
+    def test_missing_adjustment_section_still_parses(self):
+        """Backwards compat: AI skips ADJUSTMENT — report still parses."""
+        text = "NOTIFICATION:\nAs planned.\nFULL_REPORT:\n## Recovery\nAll good."
+        notif, report = self._parse(text)
+        assert "As planned" in notif
+        assert "## Recovery" in report
+
+    def test_notification_trimmed_to_240_chars(self):
+        long_notif = "X" * 300
+        text = f"NOTIFICATION:\n{long_notif}\nADJUSTMENT:\nAs planned\nFULL_REPORT:\n## Recovery\nOk."
+        notif, _ = self._parse(text)
+        assert len(notif) <= 240
+
+    def test_adjustment_case_insensitive_as_planned(self):
+        """'AS PLANNED' (uppercase) also suppresses the Adjustment header."""
+        text = "NOTIFICATION:\nOk.\nADJUSTMENT:\nAS PLANNED\nFULL_REPORT:\n## Recovery\nGood."
+        _, report = self._parse(text)
+        assert "## Adjustment" not in report
