@@ -32,7 +32,25 @@ data/calendar/*.ics
 *.json.bak
 *.json.backup-*
 
-# Note: data/health/health_data_cache.json is committed for cross-session persistence
+# Health data cache (personal health metrics — not versioned)
+data/health/health_data_cache.json
+
+# Athlete profile data (personal information — not versioned)
+data/athlete/
+
+# Generated workout tracking (personal data — not versioned)
+data/generated_workouts.json
+
+# Training plans (personal data — not versioned)
+data/plans/
+
+# Runtime state files (ephemeral — not versioned)
+data/morning_report.md
+data/obs_test_state.json
+data/sync_log.txt
+
+# Claude Code local settings (contains private environment IDs)
+.claude/settings.local.json
 
 # Garmin raw exports (manual exports from Garmin Connect)
 health_connect_export/
