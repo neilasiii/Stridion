@@ -55,11 +55,11 @@ data/sync_log.txt
 # Garmin raw exports (manual exports from Garmin Connect)
 health_connect_export/
 
-# Test/development files (archived)
-data/archive/test_workouts/
-
-# Archived scripts (unused variants)
+# All archive directories (deprecated code and docs — not versioned)
+archive/
 bin/archive/
+data/archive/
+docs/archive/
 
 # Log files
 data/*.log
