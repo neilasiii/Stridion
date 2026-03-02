@@ -76,47 +76,33 @@ cp config/gemini_api.env.example config/gemini_api.env
 
 ### 5. Set up your athlete profile
 
+Template files are included in the repo. Copy and edit them:
+
 ```bash
-mkdir -p data/athlete
+cd data/athlete/
+for f in *.example; do cp "$f" "${f%.example}"; done
+cd ../..
 ```
 
-Create the following files (templates below):
+Then edit each file in `data/athlete/` with your own details:
 
-**`data/athlete/goals.md`**
-```markdown
-# Primary Goal
-- [Your race goal, e.g. "Run a marathon in under 4:00"]
+| File | What to fill in |
+|---|---|
+| `goals.md` | Race goals, training objectives |
+| `upcoming_races.md` | Race schedule, goal times, priority |
+| `training_preferences.md` | Schedule, dietary restrictions, coaching style |
+| `current_training_status.md` | Current VDOT and training paces |
+| `communication_preferences.md` | Response detail level (BRIEF / STANDARD / DETAILED) |
+| `schedule_constraints.md` | Work schedule, childcare constraints, blocked days |
+| `training_history.md` | Injury history, past races, background |
 
-# Secondary Goals
-- Stay injury-free throughout training
-- Build consistent weekly mileage
+Calculate your VDOT from a recent race result:
+
+```bash
+python3 src/vdot_calculator.py
 ```
 
-**`data/athlete/upcoming_races.md`**
-```markdown
-# Upcoming Races
-
-## A-Race
-- **Race**: [Race name]
-- **Date**: [YYYY-MM-DD]
-- **Goal Time**: [HH:MM:SS]
-```
-
-**`data/athlete/training_preferences.md`**
-```markdown
-# Schedule
-- Available days: [e.g. Mon/Wed/Fri/Sat]
-- Preferred time: [e.g. early morning]
-
-# Constraints
-- [Any childcare, work, or other scheduling constraints]
-```
-
-**`data/athlete/communication_preferences.md`**
-```markdown
-# Current Mode: STANDARD
-# Options: BRIEF | STANDARD | DETAILED
-```
+These files are gitignored — your personal data stays local.
 
 ### 6. Initial Garmin sync
 
