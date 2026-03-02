@@ -535,7 +535,7 @@ def build_ai_prompt(workout, recovery, activities, athlete_context, weather=None
 
     if 'sleep' in recovery:
         s = recovery['sleep']
-        sleep_line = f"Sleep: {s['duration_hours']}h, score {s['score']}/100, {s['deep_pct']}% deep [REFERENCE ONLY - score unreliable with newborn]"
+        sleep_line = f"Sleep: {s['duration_hours']}h, score {s['score']}/100, {s['deep_pct']}% deep [REFERENCE ONLY - score may be unreliable]"
 
         # Add historical percentile if available
         if historical_context:
@@ -688,7 +688,7 @@ You are an expert running coach. Based on the recovery metrics above, provide:
 
 CRITICAL - METRIC PRIORITIZATION:
 - **HRV and Body Battery are PRIMARY INDICATORS** - these are the most reliable recovery metrics
-- **Sleep score is REFERENCE ONLY** - Garmin's algorithm is unreliable with newborn interruptions
+- **Sleep score is REFERENCE ONLY** - Garmin's algorithm can be unreliable with fragmented sleep
   * Sleep DURATION matters (hours of sleep)
   * Sleep SCORE does not accurately reflect recovery (penalizes feeding interruptions too heavily)
   * A low sleep score with 8+ hours of actual sleep is BETTER recovery than high sleep score with 5 hours
@@ -894,7 +894,7 @@ def generate_fallback_report(workout, recovery, activities):
             concerns.append(f"readiness {score}")
             severity = max(severity, 1)  # Reduced from 2
 
-    # Check sleep DURATION only (ignore score - unreliable with newborn)
+    # Check sleep DURATION only (ignore score — can be unreliable with fragmented sleep)
     if 'sleep' in recovery:
         hours = recovery['sleep']['duration_hours']
         if hours and hours < 5:

@@ -7,17 +7,17 @@ parse constraint keywords, then move the file to `processed/`.
 
 | Keyword | Example |
 |---|---|
-| `no workout` | No workout on 2026-02-20 — family visit |
+| `no workout` | No workout on 2026-03-10 — family visit |
 | `no run` | No run March 5 |
-| `rest day` | Rest day 2026-02-22 (childcare) |
-| `unavailable` | Unavailable Feb 28 - travel |
-| `busy` | Busy 2026-03-01, wife works |
-| `travel` | Travel 2/27 through 3/1 |
-| `skip` | Skip workout 2026-02-25 |
-| `childcare` | Childcare 2026-03-04 |
-| `wife works` | Wife works 2026-03-06 |
-| `night shift` | Night shift 2/28 |
-| `on call` | On call 2026-02-19 |
+| `rest day` | Rest day 2026-03-08 (childcare) |
+| `unavailable` | Unavailable March 12 - travel |
+| `busy` | Busy 2026-03-14, spouse works |
+| `travel` | Travel 3/15 through 3/17 |
+| `skip` | Skip workout 2026-03-20 |
+| `childcare` | Childcare 2026-03-22 |
+| `spouse works` | Spouse works 2026-03-25 |
+| `night shift` | Night shift 3/18 |
+| `on call` | On call 2026-03-19 |
 
 ## Supported date formats
 
@@ -30,8 +30,8 @@ parse constraint keywords, then move the file to `processed/`.
 ```
 # Travel Week
 
-No workout 2026-03-08 — conference in Chicago.
-Rest day 2026-03-11 — travel back.
+No workout 2026-03-20 — conference.
+Rest day 2026-03-23 — travel back.
 ```
 
 > Files are moved to `inbox/processed/` after ingestion and are not re-processed.

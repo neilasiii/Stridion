@@ -1,6 +1,6 @@
 # Running Coach System — User Guide
 
-**Audience:** Neil (daily use) + ops/debug reference.
+**Audience:** Athlete (daily use) + ops/debug reference.
 **Last updated:** 2026-02-17 (Phase 6 deploy)
 
 ---

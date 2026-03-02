@@ -534,20 +534,20 @@ running-coach/
 
 ## Athlete-Specific Context
 
-### Schedule Constraints
-- Works Mon-Thu, 0700-1730 (in-office)
-- Has 3 hours/week of work-granted fitness time (typically morning sessions)
-- Prefers early morning workouts on workdays
+This section documents the example athlete's constraints. When setting up for a new athlete, update `data/athlete/` files accordingly — these CLAUDE.md notes are for reference only.
 
-**Spouse Work Schedule (Childcare Constraint):**
-- Wife works as a nurse (12-hour shifts, 7am-7pm)
-- Cannot workout on wife's work days due to childcare
-- Schedule integrated via ICS feed (NurseGrid calendar)
+### Schedule Constraints
+- Athlete's available training days and times are defined in `data/athlete/training_preferences.md`
+- Prefer early morning workouts on workdays
+
+**Spouse/Caregiver Work Schedule (Childcare Constraint):**
+- Some athletes have days blocked by childcare obligations
+- Constraint calendar (ICS feed) can be configured in `config/calendar_sources.json`
 - System automatically reschedules conflicting running workouts to other days in the same week
 
 ### Dietary Requirements
-- **Gluten-free** (required)
-- **Dairy-free** (required)
+- Athlete dietary restrictions are stored in `data/athlete/training_preferences.md`
+- Common requirements: gluten-free, dairy-free — update as needed
 
 ### Training Philosophy
 - Jack Daniels VDOT methodology for running paces
@@ -562,12 +562,9 @@ See [docs/TRAINING_PHILOSOPHY.md](docs/TRAINING_PHILOSOPHY.md) for complete phil
 - When athlete has only **one upcoming race**, treat as **A-race** (peak priority)
 - Check `data/athlete/upcoming_races.md` for current race priority status
 
-### Current Status (as of system setup)
-- Training for marathon goal of 4:00 (9:10/mi pace)
-- Recent training: ~65 miles over 14 days
-- VO2 max: 51.0
-- Resting HR: 46 bpm average
-- Managing newborn care (sleep variability expected)
+### Current Status
+- Current VDOT, training phase, and goals are stored in `data/athlete/current_training_status.md`
+- Update these files after each race or significant fitness change
 
 ## Troubleshooting
 

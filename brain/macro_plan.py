@@ -414,7 +414,7 @@ def _detect_post_race_recovery(context_packet: Dict) -> Dict:
         dist_mi = long_candidate["dist"]
         days_ago = long_candidate["days_ago"]
 
-        # Half-marathon recovery window: 5 days (Brant had quality on day 5 post-HM).
+        # Half-marathon recovery window: 5 days (empirically: quality session is viable on day 5 post-HM).
         # The check uses days_ago at block start, not at generation time, so that a macro
         # generated mid-week correctly sees the recovery as already elapsed by Sunday.
         days_until_sunday = (6 - today.weekday()) % 7

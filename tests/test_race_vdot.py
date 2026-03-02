@@ -73,7 +73,7 @@ class TestIsRaceDistance:
         assert _is_race_distance(13.109)
 
     def test_half_marathon_slightly_long(self):
-        # Tampa Running: 13.25 mi — this is the real-world case that prompted the feature
+        # Local Race: 13.25 mi — this is the real-world case that prompted the feature
         assert _is_race_distance(13.25)
 
     def test_half_marathon_upper_edge(self):
@@ -132,8 +132,8 @@ class TestHasRaceKeywordActivity:
         assert _has_race_keyword_activity({"activity_name": "MARATHON TRAINING RACE"})
 
     def test_tampa_running_no_keyword(self):
-        # "Tampa Running" does NOT contain any keyword — must rely on distance band
-        assert not _has_race_keyword_activity({"activity_name": "Tampa Running"})
+        # "Local Race" does NOT contain any keyword — must rely on distance band
+        assert not _has_race_keyword_activity({"activity_name": "Local Race"})
 
     def test_easy_run_not_race(self):
         assert not _has_race_keyword_activity({"activity_name": "Easy Run"})
@@ -157,10 +157,10 @@ class TestDeriveVdotFromActivities:
     """
 
     def test_hm_by_distance_band(self):
-        """Tampa Running (13.25 mi, 119.2 min) should yield VDOT ≈ 37.2."""
+        """Local Race (13.25 mi, 119.2 min) should yield VDOT ≈ 37.2."""
         health = {
             "activities": [
-                _run(dist_mi=13.25, dur_min=119.2, name="Tampa Running", days_ago=30),
+                _run(dist_mi=13.25, dur_min=119.2, name="Local Race", days_ago=30),
             ]
         }
         result = _derive_vdot_from_activities(health, lookback_days=90)
@@ -213,7 +213,7 @@ class TestDeriveVdotFromActivities:
         """When multiple qualifying races exist, the most recent one is returned."""
         health = {
             "activities": [
-                _run(dist_mi=13.25, dur_min=119.2, name="Tampa Running", days_ago=60),   # older
+                _run(dist_mi=13.25, dur_min=119.2, name="Local Race", days_ago=60),   # older
                 _run(dist_mi=13.109, dur_min=112.0, name="Half Marathon Race", days_ago=10), # newer, faster
             ]
         }
@@ -227,7 +227,7 @@ class TestDeriveVdotFromActivities:
         """Older race exists beyond lookback window and is not used."""
         health = {
             "activities": [
-                _run(dist_mi=13.25, dur_min=119.2, name="Tampa Running", days_ago=95),  # outside 90-day window
+                _run(dist_mi=13.25, dur_min=119.2, name="Local Race", days_ago=95),  # outside 90-day window
                 _run(dist_mi=6.214, dur_min=55.0, name="10k Race", days_ago=20),
             ]
         }
@@ -249,7 +249,7 @@ class TestDeriveVdotFromActivities:
         """Activities exist but all are older than lookback_days → None."""
         health = {
             "activities": [
-                _run(dist_mi=13.25, dur_min=119.2, name="Tampa Running", days_ago=100),
+                _run(dist_mi=13.25, dur_min=119.2, name="Local Race", days_ago=100),
             ]
         }
         result = _derive_vdot_from_activities(health, lookback_days=90)
@@ -295,7 +295,7 @@ class TestDeriveVdotFromActivities:
         """Mix of races and training runs — only qualifying races contribute.
 
         Training runs at 8.0 mi and 7.5 mi are not in any race band and have no keywords.
-        Tampa Running (13.25 mi, HM band) and Parkrun (3.107 mi, 5k band) qualify.
+        Local Race (13.25 mi, HM band) and Parkrun (3.107 mi, 5k band) qualify.
         Parkrun is more recent (14d vs 30d) → it should be returned.
         Parkrun 24:00 5k → VDOT ≈ 37 (confirmed via calculator).
         """
@@ -303,7 +303,7 @@ class TestDeriveVdotFromActivities:
             "activities": [
                 _run(dist_mi=8.0,  dur_min=72.0,  name="Long Run",      days_ago=3),   # training (no band, no keyword)
                 _run(dist_mi=7.5,  dur_min=65.0,  name="Tempo Workout", days_ago=7),   # training (no band, no keyword)
-                _run(dist_mi=13.25, dur_min=119.2, name="Tampa Running", days_ago=30),  # race (HM band)
+                _run(dist_mi=13.25, dur_min=119.2, name="Local Race", days_ago=30),  # race (HM band)
                 _run(dist_mi=3.107, dur_min=24.0,  name="Parkrun",       days_ago=14),  # race (5k band)
             ]
         }

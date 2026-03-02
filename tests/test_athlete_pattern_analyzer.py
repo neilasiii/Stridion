@@ -47,7 +47,7 @@ class TestClassifyRunByName:
         assert classify_run(_run("Long Run 90min")) == "long"
 
     def test_keyword_race(self):
-        assert classify_run(_run("Tampa Running", dist=13.25, avg_hr=172)) == "race"
+        assert classify_run(_run("Local Race", dist=13.25, avg_hr=172)) == "race"
 
     def test_marathon_by_distance(self):
         assert classify_run(_run("Skunk Ape Marathon", dist=26.5, avg_hr=162)) == "race"

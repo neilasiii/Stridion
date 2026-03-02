@@ -59,7 +59,7 @@ test_cases = [
     "Orlando, FL",
     "Miami FL",
     "New York, New York",
-    "Tampa, Florida",
+    "YourCity, YourState",
 ]
 
 print("="*60)

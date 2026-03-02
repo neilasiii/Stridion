@@ -165,7 +165,7 @@ Before full migration, test existing skills:
 ### Test caldav-calendar
 ```bash
 # Can it sync FinalSurge ICS feed?
-# Does it handle constraint calendars (NurseGrid)?
+# Does it handle constraint calendars (e.g. NurseGrid, custom ICS)?
 # Can it query by date range?
 ```
 

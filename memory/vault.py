@@ -166,7 +166,7 @@ _DATE_RE = re.compile(
 
 _CONSTRAINT_KEYWORDS = [
     "no workout", "no run", "rest day", "unavailable", "busy",
-    "travel", "off day", "skip", "childcare", "wife works",
+    "travel", "off day", "skip", "childcare", "spouse works",
     "shift", "night shift", "on call", "blocked", "can't run",
     "cannot run", "not available",
 ]

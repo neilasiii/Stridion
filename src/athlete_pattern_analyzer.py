@@ -2,7 +2,7 @@
 Athlete Pattern Analyzer
 
 Classifies workouts and mines historical Garmin data to discover
-Neil's personal training patterns for use by the Brain LLM.
+Athlete's personal training patterns for use by the Brain LLM.
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ _KEYWORD_MAP = [
     (r'tempo|threshold', 'tempo'),
     (r'interval|repeat|fartlek|x\d+\s*(min|sec|m\b)|strides', 'interval'),
     (r'marathon|half marathon|\bhm\b|race|5k|10k|15k', 'race'),
-    # Brant shorthand: "30 min E", "45' E", "E$", " E " (standalone capital E)
+    # Coach shorthand: "30 min E", "45' E", "E$", " E " (standalone capital E)
     (r'\d+\s*(min|\')\s*[Ee]\b|[Ee]\s*$|\s[Ee]\s', 'easy'),
 ]
 
@@ -36,7 +36,7 @@ _RACE_DISTANCE_MIN_MI = 12.0   # anything >= this + high avg HR = race
 _LONG_DISTANCE_MIN_MI = 9.0    # long run threshold
 _LONG_DURATION_MIN_S  = 70 * 60
 
-# Zone 3+ is "quality effort" territory for Neil (threshold ~157 bpm per zone data)
+# Zone 3+ is "quality effort" territory for the athlete (threshold derived from zone data)
 _QUALITY_ZONE_MIN = 3
 _QUALITY_PCT_TEMPO    = 0.30   # >=30% in z3+ → sustained quality → tempo
 _QUALITY_PCT_INTERVAL = 0.15   # >=15% in z3+ with intervals → interval
