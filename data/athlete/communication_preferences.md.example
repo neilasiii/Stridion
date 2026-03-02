@@ -1,0 +1,63 @@
+# Communication Preferences
+
+## Detail Level: STANDARD
+
+**Options:**
+- `BRIEF`: Concise responses with just the essential information (schedule, key paces, quick adjustments)
+- `STANDARD`: Balanced detail with context and rationale
+- `DETAILED`: Full explanations including physiological reasoning, alternatives, and comprehensive context
+
+**Current Setting: STANDARD**
+
+---
+
+## What Each Level Provides
+
+### BRIEF Mode
+- Workout prescriptions in compact format
+- Just the schedule (time, intensity, paces)
+- Minimal explanatory text
+- Quick yes/no answers when possible
+
+### STANDARD Mode (Default)
+- Workout prescriptions with brief context
+- Short rationale for recommendations
+- Recovery considerations mentioned
+- Modification options when relevant
+
+### DETAILED Mode
+- Full workout prescriptions with comprehensive explanations
+- Physiological reasoning for all recommendations
+- Multiple modification options (conservative/moderate/full)
+- Recovery protocols and coordination with other training
+- Environmental and scheduling considerations
+
+---
+
+## How to Change Detail Level
+
+Ask the coach to switch modes at any time:
+- "Switch to brief mode"
+- "Give me detailed explanations for this session"
+- "Use standard detail level going forward"
+
+Or edit this file and change the setting at the top.
+
+---
+
+## Additional Preferences
+
+### Response Format
+- Include paces in all workout prescriptions: YES
+- Show weekly mileage totals: YES
+- Provide calendar/schedule views: YES
+- Include heart rate targets: YES for DETAILED/STANDARD, NO for BRIEF
+
+### Proactive Suggestions
+- Suggest workout library alternatives: STANDARD/DETAILED only
+- Offer modification options automatically: STANDARD/DETAILED only
+- Check health data and comment on trends: ALL levels
+
+---
+
+**Last Updated:** YYYY-MM-DD

@@ -1,0 +1,77 @@
+# Current Training Status
+
+This document tracks current fitness level, prescribed training paces, and recent training block data.
+Update regularly as fitness evolves and new VDOT calculations are performed.
+
+**Last Updated:** YYYY-MM-DD
+
+---
+
+## Current Training Block
+
+### VDOT & Training Paces
+
+**Current VDOT:** [XX.X] (based on [race name and distance]: [HH:MM:SS])
+
+Use `python3 src/vdot_calculator.py` to calculate VDOT from a race result.
+
+**Training Paces:**
+
+- **Easy (E):** [X:XX–X:XX /mile]
+- **Marathon (M):** [X:XX /mile]
+- **Threshold/Tempo (T):** [X:XX /mile]
+- **Interval (I):** [X:XX /mile]
+- **Repetition (R):** [X:XX /mile]
+
+---
+
+## Current Training Volume
+
+**Phase:** [Base Building / Early Quality / Race-Specific / Taper / Recovery]
+
+**Weekly Volume (current):** [X–X miles/week]
+**Weekly Volume (peak):** [X–X miles/week]
+
+**Weekly Structure:**
+- [X] runs per week
+- [X] strength sessions
+- [X] mobility sessions
+
+---
+
+## Recent Training Context
+
+### Last Race/Key Workout:
+- **Event:** [Race or workout name]
+- **Date:** [YYYY-MM-DD]
+- **Result:** [Time, pace, HR]
+- **Takeaway:** [Brief notes]
+
+### Current Challenges:
+- [Any ongoing fatigue, schedule issues, or health factors]
+
+### Health Status:
+- Recovery trending [positive/neutral/negative]
+- [Any relevant notes on injury, illness, etc.]
+
+---
+
+## VDOT Reassessment Plan
+
+**Next Reassessment:** [After next race or time trial — date/event]
+
+**Current VDOT:** [XX.X]
+**Target VDOT:** [XX.X] (based on [race goal])
+
+**Interim Assessment Triggers:**
+- If workouts consistently feel too easy/hard for 2+ weeks
+- Breakthrough performance in quality workout
+- Unexpected struggle with prescribed paces
+
+---
+
+This file should be updated after:
+- Race performances
+- VDOT recalculations
+- Significant changes in fitness or training volume
+- Changes in health status affecting training

@@ -1,0 +1,66 @@
+# Schedule Constraints
+
+## Personal Work Schedule
+
+- **Schedule:** [e.g., In-office Mon–Thu, 0700–1730]
+- **Fitness Time:** [e.g., 3 hours/week of work-granted fitness time]
+- **Preference:** [e.g., Early morning workouts on workdays]
+
+---
+
+## Caregiver / Childcare Constraints (if applicable)
+
+If a household member's schedule blocks certain training days, configure a constraint calendar:
+
+**Example situation:**
+- Spouse/partner works [X]-hour shifts on rotating days
+- Cannot train on those days due to childcare
+
+**System integration:**
+- Add a constraint calendar (ICS feed) to `config/calendar_sources.json`
+- Set `"type": "constraint"` for the calendar entry
+- Running workouts on constrained days are automatically rescheduled to another day in the same week
+
+**Example config entry:**
+```json
+{
+  "name": "Spouse Work Schedule",
+  "url": "https://your-calendar-provider.com/calendars/your-ics-url",
+  "enabled": true,
+  "type": "constraint"
+}
+```
+
+If no childcare constraint applies, leave the constraint calendar disabled or remove it.
+
+---
+
+## Workout Type Flexibility
+
+**Inflexible (reschedule if blocked):**
+- Running workouts — require dedicated time and specific conditions
+
+**Flexible (can adapt around constraints):**
+- Strength training — can be done in shorter blocks or at home
+- Mobility work — can be done in small windows
+
+---
+
+## Inbox-Based Constraints
+
+For one-off blocked days, drop a `.md` note in `vault/inbox/`:
+
+```
+# Blocked Days
+
+No workout 2026-04-15 — family commitment
+Rest day 2026-04-20 (travel)
+```
+
+See `vault/inbox/README.md` for supported keywords and date formats.
+
+---
+
+## Last Updated
+
+- **Date:** YYYY-MM-DD

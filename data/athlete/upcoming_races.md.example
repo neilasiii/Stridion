@@ -1,0 +1,78 @@
+# Upcoming Races & Time Goals
+
+This document tracks planned races, time goals, race priorities, and strategy considerations.
+Agents should use this information to align training phases, taper timing, and race-specific preparation.
+
+---
+
+## Race Calendar
+
+---
+
+### [Race Name] — [Month Year]
+- **Date:** YYYY-MM-DD
+- **Location:** City, State
+- **Distance:** [Half Marathon / Marathon / 10K / etc.]
+- **Course Type:** [Flat road / Hilly trail / etc.]
+- **Expected Conditions:** [Typical weather for this race]
+
+**Previous Performance:**
+- **[Year] [Race Name]:** [HH:MM:SS] ([X:XX/mile average])
+
+**Time Goals:**
+- **A Goal (Stretch):** [HH:MM:SS] ([X:XX/mile pace])
+- **B Goal (Target):** [HH:MM:SS] ([X:XX/mile pace])
+- **C Goal (Minimum Success):** [HH:MM:SS] ([X:XX/mile pace])
+
+**Race Priority:** [A-race / B-race / C-race]
+
+**Training Phase Alignment:**
+- **Current Phase:** [Base building / Quality / Race-specific / Taper]
+- **Weeks Until Race:** [X] weeks
+- **Taper Start:** [Date] ([X] week[s] before race)
+
+**Race Strategy Notes:**
+- [Target starting pace and adjustments]
+- [Key workout types leading into race]
+
+**Fueling Plan:**
+- **Pre-race:** [Light meal X hours before, dietary restrictions respected]
+- **During race:** [Gels at mile X, water at aid stations, etc.]
+- **Hydration:** [Electrolytes if warm/humid]
+
+---
+
+## Race Priority Definitions
+
+**A-Race:** Primary goal race. Peak fitness, full taper, maximum effort. All training builds toward this.
+
+**B-Race:** Important race but not peak priority. Abbreviated taper (3–7 days), strong effort, used to gauge fitness.
+
+**C-Race:** Lower priority. Minimal taper (2–3 days easy), used as hard workout or race-pace practice.
+
+**Training Race:** Part of a long run or quality workout. Race effort but no taper.
+
+---
+
+## Notes for Coaches
+
+Agents should reference this file when:
+- Designing training plans (align phases with race dates)
+- Prescribing taper protocols
+- Planning race-specific workouts
+- Providing race-week nutrition and fueling strategies
+- Adjusting training load based on proximity to priority races
+
+---
+
+## Post-Race Review Section
+
+After each race, add brief notes here:
+
+### [Race Name] — [Date]
+- **Actual Finish Time:** [HH:MM:SS] ([X:XX/mile pace])
+- **Avg HR:** [X] bpm
+- **Goal Achievement:** [Describe outcome]
+- **What Worked Well:** [Notes]
+- **What to Improve:** [Notes]
+- **Recovery Notes:** [Easy running for X days, etc.]

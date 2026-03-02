@@ -1,0 +1,110 @@
+# Training Preferences
+
+This document describes personal training preferences that guide how agents deliver recommendations.
+These are preferences, not hard constraints, and should be applied alongside the actual training plan and history.
+
+---
+
+## 1. Coaching Style Preferences
+
+- Prefers **direct, clear, and structured guidance** instead of vague descriptions.
+- Likes workouts broken down into **step-by-step segments**.
+- Appreciates **explanations of the purpose** behind each workout or adjustment.
+- Favors **options** when fatigue or scheduling issues arise:
+  - Conservative option
+  - Moderate option
+  - Full-intent version
+
+---
+
+## 2. Scheduling & Work-Life Integration
+
+### Work Schedule
+- Works **[X] days per week**: **[Days]**, **[hours]**.
+
+### Training Windows
+- Preferred workout time: **[e.g., early morning / evening]**
+- Typical session window: **[e.g., 6:00–7:30 AM]**
+
+### Weekend Flexibility
+- **[Saturday / Sunday]**: preferred for long runs.
+- **[Sunday]**: preferred for mobility/recovery work.
+
+---
+
+## 3. Training Structure Preferences
+
+- Strong preference for **time-based workouts** instead of distance.
+- Likes **Jack Daniels–style zone labeling** (E, M, T, I, R).
+- Wants **periodized training**: Base → Early Quality → Race-Specific → Taper.
+
+### Flexibility
+- Coach should design optimal weekly structure based on work schedule and recovery.
+- Allow deviations when life, work, or recovery interfere.
+- Emphasize **principles over exact day-by-day adherence**.
+
+---
+
+## 4. Adjustment & Recovery Preferences
+
+- Prefers conservative adjustments when:
+  - sleep is poor
+  - recovery metrics are low
+  - fatigue accumulates
+  - soreness or early injury signals appear
+
+- When compromised, prefers:
+  - Reducing intensity first
+  - Preserving easy-day consistency
+  - Avoiding back-to-back hard sessions
+
+---
+
+## 5. Strength Training Preferences
+
+- Strength should **support running**, not compete with it.
+- Prefers: core, glutes, calves, hamstrings, stability and single-leg work.
+- Does **not** prefer high-DOMS sessions close to quality or long runs.
+- Ideal structure: **[Day]** = primary session, **[Day]** = lighter session.
+
+---
+
+## 6. Mobility & Recovery Preferences
+
+- Prefers **short, actionable routines** (5–15 min) during the week.
+- **[Day]** preferred for longer mobility/yoga session.
+- Target areas: hips, hamstrings, calves, thoracic spine.
+
+---
+
+## 7. Dietary Requirements
+
+- **[List any dietary restrictions — e.g., gluten-free, dairy-free, vegan]**
+- All nutrition recommendations must respect these constraints.
+
+### Preferred Fueling Products
+- **Gels:** [Brand/type that works well]
+- **Electrolytes:** [Brand/type]
+- **Hydration:** [Approach]
+
+---
+
+## 8. Data Interpretation Preferences
+
+- Uses Garmin metrics as helpful signals, not absolute truths.
+- Prefers trend-based interpretation and RPE-first intensity guidance.
+- Values context-aware analysis: heat/dew point, cumulative workload, sleep debt.
+
+---
+
+## 9. Safety & Long-Term Preferences
+
+- Strong preference for avoiding injury and sustainable progression.
+- Does not want:
+  - Forcing intensity on low-energy days
+  - Making up missed workouts with harder efforts
+  - Unnecessary stacking of demanding sessions
+
+---
+
+This file should be used by all agents to ensure recommendations align with the athlete's preferred coaching style, schedule, and communication expectations.

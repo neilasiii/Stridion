@@ -36,7 +36,8 @@ data/calendar/*.ics
 data/health/health_data_cache.json
 
 # Athlete profile data (personal information — not versioned)
-data/athlete/
+data/athlete/*
+!data/athlete/*.example
 
 # Generated workout tracking (personal data — not versioned)
 data/generated_workouts.json
