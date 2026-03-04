@@ -1,9 +1,23 @@
 from datetime import date, timedelta
 
 from brain.macro_plan import validate_macro_plan
-from brain.planner import _enforce_structure_constraints, _normalize_weekly_structure, replan_remaining_week
-from brain.schemas import MacroPaces, MacroPlan, MacroWeek, PlanDay, PlanDecision
-from memory.db import get_active_plan, init_db, insert_plan, insert_plan_days, set_active_plan
+from brain.planner import (
+    _enforce_structure_constraints,
+    _normalize_weekly_structure,
+    replan_remaining_week,
+)
+from brain.schemas import MacroPaces, MacroPlan, MacroWeek, PlanDecision
+from memory.db import (
+    get_active_plan,
+    init_db,
+    insert_plan,
+    insert_plan_days,
+    query_events,
+    set_active_plan,
+)
+
+
+RUN_TYPES = {"easy", "tempo", "interval", "long"}
 
 
 def _macro_week(i: int, ws: str, target: float, ceil: float | None = None):
@@ -19,10 +33,76 @@ def _macro_week(i: int, ws: str, target: float, ceil: float | None = None):
         quality_sessions_allowed=0,
         key_workout_type="easy",
         recommended_session_types=["easy", "long"],
-        paces=MacroPaces(easy="10:00/mi", tempo=None, interval=None, long_run="10:30/mi"),
+        paces=MacroPaces(
+            easy="10:00/mi", tempo=None, interval=None, long_run="10:30/mi"
+        ),
         planner_notes="",
         phase_rationale="",
     )
+
+
+def _plan_for_week(
+    start: date, workout_types: list[str], priorities: list[str] | None = None
+) -> PlanDecision:
+    priorities = priorities or ["nice_to_have"] * len(workout_types)
+    return PlanDecision.model_validate(
+        {
+            "week_start": start.isoformat(),
+            "week_end": (start + timedelta(days=6)).isoformat(),
+            "phase": "base",
+            "weekly_volume_miles": 20,
+            "safety_flags": [],
+            "rationale": "",
+            "context_hash": "x",
+            "days": [
+                {
+                    "date": (start + timedelta(days=i)).isoformat(),
+                    "intent": "",
+                    "workout_type": workout_types[i],
+                    "priority": priorities[i],
+                    "duration_min": 45 if workout_types[i] in RUN_TYPES else 0,
+                    "structure_steps": (
+                        [
+                            {
+                                "label": "main",
+                                "duration_min": 45,
+                                "target_metric": "rpe",
+                                "target_value": "RPE 4",
+                            }
+                        ]
+                        if workout_types[i] in RUN_TYPES
+                        else []
+                    ),
+                    "safety_flags": [],
+                    "rationale": "",
+                }
+                for i in range(7)
+            ],
+        }
+    )
+
+
+def _seed_active_plan(
+    db_path, start: date, workout_types: list[str], priorities: list[str] | None = None
+) -> str:
+    decision = _plan_for_week(start, workout_types, priorities)
+    pid = insert_plan(
+        start,
+        start + timedelta(days=6),
+        decision.model_dump(),
+        context_hash="seed",
+        db_path=db_path,
+    )
+    insert_plan_days(
+        pid,
+        [
+            {"day": d.date, "intent": d.intent, "workout_json": d.model_dump()}
+            for d in decision.days
+        ],
+        db_path=db_path,
+    )
+    set_active_plan(pid, db_path=db_path)
+    return pid
 
 
 def test_macro_band_validation_order_and_ceiling_jump():
@@ -56,73 +136,134 @@ def test_macro_band_validation_order_and_ceiling_jump():
     assert any("ceiling ramp" in e for e in errs.errors)
 
 
-def test_flexible_weekly_run_counts_and_blocked_days():
-    start = date(2026, 1, 4)
-    d = PlanDecision.model_validate(
+def test_structure_constraints_anchor_preference_and_min_backfill():
+    start = date(2026, 1, 4)  # Sunday
+    decision = _plan_for_week(
+        start,
+        ["easy", "easy", "rest", "easy", "rest", "easy", "rest"],
+        [
+            "optional",
+            "must_do",
+            "optional",
+            "nice_to_have",
+            "optional",
+            "must_do",
+            "optional",
+        ],
+    )
+    structure = _normalize_weekly_structure(
         {
-            "week_start": start.isoformat(),
-            "week_end": (start + timedelta(days=6)).isoformat(),
-            "phase": "base",
-            "weekly_volume_miles": 20,
-            "safety_flags": [],
-            "rationale": "",
-            "context_hash": "x",
-            "days": [
-                {
-                    "date": (start + timedelta(days=i)).isoformat(),
-                    "intent": "",
-                    "workout_type": "easy" if i < 6 else "rest",
-                    "priority": "optional" if i in (0, 1) else "nice_to_have",
-                    "duration_min": 30,
-                    "structure_steps": [{"label": "main", "duration_min": 30, "target_metric": "rpe", "target_value": "RPE 4"}],
-                    "safety_flags": [],
-                    "rationale": "",
+            "athlete": {
+                "weekly_structure": {
+                    "min_runs_per_week": 4,
+                    "preferred_runs_per_week": 4,
+                    "max_runs_per_week": 4,
+                    "anchor_days": ["monday", "wednesday", "friday", "saturday"],
+                    "non_negotiable_blocked_days": ["sunday"],
                 }
-                for i in range(7)
-            ],
+            }
         }
     )
-    structure = _normalize_weekly_structure({"athlete": {"weekly_structure": {"runs_per_week": 4, "max_runs_per_week": 4, "non_negotiable_blocked_days": ["sunday"]}}})
-    _enforce_structure_constraints(d, structure)
-    runs = [x for x in d.days if x.workout_type in {"easy", "tempo", "interval", "long"}]
-    assert len(runs) <= 4
-    assert d.days[0].workout_type in {"rest", "cross"}
+    _enforce_structure_constraints(decision, structure)
+
+    run_days = [d for d in decision.days if d.workout_type in RUN_TYPES]
+    assert len(run_days) == 4
+    # Sunday blocked should be rest
+    assert decision.days[0].workout_type in {"rest", "cross"}
+    # Monday anchor is must_do and should survive trimming
+    assert decision.days[1].workout_type in RUN_TYPES
+    # Wednesday anchor should be backfilled to satisfy min=4 after blocked-day conversion
+    assert decision.days[3].workout_type in RUN_TYPES
 
 
-def test_replan_remaining_week_persists_revision_metadata(tmp_path):
+def test_replan_drops_missed_easy_and_persists_revision_metadata(tmp_path):
     db = tmp_path / "coach.sqlite"
     init_db(db)
-    start = date.today() - timedelta(days=date.today().weekday() + 1)
-    end = start + timedelta(days=6)
-    plan = {
-        "week_start": start.isoformat(),
-        "week_end": end.isoformat(),
-        "phase": "quality",
-        "weekly_volume_miles": 25,
-        "safety_flags": [],
-        "rationale": "",
-        "context_hash": "x",
-        "days": [
-            {
-                "date": (start + timedelta(days=i)).isoformat(),
-                "intent": "",
-                "workout_type": "tempo" if i == 2 else ("long" if i == 4 else "easy"),
-                "priority": "must_do" if i in (2, 4) else "nice_to_have",
-                "duration_min": 60,
-                "structure_steps": [{"label": "main", "duration_min": 60, "target_metric": "rpe", "target_value": "RPE 5"}],
-                "safety_flags": [],
-                "rationale": "",
-            }
-            for i in range(7)
-        ],
-    }
-    pid = insert_plan(start, end, plan, context_hash="x", db_path=db)
-    insert_plan_days(pid, [{"day": x["date"], "intent": x["intent"], "workout_json": x} for x in plan["days"]], db_path=db)
-    set_active_plan(pid, db_path=db)
 
-    decision = replan_remaining_week({"today": date.today().isoformat()}, [date.today().isoformat()], db_path=db)
+    start = date.today() - timedelta(days=date.today().weekday() + 1)
+    original_plan_id = _seed_active_plan(
+        db,
+        start,
+        ["easy", "easy", "easy", "easy", "long", "rest", "rest"],
+    )
+
+    today_iso = date.today().isoformat()
+    decision = replan_remaining_week({"today": today_iso}, [today_iso], db_path=db)
     assert isinstance(decision, PlanDecision)
+    today_day = next(d for d in decision.days if d.date == today_iso)
+    assert today_day.workout_type == "rest"
+    assert "missed_easy_dropped" in today_day.safety_flags
+
     active = get_active_plan(db_path=db)
-    assert active["supersedes_plan_id"] == pid
+    assert active["supersedes_plan_id"] == original_plan_id
     assert active["replan_reason"] == "missed_workout"
     assert active["plan_revision_number"] == 2
+    assert active["replan_details"]["dropped_easy"] == [today_iso]
+
+    events = query_events(event_type="week_replanned", db_path=db)
+    assert events
+    assert events[0]["payload_json"]
+
+
+def test_replan_moves_quality_only_when_spacing_safe(tmp_path):
+    db = tmp_path / "coach.sqlite"
+    init_db(db)
+
+    start = date.today() - timedelta(days=date.today().weekday() + 1)
+    # Force Tuesday quality missed; Wednesday easy is safe move slot.
+    _seed_active_plan(
+        db,
+        start,
+        ["easy", "tempo", "easy", "long", "rest", "easy", "rest"],
+        [
+            "nice_to_have",
+            "must_do",
+            "nice_to_have",
+            "must_do",
+            "optional",
+            "nice_to_have",
+            "optional",
+        ],
+    )
+
+    missed_date = (start + timedelta(days=2)).isoformat()
+    decision = replan_remaining_week(
+        {"today": start.isoformat()}, [missed_date], db_path=db
+    )
+    # no consecutive hard days after reflow
+    for i in range(1, len(decision.days)):
+        assert not (
+            decision.days[i - 1].workout_type in {"tempo", "interval", "long"}
+            and decision.days[i].workout_type in {"tempo", "interval", "long"}
+        )
+
+
+def test_replan_shortens_or_drops_long_on_constraints(tmp_path):
+    db = tmp_path / "coach.sqlite"
+    init_db(db)
+
+    start = date.today() - timedelta(days=date.today().weekday() + 1)
+    _seed_active_plan(
+        db,
+        start,
+        ["easy", "easy", "long", "tempo", "rest", "rest", "rest"],
+    )
+
+    missed_long_date = (start + timedelta(days=2)).isoformat()
+    decision = replan_remaining_week(
+        {
+            "today": start.isoformat(),
+            "athlete": {
+                "weekly_structure": {
+                    "non_negotiable_blocked_days": ["thursday", "friday"]
+                }
+            },
+        },
+        [missed_long_date],
+        db_path=db,
+    )
+
+    long_days = [d for d in decision.days if d.workout_type == "long"]
+    assert len(long_days) <= 1
+    if long_days:
+        assert long_days[0].duration_min <= 45

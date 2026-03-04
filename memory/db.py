@@ -31,6 +31,7 @@ DB_PATH = PROJECT_ROOT / "data" / "coach.sqlite"
 
 # ── Connection ─────────────────────────────────────────────────────────────────
 
+
 def _connect(db_path: Path = DB_PATH) -> sqlite3.Connection:
     db_path = Path(db_path)
     db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -82,6 +83,7 @@ CREATE TABLE IF NOT EXISTS plans (
     plan_revision_number INTEGER NOT NULL DEFAULT 1,
     supersedes_plan_id TEXT,
     replan_reason TEXT,
+    replan_details_json TEXT,
     revised_at DATETIME,
     status       TEXT NOT NULL DEFAULT 'draft',
     plan_json    TEXT NOT NULL
@@ -192,11 +194,12 @@ def _run_migrations(conn: sqlite3.Connection) -> None:
         "ALTER TABLE workout_checkins ADD COLUMN effort_notes TEXT",
         "ALTER TABLE workout_checkins ADD COLUMN response_received_at DATETIME",
         # Watch-side self-evaluation (from Garmin summaryDTO)
-        "ALTER TABLE workout_checkins ADD COLUMN rpe_watch REAL",    # directWorkoutRpe / 10
-        "ALTER TABLE workout_checkins ADD COLUMN workout_feel REAL", # directWorkoutFeel (0=bad,50=ok,75=good,100=excellent)
+        "ALTER TABLE workout_checkins ADD COLUMN rpe_watch REAL",  # directWorkoutRpe / 10
+        "ALTER TABLE workout_checkins ADD COLUMN workout_feel REAL",  # directWorkoutFeel (0=bad,50=ok,75=good,100=excellent)
         "ALTER TABLE plans ADD COLUMN plan_revision_number INTEGER NOT NULL DEFAULT 1",
         "ALTER TABLE plans ADD COLUMN supersedes_plan_id TEXT",
         "ALTER TABLE plans ADD COLUMN replan_reason TEXT",
+        "ALTER TABLE plans ADD COLUMN replan_details_json TEXT",
         "ALTER TABLE plans ADD COLUMN revised_at DATETIME",
     ]
     for sql in migrations:
@@ -218,6 +221,7 @@ def init_db(db_path: Path = DB_PATH) -> None:
 
 
 # ── Athlete Profile ─────────────────────────────────────────────────────────────
+
 
 def upsert_athlete_profile(key: str, value: Any, db_path: Path = DB_PATH) -> None:
     """Store or update a named athlete profile value."""
@@ -249,6 +253,7 @@ def get_athlete_profile(key: str, db_path: Path = DB_PATH) -> Optional[Any]:
 
 
 # ── Events ──────────────────────────────────────────────────────────────────────
+
 
 def _make_event_id(event_type: str, payload: Dict, ts: str) -> str:
     """Stable deterministic 32-char hex id for event idempotency."""
@@ -364,6 +369,7 @@ def delete_events_by_source(
 
 # ── State ────────────────────────────────────────────────────────────────────────
 
+
 def set_state(key: str, value: str, db_path: Path = DB_PATH) -> None:
     """Set a mutable state value."""
     conn = _connect(db_path)
@@ -386,15 +392,14 @@ def get_state(
     """Get a state value, or default if absent."""
     conn = _connect(db_path)
     try:
-        row = conn.execute(
-            "SELECT value FROM state WHERE key = ?", (key,)
-        ).fetchone()
+        row = conn.execute("SELECT value FROM state WHERE key = ?", (key,)).fetchone()
         return row["value"] if row else default
     finally:
         conn.close()
 
 
 # ── Metrics ──────────────────────────────────────────────────────────────────────
+
 
 def upsert_metrics(day: date, payload: Dict, db_path: Path = DB_PATH) -> None:
     """Upsert daily health metric rollup for a given calendar date."""
@@ -410,9 +415,7 @@ def upsert_metrics(day: date, payload: Dict, db_path: Path = DB_PATH) -> None:
         conn.close()
 
 
-def get_metrics_range(
-    start: date, end: date, db_path: Path = DB_PATH
-) -> List[Dict]:
+def get_metrics_range(start: date, end: date, db_path: Path = DB_PATH) -> List[Dict]:
     """Return daily metric rows between start and end (inclusive)."""
     conn = _connect(db_path)
     try:
@@ -427,9 +430,10 @@ def get_metrics_range(
 
 # ── Plans ─────────────────────────────────────────────────────────────────────────
 
+
 def _new_plan_id(start_date: date, context_hash: Optional[str] = None) -> str:
     """Generate a human-readable, unique plan id."""
-    suffix = (context_hash[:8] if context_hash else uuid.uuid4().hex[:8])
+    suffix = context_hash[:8] if context_hash else uuid.uuid4().hex[:8]
     return f"{start_date.strftime('%Y%m%d')}-{suffix}"
 
 
@@ -442,6 +446,7 @@ def insert_plan(
     plan_revision_number: int = 1,
     supersedes_plan_id: Optional[str] = None,
     replan_reason: Optional[str] = None,
+    replan_details: Optional[Dict] = None,
     revised_at: Optional[str] = None,
     db_path: Path = DB_PATH,
 ) -> str:
@@ -464,9 +469,9 @@ def insert_plan(
         conn.execute(
             """INSERT INTO plans(
                    plan_id, start_date, end_date, context_hash,
-                   plan_revision_number, supersedes_plan_id, replan_reason, revised_at,
+                   plan_revision_number, supersedes_plan_id, replan_reason, replan_details_json, revised_at,
                    status, plan_json
-               ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 plan_id,
                 start_date.isoformat(),
@@ -475,6 +480,7 @@ def insert_plan(
                 plan_revision_number,
                 supersedes_plan_id,
                 replan_reason,
+                json.dumps(replan_details) if replan_details else None,
                 revised_at,
                 status,
                 json.dumps(plan_json),
@@ -486,9 +492,7 @@ def insert_plan(
     return plan_id
 
 
-def insert_plan_days(
-    plan_id: str, days: List[Dict], db_path: Path = DB_PATH
-) -> None:
+def insert_plan_days(plan_id: str, days: List[Dict], db_path: Path = DB_PATH) -> None:
     """
     Insert (or replace) day rows for a plan.
 
@@ -497,6 +501,7 @@ def insert_plan_days(
       intent       - str  e.g. "Easy 60 min"
       workout_json - dict  structured workout description
     """
+
     def _day_str(d: Any) -> str:
         return d.isoformat() if isinstance(d, date) else str(d)
 
@@ -553,17 +558,15 @@ def set_active_plan(plan_id: str, db_path: Path = DB_PATH) -> None:
         conn.execute("UPDATE plans SET status = 'archived' WHERE status = 'active'")
 
         # 4) Activate new plan
-        conn.execute(
-            "UPDATE plans SET status = 'active' WHERE plan_id = ?", (plan_id,)
-        )
+        conn.execute("UPDATE plans SET status = 'active' WHERE plan_id = ?", (plan_id,))
 
         # 5) Write plan_activated event — inline to stay in the same transaction.
         #    Use uuid4 as the event_id so every activation is unconditionally
         #    recorded (no INSERT OR IGNORE silently dropping a duplicate hash).
         event_payload = {
-            "plan_id":          plan_id,
+            "plan_id": plan_id,
             "previous_plan_id": previous_plan_id,
-            "activated_at":     ts,
+            "activated_at": ts,
         }
         event_payload_str = json.dumps(event_payload, sort_keys=True)
         event_id = uuid.uuid4().hex  # guaranteed unique — never dropped
@@ -655,21 +658,28 @@ def get_active_plan(
         ).fetchall()
 
         return {
-            "plan_id":      plan_row["plan_id"],
-            "start_date":   plan_row["start_date"],
-            "end_date":     plan_row["end_date"],
-            "created_at":   plan_row["created_at"],
+            "plan_id": plan_row["plan_id"],
+            "start_date": plan_row["start_date"],
+            "end_date": plan_row["end_date"],
+            "created_at": plan_row["created_at"],
             "context_hash": plan_row["context_hash"],
             "plan_revision_number": plan_row["plan_revision_number"],
             "supersedes_plan_id": plan_row["supersedes_plan_id"],
             "replan_reason": plan_row["replan_reason"],
-            "status":       plan_row["status"],
-            "plan":         json.loads(plan_row["plan_json"]),
+            "replan_details": (
+                json.loads(plan_row["replan_details_json"])
+                if plan_row["replan_details_json"]
+                else None
+            ),
+            "status": plan_row["status"],
+            "plan": json.loads(plan_row["plan_json"]),
             "days": [
                 {
-                    "day":     d["day"],
-                    "intent":  d["intent"],
-                    "workout": json.loads(d["workout_json"]) if d["workout_json"] else {},
+                    "day": d["day"],
+                    "intent": d["intent"],
+                    "workout": (
+                        json.loads(d["workout_json"]) if d["workout_json"] else {}
+                    ),
                 }
                 for d in days
             ],
@@ -699,6 +709,7 @@ def list_plans(
 
 
 # ── Task Runs ────────────────────────────────────────────────────────────────────
+
 
 def log_task_start(task: str, db_path: Path = DB_PATH) -> int:
     """Log task start. Returns row id for later finish update."""
@@ -746,6 +757,7 @@ def get_last_task_run(task: str, db_path: Path = DB_PATH) -> Optional[Dict]:
 
 
 # ── Sync Runs ─────────────────────────────────────────────────────────────────
+
 
 def record_sync_start(
     source: str = "agent",
@@ -815,6 +827,7 @@ def get_last_sync_run(
 
 # ── Daily Metrics ──────────────────────────────────────────────────────────────
 
+
 def upsert_daily_metrics(
     day: date,
     hrv_rmssd: Optional[float] = None,
@@ -879,6 +892,7 @@ def get_daily_metrics(
 
 
 # ── Activities ────────────────────────────────────────────────────────────────
+
 
 def upsert_activity(
     activity_id: str,
@@ -960,6 +974,7 @@ def get_activities(
 
 
 # ── Macro Plans ────────────────────────────────────────────────────────────────
+
 
 def _new_macro_id(mode: str, race_date_or_none: Optional[str], vdot: float) -> str:
     """Generate a human-readable, unique macro plan id.
@@ -1063,9 +1078,9 @@ def set_active_macro_plan(macro_id: str, db_path: Path = DB_PATH) -> None:
 
         # 5) Write macro_plan_activated event (inline, same transaction)
         event_payload = {
-            "macro_id":          macro_id,
+            "macro_id": macro_id,
             "previous_macro_id": previous_macro_id,
-            "activated_at":      ts,
+            "activated_at": ts,
         }
         event_payload_str = json.dumps(event_payload, sort_keys=True)
         event_id = uuid.uuid4().hex  # guaranteed unique
@@ -1112,15 +1127,15 @@ def get_active_macro_plan(db_path: Path = DB_PATH) -> Optional[Dict]:
         if not row:
             return None
         return {
-            "macro_id":    row["macro_id"],
-            "mode":        row["mode"],
-            "race_date":   row["race_date"],
-            "race_name":   row["race_name"],
-            "start_week":  row["start_week"],
+            "macro_id": row["macro_id"],
+            "mode": row["mode"],
+            "race_date": row["race_date"],
+            "race_name": row["race_name"],
+            "start_week": row["start_week"],
             "total_weeks": row["total_weeks"],
-            "vdot":        row["vdot"],
-            "status":      row["status"],
-            "plan":        json.loads(row["plan_json"]),
+            "vdot": row["vdot"],
+            "status": row["status"],
+            "plan": json.loads(row["plan_json"]),
         }
     finally:
         conn.close()
@@ -1132,6 +1147,7 @@ def get_active_macro_plan_id(db_path: Path = DB_PATH) -> Optional[str]:
 
 
 # ── Workout Check-ins ──────────────────────────────────────────────────────────
+
 
 def upsert_checkin(
     activity_id: str,
@@ -1153,7 +1169,11 @@ def upsert_checkin(
                ) VALUES (?, ?, ?, ?, ?, ?, ?)""",
             (
                 activity_id,
-                activity_date.isoformat() if isinstance(activity_date, date) else activity_date,
+                (
+                    activity_date.isoformat()
+                    if isinstance(activity_date, date)
+                    else activity_date
+                ),
                 activity_type,
                 activity_name,
                 distance_mi,
