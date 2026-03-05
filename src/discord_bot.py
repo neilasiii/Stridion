@@ -2235,6 +2235,63 @@ async def _post_pending_weekly_synthesis(channel) -> bool:
     return True
 
 
+async def _post_pending_cutover_prompt(channel) -> bool:
+    """
+    If pending_cutover_prompt is set, post the cutover readiness prompt to #coach.
+    Returns True if posted, False otherwise.
+    """
+    import sqlite3 as _sqlite3
+    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
+    if not db_path.exists():
+        return False
+
+    try:
+        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = _sqlite3.Row
+        row = conn.execute(
+            "SELECT value FROM state WHERE key = 'pending_cutover_prompt'"
+        ).fetchone()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_post_pending_cutover_prompt: DB read error: %s", exc)
+        return False
+
+    if not row:
+        return False
+
+    try:
+        embed = discord.Embed(
+            title="✅ 4 Weeks of Auto-Plans Complete",
+            description=(
+                "The system has generated 4 consecutive weeks of training plans automatically.\n\n"
+                "**Ready to cut FinalSurge?**\n"
+                "Run `/coach_cutover confirm` to review a readiness report and disable the FinalSurge import.\n\n"
+                "Not ready yet? Reply **delay** to wait one more week."
+            ),
+            color=discord.Color.green(),
+            timestamp=datetime.now(),
+        )
+        await channel.send(embed=embed)
+    except Exception as exc:
+        logger.error("_post_pending_cutover_prompt: send failed: %s", exc)
+        return False
+
+    # Clear pending, set awaiting response
+    try:
+        conn = _sqlite3.connect(str(db_path))
+        conn.execute("DELETE FROM state WHERE key = 'pending_cutover_prompt'")
+        conn.commit()
+        conn.close()
+        from memory.db import set_state
+        set_state("cutover_awaiting_response", "1")
+    except Exception as exc:
+        logger.warning("_post_pending_cutover_prompt: state update error: %s", exc)
+
+    logger.info("_post_pending_cutover_prompt: cutover prompt posted")
+    return True
+
+
+
 @tasks.loop(minutes=30)
 async def checkin_delivery_task():
     """Deliver pending post-workout check-in messages to #coach every 30 minutes."""
@@ -2243,6 +2300,7 @@ async def checkin_delivery_task():
         await _post_pending_checkin(channel)
         await _post_pending_vdot_update(channel)
         await _post_pending_weekly_synthesis(channel)
+        await _post_pending_cutover_prompt(channel)
 
 
 @tasks.loop(time=time(hour=8, minute=30, tzinfo=EST))  # 8:30 AM EST
@@ -2434,6 +2492,13 @@ async def on_ready():
         posted = await _post_pending_obs(testing_channel)
         if posted:
             print("✓ Late obs result delivered on reconnect")
+
+    # Deliver any cutover prompt the heartbeat agent queued while Discord was offline
+    coach_channel = bot.get_channel(CHANNELS["coach"])
+    if coach_channel:
+        posted = await _post_pending_cutover_prompt(coach_channel)
+        if posted:
+            print("✓ Late cutover prompt delivered on reconnect")
 
     # Start post-workout check-in delivery task (fires immediately on first run)
     if not checkin_delivery_task.is_running():

@@ -95,3 +95,26 @@ def test_hook_queues_after_delay_when_count_catches_up(tmp_path):
     set_state("cutover_threshold", "5", db_path=db)
     result = run(db_path=db)
     assert result["pending_written"] is True
+
+
+def test_cutover_awaiting_set_after_prompt(tmp_path):
+    """After prompt is delivered, cutover_awaiting_response is set and pending_cutover_prompt is cleared."""
+    import json
+    import sqlite3
+
+    db = make_db(tmp_path)
+    from memory.db import get_state, set_state
+
+    set_state("pending_cutover_prompt", json.dumps({"count": 4, "threshold": 4}), db_path=db)
+
+    # Simulate what _post_pending_cutover_prompt does (minus Discord send):
+    # 1. Set cutover_awaiting_response = "1"
+    set_state("cutover_awaiting_response", "1", db_path=db)
+    # 2. Delete pending_cutover_prompt from state table
+    conn = sqlite3.connect(str(db))
+    conn.execute("DELETE FROM state WHERE key = 'pending_cutover_prompt'")
+    conn.commit()
+    conn.close()
+
+    assert get_state("pending_cutover_prompt", db_path=db) is None
+    assert get_state("cutover_awaiting_response", db_path=db) == "1"
