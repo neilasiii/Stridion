@@ -98,23 +98,47 @@ def test_hook_queues_after_delay_when_count_catches_up(tmp_path):
 
 
 def test_cutover_awaiting_set_after_prompt(tmp_path):
-    """After prompt is delivered, cutover_awaiting_response is set and pending_cutover_prompt is cleared."""
+    """_post_pending_cutover_prompt clears pending flag and sets awaiting flag."""
+    import asyncio
     import json
-    import sqlite3
-
-    db = make_db(tmp_path)
+    import shutil
+    import unittest.mock as mock
     from memory.db import get_state, set_state
 
+    # Build a test DB and pre-populate pending_cutover_prompt
+    db = make_db(tmp_path)
     set_state("pending_cutover_prompt", json.dumps({"count": 4, "threshold": 4}), db_path=db)
 
-    # Simulate what _post_pending_cutover_prompt does (minus Discord send):
-    # 1. Set cutover_awaiting_response = "1"
-    set_state("cutover_awaiting_response", "1", db_path=db)
-    # 2. Delete pending_cutover_prompt from state table
-    conn = sqlite3.connect(str(db))
-    conn.execute("DELETE FROM state WHERE key = 'pending_cutover_prompt'")
-    conn.commit()
-    conn.close()
+    # The function constructs: PROJECT_ROOT / "data" / "coach.sqlite" for sqlite3 calls.
+    # Place the test DB there so the raw sqlite3 read/delete work.
+    data_dir = tmp_path / "data"
+    data_dir.mkdir(exist_ok=True)
+    test_db = data_dir / "coach.sqlite"
+    shutil.copy(str(db), str(test_db))
 
-    assert get_state("pending_cutover_prompt", db_path=db) is None
-    assert get_state("cutover_awaiting_response", db_path=db) == "1"
+    import src.discord_bot as bot_module
+
+    # set_state default db_path is baked in at import time, so patch the symbol
+    # in memory.db with a wrapper that redirects no-arg calls to our test DB.
+    import memory.db as db_module
+    _real_set_state = db_module.set_state
+
+    def _redirected_set_state(key, value, db_path=None):
+        _real_set_state(key, value, db_path=test_db if db_path is None else db_path)
+
+    original_root = bot_module.PROJECT_ROOT
+    try:
+        bot_module.PROJECT_ROOT = tmp_path
+        # Patch set_state in memory.db so the import-inside-function picks it up
+        db_module.set_state = _redirected_set_state
+
+        mock_channel = mock.AsyncMock()
+        result = asyncio.run(bot_module._post_pending_cutover_prompt(mock_channel))
+    finally:
+        bot_module.PROJECT_ROOT = original_root
+        db_module.set_state = _real_set_state
+
+    assert result is True
+    mock_channel.send.assert_called_once()
+    assert get_state("pending_cutover_prompt", db_path=test_db) is None
+    assert get_state("cutover_awaiting_response", db_path=test_db) == "1"
