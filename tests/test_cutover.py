@@ -142,3 +142,31 @@ def test_cutover_awaiting_set_after_prompt(tmp_path):
     mock_channel.send.assert_called_once()
     assert get_state("pending_cutover_prompt", db_path=test_db) is None
     assert get_state("cutover_awaiting_response", db_path=test_db) == "1"
+
+
+def test_delay_bumps_threshold(tmp_path):
+    """Replying 'delay' when awaiting response bumps threshold by 1 and clears awaiting."""
+    db = make_db(tmp_path)
+    from memory.db import get_state, set_state
+    from hooks.on_cutover_ready import _handle_delay
+
+    set_state("cutover_awaiting_response", "1", db_path=db)
+    set_state("cutover_threshold", "4", db_path=db)
+
+    result = _handle_delay(db_path=db)
+
+    assert result is True
+    assert get_state("cutover_threshold", db_path=db) == "5"
+    assert get_state("cutover_awaiting_response", db_path=db) is None
+
+
+def test_delay_without_awaiting_is_noop(tmp_path):
+    """Delay handler is a no-op when not awaiting a response."""
+    db = make_db(tmp_path)
+    from memory.db import get_state
+    from hooks.on_cutover_ready import _handle_delay
+
+    result = _handle_delay(db_path=db)
+
+    assert result is False
+    assert get_state("cutover_threshold", db_path=db) is None

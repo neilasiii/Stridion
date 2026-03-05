@@ -1361,6 +1361,15 @@ async def on_message(message: discord.Message):
                 if handled:
                     return
 
+            # ── Cutover delay handler ────────────────────────────────────────
+            if lower.strip() == "delay":
+                from hooks.on_cutover_ready import _handle_delay
+                if _handle_delay():
+                    await message.reply(
+                        "Got it. I'll check again after one more week of clean plans."
+                    )
+                    return
+
             # ── Reply to bot message → route straight to AI ─────────────────
             # Handles post-workout check-in replies (and any other bot reply)
             # without keyword matching accidentally triggering CLI commands.

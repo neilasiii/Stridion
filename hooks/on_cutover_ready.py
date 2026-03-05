@@ -65,3 +65,33 @@ def run(db_path=None) -> Dict[str, Any]:
     set_state(_PROMPT_KEY, json.dumps(payload), db_path=db)
     result["pending_written"] = True
     return result
+
+
+def _handle_delay(db_path=None) -> bool:
+    """
+    Called when athlete replies 'delay'. Bumps threshold by 1, clears awaiting flag.
+    Returns True if delay was applied, False if not currently awaiting a response.
+    """
+    import sqlite3 as _sqlite3
+
+    from memory.db import DB_PATH as _DEFAULT_DB, get_state, set_state
+
+    db = db_path or _DEFAULT_DB
+
+    if not get_state(_AWAITING_KEY, db_path=db):
+        return False
+
+    threshold = int(
+        get_state(_THRESHOLD_KEY, default=str(_DEFAULT_THRESHOLD), db_path=db) or str(_DEFAULT_THRESHOLD)
+    )
+    new_threshold = threshold + 1
+    set_state(_THRESHOLD_KEY, str(new_threshold), db_path=db)
+
+    # Delete awaiting flag — hook will re-queue when count catches up
+    conn = _sqlite3.connect(str(db))
+    conn.execute(f"DELETE FROM state WHERE key = \'{_AWAITING_KEY}\'")
+    conn.commit()
+    conn.close()
+
+    log.info("on_cutover_ready: delay applied — new threshold %d", new_threshold)
+    return True
