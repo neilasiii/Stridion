@@ -1445,6 +1445,13 @@ async def on_message(message: discord.Message):
                     )
                     return
 
+            # ── Injury risk yes/no handler ───────────────────────────────────
+            if lower.strip() in ("yes", "no"):
+                from memory.db import get_state
+                if get_state("injury_risk_awaiting_response"):
+                    await _handle_injury_risk_response(message, lower.strip() == "yes")
+                    return
+
             # ── Reply to bot message → route straight to AI ─────────────────
             # Handles post-workout check-in replies (and any other bot reply)
             # without keyword matching accidentally triggering CLI commands.
@@ -2438,6 +2445,24 @@ async def _post_pending_injury_risk(channel) -> bool:
     return True
 
 
+async def _handle_injury_risk_response(message, confirmed: bool) -> None:
+    """Handle athlete's yes/no reply to an injury risk alert."""
+    from memory.db import delete_state
+    delete_state("injury_risk_awaiting_response")
+
+    if not confirmed:
+        await message.reply("Got it. Keeping the plan as-is. I'll keep watching.")
+        return
+
+    await message.reply("Ok, regenerating this week with a lighter load…")
+    rc, stdout, stderr = await run_coach_cli(["plan", "--week", "--force"], timeout=300)
+    if rc == 0:
+        reply = stdout.strip() or "Lighter week generated."
+        await send_long_message(message, reply[:1900])
+    else:
+        await message.reply(f"Plan regeneration failed: {(stderr or stdout)[:500]}")
+
+
 def _build_cutover_report(db_path=None) -> dict:
     """
     Build cutover readiness report data.
@@ -2514,6 +2539,7 @@ async def checkin_delivery_task():
         await _post_pending_vdot_update(channel)
         await _post_pending_weekly_synthesis(channel)
         await _post_pending_cutover_prompt(channel)
+        await _post_pending_injury_risk(channel)
 
 
 @tasks.loop(time=time(hour=8, minute=30, tzinfo=EST))  # 8:30 AM EST
@@ -2712,6 +2738,12 @@ async def on_ready():
         posted = await _post_pending_cutover_prompt(coach_channel)
         if posted:
             print("✓ Late cutover prompt delivered on reconnect")
+
+    # Deliver any injury risk alert the heartbeat agent queued while Discord was offline
+    if coach_channel:
+        posted = await _post_pending_injury_risk(coach_channel)
+        if posted:
+            print("✓ Late injury risk alert delivered on reconnect")
 
     # Start post-workout check-in delivery task (fires immediately on first run)
     if not checkin_delivery_task.is_running():

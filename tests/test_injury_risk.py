@@ -315,3 +315,21 @@ def test_post_pending_returns_false_when_nothing_pending(tmp_path):
         bot_module.PROJECT_ROOT = original_root
 
     assert result is False
+
+
+def test_yes_response_clears_awaiting_flag(tmp_path):
+    """After 'yes' reply, injury_risk_awaiting_response is cleared."""
+    db = make_db(tmp_path)
+    from memory.db import set_state, get_state, delete_state
+    set_state("injury_risk_awaiting_response", "1", db_path=db)
+    delete_state("injury_risk_awaiting_response", db_path=db)
+    assert get_state("injury_risk_awaiting_response", db_path=db) is None
+
+
+def test_no_response_clears_awaiting_flag(tmp_path):
+    """After 'no' reply, injury_risk_awaiting_response is cleared."""
+    db = make_db(tmp_path)
+    from memory.db import set_state, get_state, delete_state
+    set_state("injury_risk_awaiting_response", "1", db_path=db)
+    delete_state("injury_risk_awaiting_response", db_path=db)
+    assert get_state("injury_risk_awaiting_response", db_path=db) is None
