@@ -187,7 +187,9 @@ def test_replan_drops_missed_easy_and_persists_revision_metadata(tmp_path):
         ["easy", "easy", "easy", "easy", "long", "rest", "rest"],
     )
 
-    today_iso = date.today().isoformat()
+    # Use start+1 (Monday = index 1 = "easy") as today and missed date.
+    # This is day-of-week independent — index 1 is always "easy" in the seeded plan.
+    today_iso = (start + timedelta(days=1)).isoformat()
     decision = replan_remaining_week({"today": today_iso}, [today_iso], db_path=db)
     assert isinstance(decision, PlanDecision)
     today_day = next(d for d in decision.days if d.date == today_iso)
@@ -205,12 +207,13 @@ def test_replan_drops_missed_easy_and_persists_revision_metadata(tmp_path):
     assert events[0]["payload_json"]
 
 
-def test_replan_moves_quality_only_when_spacing_safe(tmp_path):
+def test_replan_moves_quality_session_with_correct_type(tmp_path):
+    """Quality relocation must preserve the original workout type (not 'rest')."""
     db = tmp_path / "coach.sqlite"
     init_db(db)
 
     start = date.today() - timedelta(days=date.today().weekday() + 1)
-    # Force Tuesday quality missed; Wednesday easy is safe move slot.
+    # day 1 (Monday) = tempo; day 2 (Tuesday) = easy — safe relocation slot
     _seed_active_plan(
         db,
         start,
@@ -226,11 +229,23 @@ def test_replan_moves_quality_only_when_spacing_safe(tmp_path):
         ],
     )
 
-    missed_date = (start + timedelta(days=2)).isoformat()
+    missed_date = (start + timedelta(days=1)).isoformat()  # Monday = tempo day
     decision = replan_remaining_week(
         {"today": start.isoformat()}, [missed_date], db_path=db
     )
-    # no consecutive hard days after reflow
+
+    # The missed tempo should have been relocated, not silently dropped as rest
+    relocated = [d for d in decision.days if "moved_quality_session" in d.safety_flags]
+    assert relocated, "Expected quality session to be relocated"
+    assert relocated[0].workout_type == "tempo", (
+        f"Relocated session has wrong type: {relocated[0].workout_type!r} (expected 'tempo')"
+    )
+
+    # Original missed day should now be rest
+    missed_day = next(d for d in decision.days if d.date == missed_date)
+    assert missed_day.workout_type == "rest"
+
+    # No consecutive hard days after reflow
     for i in range(1, len(decision.days)):
         assert not (
             decision.days[i - 1].workout_type in {"tempo", "interval", "long"}

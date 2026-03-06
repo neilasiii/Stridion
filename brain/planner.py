@@ -1011,8 +1011,8 @@ def replan_remaining_week(
         if flag not in day_obj.safety_flags:
             day_obj.safety_flags.append(flag)
 
-    missed_quality = []
-    missed_long = []
+    missed_quality = []  # list of (original_workout_type, original_duration_min, day)
+    missed_long = []     # list of (shortened_duration_min, day)
     replan_actions: Dict[str, Any] = {
         "missed_dates": sorted(missed),
         "dropped_easy": [],
@@ -1030,16 +1030,16 @@ def replan_remaining_week(
             continue
         if day.workout_type in {"tempo", "interval"}:
             day.priority = "must_do"
-            missed_quality.append(day)
+            # Capture type and duration BEFORE _to_rest mutates the object
+            missed_quality.append((day.workout_type, day.duration_min, day))
             _to_rest(day, "missed_quality_reflow")
             continue
         if day.workout_type == "long":
             day.priority = "must_do"
-            day.duration_min = max(30, int(day.duration_min * 0.7))
-            missed_long.append(day)
+            shortened = max(30, int(day.duration_min * 0.7))
+            # Capture shortened duration BEFORE _to_rest zeroes it out
+            missed_long.append((shortened, day))
             _to_rest(day, "missed_long_reflow")
-
-    remaining = [d for d in decision.days if d.date >= today_iso]
 
     def _safe_for_quality(idx: int) -> bool:
         day = decision.days[idx]
@@ -1051,13 +1051,13 @@ def replan_remaining_week(
         next_hard = idx < len(decision.days) - 1 and _is_hard(decision.days[idx + 1])
         return not (prev_hard or next_hard)
 
-    for src in missed_quality:
+    for src_type, src_dur, src in missed_quality:
         for idx, candidate in enumerate(decision.days):
             if candidate.date < today_iso:
                 continue
             if _safe_for_quality(idx):
-                candidate.workout_type = src.workout_type
-                candidate.duration_min = max(candidate.duration_min, src.duration_min)
+                candidate.workout_type = src_type
+                candidate.duration_min = max(candidate.duration_min, src_dur)
                 candidate.priority = "must_do"
                 candidate.safety_flags.append("moved_quality_session")
                 replan_actions["moved_quality_to"].append(candidate.date)
@@ -1067,7 +1067,7 @@ def replan_remaining_week(
                 decision.safety_flags.append("quality_dropped_due_to_spacing")
             replan_actions["dropped_quality"] += 1
 
-    for src in missed_long:
+    for src_dur, src in missed_long:
         moved = False
         for idx, candidate in enumerate(decision.days):
             if candidate.date < today_iso or _weekday(candidate.date) in blocked:
@@ -1077,7 +1077,7 @@ def replan_remaining_week(
                 if prev_hard:
                     continue
                 candidate.workout_type = "long"
-                candidate.duration_min = max(candidate.duration_min, src.duration_min)
+                candidate.duration_min = max(candidate.duration_min, src_dur)
                 candidate.priority = "must_do"
                 candidate.safety_flags.append("moved_long_session")
                 replan_actions["moved_long_to"].append(candidate.date)
@@ -1091,7 +1091,9 @@ def replan_remaining_week(
         if _is_hard(decision.days[i - 1]) and _is_hard(decision.days[i]):
             _to_easy(decision.days[i], "hard_day_spacing_enforced")
 
-    for day in remaining:
+    for day in decision.days:
+        if day.date < today_iso:
+            continue
         if _weekday(day.date) in blocked and day.workout_type in {
             "easy",
             "tempo",
