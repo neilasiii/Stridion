@@ -207,3 +207,15 @@ def test_disable_finalsurge_missing_config(tmp_path):
     from src.discord_bot import _disable_finalsurge_calendar
     count = _disable_finalsurge_calendar(config_path=tmp_path / "nonexistent.json")
     assert count == 0
+
+
+def test_hook_skips_when_already_confirmed(tmp_path):
+    """Hook does not re-queue after cutover has been confirmed."""
+    db = make_db(tmp_path)
+    from memory.db import set_state, get_state
+    set_state("saturday_plan_success_count", "4", db_path=db)
+    set_state("cutover_confirmed", "1", db_path=db)
+    from hooks.on_cutover_ready import run
+    result = run(db_path=db)
+    assert result["pending_written"] is False
+    assert get_state("pending_cutover_prompt", db_path=db) is None

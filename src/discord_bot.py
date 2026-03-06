@@ -1286,6 +1286,8 @@ async def coach_cutover_command(interaction: discord.Interaction, action: str = 
 
     # Clear cutover state
     try:
+        from memory.db import set_state as _set_state
+        _set_state("cutover_confirmed", "1")
         delete_state("cutover_awaiting_response")
         delete_state("cutover_threshold")
     except Exception as exc:
@@ -2426,7 +2428,7 @@ def _disable_finalsurge_calendar(config_path=None) -> int:
     """
     import json as _json
     from pathlib import Path as _Path
-    path = _Path(config_path) if config_path else _Path("config/calendar_sources.json")
+    path = _Path(config_path) if config_path else PROJECT_ROOT / "config" / "calendar_sources.json"
     if not path.exists():
         return 0
     data = _json.loads(path.read_text())

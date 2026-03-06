@@ -7,6 +7,7 @@ State keys:
   cutover_threshold
   pending_cutover_prompt
   cutover_awaiting_response
+  cutover_confirmed           (set on /coach_cutover confirm; prevents re-queue)
 """
 
 import json
@@ -22,6 +23,7 @@ _COUNT_KEY = "saturday_plan_success_count"
 _THRESHOLD_KEY = "cutover_threshold"
 _PROMPT_KEY = "pending_cutover_prompt"
 _AWAITING_KEY = "cutover_awaiting_response"
+_CONFIRMED_KEY = "cutover_confirmed"
 _DEFAULT_THRESHOLD = 4
 
 
@@ -56,6 +58,11 @@ def run(db_path=None) -> Dict[str, Any]:
     }
 
     if count < threshold:
+        return result
+
+    # Already confirmed — never re-queue after cutover is complete
+    if get_state(_CONFIRMED_KEY, db_path=db):
+        log.debug("on_cutover_ready: cutover already confirmed — skipping")
         return result
 
     if get_state(_PROMPT_KEY, db_path=db) or get_state(_AWAITING_KEY, db_path=db):
