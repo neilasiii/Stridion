@@ -2375,6 +2375,69 @@ async def _post_pending_cutover_prompt(channel) -> bool:
     return True
 
 
+async def _post_pending_injury_risk(channel) -> bool:
+    """
+    If pending_injury_risk_alert is set, post the injury risk alert to #coach.
+    Returns True if posted, False otherwise.
+    """
+    import sqlite3 as _sqlite3
+    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
+    if not db_path.exists():
+        return False
+
+    try:
+        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = _sqlite3.Row
+        row = conn.execute(
+            "SELECT value FROM state WHERE key = 'pending_injury_risk_alert'"
+        ).fetchone()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_post_pending_injury_risk: DB read error: %s", exc)
+        return False
+
+    if not row:
+        return False
+
+    try:
+        payload = json.loads(row["value"])
+    except Exception:
+        return False
+
+    severity = payload.get("severity", "YELLOW")
+    severity_colors = {
+        "YELLOW": discord.Color.yellow(),
+        "ORANGE": discord.Color.orange(),
+        "RED":    discord.Color.red(),
+    }
+
+    try:
+        embed = discord.Embed(
+            title=f"Injury Risk Alert — {severity}",
+            description=payload.get("message", "Overtraining signals detected."),
+            color=severity_colors.get(severity, discord.Color.yellow()),
+            timestamp=datetime.now(),
+        )
+        await channel.send(embed=embed)
+    except Exception as exc:
+        logger.error("_post_pending_injury_risk: send failed: %s", exc)
+        return False
+
+    # Clear pending, set awaiting response
+    try:
+        conn = _sqlite3.connect(str(db_path))
+        conn.execute("DELETE FROM state WHERE key = 'pending_injury_risk_alert'")
+        conn.commit()
+        conn.close()
+        from memory.db import set_state
+        set_state("injury_risk_awaiting_response", "1")
+    except Exception as exc:
+        logger.warning("_post_pending_injury_risk: state update error: %s", exc)
+
+    logger.info("_post_pending_injury_risk: alert posted (%s)", severity)
+    return True
+
+
 def _build_cutover_report(db_path=None) -> dict:
     """
     Build cutover readiness report data.

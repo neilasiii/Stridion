@@ -258,3 +258,60 @@ def test_hook_importable_and_callable(tmp_path):
     assert "pending_written" in result
     assert "signals_fired" in result
     assert isinstance(result["signals_fired"], list)
+
+
+def test_post_pending_injury_risk_clears_pending_sets_awaiting(tmp_path):
+    """_post_pending_injury_risk clears pending flag and sets awaiting flag."""
+    import asyncio
+    import shutil
+    import unittest.mock as mock
+    from memory.db import get_state, set_state
+
+    db = make_db(tmp_path)
+    payload = {"signals": ["HRV streak"], "severity": "YELLOW", "message": "test"}
+    set_state("pending_injury_risk_alert", json.dumps(payload), db_path=db)
+
+    # Place DB where the function reads it (PROJECT_ROOT/data/coach.sqlite)
+    data_dir = tmp_path / "data"
+    data_dir.mkdir(exist_ok=True)
+    test_db = data_dir / "coach.sqlite"
+    shutil.copy(str(db), str(test_db))
+
+    import src.discord_bot as bot_module
+    import memory.db as db_module
+    _real_set_state = db_module.set_state
+
+    def _redirected(key, value, db_path=None):
+        _real_set_state(key, value, db_path=test_db if db_path is None else db_path)
+
+    original_root = bot_module.PROJECT_ROOT
+    try:
+        bot_module.PROJECT_ROOT = tmp_path
+        db_module.set_state = _redirected
+        mock_channel = mock.AsyncMock()
+        result = asyncio.run(bot_module._post_pending_injury_risk(mock_channel))
+    finally:
+        bot_module.PROJECT_ROOT = original_root
+        db_module.set_state = _real_set_state
+
+    assert result is True
+    mock_channel.send.assert_called_once()
+    assert get_state("pending_injury_risk_alert", db_path=test_db) is None
+    assert get_state("injury_risk_awaiting_response", db_path=test_db) == "1"
+
+
+def test_post_pending_returns_false_when_nothing_pending(tmp_path):
+    """_post_pending_injury_risk returns False when nothing queued."""
+    import asyncio
+    import unittest.mock as mock
+
+    import src.discord_bot as bot_module
+    original_root = bot_module.PROJECT_ROOT
+    try:
+        bot_module.PROJECT_ROOT = tmp_path  # No DB exists here
+        mock_channel = mock.AsyncMock()
+        result = asyncio.run(bot_module._post_pending_injury_risk(mock_channel))
+    finally:
+        bot_module.PROJECT_ROOT = original_root
+
+    assert result is False
