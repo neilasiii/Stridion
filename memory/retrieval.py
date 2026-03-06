@@ -929,7 +929,7 @@ def build_context_packet(
             "min_runs_per_week":    3,
             "preferred_runs_per_week": 4,
             "max_runs_per_week":    5,
-            "anchor_days":          ["tuesday", "thursday", "saturday", "sunday"],
+            "anchor_days":          ["wednesday", "thursday", "saturday"],
             "non_negotiable_blocked_days": [],
             "quality_sessions":     1,
             "long_runs":            1,
