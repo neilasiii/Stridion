@@ -207,8 +207,15 @@ def validate_macro_plan(
             )
 
     # 7. Volume ramp constraints (base phase only)
+    for w in weeks:
+        if not (w.volume_floor_miles <= w.volume_target_miles <= w.volume_ceiling_miles):
+            errors.append(
+                f"week {w.week_number}: invalid volume band "
+                f"({w.volume_floor_miles:.1f} <= {w.volume_target_miles:.1f} <= {w.volume_ceiling_miles:.1f} violated)"
+            )
+
     base_vols = [
-        (w.week_number, w.target_volume_miles)
+        (w.week_number, w.volume_target_miles, w.volume_ceiling_miles)
         for w in weeks
         if w.phase == "base"
     ]
@@ -216,6 +223,8 @@ def validate_macro_plan(
     for i in range(1, len(base_vols)):
         prev_vol = base_vols[i - 1][1]
         curr_vol = base_vols[i][1]
+        prev_ceil = base_vols[i - 1][2]
+        curr_ceil = base_vols[i][2]
         if prev_vol > 0:
             pct = (curr_vol - prev_vol) / prev_vol
             if pct > 0.10 + 1e-9:  # epsilon for float precision at exactly 10%
@@ -227,24 +236,30 @@ def validate_macro_plan(
                 errors.append(
                     f"week {base_vols[i][0]}: 3+ consecutive ramps >7%"
                 )
+        if prev_ceil > 0:
+            ceil_pct = (curr_ceil - prev_ceil) / prev_ceil
+            if ceil_pct > 0.12 + 1e-9:
+                errors.append(
+                    f"week {base_vols[i][0]}: ceiling ramp {ceil_pct:.0%} exceeds 12% cap"
+                )
 
     # 8. Zero/low volume rules
     for w in weeks:
-        if w.target_volume_miles == 0 and w.key_workout_type != "rest":
+        if w.volume_target_miles == 0 and w.key_workout_type != "rest":
             errors.append(
                 f"week {w.week_number}: zero volume but "
                 f"key_workout_type='{w.key_workout_type}' (must be 'rest')"
             )
-        if w.target_volume_miles < 6 and w.quality_sessions_allowed > 0:
+        if w.volume_target_miles < 6 and w.quality_sessions_allowed > 0:
             errors.append(
-                f"week {w.week_number}: volume {w.target_volume_miles:.1f}mi < 6 "
+                f"week {w.week_number}: volume {w.volume_target_miles:.1f}mi < 6 "
                 f"but quality_sessions_allowed={w.quality_sessions_allowed} (must be 0)"
             )
 
     # 9. long_run_max_min sanity (≤ 62% of weekly volume at ~10 min/mi, general cap)
     for w in weeks:
-        if w.target_volume_miles > 0:
-            volume_mins_approx = w.target_volume_miles * 10
+        if w.volume_target_miles > 0:
+            volume_mins_approx = w.volume_target_miles * 10
             if w.long_run_max_min > volume_mins_approx * 0.62:
                 errors.append(
                     f"week {w.week_number}: long_run_max_min {w.long_run_max_min} "
@@ -252,7 +267,7 @@ def validate_macro_plan(
                 )
 
     # 10. Rationale consistency — warn if "from 0" language when Week 1 > 5 mi
-    if weeks and plan.weeks[0].target_volume_miles > 5.0:
+    if weeks and plan.weeks[0].volume_target_miles > 5.0:
         if re.search(r"\bfrom\s+0\b", plan.rationale, re.IGNORECASE):
             errors.append(
                 "rationale mentions 'from 0' but Week 1 volume > 5 mi "
@@ -261,8 +276,8 @@ def validate_macro_plan(
 
     # 11. Early-block long run cap (weeks 1-4): ≤ 50% of weekly volume
     for w in weeks:
-        if 1 <= w.week_number <= 4 and w.target_volume_miles > 0:
-            vol_mins = w.target_volume_miles * 10
+        if 1 <= w.week_number <= 4 and w.volume_target_miles > 0:
+            vol_mins = w.volume_target_miles * 10
             if w.long_run_max_min > vol_mins * 0.50 + 0.5:  # 0.5 min tolerance
                 errors.append(
                     f"week {w.week_number}: early-block LR cap exceeded — "
@@ -293,15 +308,15 @@ def validate_macro_plan(
     # 13. End-of-block stress (base_block only)
     if plan.mode == "base_block" and weeks:
         final    = weeks[-1]
-        peak_vol = max((w.target_volume_miles for w in weeks), default=0.0)
+        peak_vol = max((w.volume_target_miles for w in weeks), default=0.0)
         if (
-            final.target_volume_miles >= peak_vol - 0.1
+            final.volume_target_miles >= peak_vol - 0.1
             and final.intensity_budget == "high"
             and final.quality_sessions_allowed == 2
         ):
             errors.append(
                 f"week {final.week_number}: base_block ends at peak volume "
-                f"({final.target_volume_miles:.1f}mi) with high intensity + "
+                f"({final.volume_target_miles:.1f}mi) with high intensity + "
                 f"2 quality sessions — unsustainable block finish; "
                 f"reduce volume or intensity in final week"
             )
@@ -310,10 +325,10 @@ def validate_macro_plan(
     if post_race_cap_miles is not None and weeks:
         n_recovery = max(1, post_race_recovery_weeks) if post_race_recovery_weeks else 1
         for rw in weeks[:n_recovery]:
-            if rw.target_volume_miles > post_race_cap_miles * 1.15 + 0.5:
+            if rw.volume_ceiling_miles > post_race_cap_miles * 1.15 + 0.5:
                 errors.append(
                     f"week {rw.week_number}: post-race recovery required — "
-                    f"volume {rw.target_volume_miles:.1f}mi exceeds cap "
+                    f"ceiling {rw.volume_ceiling_miles:.1f}mi exceeds cap "
                     f"{post_race_cap_miles:.1f}mi (with 15% slack)"
                 )
             if rw.quality_sessions_allowed > 0:
@@ -423,7 +438,7 @@ def _detect_post_race_recovery(context_packet: Dict) -> Dict:
         if dist_mi >= 24.0:
             # Marathon: 2 full recovery weeks regardless of timing
             recovery_weeks = 2
-        elif days_ago_at_block_start <= 5:
+        elif days_ago_at_block_start <= 7:
             # Half marathon: block starts before recovery window closes — enforce week 1 recovery
             recovery_weeks = 1
         else:
@@ -491,11 +506,14 @@ Required JSON structure (output ONLY this, no prose, no markdown fences):
       "week_number": <int 1-52>,
       "week_start": "YYYY-MM-DD",
       "phase": "base" | "quality" | "race_specific" | "taper",
-      "target_volume_miles": <float 0-150>,
+      "volume_floor_miles": <float 0-150>,
+      "volume_target_miles": <float 0-150>,
+      "volume_ceiling_miles": <float 0-150>,
       "long_run_max_min": <int 0-300>,
       "intensity_budget": "none" | "low" | "moderate" | "high",
       "quality_sessions_allowed": <int 0-2>,
       "key_workout_type": "easy" | "tempo" | "interval" | "long" | "strength" | "rest" | "cross",
+      "recommended_session_types": ["easy"|"tempo"|"interval"|"long"|"strength"|"rest"|"cross", ...],
       "paces": {
         "easy": "<e.g. '10:30-11:10/mi' — max 20 chars>",
         "tempo": null | "<max 20 chars>",
@@ -717,7 +735,7 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
                 f"POST-RACE RECOVERY REQUIREMENT:\n"
                 f"- A race-level effort ({dist:.1f} mi) was completed {days_ago} day(s) ago.\n"
                 f"- Weeks 1–{n_rec} MUST be recovery weeks:\n"
-                f"  * target_volume_miles <= {cap:.1f} mi (hard cap)\n"
+                f"  * volume_target_miles <= {cap:.1f} mi (hard cap)\n"
                 f"  * quality_sessions_allowed = 0\n"
                 f"  * intensity_budget = 'none' or 'low'\n"
                 f"  * key_workout_type = 'easy' or 'rest'\n"
@@ -762,10 +780,10 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
         f"- Volume == 0 → key_workout_type must be 'rest'\n"
         f"- Volume < 6 mi → quality_sessions_allowed must be 0\n\n"
         f"LONG RUN (target 35-45% of weekly volume at ~10 min/mi):\n"
-        f"- TARGET long_run_max_min = 35-45% of (target_volume_miles × 10 min)\n"
+        f"- TARGET long_run_max_min = 35-45% of (volume_target_miles × 10 min)\n"
         f"  Example: 20 mi/wk → target 70-90 min long run\n"
-        f"- Hard cap (any week): ≤ 62% of (target_volume_miles × 10 min)\n"
-        f"- Early-block cap (weeks 1-4): ≤ 50% of (target_volume_miles × 10 min)\n\n"
+        f"- Hard cap (any week): ≤ 62% of (volume_target_miles × 10 min)\n"
+        f"- Early-block cap (weeks 1-4): ≤ 50% of (volume_target_miles × 10 min)\n\n"
         f"QUALITY RAMP (avoid sudden stress spikes):\n"
         f"- First quality week: quality_sessions_allowed = 1 (NEVER jump 0→2)\n"
         f"- Do NOT simultaneously increase quality_sessions_allowed AND "
@@ -985,22 +1003,28 @@ def generate_macro_plan(
     for i in range(1, len(plan.weeks)):
         prev = plan.weeks[i - 1]
         curr = plan.weeks[i]
-        if prev.target_volume_miles > 0 and curr.phase == "base":
-            pct = (curr.target_volume_miles - prev.target_volume_miles) / prev.target_volume_miles
+        if prev.volume_target_miles > 0 and curr.phase == "base":
+            pct = (curr.volume_target_miles - prev.volume_target_miles) / prev.volume_target_miles
             import math as _math
             # Cap at 10% — use floor to avoid rounding past the limit
             if pct > 0.10 + 1e-9:
-                capped = _math.floor(prev.target_volume_miles * 1.099 * 10) / 10
-                log.info("volume ramp fixup: week %d %.1f→%.1f", curr.week_number, curr.target_volume_miles, capped)
-                curr.target_volume_miles = capped
-                pct = (capped - prev.target_volume_miles) / prev.target_volume_miles
+                capped = _math.floor(prev.volume_target_miles * 1.099 * 10) / 10
+                log.info("volume ramp fixup: week %d %.1f→%.1f", curr.week_number, curr.volume_target_miles, capped)
+                curr.volume_target_miles = capped
+                pct = (capped - prev.volume_target_miles) / prev.volume_target_miles
             # Track consecutive >7% ramps and flatten the third
             consec_big = consec_big + 1 if pct > 0.07 else 0
             if consec_big >= 3:
-                flattened = _math.floor(prev.target_volume_miles * 1.05 * 10) / 10
-                log.info("consec ramp fixup: week %d %.1f→%.1f", curr.week_number, curr.target_volume_miles, flattened)
-                curr.target_volume_miles = flattened
+                flattened = _math.floor(prev.volume_target_miles * 1.05 * 10) / 10
+                log.info("consec ramp fixup: week %d %.1f→%.1f", curr.week_number, curr.volume_target_miles, flattened)
+                curr.volume_target_miles = flattened
                 consec_big = 1  # reset streak
+
+    for week in plan.weeks:
+        if week.volume_floor_miles > week.volume_target_miles:
+            week.volume_floor_miles = max(0.0, round(week.volume_target_miles * 0.9, 1))
+        if week.volume_ceiling_miles < week.volume_target_miles:
+            week.volume_ceiling_miles = round(week.volume_target_miles * 1.1, 1)
 
     # ── Post-parse fixup: enforce simultaneous quality+LR constraint ─────────
     # Validation rule 12 rejects plans where quality increases AND long_run_max_min

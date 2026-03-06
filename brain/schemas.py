@@ -54,6 +54,7 @@ class PlanDay(BaseModel):
     intent: str = Field(max_length=80)      # Human-readable one-liner
     workout_type: WorkoutTypeT
     duration_min: int = Field(ge=0, le=300)
+    priority: Literal["must_do", "nice_to_have", "optional"] = "nice_to_have"
     structure_steps: List[WorkoutStep] = Field(default_factory=list)
     safety_flags: List[str] = Field(default_factory=list)
     rationale: str = Field(max_length=200)
@@ -157,14 +158,39 @@ class MacroWeek(BaseModel):
     week_number:              int   = Field(ge=1, le=52)
     week_start:               str          # ISO Sunday
     phase:                    TrainingPhaseT
-    target_volume_miles:      float = Field(ge=0.0, le=150.0)
+    volume_floor_miles:       float = Field(ge=0.0, le=150.0)
+    volume_target_miles:      float = Field(ge=0.0, le=150.0)
+    volume_ceiling_miles:     float = Field(ge=0.0, le=150.0)
     long_run_max_min:         int   = Field(ge=0, le=300)
     intensity_budget:         IntensityBudgetT
     quality_sessions_allowed: int   = Field(ge=0, le=2)
     key_workout_type:         WorkoutTypeT
+    recommended_session_types: List[WorkoutTypeT] = Field(default_factory=list)
     paces:                    MacroPaces
     planner_notes:            str   = Field(max_length=200)
     phase_rationale:          str   = Field(max_length=200)
+
+    @model_validator(mode="before")
+    @classmethod
+    def migrate_target_volume(cls, values: object) -> object:
+        if not isinstance(values, dict):
+            return values
+        if "volume_target_miles" in values:
+            return values
+        target = values.get("target_volume_miles")
+        if target is None:
+            return values
+        t = float(target)
+        values.setdefault("volume_target_miles", t)
+        values.setdefault("volume_floor_miles", max(0.0, round(t * 0.9, 1)))
+        values.setdefault("volume_ceiling_miles", round(t * 1.1, 1))
+        values.setdefault("recommended_session_types", [values.get("key_workout_type", "easy")])
+        return values
+
+    @property
+    def target_volume_miles(self) -> float:
+        """Backward-compatible alias for older call sites/tests."""
+        return self.volume_target_miles
 
 
 class MacroPlan(BaseModel):

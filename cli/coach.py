@@ -32,6 +32,7 @@ logging.basicConfig(
 
 # ── sync ──────────────────────────────────────────────────────────────────────
 
+
 def cmd_sync(args) -> int:
     from skills.garmin_sync import run
 
@@ -54,6 +55,7 @@ def cmd_sync(args) -> int:
 
 
 # ── plan ──────────────────────────────────────────────────────────────────────
+
 
 def cmd_plan(args) -> int:
     # Route --macro to cmd_macro
@@ -79,7 +81,7 @@ def cmd_plan(args) -> int:
         print(
             f"  macro_guidance = {mg.get('macro_id')} "
             f"week {cw.get('week_number')}/{mg.get('total_weeks')} "
-            f"phase={cw.get('phase')} vol={cw.get('target_volume_miles')}mi"
+            f"phase={cw.get('phase')} vol={cw.get('volume_floor_miles')}-{cw.get('volume_target_miles')}-{cw.get('volume_ceiling_miles')}mi"
         )
 
     print("Calling Brain (LLM)…")
@@ -98,12 +100,15 @@ def cmd_plan(args) -> int:
     print()
     for d in decision.days:
         flag = " [!]" if d.safety_flags else ""
-        print(f"  {d.date}  {d.workout_type:10s}  {d.duration_min:3d}min  {d.intent}{flag}")
+        print(
+            f"  {d.date}  {d.workout_type:10s}  {d.duration_min:3d}min  {d.intent}{flag}"
+        )
 
     return 0
 
 
 # ── macro ──────────────────────────────────────────────────────────────────────
+
 
 def cmd_macro(args) -> int:
     """Generate or display the long-range periodized training block."""
@@ -111,7 +116,7 @@ def cmd_macro(args) -> int:
     from memory.db import get_active_macro_plan
 
     show_only = getattr(args, "show", False)
-    force     = getattr(args, "force", False)
+    force = getattr(args, "force", False)
 
     if show_only:
         row = get_active_macro_plan()
@@ -120,6 +125,7 @@ def cmd_macro(args) -> int:
             return 1
         try:
             from brain.schemas import MacroPlan
+
             plan = MacroPlan.model_validate(row["plan"])
             _print_macro_plan(plan, row["macro_id"])
             return 0
@@ -147,6 +153,7 @@ def cmd_macro(args) -> int:
 
     # Fetch the macro_id that was just activated
     from memory.db import get_active_macro_plan_id
+
     macro_id = get_active_macro_plan_id() or "unknown"
     _print_macro_plan(plan, macro_id)
     return 0
@@ -173,27 +180,31 @@ def _print_macro_plan(plan, macro_id: str, today=None) -> None:
     print(f"✓ Macro plan: {macro_id}  mode={plan.mode}")
     print(
         f"  Block: {block_range}  {plan.total_weeks} weeks  "
-        f"VDOT: {plan.vdot:.1f}  Peak: {plan.peak_weekly_miles:.1f} mi/wk"
-        + race_info
+        f"VDOT: {plan.vdot:.1f}  Peak: {plan.peak_weekly_miles:.1f} mi/wk" + race_info
     )
     print()
-    print(f"  {'WK':>2}  {'START':<12} {'PHASE':<13} {'MILES':>5}  {'LR_MIN':>6}  {'INTENSITY':<10} NOTES")
+    print(
+        f"  {'WK':>2}  {'START':<12} {'PHASE':<13} {'MILES':>5}  {'LR_MIN':>6}  {'INTENSITY':<10} NOTES"
+    )
     print("  " + "─" * 76)
 
     for w in plan.weeks:
         notes = w.planner_notes[:35] if w.planner_notes else ""
         if len(w.planner_notes) > 35:
             notes = notes.rstrip() + "…"
-        is_current = current_week is not None and w.week_number == current_week.week_number
+        is_current = (
+            current_week is not None and w.week_number == current_week.week_number
+        )
         marker = "→" if is_current else " "
         print(
             f"{marker} {w.week_number:>2}  {w.week_start:<12} {w.phase:<13} "
-            f"{w.target_volume_miles:>5.1f}  {w.long_run_max_min:>6}  "
+            f"{w.volume_target_miles:>5.1f}  {w.long_run_max_min:>6}  "
             f"{w.intensity_budget:<10} {notes}"
         )
 
 
 # ── export-garmin ─────────────────────────────────────────────────────────────
+
 
 def cmd_export_garmin(args) -> int:
     source = getattr(args, "source", "internal")
@@ -219,7 +230,9 @@ def cmd_export_garmin(args) -> int:
 
     if not dry_run:
         if result["published"]:
-            print(f"\n✓ Published {len(result['published'])} workout(s): {result['published']}")
+            print(
+                f"\n✓ Published {len(result['published'])} workout(s): {result['published']}"
+            )
         if result["skipped"]:
             print(f"\nSkipped {len(result['skipped'])}:")
             for s in result["skipped"]:
@@ -238,6 +251,7 @@ def cmd_export_garmin(args) -> int:
 
 
 # ── brief ─────────────────────────────────────────────────────────────────────
+
 
 def cmd_brief(args) -> int:
     if not getattr(args, "today", False):
@@ -272,11 +286,14 @@ def cmd_brief(args) -> int:
         print("  Steps:")
         for step in s["structure_steps"]:
             reps = f" x{step['reps']}" if step.get("reps") else ""
-            print(f"    {step['label']:10s} {step['duration_min']}min{reps}  {step['target_value']}")
+            print(
+                f"    {step['label']:10s} {step['duration_min']}min{reps}  {step['target_value']}"
+            )
     return 0
 
 
 # ── schedule ──────────────────────────────────────────────────────────────────
+
 
 def cmd_schedule(args) -> int:
     """Export the active plan's next N days in a human-readable format."""
@@ -285,7 +302,7 @@ def cmd_schedule(args) -> int:
         return 1
 
     days = getattr(args, "days", 7)
-    fmt  = getattr(args, "format", "mobile")
+    fmt = getattr(args, "format", "mobile")
 
     from skills.plans import get_schedule
 
@@ -318,9 +335,9 @@ def _clamp60(s: str) -> str:
 def _fmt_table(sched: dict) -> str:
     lines = []
     pid = sched["plan_id"] or "?"
-    ps  = sched.get("plan_start") or "?"
-    pe  = sched.get("plan_end")   or "?"
-    ca  = sched.get("created_at") or "?"
+    ps = sched.get("plan_start") or "?"
+    pe = sched.get("plan_end") or "?"
+    ca = sched.get("created_at") or "?"
     # Trim created_at to date+time without microseconds
     if len(ca) > 19:
         ca = ca[:19]
@@ -350,37 +367,40 @@ def _fmt_table(sched: dict) -> str:
 def _fmt_text(sched: dict) -> str:
     lines = []
     pid = sched["plan_id"] or "?"
-    lines.append(f"Schedule — plan {pid}  {sched['range_start']} to {sched['range_end']}")
+    lines.append(
+        f"Schedule — plan {pid}  {sched['range_start']} to {sched['range_end']}"
+    )
     lines.append("")
     for row in sched["rows"]:
-        flag_part = f" [flags: {'; '.join(row['safety_flags'])}]" if row["safety_flags"] else ""
+        flag_part = (
+            f" [flags: {'; '.join(row['safety_flags'])}]" if row["safety_flags"] else ""
+        )
         lines.append(
-            f"{row['weekday']} {row['date']} — "
-            f"{_clamp60(row['intent'])}{flag_part}"
+            f"{row['weekday']} {row['date']} — " f"{_clamp60(row['intent'])}{flag_part}"
         )
     return "\n".join(lines)
 
 
 _TYPE_EMOJI = {
-    "rest":     ("⚪", "Rest"),
-    "easy":     ("🟢", "Easy"),
-    "long":     ("🔵", "Long"),
-    "race":     ("🟣", "Race"),
-    "tempo":    ("🟠", "Quality"),
+    "rest": ("⚪", "Rest"),
+    "easy": ("🟢", "Easy"),
+    "long": ("🔵", "Long"),
+    "race": ("🟣", "Race"),
+    "tempo": ("🟠", "Quality"),
     "interval": ("🟠", "Quality"),
-    "workout":  ("🟠", "Quality"),
+    "workout": ("🟠", "Quality"),
     "strength": ("🟠", "Quality"),
-    "cross":    ("🟠", "Quality"),
-    "none":     ("⚫", "No entry"),
+    "cross": ("🟠", "Quality"),
+    "none": ("⚫", "No entry"),
 }
 
 
 def _fmt_mobile(sched: dict) -> str:
     """Mobile/Discord-friendly 'day cards' format — no code fences."""
     pid = (sched["plan_id"] or "?")[:16]
-    ps  = sched.get("plan_start") or "?"
-    pe  = sched.get("plan_end")   or "?"
-    n   = len(sched["rows"])
+    ps = sched.get("plan_start") or "?"
+    pe = sched.get("plan_end") or "?"
+    n = len(sched["rows"])
 
     lines = [
         f"📅 Week Schedule ({n} days)",
@@ -390,7 +410,9 @@ def _fmt_mobile(sched: dict) -> str:
 
     for row in sched["rows"]:
         lines.append("")  # blank separator between days
-        emoji, label = _TYPE_EMOJI.get(row["workout_type"], ("🔘", row["workout_type"].title()))
+        emoji, label = _TYPE_EMOJI.get(
+            row["workout_type"], ("🔘", row["workout_type"].title())
+        )
         dur = row["duration_min"]
         dur_part = f" · {dur}m" if dur not in ("", 0) else ""
         # Bold day header line
@@ -422,11 +444,12 @@ def _fmt_md(sched: dict) -> str:
     lines.append("")
     for row in sched["rows"]:
         wtype = row["workout_type"]
-        dur   = f" {row['duration_min']}min" if row["duration_min"] not in ("", 0) else ""
+        dur = f" {row['duration_min']}min" if row["duration_min"] not in ("", 0) else ""
         intent = _clamp60(row["intent"])
         flags_part = (
             f"\n  - *flags: {'; '.join(row['safety_flags'])}*"
-            if row["safety_flags"] else ""
+            if row["safety_flags"]
+            else ""
         )
         lines.append(
             f"- **{row['date']} ({row['weekday']})** — {wtype}{dur}: {intent}"
@@ -436,6 +459,7 @@ def _fmt_md(sched: dict) -> str:
 
 
 # ── db sanity ─────────────────────────────────────────────────────────────────
+
 
 def cmd_db(args) -> int:
     subcmd = getattr(args, "db_command", None)
@@ -451,6 +475,7 @@ def _json_cache_age_minutes() -> float | None:
         import json as _json
         from datetime import datetime, timezone
         from memory.retrieval import HEALTH_CACHE
+
         data = _json.loads(HEALTH_CACHE.read_text())
         ts_str = data.get("last_updated", "")
         if not ts_str:
@@ -469,8 +494,8 @@ def _db_sanity() -> int:
 
     init_db()
 
-    today     = date.today()
-    week_ago  = (today - timedelta(days=7)).isoformat()
+    today = date.today()
+    week_ago = (today - timedelta(days=7)).isoformat()
     today_str = today.isoformat()
 
     conn = sqlite3.connect(str(DB_PATH))
@@ -485,7 +510,7 @@ def _db_sanity() -> int:
     if last_ok:
         ts_str = last_ok["finished_at"] or last_ok["started_at"]
         try:
-            ts      = datetime.fromisoformat(ts_str)
+            ts = datetime.fromisoformat(ts_str)
             age_min = int((datetime.utcnow() - ts).total_seconds() / 60)
             age_str = f"{age_min} min ago"
             if age_min > 60:
@@ -497,7 +522,11 @@ def _db_sanity() -> int:
                 if cache_age_min is not None and cache_age_min <= 60:
                     age_str += f"  (cache {int(cache_age_min)}min old — ok)"
                 else:
-                    stale = f"{int(cache_age_min)}min" if cache_age_min is not None else "unknown"
+                    stale = (
+                        f"{int(cache_age_min)}min"
+                        if cache_age_min is not None
+                        else "unknown"
+                    )
                     issues.append(
                         f"last sync {age_min}min ago and cache {stale} old (both stale)"
                     )
@@ -511,7 +540,7 @@ def _db_sanity() -> int:
     print()
 
     # daily_metrics
-    dm_count  = conn.execute(
+    dm_count = conn.execute(
         "SELECT COUNT(*) FROM daily_metrics WHERE day >= ?", (week_ago,)
     ).fetchone()[0]
     dm_latest = conn.execute("SELECT MAX(day) FROM daily_metrics").fetchone()[0]
@@ -519,12 +548,14 @@ def _db_sanity() -> int:
         "SELECT 1 FROM daily_metrics WHERE day = ?", (today_str,)
     ).fetchone()
     today_flag = "" if has_today else "  ← today missing"
-    print(f"daily_metrics (7d):  {dm_count} rows  latest {dm_latest or 'none'}{today_flag}")
+    print(
+        f"daily_metrics (7d):  {dm_count} rows  latest {dm_latest or 'none'}{today_flag}"
+    )
     if not has_today:
         issues.append("today missing from daily_metrics")
 
     # activities
-    act_count  = conn.execute(
+    act_count = conn.execute(
         "SELECT COUNT(*) FROM activities WHERE activity_date >= ?", (week_ago,)
     ).fetchone()[0]
     act_latest = conn.execute("SELECT MAX(activity_date) FROM activities").fetchone()[0]
@@ -545,6 +576,7 @@ def _db_sanity() -> int:
 
     # Macro plan status
     from memory.db import get_active_macro_plan
+
     macro = get_active_macro_plan()
     if macro:
         macro_id = macro["macro_id"]
@@ -553,6 +585,7 @@ def _db_sanity() -> int:
         status_str = macro["status"]
         try:
             from brain.schemas import MacroPlan
+
             mp = MacroPlan.model_validate(macro["plan"])
             cw = mp.get_week_for_date(today_str)
             weeks_remaining = (total_weeks - cw.week_number + 1) if cw else "N/A"
@@ -576,6 +609,7 @@ def _db_sanity() -> int:
 
 # ── parity ────────────────────────────────────────────────────────────────────
 
+
 def cmd_parity(args) -> int:
     day_str = args.day
     try:
@@ -591,10 +625,10 @@ def cmd_parity(args) -> int:
 
     # SQLite row for that day
     rows = get_daily_metrics(target, target)
-    sq   = rows[0] if rows else None
+    sq = rows[0] if rows else None
 
     # JSON cache
-    json_cache   = None
+    json_cache = None
     json_missing = False
     try:
         with HEALTH_CACHE.open(encoding="utf-8") as f:
@@ -610,30 +644,30 @@ def cmd_parity(args) -> int:
         return next((r for r in lst if str(r.get(date_key, ""))[:10] == day), None)
 
     if json_cache:
-        tr_e  = _find(json_cache.get("training_readiness", []), "date", day_str)
-        bb_e  = _find(json_cache.get("body_battery",        []), "date", day_str)
-        hrv_e = _find(json_cache.get("hrv_readings",        []), "date", day_str)
-        j_tr  = tr_e["score"]          if tr_e  else None
-        j_bb  = bb_e["latest_level"]   if bb_e  else None
+        tr_e = _find(json_cache.get("training_readiness", []), "date", day_str)
+        bb_e = _find(json_cache.get("body_battery", []), "date", day_str)
+        hrv_e = _find(json_cache.get("hrv_readings", []), "date", day_str)
+        j_tr = tr_e["score"] if tr_e else None
+        j_bb = bb_e["latest_level"] if bb_e else None
         j_hrv = hrv_e["last_night_avg"] if hrv_e else None
     else:
         j_tr = j_bb = j_hrv = None
 
-    s_tr  = sq["training_readiness"] if sq else None
-    s_bb  = sq["body_battery"]       if sq else None
-    s_hrv = sq["hrv_rmssd"]          if sq else None
+    s_tr = sq["training_readiness"] if sq else None
+    s_bb = sq["body_battery"] if sq else None
+    s_hrv = sq["hrv_rmssd"] if sq else None
 
     metrics = [
-        ("training_readiness", s_tr,  j_tr),
-        ("body_battery_max",   s_bb,  j_bb),
-        ("hrv",                s_hrv, j_hrv),
+        ("training_readiness", s_tr, j_tr),
+        ("body_battery_max", s_bb, j_bb),
+        ("hrv", s_hrv, j_hrv),
     ]
 
     mismatch = False
     for name, s_val, j_val in metrics:
         if s_val is not None and j_val is not None:
             if abs(float(s_val) - float(j_val)) > 0.5:
-                mark    = "✗"
+                mark = "✗"
                 mismatch = True
             else:
                 mark = "✓"
@@ -648,6 +682,7 @@ def cmd_parity(args) -> int:
 
 # ── morning-report ────────────────────────────────────────────────────────────
 
+
 def cmd_morning_report(args) -> int:
     # Add src/ to sys.path so morning_report can import environmental_adjustments
     src_dir = str(PROJECT_ROOT / "src")
@@ -655,6 +690,7 @@ def cmd_morning_report(args) -> int:
         sys.path.insert(0, src_dir)
 
     from morning_report import run as _mr_run
+
     return _mr_run(
         check_sleep=getattr(args, "check_sleep", False),
         as_json=getattr(args, "json", False),
@@ -666,11 +702,13 @@ def cmd_morning_report(args) -> int:
 
 # ── analyze-patterns ──────────────────────────────────────────────────────────
 
+
 def cmd_analyze_patterns(args) -> int:
     src_dir = str(PROJECT_ROOT / "src")
     if src_dir not in sys.path:
         sys.path.insert(0, src_dir)
     from athlete_pattern_analyzer import run_analysis
+
     patterns = run_analysis()
     hrv = patterns["hrv_calibration"]
     aero = patterns["aerobic_efficiency"]
@@ -686,6 +724,7 @@ def cmd_analyze_patterns(args) -> int:
 
 # ── memory search ─────────────────────────────────────────────────────────────
 
+
 def cmd_memory(args) -> int:
     subcmd = getattr(args, "mem_command", None)
     if subcmd == "search":
@@ -695,6 +734,7 @@ def cmd_memory(args) -> int:
 
 
 # ── agent ─────────────────────────────────────────────────────────────────────
+
 
 def cmd_agent(args) -> int:
     subcmd = getattr(args, "agent_command", None)
@@ -719,14 +759,16 @@ def _agent_status() -> int:
     if lock is None:
         print("Lock:  FREE")
     elif lock.get("expired"):
-        print(f"Lock:  EXPIRED (was held by {lock['owner']} until {lock['expires_at']})")
+        print(
+            f"Lock:  EXPIRED (was held by {lock['owner']} until {lock['expires_at']})"
+        )
     else:
         print(f"Lock:  HELD by {lock['owner']}  expires {lock['expires_at']}")
 
     print()
 
     # Sync freshness
-    last_ok  = get_last_sync_run(status="success")
+    last_ok = get_last_sync_run(status="success")
     last_run = get_last_sync_run()
     if last_ok:
         ts_str = last_ok["finished_at"] or last_ok["started_at"]
@@ -867,6 +909,7 @@ def _memory_search(query: str) -> int:
 
 # ── CLI wiring ────────────────────────────────────────────────────────────────
 
+
 def _build_parser() -> argparse.ArgumentParser:
     """Build and return the top-level argument parser (extracted for testability)."""
     parser = argparse.ArgumentParser(
@@ -878,31 +921,55 @@ def _build_parser() -> argparse.ArgumentParser:
     # sync
     p_sync = sub.add_parser("sync", help="Sync Garmin health data")
     p_sync.add_argument("--force", action="store_true", help="Skip cache-age check")
-    p_sync.add_argument("--days", type=int, metavar="N", help="Number of days to sync (default: 30)")
-    p_sync.add_argument("--check-only", action="store_true", help="Preview what would be synced without updating cache")
+    p_sync.add_argument(
+        "--days", type=int, metavar="N", help="Number of days to sync (default: 30)"
+    )
+    p_sync.add_argument(
+        "--check-only",
+        action="store_true",
+        help="Preview what would be synced without updating cache",
+    )
     p_sync.set_defaults(func=cmd_sync)
 
     # plan
-    p_plan = sub.add_parser("plan", help="Generate a training week or macro block via Brain LLM")
-    p_plan.add_argument("--week",  action="store_true", help="Plan current week")
-    p_plan.add_argument("--macro", action="store_true", help="Generate full periodized macro block")
-    p_plan.add_argument("--show",  action="store_true", help="Show active macro plan without regenerating (use with --macro)")
+    p_plan = sub.add_parser(
+        "plan", help="Generate a training week or macro block via Brain LLM"
+    )
+    p_plan.add_argument("--week", action="store_true", help="Plan current week")
+    p_plan.add_argument(
+        "--macro", action="store_true", help="Generate full periodized macro block"
+    )
+    p_plan.add_argument(
+        "--show",
+        action="store_true",
+        help="Show active macro plan without regenerating (use with --macro)",
+    )
     p_plan.add_argument("--force", action="store_true", help="Bypass LLM cache")
     p_plan.set_defaults(func=cmd_plan)
 
     # export-garmin
-    p_exp = sub.add_parser("export-garmin", help="Publish internal plan to Garmin Connect")
-    p_exp.add_argument("--days", type=int, default=7, metavar="N", help="Days ahead (default 7)")
+    p_exp = sub.add_parser(
+        "export-garmin", help="Publish internal plan to Garmin Connect"
+    )
     p_exp.add_argument(
-        "--dry-run", dest="dry_run", action="store_true", default=True,
+        "--days", type=int, default=7, metavar="N", help="Days ahead (default 7)"
+    )
+    p_exp.add_argument(
+        "--dry-run",
+        dest="dry_run",
+        action="store_true",
+        default=True,
         help="Preview only — no Garmin API calls (default)",
     )
     p_exp.add_argument(
-        "--live", action="store_true",
+        "--live",
+        action="store_true",
         help="Actually upload to Garmin (overrides --dry-run)",
     )
     p_exp.add_argument(
-        "--source", choices=["internal", "ics"], default="internal",
+        "--source",
+        choices=["internal", "ics"],
+        default="internal",
         help="Workout source (only 'internal' supported; 'ics' is rejected)",
     )
     p_exp.set_defaults(func=cmd_export_garmin)
@@ -914,10 +981,16 @@ def _build_parser() -> argparse.ArgumentParser:
 
     # schedule
     p_sched = sub.add_parser("schedule", help="Export the active plan's week schedule")
-    p_sched.add_argument("--week", action="store_true", required=True, help="Export next N days")
-    p_sched.add_argument("--days", type=int, default=7, metavar="N", help="Number of days (default 7)")
     p_sched.add_argument(
-        "--format", choices=["table", "text", "md", "mobile"], default="mobile",
+        "--week", action="store_true", required=True, help="Export next N days"
+    )
+    p_sched.add_argument(
+        "--days", type=int, default=7, metavar="N", help="Number of days (default 7)"
+    )
+    p_sched.add_argument(
+        "--format",
+        choices=["table", "text", "md", "mobile"],
+        default="mobile",
         help="Output format (default: mobile = Discord-friendly day cards; table = desktop-aligned)",
     )
     p_sched.set_defaults(func=cmd_schedule)
@@ -931,7 +1004,9 @@ def _build_parser() -> argparse.ArgumentParser:
     # parity
     p_parity = sub.add_parser("parity", help="Compare SQLite vs JSON cache for a day")
     p_parity.add_argument(
-        "--day", required=True, metavar="YYYY-MM-DD",
+        "--day",
+        required=True,
+        metavar="YYYY-MM-DD",
         help="Date to compare (e.g. 2026-02-20)",
     )
     p_parity.set_defaults(func=cmd_parity)
@@ -939,23 +1014,33 @@ def _build_parser() -> argparse.ArgumentParser:
     # morning-report
     p_mr = sub.add_parser("morning-report", help="Generate AI morning training report")
     p_mr.add_argument("--json", action="store_true", help="Output as JSON")
-    p_mr.add_argument("--notification-only", action="store_true", help="Only output notification text")
-    p_mr.add_argument("--full-only", action="store_true", help="Only output full report")
+    p_mr.add_argument(
+        "--notification-only", action="store_true", help="Only output notification text"
+    )
+    p_mr.add_argument(
+        "--full-only", action="store_true", help="Only output full report"
+    )
     p_mr.add_argument("--no-weather", action="store_true", help="Skip weather fetch")
-    p_mr.add_argument("--check-sleep", action="store_true", help="Exit 0 if today's sleep data exists, 1 otherwise")
+    p_mr.add_argument(
+        "--check-sleep",
+        action="store_true",
+        help="Exit 0 if today's sleep data exists, 1 otherwise",
+    )
     p_mr.set_defaults(func=cmd_morning_report)
 
     # memory
     p_mem = sub.add_parser("memory", help="Query the Memory OS")
     mem_sub = p_mem.add_subparsers(dest="mem_command", required=True)
-    p_search = mem_sub.add_parser("search", help="Full-text search events and plan days")
+    p_search = mem_sub.add_parser(
+        "search", help="Full-text search events and plan days"
+    )
     p_search.add_argument("query", help="Search term")
     p_mem.set_defaults(func=cmd_memory)
 
     # agent
     p_agent = sub.add_parser("agent", help="Heartbeat agent controls")
     agent_sub = p_agent.add_subparsers(dest="agent_command", required=True)
-    agent_sub.add_parser("status",   help="Show lock state + recent task_runs")
+    agent_sub.add_parser("status", help="Show lock state + recent task_runs")
     agent_sub.add_parser("run-once", help="Run one heartbeat cycle")
     p_agent.set_defaults(func=cmd_agent)
 

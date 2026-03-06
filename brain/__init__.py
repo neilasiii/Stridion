@@ -7,7 +7,7 @@ It outputs validated Pydantic objects that are immediately persisted to SQLite.
 Authority: internal plan in SQLite is authoritative. FinalSurge is not.
 """
 
-from .planner import plan_week, adjust_today
+from .planner import plan_week, adjust_today, replan_remaining_week
 from .schemas import PlanDecision, TodayAdjustment, PlanDay, WorkoutStep
 from .schemas import MacroPlan, MacroWeek, MacroPaces
 from .macro_plan import (
@@ -21,6 +21,7 @@ from .macro_plan import (
 __all__ = [
     "plan_week",
     "adjust_today",
+    "replan_remaining_week",
     "PlanDecision",
     "TodayAdjustment",
     "PlanDay",

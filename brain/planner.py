@@ -28,7 +28,7 @@ import subprocess
 import sys
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import ValidationError
 
@@ -69,7 +69,7 @@ SAFETY RULES (enforced — violations will be flagged):
 DATA QUALITY RULE:
 If data_quality.readiness_confidence == "low":
   - Reduce intensity by one level (e.g., planned tempo → easy with strides).
-  - Keep running day count per athlete.weekly_structure.runs_per_week.
+  - Keep running day count within athlete.weekly_structure min/preferred/max bounds.
   - Do NOT increase volume vs training_summary.total_miles baseline.
   - Preserve quality session if macro permits; reduce duration/intensity rather
     than eliminating it entirely.
@@ -88,8 +88,9 @@ If macro_guidance is present and non-null:
     Deviate only if: readiness severely degraded, constraint blocks required session
     types, or race just completed. On deviation add "macro_deviation" to safety_flags
     and explain in rationale.
-  - weekly_volume_miles: target macro_guidance.current_week.target_volume_miles.
-    May reduce up to 20% for low readiness. Never EXCEED the target.
+  - weekly_volume_miles: aim for macro_guidance.current_week.volume_target_miles.
+    Stay inside [volume_floor_miles, volume_ceiling_miles] when feasible.
+    If readiness is poor, reduce load rather than force compensation.
   - quality_sessions: do NOT exceed quality_sessions_allowed. If 0, easy/rest/cross only.
   - long run: do NOT exceed long_run_max_min minutes.
   - paces: use macro_guidance.current_week.paces for all target_value fields.
@@ -98,7 +99,10 @@ If macro_guidance is present and non-null:
 If macro_guidance is null: infer phase from race proximity and training history.
 
 ATHLETE STRUCTURE RULES (check context_packet.athlete.weekly_structure):
-- Total running days MUST equal athlete.weekly_structure.runs_per_week (default 4).
+- Running days should target preferred_runs_per_week and may flex between
+  min_runs_per_week and max_runs_per_week.
+- Never schedule runs on non_negotiable_blocked_days.
+- Prefer anchor_days for running sessions when constraints allow.
 - Include exactly 1 quality session per week during quality/race_specific phase,
   unless macro quality_sessions_allowed == 0 OR BOTH of these are true:
   training_readiness < 40 AND RHR is elevated > 5 bpm above baseline.
@@ -163,6 +167,7 @@ OUTPUT RULES:
 - Every field in the schema is required unless marked Optional.
 - Rationale fields: max 200 chars each (300 for top-level).
 - structure_steps: easy/recovery runs → single "main" step only (no warmup/cooldown). Easy runs with strides → "main" step + "strides" step. Tempo/interval/long runs → warmup + main/intervals + cooldown. Rest/cross days → empty array.
+- Add day-level "priority": must_do | nice_to_have | optional.
 """
 
 _SYSTEM_ADJUST_TODAY = """\
@@ -191,6 +196,7 @@ Required output JSON structure (all fields required unless marked optional):
       "date": "YYYY-MM-DD",
       "intent": "<one-liner, max 80 chars>",
       "workout_type": "easy"|"tempo"|"interval"|"long"|"strength"|"rest"|"cross",
+      "priority": "must_do"|"nice_to_have"|"optional",
       "duration_min": <int 0-300>,
       "structure_steps": [
         {
@@ -235,6 +241,7 @@ _FIX_JSON_PROMPT = (
 
 # ── LLM call ──────────────────────────────────────────────────────────────────
 
+
 def _find_claude() -> Optional[str]:
     for p in CLAUDE_PATHS:
         if p.exists():
@@ -242,7 +249,9 @@ def _find_claude() -> Optional[str]:
     return None
 
 
-def _call_llm(system: str, user: str, timeout: int = 120, model: Optional[str] = None) -> str:
+def _call_llm(
+    system: str, user: str, timeout: int = 120, model: Optional[str] = None
+) -> str:
     """
     Call Claude CLI in headless mode. Returns raw text output.
     Raises RuntimeError on non-zero exit or empty response.
@@ -270,7 +279,11 @@ def _call_llm(system: str, user: str, timeout: int = 120, model: Optional[str] =
         )
 
     full_prompt = f"{system}\n\n{user}"
-    log.debug("Calling claude CLI, prompt_len=%d chars, model=%s", len(full_prompt), model or "default")
+    log.debug(
+        "Calling claude CLI, prompt_len=%d chars, model=%s",
+        len(full_prompt),
+        model or "default",
+    )
 
     # Strip CLAUDECODE so the subprocess is not treated as a nested session.
     # This is the documented bypass: the child process is headless/one-shot
@@ -309,6 +322,7 @@ def _call_anthropic_sdk(system: str, user: str, model: Optional[str] = None) -> 
     if api_key:
         try:
             import anthropic  # type: ignore
+
             client = anthropic.Anthropic(api_key=api_key)
             msg = client.messages.create(
                 model=model or MODEL,
@@ -337,20 +351,27 @@ def _call_gemini(system: str, user: str) -> str:
                 gemini_key = line.split("=", 1)[1].strip()
     gemini_key = gemini_key or os.environ.get("GEMINI_API_KEY", "")
     if not gemini_key:
-        raise RuntimeError("No LLM backend available: no ANTHROPIC_API_KEY and no GEMINI_API_KEY")
+        raise RuntimeError(
+            "No LLM backend available: no ANTHROPIC_API_KEY and no GEMINI_API_KEY"
+        )
 
     import json as _json
+
     url = (
         f"https://generativelanguage.googleapis.com/v1/models/"
         f"gemini-2.0-flash:generateContent?key={gemini_key}"
     )
     # v1 API does not support system_instruction — prepend system as context
     combined = f"{system}\n\n{user}"
-    payload = _json.dumps({
-        "contents": [{"parts": [{"text": combined}]}],
-        "generationConfig": {"maxOutputTokens": 4096},
-    }).encode()
-    request = _req.Request(url, data=payload, headers={"Content-Type": "application/json"})
+    payload = _json.dumps(
+        {
+            "contents": [{"parts": [{"text": combined}]}],
+            "generationConfig": {"maxOutputTokens": 4096},
+        }
+    ).encode()
+    request = _req.Request(
+        url, data=payload, headers={"Content-Type": "application/json"}
+    )
     try:
         with _req.urlopen(request, timeout=120) as resp:
             data = _json.loads(resp.read())
@@ -417,7 +438,8 @@ def _extract_or_reprompt(raw: str, system: str) -> str:
     log.warning("LLM output not clean JSON (len=%d) — reprompting for format", len(raw))
     reprompted = _call_llm(
         system,
-        "Output JSON only. No text, no markdown. No explanation.\n\nPrevious output:\n" + raw[:500],
+        "Output JSON only. No text, no markdown. No explanation.\n\nPrevious output:\n"
+        + raw[:500],
     )
     strict2 = _try_strict_extract(reprompted)
     if strict2 is not None:
@@ -432,9 +454,17 @@ def _extract_or_reprompt(raw: str, system: str) -> str:
 # ── Observability ──────────────────────────────────────────────────────────────
 
 _EXPECTED_PACKET_KEYS = {
-    "today", "athlete", "training_summary", "readiness_trend",
-    "plan_authority", "active_plan", "macro_guidance", "constraints",
-    "recent_decisions", "vault_excerpts", "data_quality",
+    "today",
+    "athlete",
+    "training_summary",
+    "readiness_trend",
+    "plan_authority",
+    "active_plan",
+    "macro_guidance",
+    "constraints",
+    "recent_decisions",
+    "vault_excerpts",
+    "data_quality",
 }
 
 
@@ -464,17 +494,21 @@ def _log_packet_stats(packet: Dict) -> None:
 
 # ── Pre-validation truncation ─────────────────────────────────────────────────
 
+
 def _truncate_plan_data(data: Dict) -> Dict:
     """
     Truncate string fields to schema limits before Pydantic validation.
     LLMs reliably ignore exact char caps even after reprompting; truncation
     here is cheaper and more reliable than a second round-trip.
     """
-    def _t(s, n): return s[:n] if isinstance(s, str) else s
+
+    def _t(s, n):
+        return s[:n] if isinstance(s, str) else s
 
     for day in data.get("days", []):
-        day["intent"]    = _t(day.get("intent", ""), 80)
+        day["intent"] = _t(day.get("intent", ""), 80)
         day["rationale"] = _t(day.get("rationale", ""), 200)
+        day["priority"] = day.get("priority", "nice_to_have")
         for step in day.get("structure_steps", []):
             step["target_value"] = _t(step.get("target_value", ""), 50)
             if "notes" in step and step["notes"]:
@@ -486,10 +520,12 @@ def _truncate_plan_data(data: Dict) -> Dict:
 
 def _truncate_adjustment_data(data: Dict) -> Dict:
     """Same pre-validation truncation for TodayAdjustment."""
-    def _t(s, n): return s[:n] if isinstance(s, str) else s
+
+    def _t(s, n):
+        return s[:n] if isinstance(s, str) else s
 
     data["adjusted_intent"] = _t(data.get("adjusted_intent", ""), 80)
-    data["rationale"]       = _t(data.get("rationale", ""), 200)
+    data["rationale"] = _t(data.get("rationale", ""), 200)
     for step in data.get("structure_steps", []):
         step["target_value"] = _t(step.get("target_value", ""), 50)
         if step.get("notes"):
@@ -498,6 +534,7 @@ def _truncate_adjustment_data(data: Dict) -> Dict:
 
 
 # ── Cache check ────────────────────────────────────────────────────────────────
+
 
 def _find_plan_by_hash(ctx_hash: str, db_path) -> Optional[Dict]:
     """Return the most recent plan row whose context_hash matches, or None."""
@@ -518,13 +555,18 @@ def _find_plan_by_hash(ctx_hash: str, db_path) -> Optional[Dict]:
             (ctx_hash,),
         ).fetchone()
         if row:
-            return {"plan_id": row["plan_id"], "plan": json.loads(row["plan_json"]), "status": row["status"]}
+            return {
+                "plan_id": row["plan_id"],
+                "plan": json.loads(row["plan_json"]),
+                "status": row["status"],
+            }
         return None
     finally:
         conn.close()
 
 
 # ── Week boundary helpers ─────────────────────────────────────────────────────
+
 
 def _resolve_week_start(week_start: Optional[date]) -> date:
     """Return the upcoming Sunday for the planning week (weeks run Sun–Sat).
@@ -543,7 +585,132 @@ def _resolve_week_start(week_start: Optional[date]) -> date:
     return today + timedelta(days=days_ahead)
 
 
+def _normalize_weekly_structure(context_packet: Dict) -> Dict[str, Any]:
+    ws = (context_packet.get("athlete", {}).get("weekly_structure", {}) or {}).copy()
+    legacy = ws.get("runs_per_week")
+    preferred = int(ws.get("preferred_runs_per_week") or legacy or 4)
+    min_runs = int(ws.get("min_runs_per_week") or max(1, preferred - 1))
+    max_runs = int(ws.get("max_runs_per_week") or min(7, preferred + 1))
+    min_runs = max(1, min(min_runs, 7))
+    max_runs = max(min_runs, min(max_runs, 7))
+    preferred = min(max(preferred, min_runs), max_runs)
+    return {
+        "min_runs_per_week": min_runs,
+        "preferred_runs_per_week": preferred,
+        "max_runs_per_week": max_runs,
+        "anchor_days": [
+            str(d).strip().lower()
+            for d in list(ws.get("anchor_days", []))
+            if str(d).strip()
+        ],
+        "non_negotiable_blocked_days": [
+            str(d).strip().lower()
+            for d in list(ws.get("non_negotiable_blocked_days", []))
+            if str(d).strip()
+        ],
+    }
+
+
+def _enforce_structure_constraints(
+    decision: PlanDecision, structure: Dict[str, Any]
+) -> None:
+    run_types = {"easy", "tempo", "interval", "long"}
+    priority_rank = {"optional": 0, "nice_to_have": 1, "must_do": 2}
+    blocked = set(structure.get("non_negotiable_blocked_days", []))
+    anchors = set(structure.get("anchor_days", []))
+
+    def _weekday_name(day_obj) -> str:
+        return date.fromisoformat(day_obj.date).strftime("%A").lower()
+
+    def _is_run(day_obj) -> bool:
+        return day_obj.workout_type in run_types
+
+    def _to_rest(day_obj, flag: str) -> None:
+        day_obj.workout_type = "rest"
+        day_obj.duration_min = 0
+        day_obj.structure_steps = []
+        day_obj.priority = "optional"
+        if flag not in day_obj.safety_flags:
+            day_obj.safety_flags.append(flag)
+
+    def _make_easy(day_obj, flag: str) -> None:
+        day_obj.workout_type = "easy"
+        day_obj.intent = day_obj.intent or "Easy aerobic run"
+        day_obj.duration_min = max(day_obj.duration_min, 30)
+        day_obj.priority = "optional"
+        if flag not in day_obj.safety_flags:
+            day_obj.safety_flags.append(flag)
+
+    for d in [d for d in decision.days if _is_run(d)]:
+        if _weekday_name(d) in blocked:
+            _to_rest(d, "blocked_day_enforced")
+
+    while (
+        len([d for d in decision.days if _is_run(d)]) > structure["max_runs_per_week"]
+    ):
+        run_days = [d for d in decision.days if _is_run(d)]
+        drop = sorted(
+            run_days,
+            key=lambda d: (
+                1 if _weekday_name(d) in anchors else 0,
+                priority_rank.get(d.priority, 1),
+                d.duration_min,
+            ),
+        )[0]
+        _to_rest(drop, "run_count_capped")
+        if "anchor_preference_applied" not in decision.safety_flags:
+            decision.safety_flags.append("anchor_preference_applied")
+
+    while (
+        len([d for d in decision.days if _is_run(d)]) < structure["min_runs_per_week"]
+    ):
+        candidates = [
+            d
+            for d in decision.days
+            if not _is_run(d) and _weekday_name(d) not in blocked
+        ]
+        if not candidates:
+            break
+        promote = sorted(
+            candidates,
+            key=lambda d: (
+                0 if _weekday_name(d) in anchors else 1,
+                0 if d.workout_type == "rest" else 1,
+            ),
+        )[0]
+        _make_easy(promote, "min_run_count_backfilled")
+        if "run_days_below_min" not in decision.safety_flags:
+            decision.safety_flags.append("run_days_below_min")
+
+    run_count = len([d for d in decision.days if _is_run(d)])
+    if run_count < structure["preferred_runs_per_week"]:
+        candidates = [
+            d
+            for d in decision.days
+            if not _is_run(d) and _weekday_name(d) not in blocked
+        ]
+        if candidates:
+            promote = sorted(
+                candidates,
+                key=lambda d: (0 if _weekday_name(d) in anchors else 1, d.duration_min),
+            )[0]
+            _make_easy(promote, "preferred_run_count_backfilled")
+
+    final_count = len([d for d in decision.days if _is_run(d)])
+    if (
+        final_count > structure["preferred_runs_per_week"]
+        and "run_days_above_preferred" not in decision.safety_flags
+    ):
+        decision.safety_flags.append("run_days_above_preferred")
+    if (
+        final_count <= structure["preferred_runs_per_week"]
+        and "run_days_targeted_to_preferred" not in decision.safety_flags
+    ):
+        decision.safety_flags.append("run_days_targeted_to_preferred")
+
+
 # ── plan_week ─────────────────────────────────────────────────────────────────
+
 
 def plan_week(
     context_packet: Dict,
@@ -564,8 +731,13 @@ def plan_week(
         PlanDecision — validated, persisted, vault-documented.
     """
     from memory import (
-        hash_context_packet, insert_plan, insert_plan_days,
-        set_active_plan, init_db, DB_PATH as _DEFAULT_DB,
+        hash_context_packet,
+        insert_event,
+        insert_plan,
+        insert_plan_days,
+        set_active_plan,
+        init_db,
+        DB_PATH as _DEFAULT_DB,
     )
     from memory.vault import append_decision, write_plan_snapshot
 
@@ -598,17 +770,20 @@ def plan_week(
     )
 
     # ── Call LLM ──────────────────────────────────────────────────────────
-    raw = _call_llm(_SYSTEM_PLAN_WEEK, user_prompt, timeout=300, model="claude-haiku-4-5-20251001")
+    raw = _call_llm(
+        _SYSTEM_PLAN_WEEK, user_prompt, timeout=300, model="claude-haiku-4-5-20251001"
+    )
     decision = _parse_and_validate_plan(raw, ctx_hash, _SYSTEM_PLAN_WEEK)
     decision = _enforce_stride_rules(decision)
+    structure = _normalize_weekly_structure(context_packet)
+    _enforce_structure_constraints(decision, structure)
 
     # ── Enforce DATA QUALITY safety flag deterministically ─────────────────
     # The LLM prompt asks for this flag, but we cannot rely on the LLM.
     # Append it here unconditionally when the condition is true.
     dq = context_packet.get("data_quality", {})
-    _low_conf = (
-        dq.get("readiness_confidence") == "low"
-        or not dq.get("has_health_cache", True)
+    _low_conf = dq.get("readiness_confidence") == "low" or not dq.get(
+        "has_health_cache", True
     )
     if _low_conf and "low_readiness_confidence" not in decision.safety_flags:
         decision.safety_flags.append("low_readiness_confidence")
@@ -627,29 +802,38 @@ def plan_week(
         # fully rely on that. Flag over-volume plans for operator visibility.
         # We do NOT silently clamp — the flag triggers a warning, letting the
         # weekly planner rationale (and the human reviewer) see the overage.
-        macro_target_vol = (
-            mg.get("current_week", {}).get("target_volume_miles")
+        cw = mg.get("current_week", {})
+        macro_floor_vol = cw.get("volume_floor_miles")
+        macro_target_vol = cw.get("volume_target_miles") or cw.get(
+            "target_volume_miles"
         )
+        macro_ceiling_vol = cw.get("volume_ceiling_miles") or macro_target_vol
         if (
-            macro_target_vol is not None
-            and isinstance(macro_target_vol, (int, float))
-            and decision.weekly_volume_miles > macro_target_vol + 0.5  # 0.5 mi tolerance
+            macro_ceiling_vol is not None
+            and isinstance(macro_ceiling_vol, (int, float))
+            and decision.weekly_volume_miles > macro_ceiling_vol + 0.5
         ):
             if "macro_cap_exceeded" not in decision.safety_flags:
                 decision.safety_flags.append("macro_cap_exceeded")
                 log.warning(
-                    "macro_cap_exceeded: plan volume %.1f mi exceeds macro target %.1f mi",
-                    decision.weekly_volume_miles, macro_target_vol,
+                    "macro_cap_exceeded: plan volume %.1f mi exceeds macro ceiling %.1f mi",
+                    decision.weekly_volume_miles,
+                    macro_ceiling_vol,
                 )
-            # Clamp to macro ceiling — macro is authoritative; readiness/constraints
-            # can reduce volume below target but never increase it above.
-            decision.weekly_volume_miles = float(macro_target_vol)
+            decision.weekly_volume_miles = float(macro_ceiling_vol)
             if "macro_cap_clamped" not in decision.safety_flags:
                 decision.safety_flags.append("macro_cap_clamped")
                 log.info(
                     "macro_cap_clamped: weekly_volume_miles clamped to %.1f mi",
-                    macro_target_vol,
+                    macro_ceiling_vol,
                 )
+        if (
+            macro_floor_vol is not None
+            and isinstance(macro_floor_vol, (int, float))
+            and decision.weekly_volume_miles < macro_floor_vol - 1.0
+            and "macro_floor_underrun" not in decision.safety_flags
+        ):
+            decision.safety_flags.append("macro_floor_underrun")
 
     # ── Persist ───────────────────────────────────────────────────────────
     plan_id = insert_plan(
@@ -668,13 +852,13 @@ def plan_week(
 
     # ── Vault ──────────────────────────────────────────────────────────────
     decision_record = {
-        "type":       "plan_generated",
-        "plan_id":    plan_id,
+        "type": "plan_generated",
+        "plan_id": plan_id,
         "week_start": ws.isoformat(),
-        "week_end":   we.isoformat(),
-        "phase":      decision.phase,
-        "volume_mi":  decision.weekly_volume_miles,
-        "summary":    f"{decision.phase} week {ws.isoformat()}",
+        "week_end": we.isoformat(),
+        "phase": decision.phase,
+        "volume_mi": decision.weekly_volume_miles,
+        "summary": f"{decision.phase} week {ws.isoformat()}",
         "safety_flags": decision.safety_flags,
     }
     append_decision(decision_record, rationale=decision.rationale[:300])
@@ -717,7 +901,8 @@ def _enforce_stride_rules(decision: PlanDecision) -> PlanDecision:
 
         log.warning(
             "Stride rule violation on %s: %s — rewriting",
-            day.date, reason,
+            day.date,
+            reason,
         )
         new_steps_dicts, rewrite_note = rewrite_strides(steps_dicts, day.duration_min)
         day.structure_steps = [WorkoutStep.model_validate(s) for s in new_steps_dicts]
@@ -753,8 +938,11 @@ def _parse_and_validate_plan(raw: str, ctx_hash: str, system: str) -> PlanDecisi
         except (json.JSONDecodeError, ValidationError) as exc:
             if attempt == 0:
                 log.warning("plan schema attempt 1 failed: %s — reprompting", exc)
-                fix_raw = _call_llm(system, _FIX_JSON_PROMPT.format(error=str(exc)[:200])
-                                    + f"\n\nPrevious output:\n{json_str[:500]}")
+                fix_raw = _call_llm(
+                    system,
+                    _FIX_JSON_PROMPT.format(error=str(exc)[:200])
+                    + f"\n\nPrevious output:\n{json_str[:500]}",
+                )
                 json_str = _extract_or_reprompt(fix_raw, system)
             else:
                 raise RuntimeError(
@@ -764,7 +952,194 @@ def _parse_and_validate_plan(raw: str, ctx_hash: str, system: str) -> PlanDecisi
     raise RuntimeError("unreachable")  # mypy
 
 
+def replan_remaining_week(
+    context_packet: Dict,
+    missed_dates: List[str],
+    reason: str = "missed_workout",
+    db_path=None,
+) -> PlanDecision:
+    """Revise only remaining days of the active week and persist as a new revision."""
+    from memory import (
+        hash_context_packet,
+        insert_event,
+        insert_plan,
+        insert_plan_days,
+        set_active_plan,
+        init_db,
+        DB_PATH as _DEFAULT_DB,
+    )
+    from memory.db import get_active_plan
+
+    db = db_path or _DEFAULT_DB
+    init_db(db)
+    active = get_active_plan(db_path=db)
+    if not active:
+        return plan_week(context_packet, force=True, db_path=db)
+
+    decision = PlanDecision.model_validate(active["plan"])
+    today_iso = context_packet.get("today", date.today().isoformat())
+    missed = set(missed_dates)
+    blocked = {
+        str(d).strip().lower()
+        for d in (
+            context_packet.get("athlete", {})
+            .get("weekly_structure", {})
+            .get("non_negotiable_blocked_days", [])
+        )
+        if str(d).strip()
+    }
+
+    def _weekday(iso_day: str) -> str:
+        return date.fromisoformat(iso_day).strftime("%A").lower()
+
+    def _is_hard(day_obj) -> bool:
+        return day_obj.workout_type in HARD_TYPES
+
+    def _to_rest(day_obj, flag: str) -> None:
+        day_obj.workout_type = "rest"
+        day_obj.duration_min = 0
+        day_obj.structure_steps = []
+        day_obj.priority = "optional"
+        if flag not in day_obj.safety_flags:
+            day_obj.safety_flags.append(flag)
+
+    def _to_easy(day_obj, flag: str) -> None:
+        day_obj.workout_type = "easy"
+        day_obj.priority = "nice_to_have"
+        if day_obj.duration_min <= 0:
+            day_obj.duration_min = 30
+        if flag not in day_obj.safety_flags:
+            day_obj.safety_flags.append(flag)
+
+    missed_quality = []  # list of (original_workout_type, original_duration_min, day)
+    missed_long = []     # list of (shortened_duration_min, day)
+    replan_actions: Dict[str, Any] = {
+        "missed_dates": sorted(missed),
+        "dropped_easy": [],
+        "moved_quality_to": [],
+        "moved_long_to": [],
+        "dropped_quality": 0,
+        "dropped_long": 0,
+    }
+    for day in decision.days:
+        if day.date < today_iso or day.date not in missed:
+            continue
+        if day.workout_type == "easy":
+            _to_rest(day, "missed_easy_dropped")
+            replan_actions["dropped_easy"].append(day.date)
+            continue
+        if day.workout_type in {"tempo", "interval"}:
+            day.priority = "must_do"
+            # Capture type and duration BEFORE _to_rest mutates the object
+            missed_quality.append((day.workout_type, day.duration_min, day))
+            _to_rest(day, "missed_quality_reflow")
+            continue
+        if day.workout_type == "long":
+            day.priority = "must_do"
+            shortened = max(30, int(day.duration_min * 0.7))
+            # Capture shortened duration BEFORE _to_rest zeroes it out
+            missed_long.append((shortened, day))
+            _to_rest(day, "missed_long_reflow")
+
+    def _safe_for_quality(idx: int) -> bool:
+        day = decision.days[idx]
+        if _weekday(day.date) in blocked:
+            return False
+        if day.workout_type not in {"rest", "cross", "easy"}:
+            return False
+        prev_hard = idx > 0 and _is_hard(decision.days[idx - 1])
+        next_hard = idx < len(decision.days) - 1 and _is_hard(decision.days[idx + 1])
+        return not (prev_hard or next_hard)
+
+    for src_type, src_dur, src in missed_quality:
+        for idx, candidate in enumerate(decision.days):
+            if candidate.date < today_iso:
+                continue
+            if _safe_for_quality(idx):
+                candidate.workout_type = src_type
+                candidate.duration_min = max(candidate.duration_min, src_dur)
+                candidate.priority = "must_do"
+                candidate.safety_flags.append("moved_quality_session")
+                replan_actions["moved_quality_to"].append(candidate.date)
+                break
+        else:
+            if "quality_dropped_due_to_spacing" not in decision.safety_flags:
+                decision.safety_flags.append("quality_dropped_due_to_spacing")
+            replan_actions["dropped_quality"] += 1
+
+    for src_dur, src in missed_long:
+        moved = False
+        for idx, candidate in enumerate(decision.days):
+            if candidate.date < today_iso or _weekday(candidate.date) in blocked:
+                continue
+            if candidate.workout_type in {"rest", "cross", "easy"}:
+                prev_hard = idx > 0 and _is_hard(decision.days[idx - 1])
+                if prev_hard:
+                    continue
+                candidate.workout_type = "long"
+                candidate.duration_min = max(candidate.duration_min, src_dur)
+                candidate.priority = "must_do"
+                candidate.safety_flags.append("moved_long_session")
+                replan_actions["moved_long_to"].append(candidate.date)
+                moved = True
+                break
+        if not moved and "long_dropped_due_to_spacing" not in decision.safety_flags:
+            decision.safety_flags.append("long_dropped_due_to_spacing")
+            replan_actions["dropped_long"] += 1
+
+    for i in range(1, len(decision.days)):
+        if _is_hard(decision.days[i - 1]) and _is_hard(decision.days[i]):
+            _to_easy(decision.days[i], "hard_day_spacing_enforced")
+
+    for day in decision.days:
+        if day.date < today_iso:
+            continue
+        if _weekday(day.date) in blocked and day.workout_type in {
+            "easy",
+            "tempo",
+            "interval",
+            "long",
+        }:
+            _to_rest(day, "blocked_day_enforced")
+
+    ws = date.fromisoformat(decision.week_start)
+    we = date.fromisoformat(decision.week_end)
+    revision = int(active.get("plan_revision_number") or 1) + 1
+    plan_id = insert_plan(
+        start_date=ws,
+        end_date=we,
+        plan_json=decision.model_dump(),
+        context_hash=hash_context_packet(context_packet),
+        plan_revision_number=revision,
+        supersedes_plan_id=active["plan_id"],
+        replan_reason=reason,
+        replan_details=replan_actions,
+        revised_at=date.today().isoformat(),
+        status="draft",
+        db_path=db,
+    )
+    insert_plan_days(
+        plan_id,
+        [r for r in decision.as_plan_days_rows() if r["day"] >= today_iso],
+        db_path=db,
+    )
+    set_active_plan(plan_id, db_path=db)
+    insert_event(
+        "week_replanned",
+        {
+            "new_plan_id": plan_id,
+            "supersedes_plan_id": active["plan_id"],
+            "reason": reason,
+            "revision": revision,
+            "details": replan_actions,
+        },
+        db_path=db,
+    )
+    return decision
+
+
 # ── adjust_today ──────────────────────────────────────────────────────────────
+
 
 def adjust_today(
     context_packet: Dict,
@@ -803,24 +1178,28 @@ def adjust_today(
     )
 
     raw = _call_llm(_SYSTEM_ADJUST_TODAY, user_prompt)
-    adjustment = _parse_and_validate_adjustment(raw, today_str, original_intent, _SYSTEM_ADJUST_TODAY)
+    adjustment = _parse_and_validate_adjustment(
+        raw, today_str, original_intent, _SYSTEM_ADJUST_TODAY
+    )
 
     # Persist to vault only
     append_decision(
         {
-            "type":             "today_adjustment",
-            "date":             today_str,
-            "original_intent":  adjustment.original_intent,
-            "adjusted_intent":  adjustment.adjusted_intent,
+            "type": "today_adjustment",
+            "date": today_str,
+            "original_intent": adjustment.original_intent,
+            "adjusted_intent": adjustment.adjusted_intent,
             "adjustment_reason": adjustment.adjustment_reason,
-            "safety_flags":     adjustment.safety_flags,
+            "safety_flags": adjustment.safety_flags,
         },
         rationale=adjustment.rationale[:200],
     )
 
     log.info(
         "adjust_today date=%s type=%s reason=%s",
-        today_str, adjustment.workout_type, adjustment.adjustment_reason,
+        today_str,
+        adjustment.workout_type,
+        adjustment.adjustment_reason,
     )
     return adjustment
 
@@ -842,8 +1221,11 @@ def _parse_and_validate_adjustment(
         except (json.JSONDecodeError, ValidationError) as exc:
             if attempt == 0:
                 log.warning("adjust schema attempt 1 failed: %s — reprompting", exc)
-                fix_raw = _call_llm(system, _FIX_JSON_PROMPT.format(error=str(exc)[:200])
-                                    + f"\n\nPrevious output:\n{json_str[:500]}")
+                fix_raw = _call_llm(
+                    system,
+                    _FIX_JSON_PROMPT.format(error=str(exc)[:200])
+                    + f"\n\nPrevious output:\n{json_str[:500]}",
+                )
                 json_str = _extract_or_reprompt(fix_raw, system)
             else:
                 raise RuntimeError(
