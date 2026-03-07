@@ -23,7 +23,7 @@ log = logging.getLogger("brain.llm")
 
 # ── LLM config ─────────────────────────────────────────────────────────────────
 
-MODEL = "claude-sonnet-4-5-20250929"
+MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 2048
 CLAUDE_PATHS = [
     Path.home() / ".local" / "bin" / "claude",
