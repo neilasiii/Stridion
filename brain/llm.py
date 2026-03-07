@@ -15,6 +15,7 @@ import json
 import logging
 import os
 import re
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Optional
@@ -37,6 +38,9 @@ PROJECT_ROOT = Path(__file__).parent.parent
 # ── Claude discovery ────────────────────────────────────────────────────────────
 
 def _find_claude() -> Optional[str]:
+    path_hit = shutil.which("claude")
+    if path_hit:
+        return path_hit
     for p in CLAUDE_PATHS:
         if p.exists():
             return str(p)
