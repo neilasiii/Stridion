@@ -70,13 +70,12 @@ SPORT_TYPES = {
 
 def load_health_cache() -> Dict[str, Any]:
     """Load health data cache containing FinalSurge workouts."""
-    cache_path = Path(__file__).parent.parent / "data" / "health" / "health_data_cache.json"
-
-    if not cache_path.exists():
-        raise FileNotFoundError(f"Health data cache not found: {cache_path}")
-
-    with open(cache_path, 'r') as f:
-        return json.load(f)
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from memory.retrieval import load_health_cache as _load
+    data = _load()
+    if data is None:
+        raise FileNotFoundError("Health data cache not found. Run sync first.")
+    return data
 
 
 def save_workout_markdown(workout: 'SupplementalWorkout', garmin_id: int = None):

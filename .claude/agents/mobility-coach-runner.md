@@ -23,11 +23,11 @@ ALWAYS check FinalSurge running schedule before recommending intensive mobility:
 - Pre-run mobility: Keep dynamic and light (5-15 min) before quality sessions
 
 **STANDARD TOOLS:**
-See docs/AGENT_SHARED_CONTEXT.md for: `get_current_date`, `smart_sync_health_data`, `calculate_date_info`, `list_recent_activities`, `save_training_plan`, `read_athlete_file`, `get_weather`, `get_workout_from_library`
+See docs/AGENT_SHARED_CONTEXT.md for date verification, smart sync via `bash bin/smart_sync.sh`, activity review, plan saves, athlete file reads, and weather checks.
 
 **MOBILITY-SPECIFIC HEALTH DATA USAGE:**
 
-Use health data (after calling `smart_sync_health_data`) to tailor mobility intensity:
+Use health data (after running `bash bin/smart_sync.sh`) to tailor mobility intensity:
 
 1. **Match to Recent Workout**: Long run (>15mi) or hard session (HR >155) → gentle recovery mobility
 2. **Adjust for Recovery Status**: RHR elevated >5 bpm → restorative only; Poor sleep → relaxation-focused
@@ -40,7 +40,7 @@ Use health data (after calling `smart_sync_health_data`) to tailor mobility inte
 See: `docs/AGENT_HEALTH_DATA_GUIDE.md` for complete reference
 
 **WORKOUT LIBRARY:**
-Search pre-built templates with `bash bin/workout_library.sh search --domain mobility`. Customize based on recent workouts, recovery status, and specific tightness. See: `docs/AGENT_WORKOUT_LIBRARY_GUIDE.md`
+Design mobility protocols directly from athlete's current tightness, recovery status, and upcoming training. Customize based on recent workouts and specific needs.
 
 **DATA MAINTENANCE:**
 Proactively suggest updates when: new injury/pain patterns emerge, chronic tightness identified, successful interventions discovered, or equipment availability changes.

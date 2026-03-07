@@ -11,13 +11,13 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 # Path constants
-REPO_ROOT = Path(__file__).parent.parent
-HEALTH_DATA_CACHE = REPO_ROOT / "data" / "health" / "health_data_cache.json"
-STRENGTH_WORKOUTS_DIR = REPO_ROOT / "data" / "workouts" / "strength"
-MOBILITY_WORKOUTS_DIR = REPO_ROOT / "data" / "workouts" / "mobility"
+PROJECT_ROOT = Path(__file__).parent.parent
+HEALTH_DATA_CACHE = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
+STRENGTH_WORKOUTS_DIR = PROJECT_ROOT / "data" / "workouts" / "strength"
+MOBILITY_WORKOUTS_DIR = PROJECT_ROOT / "data" / "workouts" / "mobility"
 
 # Ensure project root is on sys.path for skills/ imports
-_project_root_str = str(REPO_ROOT)
+_project_root_str = str(PROJECT_ROOT)
 if _project_root_str not in sys.path:
     sys.path.insert(0, _project_root_str)
 
@@ -36,12 +36,10 @@ get_active_sessions = _get_active_sessions_safe
 
 
 def load_health_data():
-    """Load health data cache"""
-    if not HEALTH_DATA_CACHE.exists():
-        return None
-
-    with open(HEALTH_DATA_CACHE, 'r') as f:
-        return json.load(f)
+    """Load health data cache."""
+    sys.path.insert(0, str(PROJECT_ROOT))
+    from memory.retrieval import load_health_cache as _load
+    return _load()  # returns None if not found (callers handle gracefully)
 
 
 def get_scheduled_workouts(date_str):

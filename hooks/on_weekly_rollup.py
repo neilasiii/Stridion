@@ -26,15 +26,14 @@ Returns: {ran: bool, synthesis_written: bool, skip_reason: str|None}
 
 import json
 import logging
-import os
-import subprocess
 import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+from brain.llm import call_llm as _call_llm
 
 _STATE_PENDING_KEY    = "pending_weekly_synthesis"
 _STATE_LAST_ROLLUP    = "runner_last_weekly_rollup"
@@ -42,12 +41,6 @@ _TRIGGER_WEEKDAY      = 5    # Saturday
 _TRIGGER_HOUR         = 23   # 11 PM local (after saturday_plan_task at 10 PM EST)
 
 log = logging.getLogger("hooks.on_weekly_rollup")
-
-CLAUDE_PATHS = [
-    Path.home() / ".local" / "bin" / "claude",
-    Path("/usr/local/bin/claude"),
-    Path("/usr/bin/claude"),
-]
 
 _SYNTHESIS_SYSTEM = """\
 You are a running coach AI. Write a concise weekly synthesis message for the athlete.
@@ -60,82 +53,6 @@ FORMAT:
 TONE: Direct, practical, coach-like. Not overly positive. Max 200 words.
 Do NOT include JSON or headers — plain prose only.
 """
-
-
-def _find_claude() -> Optional[str]:
-    for p in CLAUDE_PATHS:
-        if p.exists():
-            return str(p)
-    return None
-
-
-def _call_llm(prompt: str, timeout: int = 90) -> str:
-    """Call claude CLI in headless mode. Returns raw text."""
-    if os.environ.get("BRAIN_ALLOW_SDK_FALLBACK") == "1":
-        return _call_sdk_fallback(prompt)
-
-    claude = _find_claude()
-    if claude is None:
-        raise RuntimeError("claude CLI not found")
-
-    env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
-    result = subprocess.run(
-        [claude, "-p", prompt, "--output-format", "text"],
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-        cwd=str(PROJECT_ROOT),
-        env=env,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(f"claude CLI exited {result.returncode}: {result.stderr[:200]}")
-    text = result.stdout.strip()
-    if not text:
-        raise RuntimeError("claude CLI returned empty response")
-    return text
-
-
-def _call_sdk_fallback(prompt: str) -> str:
-    """Fallback: anthropic SDK or Gemini."""
-    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
-    if api_key:
-        try:
-            import anthropic  # type: ignore
-            client = anthropic.Anthropic(api_key=api_key)
-            msg = client.messages.create(
-                model="claude-haiku-4-5-20251001",
-                max_tokens=512,
-                system=_SYNTHESIS_SYSTEM,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            return msg.content[0].text
-        except Exception as e:
-            log.warning("anthropic SDK failed: %s", e)
-
-    # Gemini fallback
-    gemini_env = PROJECT_ROOT / "config" / "gemini_api.env"
-    gemini_key = ""
-    if gemini_env.exists():
-        for line in gemini_env.read_text().splitlines():
-            if line.startswith("GEMINI_API_KEY="):
-                gemini_key = line.split("=", 1)[1].strip()
-    gemini_key = gemini_key or os.environ.get("GEMINI_API_KEY", "")
-    if not gemini_key:
-        raise RuntimeError("No LLM backend available")
-
-    import urllib.request as _req
-    import json as _json
-    url = (
-        f"https://generativelanguage.googleapis.com/v1/models/"
-        f"gemini-2.0-flash:generateContent?key={gemini_key}"
-    )
-    payload = _json.dumps({
-        "contents": [{"parts": [{"text": f"{_SYNTHESIS_SYSTEM}\n\n{prompt}"}]}]
-    }).encode()
-    req = _req.Request(url, data=payload, headers={"Content-Type": "application/json"})
-    with _req.urlopen(req, timeout=30) as resp:
-        body = _json.loads(resp.read())
-    return body["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
 def run(db_path=None) -> Dict[str, Any]:
@@ -270,9 +187,7 @@ def run(db_path=None) -> Dict[str, Any]:
         for d in next_plan
     ]
 
-    user_prompt = f"""{_SYNTHESIS_SYSTEM}
-
-DATA — LAST WEEK ({week_start} to {week_end}):
+    data_prompt = f"""DATA — LAST WEEK ({week_start} to {week_end}):
 
 Activities completed:
 {json.dumps(act_summary, indent=2)}
@@ -293,7 +208,7 @@ Write the weekly synthesis now."""
 
     # ── 6. Call Brain LLM ─────────────────────────────────────────────────
     try:
-        synthesis_text = _call_llm(user_prompt)
+        synthesis_text = _call_llm(_SYNTHESIS_SYSTEM, data_prompt, timeout=90)
         log.info("on_weekly_rollup: synthesis generated (%d chars)", len(synthesis_text))
     except Exception as exc:
         log.error("on_weekly_rollup: LLM call failed: %s", exc)

@@ -45,8 +45,8 @@ The Running Coach System is a CLI-first application designed for use with [Claud
 │  │  - Activities, sleep, HR, VO2 max, recovery metrics │    │
 │  └─────────────────────────────────────────────────────┘    │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │  Workout Library (data/library/*.json)              │    │
-│  │  - Pre-built workout templates (19+ workouts)       │    │
+│  │  Workout Library Feature                             │    │
+│  │  - Currently inactive (not used by active workflows)│    │
 │  └─────────────────────────────────────────────────────┘    │
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │  Planned Workouts (data/plans/*.json)               │    │
@@ -202,33 +202,12 @@ Context files that personalize coaching:
 
 All coaching agents read these files to provide personalized, context-aware guidance.
 
-### 4. Workout Library System
+### 4. Workout Library Status
 
-**Location:** `data/library/workout_library.json`
+The workout library feature is not currently active.
 
-**Components:**
-- `src/workout_library.py` - CRUD operations, search, filtering
-- `src/workout_library_cli.py` - Command-line interface
-- `bin/workout_library.sh` - Shell wrapper for CLI
-
-**Features:**
-- 19+ pre-built workout templates across all coaching domains
-- Searchable metadata: domain, type, difficulty, duration, VDOT range, equipment, tags
-- JSON-based storage for easy integration
-- Template system for workout customization
-
-**Workflow:**
-```
-Coach searches library
-    ↓
-Filter by criteria (domain, type, difficulty, etc.)
-    ↓
-Select workout template
-    ↓
-Customize for athlete (pace, duration, etc.)
-    ↓
-Present to user
-```
+- (workout library feature removed)
+- Design workouts directly from athlete context, training phase, and current readiness data.
 
 ### 5. Planned Workouts System
 
@@ -237,7 +216,7 @@ Present to user
 **Components:**
 - `src/planned_workout_manager.py` - Workout plan manager (CRUD)
 - `src/planned_workout_cli.py` - CLI interface
-- `bin/planned_workouts.sh` - Shell wrapper
+- `python3 cli/coach.py schedule` - CLI access for today's and upcoming workouts
 
 **Features:**
 - Scheduled workout tracking from baseline training plan
@@ -470,7 +449,7 @@ All data is stored locally in the `data/` directory:
 data/
 ├── athlete/           # Athlete context files (version controlled)
 ├── health/            # Health data cache (gitignored)
-├── library/           # Workout library (version controlled)
+├── library/           # Legacy workout library artifacts (inactive feature)
 ├── plans/             # Training plans and workouts (version controlled)
 ├── calendar/          # Calendar import/export files (gitignored)
 └── frameworks/        # Training framework templates (version controlled)
@@ -481,7 +460,7 @@ data/
 **Version Controlled:**
 - Athlete context files (`data/athlete/*.md`)
 - Training plans (`data/plans/*.md`, `data/plans/planned_workouts.json`)
-- Workout library (`data/library/workout_library.json`)
+- Workout library metadata (inactive feature; do not depend on CLI workflow)
 - System configuration (`config/*.example`)
 
 **Gitignored:**
@@ -702,12 +681,10 @@ def fetch_new_data_type(client: Garmin, start_date: date, end_date: date, quiet:
 
 ### Adding New Workout Template
 
-Use workout library CLI:
-```bash
-bash bin/workout_library.sh import my_workout.json
-```
+Workout library CLI is not active.
 
-Or directly edit `data/library/workout_library.json` following schema in `data/library/workout_library_schema.md`.
+- (workout library feature removed)
+- Add new workout guidance in coaching docs/prompts and implement directly in planning logic.
 
 ---
 

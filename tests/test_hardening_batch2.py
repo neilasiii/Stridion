@@ -440,7 +440,7 @@ class TestShortRaceEndToEnd:
         mock_json = self._make_short_race_recovery_json(inputs["start_week"], 50.6)
 
         db = tmp_path / "coach.db"
-        with patch("brain.planner._call_llm", return_value=mock_json):
+        with patch("brain.macro_plan._call_llm", return_value=mock_json):
             plan = generate_macro_plan(packet, force=True, db_path=db)
 
         assert plan.weeks[0].quality_sessions_allowed == 0
@@ -482,7 +482,7 @@ class TestShortRaceEndToEnd:
         })
 
         db = tmp_path / "coach.db"
-        with patch("brain.planner._call_llm", return_value=bad_json):
+        with patch("brain.macro_plan._call_llm", return_value=bad_json):
             with pytest.raises(MacroValidationError) as exc_info:
                 generate_macro_plan(packet, force=True, db_path=db)
 

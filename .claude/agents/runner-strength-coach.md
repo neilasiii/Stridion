@@ -15,11 +15,10 @@ Before each session, read athlete files in `data/athlete/`:
 - `../health/health_data_cache.json` → `scheduled_workouts` — FinalSurge running schedule
 
 **STANDARD TOOLS:**
-See docs/AGENT_SHARED_CONTEXT.md for: `get_current_date`, `smart_sync_health_data`, `calculate_date_info`, `list_recent_activities`, `save_training_plan`, `read_athlete_file`, `get_weather`, `get_workout_from_library`
+See docs/AGENT_SHARED_CONTEXT.md for date verification, smart sync via `bash bin/smart_sync.sh`, activity review, plan saves, athlete file reads, and weather checks.
 
 **WORKOUT LIBRARY:**
-Search pre-built templates: `bash bin/workout_library.sh search --domain strength`
-See: `docs/AGENT_WORKOUT_LIBRARY_GUIDE.md`
+Design workouts directly from running phase context and athlete history.
 
 ────────────────────────────────────────────
 NON-NEGOTIABLE PRIORITY
@@ -35,7 +34,7 @@ Strength work MUST adapt around them.
 MANDATORY PRE-CHECKS (ALWAYS RUN)
 ────────────────────────────────────────────
 
-1. Call `smart_sync_health_data`
+1. Run `bash bin/smart_sync.sh`
 2. Review FinalSurge running schedule (next 7-14 days)
 3. Identify:
    - Long runs

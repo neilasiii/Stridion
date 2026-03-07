@@ -73,8 +73,8 @@ Before making claims:
 **MANDATORY FOR ALL AGENTS:**
 
 1. **NEVER assume or guess today's date or day-of-week**
-2. **ALWAYS call `get_current_date` at the start of EVERY coaching session**
-3. **ALWAYS call `calculate_date_info` to verify day-of-week** for any date you reference
+2. **ALWAYS run `date +"%A, %B %d, %Y"` at the start of EVERY coaching session**
+3. **Verify day-of-week by reading the date output** — do not infer from context
 4. **If user corrects your date/day-of-week, STOP and acknowledge the correction**
 
 **Why this is critical:** Date errors undermine trust and lead to incorrect workout scheduling.
@@ -83,21 +83,21 @@ Before making claims:
 
 ## Smart Sync Protocol
 
-**At session start, ALWAYS call `smart_sync_health_data`:**
+**At session start, ALWAYS run the smart sync:**
 
-This tool intelligently checks cache age before syncing:
+This command intelligently checks cache age before syncing:
 - Cache <30 min old → Uses cached data (fast, no API call)
 - Cache >30 min old → Syncs from Garmin Connect (fresh data)
-- User mentions "just finished workout" → Use `force=true` parameter
+- User mentions "just finished workout" → run `bash bin/smart_sync.sh --force`
 
 **Benefits:**
 - Reduces redundant API calls when multiple agents run in quick succession
 - Faster response times with cached data
 - Still ensures fresh data when needed
 
-**Parameters:**
-- `max_age_minutes` (default: 30) - max cache age before syncing
-- `force` (default: false) - force sync regardless of cache age
+**Command options:**
+- `bash bin/smart_sync.sh` - default cache-aware sync
+- `bash bin/smart_sync.sh --force` - force sync regardless of cache age
 
 ---
 
@@ -193,20 +193,12 @@ The athlete's baseline training plan has been extracted into `data/plans/planned
 
 ```bash
 # Today's scheduled workout
-bash bin/planned_workouts.sh list --today -v
+python3 cli/coach.py schedule --today
 
-# Upcoming workouts (next 7 days)
-bash bin/planned_workouts.sh list --upcoming 7 -v
+# Upcoming workouts (next 7 days)  
+python3 cli/coach.py schedule --upcoming 7
 
-# Mark workout completed
-bash bin/planned_workouts.sh complete <workout-id> \
-  --duration 30 --distance 3.1 --pace "10:20/mile" --hr 140
-
-# Add adjustment to workout
-bash bin/planned_workouts.sh adjust <workout-id> \
-  --reason "Recovery metrics show elevated RHR" \
-  --change "Reduced from 45 min to 30 min" \
-  --modified-by "agent-name"
+# Mark workout completed (via Discord /coach_note or check-in flow)
 ```
 
 **When to use planned workouts:**
@@ -219,7 +211,7 @@ bash bin/planned_workouts.sh adjust <workout-id> \
 
 ## Health Data Available
 
-After calling `smart_sync_health_data`, the cache (`data/health/health_data_cache.json`) contains:
+After syncing (`bash bin/smart_sync.sh`), the cache (`data/health/health_data_cache.json`) contains:
 
 **Activity Data:**
 - Recent activities (running, strength, cycling, swimming, etc.)
@@ -309,10 +301,10 @@ response = upload_workout(client, workout_dict, auto_clean=True)
 
 ## Tool Usage Patterns
 
-**When to call `calculate_date_info`:**
-- When creating schedules, call for 2-3 key dates to verify accuracy
-- Then infer sequential dates to save time
-- Don't call for every single date in a multi-week plan
+**When to verify dates:**
+- When creating schedules, run `date` to confirm today's date and day-of-week
+- Then infer sequential dates from that anchor
+- Don't verify every single date in a multi-week plan
 
 **When to save training plans:**
 - Use `save_training_plan` for multi-day or multi-week plans

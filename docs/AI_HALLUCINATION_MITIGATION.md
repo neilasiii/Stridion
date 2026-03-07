@@ -146,9 +146,9 @@ Every AI coaching prompt includes:
 **Prevents hallucination by enforcing calculation tools**:
 
 - `calculate_vdot` → Forces use of Jack Daniels formulas (no estimation)
-- `get_current_date` → Mandatory date verification at session start
-- `calculate_date_info` → Verifies day-of-week for any referenced date
-- `smart_sync_health_data` → Ensures fresh data before recommendations
+- `date +"%A, %B %d, %Y"` → Mandatory date verification at session start
+- Read day-of-week directly from date output → Verifies date references
+- `bash bin/smart_sync.sh` → Ensures fresh data before recommendations
 
 ### 4. Structured Output Formats
 

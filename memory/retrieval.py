@@ -61,6 +61,19 @@ def _load_health_cache() -> Dict:
         return json.load(f)
 
 
+def load_health_cache() -> Optional[Dict]:
+    """
+    Public API: load the Garmin health data cache.
+
+    Returns None if the cache file does not exist. Callers decide how to handle
+    a missing cache (raise, exit, or return gracefully).
+    """
+    if not HEALTH_CACHE.exists():
+        return None
+    with HEALTH_CACHE.open(encoding="utf-8") as f:
+        return json.load(f)
+
+
 def _trunc(text: str, max_chars: int) -> str:
     if len(text) <= max_chars:
         return text

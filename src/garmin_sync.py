@@ -188,7 +188,7 @@ def retry_with_backoff(func: Callable, *args, max_retries: int = 3, quiet: bool 
     raise last_exception
 
 
-def get_garmin_client() -> Garmin:
+def get_garmin_client(quiet: bool = False) -> Garmin:
     """
     Authenticate with Garmin Connect and return client.
 
@@ -196,6 +196,9 @@ def get_garmin_client() -> Garmin:
     1. Token-based authentication (from ~/.garminconnect/)
     2. Password authentication (GARMIN_EMAIL and GARMIN_PASSWORD env vars)
     3. Config file (config/.garmin_config.json)
+
+    Args:
+        quiet: If True, suppress informational messages.
 
     Returns:
         Garmin: Authenticated Garmin client
@@ -217,7 +220,8 @@ def get_garmin_client() -> Garmin:
         pass
     except Exception as e:
         # Token auth failed, fall back to password auth
-        print(f"  Token authentication failed, trying password auth...", file=sys.stderr)
+        if not quiet:
+            print(f"  Token authentication failed, trying password auth...", file=sys.stderr)
 
     # Fall back to password authentication
     email = os.getenv("GARMIN_EMAIL")

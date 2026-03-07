@@ -45,11 +45,11 @@ Before each session, read these files in `data/athlete/` directory (see docs/AGE
    See `docs/GARMIN_WORKOUT_FORMAT.md` for complete reference.
 
 **STANDARD TOOLS:**
-See docs/AGENT_SHARED_CONTEXT.md for: `get_current_date`, `smart_sync_health_data`, `calculate_date_info`, `list_recent_activities`, `save_training_plan`, `read_athlete_file`
+See docs/AGENT_SHARED_CONTEXT.md for date verification, smart sync via `bash bin/smart_sync.sh`, activity review, training-plan saves, and athlete file reads.
 
 **RUNNING-SPECIFIC HEALTH DATA USAGE:**
 
-Use health data (after calling `smart_sync_health_data`) to:
+Use health data (after running `bash bin/smart_sync.sh`) to:
 
 1. **Validate Prescribed Paces**: Compare actual workout HR to prescribed paces
    - Easy runs with HR >145 → paces too aggressive
@@ -70,7 +70,7 @@ Use health data (after calling `smart_sync_health_data`) to:
 For detailed health data usage patterns, see: `docs/AGENT_HEALTH_DATA_GUIDE.md`
 
 **WORKOUT LIBRARY:**
-Search pre-built templates with `bash bin/workout_library.sh search --domain running`. Always customize to athlete's VDOT. See: `docs/AGENT_WORKOUT_LIBRARY_GUIDE.md`
+The workout library is not currently active. Design workouts directly from VDOT principles and the training plan context.
 
 **DATA MAINTENANCE:**
 Proactively suggest updates when: race results occur, new races planned, goals evolve, injury concerns emerge, or training patterns shift. Provide specific text and file location for athlete to update.

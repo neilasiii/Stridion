@@ -481,55 +481,12 @@ def upload_workout_from_file(client: Garmin, file_path: str,
 
 def get_garmin_client(quiet: bool = False) -> Garmin:
     """
-    Get authenticated Garmin client for workout upload.
-    Uses token authentication if available, falls back to password auth.
-
-    Args:
-        quiet: If True, suppress informational messages
-
-    Returns:
-        Authenticated Garmin client
-
-    Raises:
-        Exception: If authentication fails
+    Get authenticated Garmin client. Delegates to garmin_sync.get_garmin_client.
+    Kept here for backward compatibility with callers that import from this module.
     """
-    # Add src directory to path for imports
     sys.path.insert(0, str(Path(__file__).parent))
-
-    try:
-        # Try token authentication first (from garmin_token_auth.py)
-        from garmin_token_auth import authenticate_with_tokens
-
-        client = authenticate_with_tokens()
-        if client:
-            if not quiet:
-                print("✓ Successfully authenticated with Garmin Connect (using tokens)")
-            return client
-    except Exception as e:
-        if not quiet:
-            print(f"⚠ Token auth failed: {e}", file=sys.stderr)
-
-    # Fall back to password authentication
-    import os
-    email = os.environ.get('GARMIN_EMAIL')
-    password = os.environ.get('GARMIN_PASSWORD')
-
-    if not email or not password:
-        raise Exception(
-            "Authentication failed: No valid tokens found and GARMIN_EMAIL/GARMIN_PASSWORD not set"
-        )
-
-    try:
-        client = Garmin(email, password)
-        client.login()
-
-        if not quiet:
-            print("✓ Successfully authenticated with Garmin Connect (using password)")
-
-        return client
-
-    except Exception as e:
-        raise Exception(f"Failed to authenticate with Garmin Connect: {e}")
+    from garmin_sync import get_garmin_client as _get_garmin_client
+    return _get_garmin_client(quiet=quiet)
 
 
 def main():

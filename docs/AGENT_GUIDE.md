@@ -279,36 +279,19 @@ else:
 "
 
 # 2. ONLY if no FinalSurge: Check baseline plan (Priority 2)
-bash bin/planned_workouts.sh list --today -v
+python3 cli/coach.py schedule --today
 ```
 
 ### Common Commands
 
 ```bash
+# View today's workout
+python3 cli/coach.py schedule --today
+
 # View upcoming workouts (baseline plan)
-bash bin/planned_workouts.sh list --upcoming 7 -v
+python3 cli/coach.py schedule --upcoming 7
 
-# Week summary
-bash bin/planned_workouts.sh summary --week 3
-
-# Mark workout complete
-bash bin/planned_workouts.sh complete <workout_id> \
-  --garmin-id 21089008771 \
-  --duration 30 \
-  --distance 3.1 \
-  --pace "10:20/mile" \
-  --hr 140 \
-  --notes "Felt great"
-
-# Mark workout skipped
-bash bin/planned_workouts.sh skip <workout_id> \
-  --reason "Poor sleep, prioritized recovery"
-
-# Add adjustment
-bash bin/planned_workouts.sh adjust <workout_id> \
-  --reason "Recovery metrics show elevated RHR" \
-  --change "Reduced from 45 min to 30 min" \
-  --modified-by "vdot-running-coach"
+# Mark workout complete/adjusted via Discord /coach_note or check-in flow
 ```
 
 ### Best Practices
@@ -524,18 +507,8 @@ Pre-built workout database across all domains (running, strength, mobility, nutr
 
 ### Quick Commands
 
-```bash
-# Search for specific workouts
-bash bin/workout_library.sh search --domain running --type tempo
-bash bin/workout_library.sh search --difficulty beginner --duration-max 30
-bash bin/workout_library.sh search --tags gluten_free dairy_free
-
-# Get workout details
-bash bin/workout_library.sh get <workout-id>
-
-# Library statistics
-bash bin/workout_library.sh stats
-```
+Note: The workout library CLI is not currently active.
+Design workouts directly based on athlete context, VDOT paces, and training phase.
 
 ### Python API
 
@@ -650,7 +623,7 @@ else:
 "
 
 # 3. Check baseline plan (Priority 2, only if no FinalSurge)
-bash bin/planned_workouts.sh list --today -v
+python3 cli/coach.py schedule --today
 
 # 4. Check readiness metrics
 python3 -c "

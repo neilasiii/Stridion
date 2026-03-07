@@ -42,11 +42,12 @@ import re
 
 def load_health_cache() -> Dict[str, Any]:
     """Load health data cache."""
-    cache_path = Path(__file__).parent.parent / "data" / "health" / "health_data_cache.json"
-    if not cache_path.exists():
-        raise FileNotFoundError(f"Health data cache not found: {cache_path}")
-    with open(cache_path, 'r') as f:
-        return json.load(f)
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from memory.retrieval import load_health_cache as _load
+    data = _load()
+    if data is None:
+        raise FileNotFoundError("Health data cache not found. Run sync first.")
+    return data
 
 
 def get_week_context(target_date: str) -> str:
@@ -492,36 +493,19 @@ If all runs are easy (E pace) AND recovery is not severely compromised, YOU MUST
         print(prompt)
         return None
 
-    # Call Claude Code in headless mode
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).parent.parent))
+    from brain.llm import call_llm as _call_brain_llm, _brace_search_last, _try_strict_extract
+
     try:
-        result = subprocess.run(
-            [
-                "claude",
-                "-p", prompt,
-                "--print",
-                "--output-format", "text",
-                "--model", "sonnet",
-                "--allowedTools", ""  # No tools needed, just generation
-            ],
-            capture_output=True,
-            text=True,
-            timeout=120,
-            cwd=str(Path(__file__).parent.parent)
-        )
+        response = _call_brain_llm("", prompt, timeout=120)
 
-        if result.returncode != 0:
-            print(f"Error from Claude: {result.stderr}", file=sys.stderr)
-            return None
+        # Extract JSON using proper balanced-brace extraction (not greedy regex)
+        schedule_data_str = _try_strict_extract(response)
+        if schedule_data_str is None:
+            schedule_data_str = _brace_search_last(response)
 
-        response = result.stdout.strip()
-
-        # Extract JSON from response
-        json_match = re.search(r'\{[\s\S]*\}', response)
-        if not json_match:
-            print(f"Could not find JSON in response: {response[:500]}", file=sys.stderr)
-            return None
-
-        schedule_data = json.loads(json_match.group())
+        schedule_data = json.loads(schedule_data_str)
 
         # Validate the response
         selected_days = schedule_data.get("selected_days", [])

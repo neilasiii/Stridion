@@ -165,21 +165,16 @@ python3 src/vdot_calculator.py
 
 **Browse Workout Library:**
 ```bash
-# View statistics
-bash bin/workout_library.sh stats
-
-# Search for workouts
-bash bin/workout_library.sh search --domain running --type tempo
-bash bin/workout_library.sh search --difficulty beginner
+Note: The workout library CLI is not currently active.
 ```
 
 **View Scheduled Workouts:**
 ```bash
 # Today's workout
-bash bin/planned_workouts.sh list --today -v
+python3 cli/coach.py schedule --today
 
 # Next 7 days
-bash bin/planned_workouts.sh list --upcoming 7 -v
+python3 cli/coach.py schedule --upcoming 7
 ```
 
 **Check Weather:**

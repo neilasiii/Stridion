@@ -34,6 +34,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from .schemas import MacroPlan, MacroWeek, MacroModeT, RaceDistanceT
+from .llm import call_llm as _call_llm, _try_strict_extract, _brace_search_last, _JSON_FENCE_RE
 
 log = logging.getLogger("brain.macro_plan")
 
@@ -827,34 +828,6 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
     return system, user
 
 
-# ── JSON extraction helpers (mirrors planner.py approach) ─────────────────────
-
-_JSON_FENCE_RE = re.compile(r"^```(?:json)?\s*\n?|\n?```$", re.MULTILINE)
-
-
-def _try_strict_extract(text: str) -> Optional[str]:
-    s = _JSON_FENCE_RE.sub("", text).strip()
-    if s.startswith("{") and s.endswith("}"):
-        return s
-    return None
-
-
-def _brace_search_last(text: str) -> str:
-    last_close = text.rfind("}")
-    if last_close == -1:
-        raise ValueError(f"No JSON object found in macro output:\n{text[:300]}")
-    depth = 0
-    for i in range(last_close, -1, -1):
-        ch = text[i]
-        if ch == "}":
-            depth += 1
-        elif ch == "{":
-            depth -= 1
-            if depth == 0:
-                return text[i : last_close + 1]
-    raise ValueError(f"Unbalanced JSON braces in macro output:\n{text[:300]}")
-
-
 def _truncate_macro_data(data: Dict) -> Dict:
     """Pre-validation truncation to schema limits (LLMs ignore char caps)."""
     def _t(s: Any, n: int) -> Any:
@@ -881,8 +854,6 @@ def _parse_and_validate_macro(raw_text: str, system: str) -> MacroPlan:
     Extract JSON from raw LLM output and validate with Pydantic.
     One format reprompt, then one schema reprompt on failure.
     """
-    from brain.planner import _call_llm  # avoid circular import at module level
-
     # Step 1: strict extract
     json_str = _try_strict_extract(raw_text)
     if json_str is None:
@@ -953,7 +924,6 @@ def generate_macro_plan(
     Raises:
         MacroValidationError: if the generated plan fails structural checks.
     """
-    from brain.planner import _call_llm
     from memory.db import (
         DB_PATH as _DEFAULT_DB,
         insert_macro_plan,

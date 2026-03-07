@@ -311,7 +311,7 @@ class TestPostRaceMacroIntegration:
         mock_json = _make_recovery_macro_json(start_week, 50.6, week1_cap)
 
         db = tmp_path / "test_coach.db"
-        with patch("brain.planner._call_llm", return_value=mock_json):
+        with patch("brain.macro_plan._call_llm", return_value=mock_json):
             plan = generate_macro_plan(packet, force=True, db_path=db)
 
         w1 = plan.weeks[0]
@@ -335,7 +335,7 @@ class TestPostRaceMacroIntegration:
         )
 
         db = tmp_path / "test_coach.db"
-        with patch("brain.planner._call_llm", return_value=mock_json):
+        with patch("brain.macro_plan._call_llm", return_value=mock_json):
             generate_macro_plan(packet, force=True, db_path=db)
 
         macro_id = get_active_macro_plan_id(db_path=db)
@@ -353,7 +353,7 @@ class TestPostRaceMacroIntegration:
         )
 
         db = tmp_path / "test_coach.db"
-        with patch("brain.planner._call_llm", return_value=mock_json):
+        with patch("brain.macro_plan._call_llm", return_value=mock_json):
             plan = generate_macro_plan(packet, force=True, db_path=db)
 
         assert plan.total_weeks == 12
@@ -565,7 +565,7 @@ class TestFailureMode:
         invalid_json = self._make_invalid_recovery_json(inputs["start_week"], 50.6)
 
         db = tmp_path / "test_coach.db"
-        with patch("brain.planner._call_llm", return_value=invalid_json):
+        with patch("brain.macro_plan._call_llm", return_value=invalid_json):
             with pytest.raises(MacroValidationError) as exc_info:
                 generate_macro_plan(packet, force=True, db_path=db)
 
@@ -593,7 +593,7 @@ class TestFailureMode:
         db = tmp_path / "test_coach.db"
         init_db(db_path=db)
 
-        with patch("brain.planner._call_llm", return_value=invalid_json):
+        with patch("brain.macro_plan._call_llm", return_value=invalid_json):
             with pytest.raises(MacroValidationError):
                 generate_macro_plan(packet, force=True, db_path=db)
 
@@ -619,7 +619,7 @@ class TestFailureMode:
         db = tmp_path / "test_coach.db"
         init_db(db_path=db)
 
-        with patch("brain.planner._call_llm", return_value=invalid_json):
+        with patch("brain.macro_plan._call_llm", return_value=invalid_json):
             with pytest.raises(MacroValidationError):
                 generate_macro_plan(packet, force=True, db_path=db)
 

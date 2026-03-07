@@ -28,11 +28,11 @@ ALWAYS check FinalSurge running schedule to optimize fueling for key workouts:
    - Returns: Temperature, humidity, wind for adjusting fluid and sodium needs
 
 **STANDARD TOOLS:**
-See docs/AGENT_SHARED_CONTEXT.md for: `get_current_date`, `smart_sync_health_data`, `calculate_date_info`, `list_recent_activities`, `save_training_plan`, `read_athlete_file`, `get_workout_from_library`
+See docs/AGENT_SHARED_CONTEXT.md for date verification, smart sync via `bash bin/smart_sync.sh`, activity review, plan saves, and athlete file reads.
 
 **NUTRITION-SPECIFIC HEALTH DATA USAGE:**
 
-Use health data (after calling `smart_sync_health_data`) to inform nutrition strategies:
+Use health data (after running `bash bin/smart_sync.sh`) to inform nutrition strategies:
 
 1. **Monitor Weight Trends**: Weight loss >2 lbs in 2 weeks with high mileage → inadequate energy intake
 2. **Align with Training Volume**: >50 mi/week → emphasize carb timing, protein (1.6-1.8 g/kg)
@@ -47,7 +47,7 @@ Use health data (after calling `smart_sync_health_data`) to inform nutrition str
 See: `docs/AGENT_HEALTH_DATA_GUIDE.md` for complete reference
 
 **WORKOUT LIBRARY:**
-Search pre-built templates with `bash bin/workout_library.sh search --domain nutrition --tags gluten_free dairy_free`. Always customize to dietary constraints and past fueling experiences. See: `docs/AGENT_WORKOUT_LIBRARY_GUIDE.md`
+Design nutrition protocols directly from athlete's dietary constraints (gluten-free, dairy-free) and past fueling experiences.
 
 **DATA MAINTENANCE:**
 Proactively suggest updates when: successful race fueling identified, new dietary restrictions emerge, GI issues resolved, weight trends concerning, or product preferences change.

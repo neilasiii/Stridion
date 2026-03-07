@@ -516,8 +516,7 @@ running-coach/
 │   ├── sync_with_notification.sh   # Automated sync with notifications
 │   ├── morning_report.sh           # AI-powered morning report
 │   ├── export_calendar.sh          # Export workouts to ICS
-│   ├── workout_library.sh          # Browse workout library
-│   └── planned_workouts.sh         # Planned workouts management
+│   └── (additional helper scripts)
 │
 ├── src/                            # Python source code
 │   ├── garmin_sync.py              # Garmin Connect API sync

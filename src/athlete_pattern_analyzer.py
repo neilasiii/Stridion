@@ -15,9 +15,9 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-_REPO_ROOT = Path(__file__).parent.parent
-_HEALTH_CACHE = _REPO_ROOT / "data" / "health" / "health_data_cache.json"
-_OUTPUT_PATH = _REPO_ROOT / "data" / "athlete" / "learned_patterns.md"
+PROJECT_ROOT = Path(__file__).parent.parent
+_HEALTH_CACHE = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
+_OUTPUT_PATH = PROJECT_ROOT / "data" / "athlete" / "learned_patterns.md"
 
 # ── Workout type labels ──────────────────────────────────────────────────────
 
