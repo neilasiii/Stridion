@@ -195,21 +195,14 @@ def run_cycle(db_path=None) -> dict:
                 constraints_result["needs_replan"],
             )
 
-        # ── 6. Obs missed check (always) ────────────────────────────────────
-        from hooks.on_obs_missed import run as on_obs_missed
-        obs_missed = on_obs_missed(db_path=db)
-        if obs_missed["pending_written"]:
-            summary["hooks_run"].append("on_obs_missed")
-            log.info("on_obs_missed: pending result written for Discord bot delivery")
-
-        # ── 7. Weekly rollup (Saturday 7pm+, always, idempotent) ────────────
+        # ── 6. Weekly rollup (Saturday 7pm+, always, idempotent) ────────────
         from hooks.on_weekly_rollup import run as on_weekly_rollup
         rollup = on_weekly_rollup(db_path=db)
         if rollup["synthesis_written"]:
             summary["hooks_run"].append("on_weekly_rollup")
             log.info("on_weekly_rollup: weekly synthesis queued")
 
-        # ── 8. FinalSurge cutover readiness check (always) ──────────────────
+        # ── 7. FinalSurge cutover readiness check (always) ──────────────────
         from hooks.on_cutover_ready import run as on_cutover_ready
         cutover = on_cutover_ready(db_path=db)
         if cutover["pending_written"]:
@@ -217,7 +210,7 @@ def run_cycle(db_path=None) -> dict:
             log.info("on_cutover_ready: cutover prompt queued (%d/%d plans)",
                      cutover["count"], cutover["threshold"])
 
-        # ── 9. Injury risk monitor (always) ─────────────────────────────────
+        # ── 8. Injury risk monitor (always) ─────────────────────────────────
         from hooks.on_injury_risk import run as on_injury_risk
         injury = on_injury_risk(db_path=db)
         if injury["pending_written"]:

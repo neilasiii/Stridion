@@ -34,11 +34,6 @@ CHANNELS = {
 PROJECT_ROOT = Path(__file__).parent.parent
 CLAUDE_PATH = os.path.expanduser("~/.local/bin/claude")
 
-# Observability testing (D12-1 / D12-2) — runs daily for 7 days
-TESTING_CHANNEL_ID = 1474504005244948548
-_OBS_TEST_STATE = PROJECT_ROOT / "data" / "obs_test_state.json"
-_OBS_TEST_MAX_DAYS = 7
-
 # Timezone for scheduling (Eastern Time)
 EST = timezone(timedelta(hours=-5))
 
@@ -1869,12 +1864,6 @@ async def sync_digest_task():
             timestamp=datetime.now(),
         ))
 
-    # Safety net: deliver any pending obs result that on_ready may have missed
-    testing_channel = bot.get_channel(TESTING_CHANNEL_ID)
-    if testing_channel:
-        await _post_pending_obs(testing_channel)
-
-
 @tasks.loop(time=time(hour=7, minute=0, tzinfo=EST))  # 7:00 AM EST
 async def daily_workouts_task():
     """Post daily workouts to #workouts channel."""
@@ -1929,108 +1918,6 @@ async def daily_workouts_task():
     except Exception as e:
         logger.error(f"Daily workouts task error: {e}")
         await channel.send(f"❌ Failed to load workouts: {str(e)}")
-
-
-# ── Obs helpers (used by obs_test_task, on_ready, and sync_digest) ────────────
-
-def _obs_mark_sent(date_str: str) -> None:
-    """Write last_sent_date into obs_test_state.json after a successful Discord send."""
-    try:
-        state: dict = {}
-        if _OBS_TEST_STATE.exists():
-            state = json.loads(_OBS_TEST_STATE.read_text())
-        state["last_sent_date"] = date_str
-        _OBS_TEST_STATE.write_text(json.dumps(state))
-    except Exception as exc:
-        logger.warning("obs_mark_sent failed: %s", exc)
-
-
-async def _post_pending_obs(channel) -> bool:
-    """
-    Check SQLite for a pending obs result written by the heartbeat agent.
-    If found (and not yet sent today), post it and clear the pending flag.
-    Returns True if a message was posted.
-    """
-    import sqlite3
-    db_path = PROJECT_ROOT / "data" / "coach.sqlite"
-    if not db_path.exists():
-        return False
-
-    today = datetime.now(EST).strftime("%Y-%m-%d")
-
-    # Check obs state — if already sent today, nothing to do
-    try:
-        state: dict = {}
-        if _OBS_TEST_STATE.exists():
-            state = json.loads(_OBS_TEST_STATE.read_text())
-        if state.get("last_sent_date") == today:
-            return False
-    except Exception:
-        return False
-
-    # Read pending result from SQLite state table
-    try:
-        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
-        conn.row_factory = sqlite3.Row
-        row = conn.execute("SELECT value FROM state WHERE key = 'obs_pending_result'").fetchone()
-        conn.close()
-    except Exception as exc:
-        logger.warning("_post_pending_obs: DB read error: %s", exc)
-        return False
-
-    if not row:
-        return False
-
-    try:
-        payload = json.loads(row["value"])
-    except Exception:
-        return False
-
-    if payload.get("date") != today:
-        return False  # stale result from a previous day
-
-    # Build and send the message
-    run_number = payload.get("run_number", "?")
-    overall_pass = payload.get("overall_pass", False)
-    sanity_pass  = payload.get("sanity_pass",  False)
-    parity_pass  = payload.get("parity_pass",  False)
-    rc_sanity    = payload.get("rc_sanity",    -1)
-    rc_parity    = payload.get("rc_parity",    -1)
-    out_sanity   = payload.get("out_sanity",   "")
-    out_parity   = payload.get("out_parity",   "")
-
-    icon = "✅" if overall_pass else "❌"
-    lines = [
-        f"**{icon} Daily Observability Check — {today}** (day {run_number}/{_OBS_TEST_MAX_DAYS})",
-        "_⚠️ Delivered late by heartbeat agent — Discord was offline at scheduled time._",
-        "",
-        f"• `db sanity`: {'✅ PASS' if sanity_pass else f'❌ FAIL (rc={rc_sanity})'}",
-        f"• `parity`:    {'✅ PASS' if parity_pass else f'❌ FAIL (rc={rc_parity})'}",
-    ]
-    if out_sanity.strip():
-        summary = "\n".join(out_sanity.strip().splitlines()[:8])
-        lines += ["", "```", summary, "```"]
-    if not parity_pass and out_parity.strip():
-        lines += ["", "```", out_parity.strip()[:600], "```"]
-
-    try:
-        await channel.send("\n".join(lines))
-    except Exception as exc:
-        logger.error("_post_pending_obs: send failed: %s", exc)
-        return False
-
-    # Mark sent + clear the SQLite pending flag
-    _obs_mark_sent(today)
-    try:
-        conn = sqlite3.connect(str(db_path))
-        conn.execute("DELETE FROM state WHERE key = 'obs_pending_result'")
-        conn.commit()
-        conn.close()
-    except Exception as exc:
-        logger.warning("_post_pending_obs: could not clear pending flag: %s", exc)
-
-    logger.info("_post_pending_obs: late obs result posted for %s", today)
-    return True
 
 
 async def _post_pending_checkin(channel) -> bool:
@@ -2542,75 +2429,6 @@ async def checkin_delivery_task():
         await _post_pending_injury_risk(channel)
 
 
-@tasks.loop(time=time(hour=8, minute=30, tzinfo=EST))  # 8:30 AM EST
-async def obs_test_task():
-    """Run daily observability checks (coach db sanity + parity) for 7 days."""
-    # Load persistent state so run count survives bot restarts
-    state: dict = {}
-    if _OBS_TEST_STATE.exists():
-        try:
-            state = json.loads(_OBS_TEST_STATE.read_text())
-        except Exception:
-            state = {}
-
-    run_number = state.get("runs", 0) + 1
-    if run_number > _OBS_TEST_MAX_DAYS:
-        obs_test_task.stop()
-        return
-
-    # Persist updated state immediately (guards against crash before posting)
-    state.setdefault("start_date", datetime.now(EST).date().isoformat())
-    state["runs"] = run_number
-    _OBS_TEST_STATE.write_text(json.dumps(state))
-
-    channel = bot.get_channel(TESTING_CHANNEL_ID)
-    if not channel:
-        logger.error("obs_test_task: testing channel %s not found", TESTING_CHANNEL_ID)
-        return
-
-    today = datetime.now(EST).strftime("%Y-%m-%d")
-    overall_pass = True
-
-    # ── db sanity ──────────────────────────────────────────────────────────────
-    rc_sanity, out_sanity, _ = await run_coach_cli(["db", "sanity"], timeout=30)
-    sanity_pass = rc_sanity == 0
-    if not sanity_pass:
-        overall_pass = False
-
-    # ── parity ─────────────────────────────────────────────────────────────────
-    rc_parity, out_parity, _ = await run_coach_cli(["parity", "--day", today], timeout=30)
-    parity_pass = rc_parity == 0
-    if not parity_pass:
-        overall_pass = False
-
-    icon = "✅" if overall_pass else "❌"
-    lines = [
-        f"**{icon} Daily Observability Check — {today}** (day {run_number}/{_OBS_TEST_MAX_DAYS})",
-        "",
-        f"• `db sanity`: {'✅ PASS' if sanity_pass else f'❌ FAIL (rc={rc_sanity})'}",
-        f"• `parity`:    {'✅ PASS' if parity_pass else f'❌ FAIL (rc={rc_parity})'}",
-    ]
-
-    # Always include the sanity summary (first 8 lines)
-    if out_sanity.strip():
-        summary = "\n".join(out_sanity.strip().splitlines()[:8])
-        lines += ["", "```", summary, "```"]
-
-    # Include parity output only on mismatch (exit 2) or failure
-    if not parity_pass and out_parity.strip():
-        parity_snippet = out_parity.strip()[:600]
-        lines += ["", "```", parity_snippet, "```"]
-
-    if run_number >= _OBS_TEST_MAX_DAYS:
-        lines += ["", "_Observability week complete (7/7). Task stopped._"]
-        obs_test_task.stop()
-
-    await channel.send("\n".join(lines))
-
-    # Mark as successfully sent so the heartbeat agent won't flag it as missed
-    _obs_mark_sent(today)
-
-
 @tasks.loop(time=time(hour=22, minute=0, tzinfo=EST))  # 10:00 PM EST
 async def saturday_plan_task():
     """Auto-generate next week's plan every Saturday night at 10 PM."""
@@ -2665,7 +2483,6 @@ async def saturday_plan_task():
 @morning_report_task.before_loop
 @sync_digest_task.before_loop
 @daily_workouts_task.before_loop
-@obs_test_task.before_loop
 @saturday_plan_task.before_loop
 @checkin_delivery_task.before_loop
 async def before_scheduled_tasks():
@@ -2713,24 +2530,6 @@ async def on_ready():
     if not saturday_plan_task.is_running():
         saturday_plan_task.start()
         print("✓ Saturday plan task started")
-
-    # Start observability test task only if days remain
-    _obs_runs = 0
-    if _OBS_TEST_STATE.exists():
-        try:
-            _obs_runs = json.loads(_OBS_TEST_STATE.read_text()).get("runs", 0)
-        except Exception:
-            pass
-    if _obs_runs < _OBS_TEST_MAX_DAYS and not obs_test_task.is_running():
-        obs_test_task.start()
-        print(f"✓ Observability test task started ({_obs_runs}/{_OBS_TEST_MAX_DAYS} days done)")
-
-    # Deliver any obs result the heartbeat agent caught while Discord was offline
-    testing_channel = bot.get_channel(TESTING_CHANNEL_ID)
-    if testing_channel:
-        posted = await _post_pending_obs(testing_channel)
-        if posted:
-            print("✓ Late obs result delivered on reconnect")
 
     # Deliver any cutover prompt the heartbeat agent queued while Discord was offline
     coach_channel = bot.get_channel(CHANNELS["coach"])
