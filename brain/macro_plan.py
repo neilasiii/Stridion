@@ -221,6 +221,14 @@ def validate_macro_plan(
     ]
     consec_big_ramps = 0
     for i in range(1, len(base_vols)):
+        prev_week_num = base_vols[i - 1][0]
+        curr_week_num = base_vols[i][0]
+        # Skip ramp check for non-consecutive base weeks (quality block in between).
+        # Comparing e.g. week 6 base to week 11 base after quality weeks 7-10
+        # would produce a false positive since quality drove volume up legitimately.
+        if curr_week_num != prev_week_num + 1:
+            consec_big_ramps = 0
+            continue
         prev_vol = base_vols[i - 1][1]
         curr_vol = base_vols[i][1]
         prev_ceil = base_vols[i - 1][2]
@@ -685,6 +693,10 @@ def _build_macro_prompts(inputs: Dict) -> tuple:
             'No "race_specific". No "taper".\n'
             "- race_date, race_name, race_distance MUST be null.\n"
             "- Build aerobic fitness throughout. No taper at the end.\n"
+            "- PHASE PROGRESSION IS ONE-WAY: once any week is assigned 'quality', "
+            "ALL subsequent weeks must also be 'quality'. Do NOT go back to 'base' "
+            "after 'quality'. End-of-block down-volume weeks stay 'quality' — "
+            "reduce intensity/volume within the quality phase instead.\n"
             "- END-OF-BLOCK: final 2 weeks must HOLD or REDUCE from peak volume. "
             "Do NOT make the last week simultaneously: peak volume + "
             "intensity_budget='high' + quality_sessions_allowed=2. "
