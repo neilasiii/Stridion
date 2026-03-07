@@ -11,6 +11,18 @@ This is a **running coach system** that provides personalized training guidance 
 **For training philosophy:** See [docs/TRAINING_PHILOSOPHY.md](docs/TRAINING_PHILOSOPHY.md) for periodization and training principles.
 **For AI hallucination prevention:** See [docs/AI_HALLUCINATION_MITIGATION.md](docs/AI_HALLUCINATION_MITIGATION.md) for validation system details.
 
+## First Run Detection
+
+At the start of every Claude Code session, silently run:
+```bash
+python3 bin/check_setup.py --json 2>/dev/null
+```
+If the output contains `"onboarding_needed": true`, say:
+
+> "I notice this looks like a fresh setup. Want me to walk you through getting everything configured? It takes about 10–15 minutes and covers Garmin sync, your athlete profile, and optionally the Discord bot. Just say **yes** to start."
+
+If the user says yes, invoke the `@onboarding-wizard` agent. If they say no, proceed normally. Do not repeat this prompt once `data/athlete/goals.md` exists.
+
 ## CRITICAL: Date/Day-of-Week Verification
 
 **MANDATORY FOR CLAUDE AND ALL AGENTS:**
@@ -61,6 +73,13 @@ Claude should automatically commit and push changes to the remote repository aft
 ## Key Commands
 
 ### Health Data Management
+
+**Re-run onboarding (update profile, add a race, reconfigure):**
+In Claude Code, invoke:
+```
+@onboarding-wizard
+```
+The wizard skips any steps that are already complete.
 
 **VDOT Calculator**
 ```bash
