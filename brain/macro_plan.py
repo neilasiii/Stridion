@@ -567,6 +567,19 @@ def _extract_macro_inputs(context_packet: Dict) -> Dict:
     total_mi = float(ts.get("total_miles", 0) or 0)
     period_days = int(ts.get("period_days", 14) or 14)
     weekly_avg = (total_mi / period_days * 7) if period_days > 0 else 0.0
+    recent_runs = ts.get("recent_runs", []) or []
+    last_7_days_miles = 0.0
+    for run in recent_runs:
+        run_date_str = run.get("date", "")
+        try:
+            run_date = date.fromisoformat(run_date_str)
+        except ValueError:
+            continue
+        days_ago = (today - run_date).days
+        if 0 <= days_ago <= 7 and not _has_race_keyword(run):
+            last_7_days_miles += float(run.get("distance_mi", 0) or 0)
+    if last_7_days_miles > 5.0:
+        weekly_avg = last_7_days_miles
 
     # VDOT from athlete snapshot.
     # Priority: race-derived VDOT (from actual performance) > Garmin VO2max > 38.0 default.
