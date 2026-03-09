@@ -68,17 +68,10 @@ def _session_to_workout(session):
     }
 
 
-def _get_active_sessions_safe():
-    """Call skills.plans.get_active_sessions(), returning [] on any error."""
-    try:
-        from skills.plans import get_active_sessions
-        return get_active_sessions()
-    except Exception:
-        return []
-
+from skills.plans import get_active_sessions_safe
 
 # Patchable alias for tests
-get_active_sessions = _get_active_sessions_safe
+get_active_sessions = get_active_sessions_safe
 
 
 def load_health_data():

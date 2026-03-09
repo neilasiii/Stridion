@@ -62,6 +62,14 @@ def get_active_sessions(db_path=None) -> List[Dict[str, Any]]:
     return sessions
 
 
+def get_active_sessions_safe(db_path=None) -> List[Dict[str, Any]]:
+    """Call get_active_sessions(), returning [] on any error."""
+    try:
+        return get_active_sessions(db_path=db_path)
+    except Exception:
+        return []
+
+
 def get_schedule(days: int = 7, start_date=None, db_path=None) -> Dict[str, Any]:
     """
     Return schedule rows for the next ``days`` days from ``start_date`` (today if None).
