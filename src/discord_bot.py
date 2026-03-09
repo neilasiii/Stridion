@@ -16,6 +16,7 @@ import os
 import re
 import sys
 import logging
+import sqlite3 as _sqlite3
 from datetime import datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo
 from pathlib import Path
@@ -1881,33 +1882,50 @@ async def daily_workouts_task():
         await channel.send(f"❌ Failed to load workouts: {str(e)}")
 
 
+def _read_pending_state(db_path, key: str):
+    """Read and JSON-parse a value from the SQLite state table.
+    Returns the parsed dict on success, None if the key does not exist or on error."""
+    if not db_path.exists():
+        return None
+    try:
+        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = _sqlite3.Row
+        row = conn.execute(
+            "SELECT value FROM state WHERE key = ?", (key,)
+        ).fetchone()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_read_pending_state(%s): DB read error: %s", key, exc)
+        return None
+    if not row:
+        return None
+    try:
+        return json.loads(row["value"])
+    except Exception:
+        logger.warning("_read_pending_state(%s): JSON parse error", key)
+        return None
+
+
+def _clear_pending_state(db_path, key: str) -> None:
+    """Delete a key from the SQLite state table."""
+    try:
+        conn = _sqlite3.connect(str(db_path))
+        conn.execute("DELETE FROM state WHERE key = ?", (key,))
+        conn.commit()
+        conn.close()
+    except Exception as exc:
+        logger.warning("_clear_pending_state(%s): %s", key, exc)
+
+
 async def _post_pending_checkin(channel) -> bool:
     """
     Check SQLite for a pending post-workout check-in written by the heartbeat agent.
     If found, post a short message to #coach and mark it delivered.
     Returns True if a message was posted.
     """
-    import sqlite3 as _sqlite3
     db_path = PROJECT_ROOT / "data" / "coach.sqlite"
-    if not db_path.exists():
-        return False
-
-    # Read pending checkin from SQLite state table
-    try:
-        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
-        conn.row_factory = _sqlite3.Row
-        row = conn.execute("SELECT value FROM state WHERE key = 'pending_checkin'").fetchone()
-        conn.close()
-    except Exception as exc:
-        logger.warning("_post_pending_checkin: DB read error: %s", exc)
-        return False
-
-    if not row:
-        return False
-
-    try:
-        payload = json.loads(row["value"])
-    except Exception:
+    payload = _read_pending_state(db_path, "pending_checkin")
+    if payload is None:
         return False
 
     activity_id   = payload.get("activity_id", "")
@@ -1955,13 +1973,7 @@ async def _post_pending_checkin(channel) -> bool:
     except Exception as exc:
         logger.warning("_post_pending_checkin: mark_checkin_sent failed: %s", exc)
 
-    try:
-        conn = _sqlite3.connect(str(db_path))
-        conn.execute("DELETE FROM state WHERE key = 'pending_checkin'")
-        conn.commit()
-        conn.close()
-    except Exception as exc:
-        logger.warning("_post_pending_checkin: could not clear pending flag: %s", exc)
+    _clear_pending_state(db_path, "pending_checkin")
 
     logger.info("_post_pending_checkin: check-in posted for activity %s (%s)", activity_id, name)
     return True
@@ -1973,28 +1985,9 @@ async def _post_pending_vdot_update(channel) -> bool:
     If found, post a notification to #coach and clear the flag.
     Returns True if a message was posted.
     """
-    import sqlite3 as _sqlite3
     db_path = PROJECT_ROOT / "data" / "coach.sqlite"
-    if not db_path.exists():
-        return False
-
-    try:
-        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
-        conn.row_factory = _sqlite3.Row
-        row = conn.execute(
-            "SELECT value FROM state WHERE key = 'pending_vdot_update'"
-        ).fetchone()
-        conn.close()
-    except Exception as exc:
-        logger.warning("_post_pending_vdot_update: DB read error: %s", exc)
-        return False
-
-    if not row:
-        return False
-
-    try:
-        payload = json.loads(row["value"])
-    except Exception:
+    payload = _read_pending_state(db_path, "pending_vdot_update")
+    if payload is None:
         return False
 
     derived = payload.get("derived")
@@ -2022,7 +2015,7 @@ async def _post_pending_vdot_update(channel) -> bool:
         conn = _sqlite3.connect(str(db_path))
         conn.execute(
             "INSERT OR REPLACE INTO state (key, value) VALUES (?, ?)",
-            ("pending_vdot_confirm", row["value"]),
+            ("pending_vdot_confirm", json.dumps(payload)),
         )
         conn.execute("DELETE FROM state WHERE key = 'pending_vdot_update'")
         conn.commit()
@@ -2122,28 +2115,9 @@ async def _post_pending_weekly_synthesis(channel) -> bool:
     If found, post it to #coach and clear the flag.
     Returns True if a message was posted.
     """
-    import sqlite3 as _sqlite3
     db_path = PROJECT_ROOT / "data" / "coach.sqlite"
-    if not db_path.exists():
-        return False
-
-    try:
-        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
-        conn.row_factory = _sqlite3.Row
-        row = conn.execute(
-            "SELECT value FROM state WHERE key = 'pending_weekly_synthesis'"
-        ).fetchone()
-        conn.close()
-    except Exception as exc:
-        logger.warning("_post_pending_weekly_synthesis: DB read error: %s", exc)
-        return False
-
-    if not row:
-        return False
-
-    try:
-        payload = json.loads(row["value"])
-    except Exception:
+    payload = _read_pending_state(db_path, "pending_weekly_synthesis")
+    if payload is None:
         return False
 
     text = payload.get("text", "").strip()
@@ -2162,13 +2136,7 @@ async def _post_pending_weekly_synthesis(channel) -> bool:
         return False
 
     # Clear the pending flag
-    try:
-        conn = _sqlite3.connect(str(db_path))
-        conn.execute("DELETE FROM state WHERE key = 'pending_weekly_synthesis'")
-        conn.commit()
-        conn.close()
-    except Exception as exc:
-        logger.warning("_post_pending_weekly_synthesis: could not clear pending flag: %s", exc)
+    _clear_pending_state(db_path, "pending_weekly_synthesis")
 
     logger.info("_post_pending_weekly_synthesis: weekly synthesis posted for %s", synth_date)
     return True
@@ -2179,16 +2147,14 @@ async def _post_pending_cutover_prompt(channel) -> bool:
     If pending_cutover_prompt is set, post the cutover readiness prompt to #coach.
     Returns True if posted, False otherwise.
     """
-    import sqlite3 as _sqlite3
     db_path = PROJECT_ROOT / "data" / "coach.sqlite"
     if not db_path.exists():
         return False
 
     try:
         conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
-        conn.row_factory = _sqlite3.Row
         row = conn.execute(
-            "SELECT value FROM state WHERE key = 'pending_cutover_prompt'"
+            "SELECT 1 FROM state WHERE key = 'pending_cutover_prompt'"
         ).fetchone()
         conn.close()
     except Exception as exc:
@@ -2217,10 +2183,7 @@ async def _post_pending_cutover_prompt(channel) -> bool:
 
     # Clear pending, set awaiting response
     try:
-        conn = _sqlite3.connect(str(db_path))
-        conn.execute("DELETE FROM state WHERE key = 'pending_cutover_prompt'")
-        conn.commit()
-        conn.close()
+        _clear_pending_state(db_path, "pending_cutover_prompt")
         from memory.db import set_state
         set_state("cutover_awaiting_response", "1")
     except Exception as exc:
@@ -2235,28 +2198,9 @@ async def _post_pending_injury_risk(channel) -> bool:
     If pending_injury_risk_alert is set, post the injury risk alert to #coach.
     Returns True if posted, False otherwise.
     """
-    import sqlite3 as _sqlite3
     db_path = PROJECT_ROOT / "data" / "coach.sqlite"
-    if not db_path.exists():
-        return False
-
-    try:
-        conn = _sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
-        conn.row_factory = _sqlite3.Row
-        row = conn.execute(
-            "SELECT value FROM state WHERE key = 'pending_injury_risk_alert'"
-        ).fetchone()
-        conn.close()
-    except Exception as exc:
-        logger.warning("_post_pending_injury_risk: DB read error: %s", exc)
-        return False
-
-    if not row:
-        return False
-
-    try:
-        payload = json.loads(row["value"])
-    except Exception:
+    payload = _read_pending_state(db_path, "pending_injury_risk_alert")
+    if payload is None:
         return False
 
     severity = payload.get("severity", "YELLOW")
@@ -2280,10 +2224,7 @@ async def _post_pending_injury_risk(channel) -> bool:
 
     # Clear pending, set awaiting response
     try:
-        conn = _sqlite3.connect(str(db_path))
-        conn.execute("DELETE FROM state WHERE key = 'pending_injury_risk_alert'")
-        conn.commit()
-        conn.close()
+        _clear_pending_state(db_path, "pending_injury_risk_alert")
         from memory.db import set_state
         set_state("injury_risk_awaiting_response", "1")
     except Exception as exc:
