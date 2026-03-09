@@ -485,7 +485,7 @@ def get_garmin_client(quiet: bool = False) -> Garmin:
     Kept here for backward compatibility with callers that import from this module.
     """
     sys.path.insert(0, str(Path(__file__).parent))
-    from garmin_sync import get_garmin_client as _get_garmin_client
+    from garmin_fetcher import get_garmin_client as _get_garmin_client
     return _get_garmin_client(quiet=quiet)
 
 

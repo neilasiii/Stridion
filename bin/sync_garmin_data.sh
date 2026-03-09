@@ -72,7 +72,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Run the sync script with summary
-"$PYTHON" "$PROJECT_ROOT/src/garmin_sync.py" --days "$DAYS" --summary $CHECK_ONLY
+"$PYTHON" "$PROJECT_ROOT/src/garmin_fetcher.py" --days "$DAYS" --summary $CHECK_ONLY
 
 # If sync was successful and not check-only, deduplicate scheduled workouts
 # This prevents duplicate entries from ICS calendar imports

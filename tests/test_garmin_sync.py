@@ -14,7 +14,7 @@ from datetime import datetime
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.garmin_sync import merge_data, retry_with_backoff
+from src.garmin_fetcher import merge_data, retry_with_backoff
 
 
 class TestMergeData(unittest.TestCase):
@@ -127,7 +127,7 @@ class TestUnitConversions(unittest.TestCase):
 
     def test_meters_to_miles(self):
         """Test meters to miles conversion"""
-        from src.garmin_sync import METERS_TO_MILES
+        from src.garmin_fetcher import METERS_TO_MILES
 
         # 5000 meters = ~3.107 miles
         miles = 5000 / METERS_TO_MILES
@@ -135,7 +135,7 @@ class TestUnitConversions(unittest.TestCase):
 
     def test_ms_to_mph(self):
         """Test m/s to mph conversion"""
-        from src.garmin_sync import MS_TO_MPH
+        from src.garmin_fetcher import MS_TO_MPH
 
         # 4.47 m/s = ~10 mph
         mph = 4.47 * MS_TO_MPH
@@ -143,7 +143,7 @@ class TestUnitConversions(unittest.TestCase):
 
     def test_grams_to_lbs(self):
         """Test grams to pounds conversion"""
-        from src.garmin_sync import GRAMS_TO_LBS
+        from src.garmin_fetcher import GRAMS_TO_LBS
 
         # 75000 grams = ~165.35 lbs
         lbs = 75000 / GRAMS_TO_LBS
@@ -151,7 +151,7 @@ class TestUnitConversions(unittest.TestCase):
 
     def test_minutes_to_hours(self):
         """Test minutes to hours conversion"""
-        from src.garmin_sync import MINUTES_TO_HOURS
+        from src.garmin_fetcher import MINUTES_TO_HOURS
 
         # 420 minutes = 7 hours
         hours = 420 / MINUTES_TO_HOURS
@@ -159,7 +159,7 @@ class TestUnitConversions(unittest.TestCase):
 
     def test_milliseconds_to_seconds(self):
         """Test milliseconds to seconds conversion"""
-        from src.garmin_sync import MILLISECONDS_TO_SECONDS
+        from src.garmin_fetcher import MILLISECONDS_TO_SECONDS
 
         # 5000 milliseconds = 5 seconds
         seconds = 5000 / MILLISECONDS_TO_SECONDS
@@ -171,7 +171,7 @@ class TestSystemTimestamps(unittest.TestCase):
 
     def test_utc_now_returns_utc_timestamp(self):
         """Test that utc_now returns UTC timestamp for system operations"""
-        from src.garmin_sync import utc_now
+        from src.garmin_fetcher import utc_now
 
         result = utc_now()
         # Should have timezone info

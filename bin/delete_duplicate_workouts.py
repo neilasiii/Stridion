@@ -18,7 +18,7 @@ from typing import Dict, List, Any
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from garmin_sync import get_garmin_client
+from garmin_fetcher import get_garmin_client
 
 
 def find_duplicates(workouts: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:

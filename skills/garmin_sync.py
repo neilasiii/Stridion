@@ -6,7 +6,7 @@ After a successful sync, ingests recovery metrics and activities into SQLite
 (B11-012, B11-013) — JSON cache remains the primary read path for now.
 
 Does NOT modify health_data_cache.json format — that remains owned by
-src/garmin_sync.py (sacred invariant).
+src/garmin_fetcher.py (sacred invariant).
 """
 
 import json
