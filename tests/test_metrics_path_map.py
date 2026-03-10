@@ -41,76 +41,10 @@ def _days_ago(n: int) -> date:
     return _today() - timedelta(days=n)
 
 
-# ── Section 1: legacy metrics table (upsert_metrics / get_metrics_range) ──────
-
-class TestLegacyMetricsTable:
-    """
-    Validates the contract for the legacy 'metrics' table (blob storage).
-
-    Writer: hooks/on_sync.py (REMOVED — legacy write path deleted in Track F)
-    Reader: hooks/on_readiness_change.py (REMOVED — migrated to get_daily_metrics)
-
-    The payload is an untyped JSON blob; the only guaranteed key observed in
-    production is 'training_readiness'.  These tests pin the current surface.
-    """
-
-    def setup_method(self):
-        self.db = _tmp_db()
-        from memory.db import init_db
-        init_db(db_path=self.db)
-
-    def test_upsert_and_roundtrip(self):
-        from memory.db import upsert_metrics, get_metrics_range
-
-        today = _today()
-        payload = {"training_readiness": 72, "hrv": 58, "body_battery_max": 85}
-        upsert_metrics(today, payload, db_path=self.db)
-
-        rows = get_metrics_range(today, today, db_path=self.db)
-        assert len(rows) == 1
-        assert rows[0]["day"] == today.isoformat()
-        assert rows[0]["training_readiness"] == 72
-        assert rows[0]["hrv"] == 58
-
-    def test_upsert_overwrites_existing_row(self):
-        from memory.db import upsert_metrics, get_metrics_range
-
-        today = _today()
-        upsert_metrics(today, {"training_readiness": 60}, db_path=self.db)
-        upsert_metrics(today, {"training_readiness": 80}, db_path=self.db)
-
-        rows = get_metrics_range(today, today, db_path=self.db)
-        assert rows[0]["training_readiness"] == 80
-
-    def test_range_query_inclusive(self):
-        from memory.db import upsert_metrics, get_metrics_range
-
-        for i in range(4):
-            d = _days_ago(i)
-            upsert_metrics(d, {"training_readiness": 50 + i}, db_path=self.db)
-
-        start = _days_ago(2)
-        end   = _days_ago(0)
-        rows  = get_metrics_range(start, end, db_path=self.db)
-        assert len(rows) == 3
-
-    def test_empty_range_returns_empty_list(self):
-        from memory.db import get_metrics_range
-
-        rows = get_metrics_range(_days_ago(30), _days_ago(20), db_path=self.db)
-        assert rows == []
-
-    def test_row_shape_has_day_key_plus_payload_fields(self):
-        """Each returned row must have 'day' merged with all payload keys."""
-        from memory.db import upsert_metrics, get_metrics_range
-
-        today = _today()
-        upsert_metrics(today, {"k1": 1, "k2": "v"}, db_path=self.db)
-        rows = get_metrics_range(today, today, db_path=self.db)
-        assert "day" in rows[0]
-        assert "k1" in rows[0]
-        assert "k2" in rows[0]
-
+# ── Section 1: legacy metrics table — DELETED (Track F retirement) ─────────────
+# upsert_metrics, get_metrics_range, and the 'metrics' blob table DDL were
+# removed from memory/db.py and memory/__init__.py.  No production callers
+# remained at the time of deletion.
 
 # ── Section 2: typed daily_metrics table (upsert_daily_metrics / get_daily_metrics) ──
 

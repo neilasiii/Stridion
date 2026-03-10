@@ -5,7 +5,6 @@ Tables:
   athlete_profile  - key/value athlete context
   events           - immutable event log with idempotency keys
   state            - mutable key/value (last sync, active plan id, etc.)
-  metrics          - daily health metric rollups (one row per day, legacy)
   plans            - versioned training plans (never overwritten)
   plan_days        - per-day plan prescriptions
   task_runs        - heartbeat / cron task audit log
@@ -67,11 +66,6 @@ CREATE TABLE IF NOT EXISTS state (
     key        TEXT PRIMARY KEY,
     value      TEXT NOT NULL,
     updated_at DATETIME NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS metrics (
-    day          DATE PRIMARY KEY,
-    payload_json TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS plans (
@@ -407,36 +401,6 @@ def delete_state(key: str, db_path: Path = DB_PATH) -> None:
     try:
         conn.execute("DELETE FROM state WHERE key = ?", (key,))
         conn.commit()
-    finally:
-        conn.close()
-
-
-# ── Metrics ──────────────────────────────────────────────────────────────────────
-
-
-def upsert_metrics(day: date, payload: Dict, db_path: Path = DB_PATH) -> None:
-    """Upsert daily health metric rollup for a given calendar date."""
-    conn = _connect(db_path)
-    try:
-        conn.execute(
-            """INSERT INTO metrics(day, payload_json) VALUES(?, ?)
-               ON CONFLICT(day) DO UPDATE SET payload_json = excluded.payload_json""",
-            (day.isoformat(), json.dumps(payload)),
-        )
-        conn.commit()
-    finally:
-        conn.close()
-
-
-def get_metrics_range(start: date, end: date, db_path: Path = DB_PATH) -> List[Dict]:
-    """Return daily metric rows between start and end (inclusive)."""
-    conn = _connect(db_path)
-    try:
-        rows = conn.execute(
-            "SELECT day, payload_json FROM metrics WHERE day BETWEEN ? AND ? ORDER BY day",
-            (start.isoformat(), end.isoformat()),
-        ).fetchall()
-        return [{"day": r["day"], **json.loads(r["payload_json"])} for r in rows]
     finally:
         conn.close()
 
