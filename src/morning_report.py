@@ -698,7 +698,7 @@ def call_claude_headless(prompt):
         # If claude CLI failed, try Gemini via the shared gemini_client module
         try:
             sys.path.insert(0, str(Path(__file__).parent))  # ensure src/ is on path
-            from gemini_client import call_gemini
+            from brain.llm import call_gemini
             response, error = call_gemini(prompt, max_tokens=2048)
             if error:
                 return None, f"Claude unavailable, Gemini error: {error}"

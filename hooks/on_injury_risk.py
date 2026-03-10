@@ -18,8 +18,9 @@ from datetime import date, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
+from memory.retrieval import HEALTH_CACHE
+
 PROJECT_ROOT = Path(__file__).parent.parent
-HEALTH_CACHE  = PROJECT_ROOT / "data" / "health" / "health_data_cache.json"
 PATTERNS_FILE = PROJECT_ROOT / "data" / "athlete" / "learned_patterns.md"
 
 log = logging.getLogger("hooks.on_injury_risk")

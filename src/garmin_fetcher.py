@@ -48,12 +48,10 @@ except ImportError:
 try:
     from workout_scheduler import apply_schedule_constraints
     from workout_uploader import delete_workout
-    from supplemental_workout_generator import generate_week_supplemental_workouts
 except ImportError:
     # Workout scheduler is optional - workouts won't be rescheduled for conflicts
     apply_schedule_constraints = None
     delete_workout = None
-    generate_week_supplemental_workouts = None
 
 try:
     from ics_exporter import export_calendar
@@ -1419,115 +1417,6 @@ def fetch_progress_summary(client: Garmin, start_date: date, end_date: date, qui
 
     except Exception as e:
         print(f"Warning: Failed to fetch progress summary: {e}", file=sys.stderr)
-        return {}
-
-
-def fetch_endurance_score(client: Garmin, start_date: date, end_date: date, quiet: bool = False) -> Dict[str, Any]:
-    """
-    Fetch endurance score from Garmin Connect.
-
-    Endurance score measures long-term aerobic capacity based on heart rate
-    and activity patterns over time.
-
-    Args:
-        client: Authenticated Garmin client
-        start_date: Start date for endurance score query
-        end_date: End date for endurance score query
-        quiet: Suppress output
-
-    Returns:
-        Dictionary with endurance score data
-    """
-    if not quiet:
-        print(f"Fetching endurance score from {start_date} to {end_date}...")
-
-    try:
-        score_data = retry_with_backoff(
-            client.get_endurance_score,
-            start_date.isoformat(),
-            end_date.isoformat(),
-            quiet=quiet
-        )
-
-        if score_data and not quiet:
-            print(f"  Found endurance score data")
-
-        return score_data if score_data else {}
-
-    except Exception as e:
-        if not quiet:
-            print(f"Warning: Failed to fetch endurance score: {e}", file=sys.stderr)
-        return {}
-
-
-def fetch_respiration_data(client: Garmin, target_date: date, quiet: bool = False) -> Dict[str, Any]:
-    """
-    Fetch respiration (breathing rate) data from Garmin Connect.
-
-    Provides breathing rate data during sleep and activities, useful for
-    recovery and stress monitoring.
-
-    Args:
-        client: Authenticated Garmin client
-        target_date: Date for respiration data
-        quiet: Suppress output
-
-    Returns:
-        Dictionary with respiration data
-    """
-    if not quiet:
-        print(f"Fetching respiration data for {target_date}...")
-
-    try:
-        resp_data = retry_with_backoff(
-            client.get_respiration_data,
-            target_date.isoformat(),
-            quiet=quiet
-        )
-
-        if resp_data and not quiet:
-            print(f"  Found respiration data")
-
-        return resp_data if resp_data else {}
-
-    except Exception as e:
-        if not quiet:
-            print(f"Warning: Failed to fetch respiration data: {e}", file=sys.stderr)
-        return {}
-
-
-def fetch_activity_gps_details(client: Garmin, activity_id: str, quiet: bool = False) -> Dict[str, Any]:
-    """
-    Fetch detailed GPS track data for a specific activity.
-
-    Provides comprehensive activity details including GPS coordinates,
-    elevation profile, heart rate zones, and performance metrics.
-
-    Args:
-        client: Authenticated Garmin client
-        activity_id: Garmin activity ID
-        quiet: Suppress output
-
-    Returns:
-        Dictionary with detailed activity data including GPS track
-    """
-    if not quiet:
-        print(f"  Fetching GPS details for activity {activity_id}...")
-
-    try:
-        details = retry_with_backoff(
-            client.get_activity_details,
-            activity_id,
-            maxChartSize=2000,
-            maxPolylineSize=4000,
-            quiet=quiet
-        )
-
-        return details if details else {}
-
-    except Exception as e:
-        if not quiet:
-            print(f"  Warning: Could not fetch GPS details for activity {activity_id}: {e}", file=sys.stderr)
         return {}
 
 

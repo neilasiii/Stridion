@@ -68,12 +68,6 @@ def write_daily_note(note_date: date, content: str) -> Path:
     return path
 
 
-def read_daily_note(note_date: date) -> Optional[str]:
-    """Return the content of a daily note, or None if it doesn't exist."""
-    path = DAILY_DIR / f"{note_date.isoformat()}.md"
-    return path.read_text(encoding="utf-8") if path.exists() else None
-
-
 # ── Decisions Log ─────────────────────────────────────────────────────────────
 
 def append_decision(

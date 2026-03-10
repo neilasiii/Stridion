@@ -234,3 +234,25 @@ def _brace_search_last(text: str) -> str:
             if depth == 0:
                 return text[i : last_close + 1]
     raise ValueError(f"Unbalanced JSON braces in output:\n{text[:300]}")
+
+
+# ── Public Gemini shim (drop-in replacement for gemini_client.call_gemini) ────
+
+def call_gemini(
+    prompt: str,
+    max_tokens: int = 2048,
+    temperature: float = 0.7,
+) -> "tuple[Optional[str], Optional[str]]":
+    """
+    Public wrapper around _call_gemini with the same interface as the old
+    gemini_client.call_gemini: returns (response_text, None) on success,
+    (None, error_message) on failure.
+
+    Import from here instead of src/gemini_client:
+        from brain.llm import call_gemini
+    """
+    try:
+        text = _call_gemini("", prompt)
+        return text, None
+    except Exception as exc:
+        return None, str(exc)
